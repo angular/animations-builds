@@ -15,7 +15,7 @@ export declare class AnimationTimelineContext {
     previousNode: meta.AnimationMetadata;
     subContextCount: number;
     constructor(errors: any[], timelines: TimelineBuilder[], initialTimeline?: TimelineBuilder);
-    createSubContext(inherit?: boolean): AnimationTimelineContext;
+    createSubContext(): AnimationTimelineContext;
     transformIntoNewTimeline(newTime?: number): TimelineBuilder;
     incrementTime(time: number): void;
 }
@@ -32,17 +32,17 @@ export declare class AnimationTimelineVisitor implements AnimationDslVisitor {
 export declare class TimelineBuilder {
     startTime: number;
     private _globalTimelineStyles;
-    time: number;
+    duration: number;
     easing: string;
     private _currentKeyframe;
     private _keyframes;
     private _styleSummary;
     private _localTimelineStyles;
     private _backFill;
-    constructor(startTime: number, _globalTimelineStyles?: StyleData, inheritedBackFill?: StyleData, inheritedStyles?: StyleData);
+    constructor(startTime: number, _globalTimelineStyles?: StyleData);
     hasStyling(): boolean;
     readonly currentTime: number;
-    fork(inherit?: boolean): TimelineBuilder;
+    fork(currentTime?: number): TimelineBuilder;
     private _loadKeyframe();
     forwardFrame(): void;
     forwardTime(time: number): void;

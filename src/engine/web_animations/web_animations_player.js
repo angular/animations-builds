@@ -26,8 +26,11 @@ var WebAnimationsPlayer = (function () {
         this._finished = false;
         this._started = false;
         this._destroyed = false;
+        this.time = 0;
         this.parentPlayer = null;
         this._duration = options['duration'];
+        this._delay = options['delay'] || 0;
+        this.time = this._duration + this._delay;
         this.previousStyles = {};
         previousPlayers.forEach(function (player) {
             var styles = player._captureStyles();
@@ -193,23 +196,15 @@ var WebAnimationsPlayer = (function () {
             this._onDestroyFns = [];
         }
     };
-    Object.defineProperty(WebAnimationsPlayer.prototype, "totalTime", {
-        /**
-         * @return {?}
-         */
-        get: function () { return this._duration; },
-        enumerable: true,
-        configurable: true
-    });
     /**
      * @param {?} p
      * @return {?}
      */
-    WebAnimationsPlayer.prototype.setPosition = function (p) { this._player.currentTime = p * this.totalTime; };
+    WebAnimationsPlayer.prototype.setPosition = function (p) { this._player.currentTime = p * this.time; };
     /**
      * @return {?}
      */
-    WebAnimationsPlayer.prototype.getPosition = function () { return this._player.currentTime / this.totalTime; };
+    WebAnimationsPlayer.prototype.getPosition = function () { return this._player.currentTime / this.time; };
     /**
      * @return {?}
      */
@@ -241,6 +236,8 @@ function WebAnimationsPlayer_tsickle_Closure_declarations() {
     /** @type {?} */
     WebAnimationsPlayer.prototype._duration;
     /** @type {?} */
+    WebAnimationsPlayer.prototype._delay;
+    /** @type {?} */
     WebAnimationsPlayer.prototype._initialized;
     /** @type {?} */
     WebAnimationsPlayer.prototype._finished;
@@ -250,6 +247,8 @@ function WebAnimationsPlayer_tsickle_Closure_declarations() {
     WebAnimationsPlayer.prototype._destroyed;
     /** @type {?} */
     WebAnimationsPlayer.prototype._finalKeyframe;
+    /** @type {?} */
+    WebAnimationsPlayer.prototype.time;
     /** @type {?} */
     WebAnimationsPlayer.prototype.parentPlayer;
     /** @type {?} */
