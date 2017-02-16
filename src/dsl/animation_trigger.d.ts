@@ -50,12 +50,12 @@ import { AnimationTransitionInstruction } from './animation_transition_instructi
  * ```
  *
  * The template associated with this component will make use of the `myAnimationTrigger` animation
- trigger by binding to an element within its template code.
+ * trigger by binding to an element within its template code.
  *
  * ```html
  * <!-- somewhere inside of my-component-tpl.html -->
  * <div [@myAnimationTrigger]="myStatusExp">...</div>
- tools/gulp-tasks/validate-commit-message.js ```
+ * ```
  *
  * {@example core/animation/ts/dsl/animation_example.ts region='Component'}
  *

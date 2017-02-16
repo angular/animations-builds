@@ -56,7 +56,7 @@ import { validateAnimationSequence } from './animation_validator_visitor';
  * ```html
  * <!-- somewhere inside of my-component-tpl.html -->
  * <div [\@myAnimationTrigger]="myStatusExp">...</div>
- * tools/gulp-tasks/validate-commit-message.js ```
+ * ```
  *
  * {\@example core/animation/ts/dsl/animation_example.ts region='Component'}
  *

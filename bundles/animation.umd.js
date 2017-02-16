@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.7-88eb3b2
+ * @license Angular v4.0.0-beta.7-8c20aaa
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2068,7 +2068,7 @@
      * ```html
      * <!-- somewhere inside of my-component-tpl.html -->
      * <div [\@myAnimationTrigger]="myStatusExp">...</div>
-     * tools/gulp-tasks/validate-commit-message.js ```
+     * ```
      *
      * {\@example core/animation/ts/dsl/animation_example.ts region='Component'}
      *
