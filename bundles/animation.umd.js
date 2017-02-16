@@ -2242,5 +2242,11 @@
     exports.transition = transition;
     exports.AnimationTrigger = AnimationTrigger;
     exports.trigger = trigger;
+    exports.ɵa = resolveDefaultAnimationDriver;
+    exports.ɵd = AnimationStyleNormalizer;
+    exports.ɵe = WebAnimationsStyleNormalizer;
+    exports.ɵc = AnimationDriver;
+    exports.ɵg = DomAnimationTransitionEngine;
+    exports.ɵf = TransitionEngine;
 
 }));
