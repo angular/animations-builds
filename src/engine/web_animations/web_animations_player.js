@@ -24,8 +24,11 @@ export class WebAnimationsPlayer {
         this._finished = false;
         this._started = false;
         this._destroyed = false;
+        this.time = 0;
         this.parentPlayer = null;
         this._duration = options['duration'];
+        this._delay = options['delay'] || 0;
+        this.time = this._duration + this._delay;
         this.previousStyles = {};
         previousPlayers.forEach(player => {
             let styles = player._captureStyles();
@@ -184,18 +187,14 @@ export class WebAnimationsPlayer {
         }
     }
     /**
-     * @return {?}
-     */
-    get totalTime() { return this._duration; }
-    /**
      * @param {?} p
      * @return {?}
      */
-    setPosition(p) { this._player.currentTime = p * this.totalTime; }
+    setPosition(p) { this._player.currentTime = p * this.time; }
     /**
      * @return {?}
      */
-    getPosition() { return this._player.currentTime / this.totalTime; }
+    getPosition() { return this._player.currentTime / this.time; }
     /**
      * @return {?}
      */
@@ -224,6 +223,8 @@ function WebAnimationsPlayer_tsickle_Closure_declarations() {
     /** @type {?} */
     WebAnimationsPlayer.prototype._duration;
     /** @type {?} */
+    WebAnimationsPlayer.prototype._delay;
+    /** @type {?} */
     WebAnimationsPlayer.prototype._initialized;
     /** @type {?} */
     WebAnimationsPlayer.prototype._finished;
@@ -233,6 +234,8 @@ function WebAnimationsPlayer_tsickle_Closure_declarations() {
     WebAnimationsPlayer.prototype._destroyed;
     /** @type {?} */
     WebAnimationsPlayer.prototype._finalKeyframe;
+    /** @type {?} */
+    WebAnimationsPlayer.prototype.time;
     /** @type {?} */
     WebAnimationsPlayer.prototype.parentPlayer;
     /** @type {?} */

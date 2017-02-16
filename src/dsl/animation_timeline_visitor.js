@@ -35,11 +35,10 @@ export class AnimationTimelineContext {
         timelines.push(this.currentTimeline);
     }
     /**
-     * @param {?=} inherit
      * @return {?}
      */
-    createSubContext(inherit = false) {
-        const /** @type {?} */ context = new AnimationTimelineContext(this.errors, this.timelines, this.currentTimeline.fork(inherit));
+    createSubContext() {
+        const /** @type {?} */ context = new AnimationTimelineContext(this.errors, this.timelines, this.currentTimeline.fork());
         context.previousNode = this.previousNode;
         context.currentAnimateTimings = this.currentAnimateTimings;
         this.subContextCount++;
@@ -50,13 +49,7 @@ export class AnimationTimelineContext {
      * @return {?}
      */
     transformIntoNewTimeline(newTime = 0) {
-        const /** @type {?} */ oldTimeline = this.currentTimeline;
-        const /** @type {?} */ oldTime = oldTimeline.time;
-        if (newTime > 0) {
-            oldTimeline.time = newTime;
-        }
-        this.currentTimeline = oldTimeline.fork(true);
-        oldTimeline.time = oldTime;
+        this.currentTimeline = this.currentTimeline.fork(newTime);
         this.timelines.push(this.currentTimeline);
         return this.currentTimeline;
     }
@@ -65,7 +58,7 @@ export class AnimationTimelineContext {
      * @return {?}
      */
     incrementTime(time) {
-        this.currentTimeline.forwardTime(this.currentTimeline.time + time);
+        this.currentTimeline.forwardTime(this.currentTimeline.duration + time);
     }
 }
 function AnimationTimelineContext_tsickle_Closure_declarations() {
@@ -146,12 +139,14 @@ export class AnimationTimelineVisitor {
             context.currentTimeline.forwardFrame();
             context.currentTimeline.snapshotCurrentStyles();
         }
-        ast.steps.map(s => visitAnimationNode(this, s, context));
-        context.previousNode = ast;
+        ast.steps.forEach(s => visitAnimationNode(this, s, context));
+        // this means that some animation function within the sequence
+        // ended up creating a sub timeline (which means the current
+        // timeline cannot overlap with the contents of the sequence)
         if (context.subContextCount > subContextCount) {
             context.transformIntoNewTimeline();
-            context.currentTimeline.snapshotCurrentStyles();
         }
+        context.previousNode = ast;
     }
     /**
      * @param {?} ast
@@ -161,21 +156,17 @@ export class AnimationTimelineVisitor {
     visitGroup(ast, context) {
         const /** @type {?} */ innerTimelines = [];
         let /** @type {?} */ furthestTime = context.currentTimeline.currentTime;
-        ast.steps.map(s => {
-            const /** @type {?} */ innerContext = context.createSubContext(false);
-            innerContext.currentTimeline.snapshotCurrentStyles();
+        ast.steps.forEach(s => {
+            const /** @type {?} */ innerContext = context.createSubContext();
             visitAnimationNode(this, s, innerContext);
             furthestTime = Math.max(furthestTime, innerContext.currentTimeline.currentTime);
             innerTimelines.push(innerContext.currentTimeline);
         });
-        context.transformIntoNewTimeline(furthestTime);
         // this operation is run after the AST loop because otherwise
         // if the parent timeline's collected styles were updated then
         // it would pass in invalid data into the new-to-be forked items
         innerTimelines.forEach(timeline => context.currentTimeline.mergeTimelineCollectedStyles(timeline));
-        // we do this because the window between this timeline and the sub timeline
-        // should ensure that the styles within are exactly the same as they were before
-        context.currentTimeline.snapshotCurrentStyles();
+        context.transformIntoNewTimeline(furthestTime);
         context.previousNode = ast;
     }
     /**
@@ -240,20 +231,16 @@ export class AnimationTimelineVisitor {
         if (!containsOffsets) {
             offsetGap = MAX_KEYFRAME_OFFSET / limit;
         }
-        const /** @type {?} */ keyframeDuration = context.currentAnimateTimings.duration;
-        const /** @type {?} */ innerContext = context.createSubContext(true);
+        const /** @type {?} */ startTime = context.currentTimeline.duration;
+        const /** @type {?} */ duration = context.currentAnimateTimings.duration;
+        const /** @type {?} */ innerContext = context.createSubContext();
         const /** @type {?} */ innerTimeline = innerContext.currentTimeline;
         innerTimeline.easing = context.currentAnimateTimings.easing;
-        // this will ensure that all collected styles so far
-        // are populated into the first keyframe of the keyframes()
-        // timeline (even if there exists a starting keyframe then
-        // it will override the contents of the first frame later)
-        innerTimeline.snapshotCurrentStyles();
-        ast.steps.map((step, i) => {
+        ast.steps.forEach((step, i) => {
             const /** @type {?} */ normalizedStyles = normalizeStyles(new AnimationStyles(step.styles));
             const /** @type {?} */ offset = containsOffsets ? (normalizedStyles['offset']) :
                 (i == limit ? MAX_KEYFRAME_OFFSET : i * offsetGap);
-            innerTimeline.forwardTime(offset * keyframeDuration);
+            innerTimeline.forwardTime(offset * duration);
             innerTimeline.setStyles(normalizedStyles);
         });
         // this will ensure that the parent timeline gets all the styles from
@@ -261,8 +248,7 @@ export class AnimationTimelineVisitor {
         context.currentTimeline.mergeTimelineCollectedStyles(innerTimeline);
         // we do this because the window between this timeline and the sub timeline
         // should ensure that the styles within are exactly the same as they were before
-        context.transformIntoNewTimeline(context.currentTimeline.time + keyframeDuration);
-        context.currentTimeline.snapshotCurrentStyles();
+        context.transformIntoNewTimeline(startTime + duration);
         context.previousNode = ast;
     }
 }
@@ -270,24 +256,16 @@ export class TimelineBuilder {
     /**
      * @param {?} startTime
      * @param {?=} _globalTimelineStyles
-     * @param {?=} inheritedBackFill
-     * @param {?=} inheritedStyles
      */
-    constructor(startTime, _globalTimelineStyles = null, inheritedBackFill = null, inheritedStyles = null) {
+    constructor(startTime, _globalTimelineStyles = null) {
         this.startTime = startTime;
         this._globalTimelineStyles = _globalTimelineStyles;
-        this.time = 0;
+        this.duration = 0;
         this.easing = '';
         this._keyframes = new Map();
         this._styleSummary = {};
         this._backFill = {};
-        if (inheritedBackFill) {
-            this._backFill = inheritedBackFill;
-        }
         this._localTimelineStyles = Object.create(this._backFill, {});
-        if (inheritedStyles) {
-            this._localTimelineStyles = copyStyles(inheritedStyles, false, this._localTimelineStyles);
-        }
         if (!this._globalTimelineStyles) {
             this._globalTimelineStyles = this._localTimelineStyles;
         }
@@ -300,31 +278,29 @@ export class TimelineBuilder {
     /**
      * @return {?}
      */
-    get currentTime() { return this.startTime + this.time; }
+    get currentTime() { return this.startTime + this.duration; }
     /**
-     * @param {?=} inherit
+     * @param {?=} currentTime
      * @return {?}
      */
-    fork(inherit = false) {
-        let /** @type {?} */ inheritedBackFill = inherit ? this._backFill : null;
-        let /** @type {?} */ inheritedStyles = inherit ? this._localTimelineStyles : null;
-        return new TimelineBuilder(this.currentTime, this._globalTimelineStyles, inheritedBackFill, inheritedStyles);
+    fork(currentTime = 0) {
+        return new TimelineBuilder(currentTime || this.currentTime, this._globalTimelineStyles);
     }
     /**
      * @return {?}
      */
     _loadKeyframe() {
-        this._currentKeyframe = this._keyframes.get(this.time);
+        this._currentKeyframe = this._keyframes.get(this.duration);
         if (!this._currentKeyframe) {
             this._currentKeyframe = Object.create(this._backFill, {});
-            this._keyframes.set(this.time, this._currentKeyframe);
+            this._keyframes.set(this.duration, this._currentKeyframe);
         }
     }
     /**
      * @return {?}
      */
     forwardFrame() {
-        this.time++;
+        this.duration++;
         this._loadKeyframe();
     }
     /**
@@ -332,7 +308,7 @@ export class TimelineBuilder {
      * @return {?}
      */
     forwardTime(time) {
-        this.time = time;
+        this.duration = time;
         this._loadKeyframe();
     }
     /**
@@ -342,9 +318,6 @@ export class TimelineBuilder {
      */
     _updateStyle(prop, value) {
         if (prop != 'easing') {
-            if (!this._localTimelineStyles[prop]) {
-                this._backFill[prop] = this._globalTimelineStyles[prop] || meta.AUTO_STYLE;
-            }
             this._localTimelineStyles[prop] = value;
             this._globalTimelineStyles[prop] = value;
             this._styleSummary[prop] = { time: this.currentTime, value };
@@ -359,6 +332,9 @@ export class TimelineBuilder {
             if (prop !== 'offset') {
                 const /** @type {?} */ val = styles[prop];
                 this._currentKeyframe[prop] = val;
+                if (prop !== 'easing' && !this._localTimelineStyles[prop]) {
+                    this._backFill[prop] = this._globalTimelineStyles[prop] || meta.AUTO_STYLE;
+                }
                 this._updateStyle(prop, val);
             }
         });
@@ -375,7 +351,7 @@ export class TimelineBuilder {
     /**
      * @return {?}
      */
-    getFinalKeyframe() { return this._keyframes.get(this.time); }
+    getFinalKeyframe() { return this._keyframes.get(this.duration); }
     /**
      * @return {?}
      */
@@ -406,7 +382,7 @@ export class TimelineBuilder {
         const /** @type {?} */ finalKeyframes = [];
         // special case for when there are only start/destination
         // styles but no actual animation animate steps...
-        if (this.time == 0) {
+        if (this.duration == 0) {
             const /** @type {?} */ targetKeyframe = this.getFinalKeyframe();
             const /** @type {?} */ firstKeyframe = copyStyles(targetKeyframe, true);
             firstKeyframe['offset'] = 0;
@@ -418,16 +394,16 @@ export class TimelineBuilder {
         else {
             this._keyframes.forEach((keyframe, time) => {
                 const /** @type {?} */ finalKeyframe = copyStyles(keyframe, true);
-                finalKeyframe['offset'] = time / this.time;
+                finalKeyframe['offset'] = time / this.duration;
                 finalKeyframes.push(finalKeyframe);
             });
         }
-        return createTimelineInstruction(finalKeyframes, this.time, this.startTime, this.easing);
+        return createTimelineInstruction(finalKeyframes, this.duration, this.startTime, this.easing);
     }
 }
 function TimelineBuilder_tsickle_Closure_declarations() {
     /** @type {?} */
-    TimelineBuilder.prototype.time;
+    TimelineBuilder.prototype.duration;
     /** @type {?} */
     TimelineBuilder.prototype.easing;
     /** @type {?} */

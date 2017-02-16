@@ -20,11 +20,13 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     private _onDestroyFns;
     private _player;
     private _duration;
+    private _delay;
     private _initialized;
     private _finished;
     private _started;
     private _destroyed;
     private _finalKeyframe;
+    time: number;
     parentPlayer: AnimationPlayer;
     previousStyles: {
         [styleName: string]: string | number;
@@ -48,7 +50,6 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     restart(): void;
     hasStarted(): boolean;
     destroy(): void;
-    readonly totalTime: number;
     setPosition(p: number): void;
     getPosition(): number;
     private _captureStyles();
