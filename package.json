@@ -1,6 +1,6 @@
 {
   "name": "@angular/animation",
-  "version": "4.0.0-beta.8-8742432",
+  "version": "4.0.0-beta.8-fbe4b76",
   "description": "Angular - animation integration with web-animations",
   "main": "bundles/animation.umd.js",
   "module": "index.js",
@@ -8,7 +8,7 @@
   "author": "angular",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/core": "4.0.0-beta.8-8742432"
+    "@angular/core": "4.0.0-beta.8-fbe4b76"
   },
   "repository": {
     "type": "git",
