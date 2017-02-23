@@ -10,4 +10,4 @@
  * @description
  * Entry point for all public APIs of the animation package.
  */
-export * from './src/animation';
+export * from './src/animations';

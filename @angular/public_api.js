@@ -10,5 +10,5 @@
  * @description
  * Entry point for all public APIs of the animation package.
  */
-export { AnimationModule, Animation, AUTO_STYLE, animate, group, keyframes, sequence, state, style, transition, AnimationTrigger, trigger } from './src/animation';
+export { AUTO_STYLE, animate, group, keyframes, sequence, state, style, transition, trigger, AnimationPlayer, NoOpAnimationPlayer, ɵAnimationGroupPlayer } from './src/animations';
 //# sourceMappingURL=public_api.js.map

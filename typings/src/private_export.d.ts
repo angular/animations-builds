@@ -5,6 +5,4 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-export interface StyleData {
-    [key: string]: string | number;
-}
+export { AnimationGroupPlayer as ɵAnimationGroupPlayer } from './players/animation_group_player';

@@ -1,1 +1,0 @@
-{"typings": "../typings/testing/testing.d.ts", "main": "../bundles/animation-testing.umd.js", "module": "../@angular/animation/testing.es5.js", "es2015": "../@angular/animation/testing.js"}
