@@ -43,7 +43,7 @@
   }();
 
   /**
-   * @license Angular v4.0.0-beta.8-41da599
+   * @license Angular v4.0.0-beta.8-2da3844
    * (c) 2010-2017 Google, Inc. https://angular.io/
    * License: MIT
    */
