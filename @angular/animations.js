@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.8-1f3198c
+ * @license Angular v4.0.0-beta.8-32c2fd5
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -581,7 +581,7 @@ class AnimationPlayer {
 /**
  * \@experimental Animation support is experimental.
  */
-class NoOpAnimationPlayer {
+class NoopAnimationPlayer {
     constructor() {
         this._onDoneFns = [];
         this._onStartFns = [];
@@ -809,4 +809,4 @@ class AnimationGroupPlayer {
     get players() { return this._players; }
 }
 
-export { AUTO_STYLE, animate, group, keyframes, sequence, state, style, transition, trigger, AnimationPlayer, NoOpAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer };
+export { AUTO_STYLE, animate, group, keyframes, sequence, state, style, transition, trigger, AnimationPlayer, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer };

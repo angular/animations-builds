@@ -43,7 +43,7 @@
   }();
 
   /**
-   * @license Angular v4.0.0-beta.8-1f3198c
+   * @license Angular v4.0.0-beta.8-32c2fd5
    * (c) 2010-2017 Google, Inc. https://angular.io/
    * License: MIT
    */
@@ -601,11 +601,11 @@
     return AnimationPlayer;
   }();
 
-  var NoOpAnimationPlayer = function () {
-    function NoOpAnimationPlayer() {
+  var NoopAnimationPlayer = function () {
+    function NoopAnimationPlayer() {
       var _this = this;
 
-      _classCallCheck(this, NoOpAnimationPlayer);
+      _classCallCheck(this, NoopAnimationPlayer);
 
       this._onDoneFns = [];
       this._onStartFns = [];
@@ -623,7 +623,7 @@
      */
 
 
-    _createClass(NoOpAnimationPlayer, [{
+    _createClass(NoopAnimationPlayer, [{
       key: '_onFinish',
       value: function _onFinish() {
         if (!this._finished) {
@@ -704,7 +704,7 @@
       }
     }]);
 
-    return NoOpAnimationPlayer;
+    return NoopAnimationPlayer;
   }();
 
   var AnimationGroupPlayer = function () {
@@ -885,6 +885,6 @@
   exports.transition = transition;
   exports.trigger = trigger;
   exports.AnimationPlayer = AnimationPlayer;
-  exports.NoOpAnimationPlayer = NoOpAnimationPlayer;
+  exports.NoopAnimationPlayer = NoopAnimationPlayer;
   exports.ɵAnimationGroupPlayer = AnimationGroupPlayer;
 });

@@ -1,5 +1,5 @@
 var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}/**
- * @license Angular v4.0.0-beta.8-1f3198c
+ * @license Angular v4.0.0-beta.8-32c2fd5
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  *//**
@@ -484,9 +484,9 @@ var _createClass=function(){function defineProperties(target,props){for(var i=0;
      * @return {?}
      */,set:function set(player){throw new Error('NOT IMPLEMENTED: Base Class');}}]);return AnimationPlayer;}();/**
  * \@experimental Animation support is experimental.
- */var NoOpAnimationPlayer=function(){function NoOpAnimationPlayer(){var _this=this;_classCallCheck(this,NoOpAnimationPlayer);this._onDoneFns=[];this._onStartFns=[];this._onDestroyFns=[];this._started=false;this._destroyed=false;this._finished=false;this.parentPlayer=null;scheduleMicroTask(function(){return _this._onFinish();});}/**
+ */var NoopAnimationPlayer=function(){function NoopAnimationPlayer(){var _this=this;_classCallCheck(this,NoopAnimationPlayer);this._onDoneFns=[];this._onStartFns=[];this._onDestroyFns=[];this._started=false;this._destroyed=false;this._finished=false;this.parentPlayer=null;scheduleMicroTask(function(){return _this._onFinish();});}/**
      * @return {?}
-     */_createClass(NoOpAnimationPlayer,[{key:'_onFinish',value:function _onFinish(){if(!this._finished){this._finished=true;this._onDoneFns.forEach(function(fn){return fn();});this._onDoneFns=[];}}/**
+     */_createClass(NoopAnimationPlayer,[{key:'_onFinish',value:function _onFinish(){if(!this._finished){this._finished=true;this._onDoneFns.forEach(function(fn){return fn();});this._onDoneFns=[];}}/**
      * @param {?} fn
      * @return {?}
      */},{key:'onStart',value:function onStart(fn){this._onStartFns.push(fn);}/**
@@ -516,7 +516,7 @@ var _createClass=function(){function defineProperties(target,props){for(var i=0;
      * @return {?}
      */},{key:'setPosition',value:function setPosition(p){}/**
      * @return {?}
-     */},{key:'getPosition',value:function getPosition(){return 0;}}]);return NoOpAnimationPlayer;}();var AnimationGroupPlayer=function(){/**
+     */},{key:'getPosition',value:function getPosition(){return 0;}}]);return NoopAnimationPlayer;}();var AnimationGroupPlayer=function(){/**
      * @param {?} _players
      */function AnimationGroupPlayer(_players){var _this2=this;_classCallCheck(this,AnimationGroupPlayer);this._players=_players;this._onDoneFns=[];this._onStartFns=[];this._finished=false;this._started=false;this._destroyed=false;this._onDestroyFns=[];this.parentPlayer=null;var count=0;var total=this._players.length;if(total==0){scheduleMicroTask(function(){return _this2._onFinish();});}else{this._players.forEach(function(player){player.parentPlayer=_this2;player.onDone(function(){if(++count>=total){_this2._onFinish();}});});}}/**
      * @return {?}
@@ -552,4 +552,4 @@ var _createClass=function(){function defineProperties(target,props){for(var i=0;
      * @return {?}
      */},{key:'getPosition',value:function getPosition(){var/** @type {?} */min=0;this._players.forEach(function(player){var/** @type {?} */p=player.getPosition();min=Math.min(p,min);});return min;}/**
      * @return {?}
-     */},{key:'players',get:function get(){return this._players;}}]);return AnimationGroupPlayer;}();export{AUTO_STYLE,animate,group,keyframes,sequence,state,style,transition,trigger,AnimationPlayer,NoOpAnimationPlayer,AnimationGroupPlayer as ɵAnimationGroupPlayer};
+     */},{key:'players',get:function get(){return this._players;}}]);return AnimationGroupPlayer;}();export{AUTO_STYLE,animate,group,keyframes,sequence,state,style,transition,trigger,AnimationPlayer,NoopAnimationPlayer,AnimationGroupPlayer as ɵAnimationGroupPlayer};

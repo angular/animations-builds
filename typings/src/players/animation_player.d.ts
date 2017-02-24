@@ -20,7 +20,7 @@ export declare abstract class AnimationPlayer {
 /**
  * @experimental Animation support is experimental.
  */
-export declare class NoOpAnimationPlayer implements AnimationPlayer {
+export declare class NoopAnimationPlayer implements AnimationPlayer {
     private _onDoneFns;
     private _onStartFns;
     private _onDestroyFns;
