@@ -1,6 +1,6 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define('@angular/animation', ['exports'], factory);
+    define('@angular/animations', ['exports'], factory);
   } else if (typeof exports !== "undefined") {
     factory(exports);
   } else {
@@ -8,7 +8,8 @@
       exports: {}
     };
     factory(mod.exports);
-    global.angularAnimation = mod.exports;
+    global.ng = global.ng || {};
+    global.ng.animations = mod.exports;
   }
 })(this, function (exports) {
   'use strict';
@@ -42,7 +43,7 @@
   }();
 
   /**
-   * @license Angular v0.0.0-PLACEHOLDER
+   * @license Angular v4.0.0-beta.8-c53621b
    * (c) 2010-2017 Google, Inc. https://angular.io/
    * License: MIT
    */
