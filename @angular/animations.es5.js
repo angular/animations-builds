@@ -1,5 +1,5 @@
 var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}/**
- * @license Angular v4.0.0-beta.8-01907ba
+ * @license Angular v4.0.0-beta.8-be85103
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  *//**
@@ -431,8 +431,7 @@ var _createClass=function(){function defineProperties(target,props){for(var i=0;
  * found in the LICENSE file at https://angular.io/license
  * @param {?} cb
  * @return {?}
- */function scheduleMicroTask(cb){// FIXME
-setTimeout(cb,0);}/**
+ */function scheduleMicroTask(cb){Promise.resolve(null).then(cb);}/**
  * \@experimental Animation support is experimental.
  * @abstract
  */var AnimationPlayer=function(){function AnimationPlayer(){_classCallCheck(this,AnimationPlayer);}_createClass(AnimationPlayer,[{key:'onDone',/**

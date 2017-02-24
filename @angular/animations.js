@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.8-01907ba
+ * @license Angular v4.0.0-beta.8-be85103
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -491,8 +491,7 @@ function transition(stateChangeExpr, steps) {
  * @return {?}
  */
 function scheduleMicroTask(cb) {
-    // FIXME
-    setTimeout(cb, 0);
+    Promise.resolve(null).then(cb);
 }
 
 /**
