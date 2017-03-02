@@ -3,7 +3,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * @license Angular v4.0.0-rc.1-3168ef7
+ * @license Angular v4.0.0-rc.1-9560ad8
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -241,28 +241,7 @@ function sequence(steps) {
  * @return {?}
  */
 function style(tokens) {
-  var /** @type {?} */input = void 0;
-  var /** @type {?} */offset = null;
-  if (Array.isArray(tokens)) {
-    input = tokens;
-  } else {
-    input = [/** @type {?} */tokens];
-  }
-  input.forEach(function (entry) {
-    var /** @type {?} */entryOffset = entry['offset'];
-    if (entryOffset != null) {
-      offset = offset == null ? parseFloat( /** @type {?} */entryOffset) : offset;
-    }
-  });
-  return _style(offset, input);
-}
-/**
- * @param {?} offset
- * @param {?} styles
- * @return {?}
- */
-function _style(offset, styles) {
-  return { type: 6 /* Style */, styles: styles, offset: offset };
+  return { type: 6 /* Style */, styles: tokens };
 }
 /**
  * `state` is an animation-specific function that is designed to be used inside of Angular2's
@@ -479,11 +458,7 @@ function keyframes(steps) {
  * @return {?}
  */
 function transition(stateChangeExpr, steps) {
-  return {
-    type: 1 /* Transition */
-    , expr: stateChangeExpr,
-    animation: Array.isArray(steps) ? sequence(steps) : steps
-  };
+  return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps };
 }
 
 /**
