@@ -1,16 +1,12 @@
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 /**
- * @license Angular v4.0.0-rc.2-5ad5301
+ * @license Angular v4.0.0-rc.3-53d62fa
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
 /**
  * @experimental Animation support is experimental.
  */
-var /** @type {?} */AUTO_STYLE = '*';
+var /** @type {?} */ AUTO_STYLE = '*';
 /**
  * `trigger` is an animation-specific function that is designed to be used inside of Angular2's
  * animation DSL language. If this information is new, please navigate to the {\@link
@@ -66,7 +62,7 @@ var /** @type {?} */AUTO_STYLE = '*';
  * @return {?}
  */
 function trigger(name, definitions) {
-  return { name: name, definitions: definitions };
+    return { name: name, definitions: definitions };
 }
 /**
  * `animate` is an animation-specific function that is designed to be used inside of Angular2's
@@ -116,10 +112,9 @@ function trigger(name, definitions) {
  * @param {?=} styles
  * @return {?}
  */
-function animate(timings) {
-  var styles = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
-  return { type: 4 /* Animate */, styles: styles, timings: timings };
+function animate(timings, styles) {
+    if (styles === void 0) { styles = null; }
+    return { type: 4 /* Animate */, styles: styles, timings: timings };
 }
 /**
  * `group` is an animation-specific function that is designed to be used inside of Angular2's
@@ -155,7 +150,7 @@ function animate(timings) {
  * @return {?}
  */
 function group(steps) {
-  return { type: 3 /* Group */, steps: steps };
+    return { type: 3 /* Group */, steps: steps };
 }
 /**
  * `sequence` is an animation-specific function that is designed to be used inside of Angular2's
@@ -194,7 +189,7 @@ function group(steps) {
  * @return {?}
  */
 function sequence(steps) {
-  return { type: 2 /* Sequence */, steps: steps };
+    return { type: 2 /* Sequence */, steps: steps };
 }
 /**
  * `style` is an animation-specific function that is designed to be used inside of Angular2's
@@ -241,7 +236,7 @@ function sequence(steps) {
  * @return {?}
  */
 function style(tokens) {
-  return { type: 6 /* Style */, styles: tokens };
+    return { type: 6 /* Style */, styles: tokens };
 }
 /**
  * `state` is an animation-specific function that is designed to be used inside of Angular2's
@@ -295,7 +290,7 @@ function style(tokens) {
  * @return {?}
  */
 function state(name, styles) {
-  return { type: 0 /* State */, name: name, styles: styles };
+    return { type: 0 /* State */, name: name, styles: styles };
 }
 /**
  * `keyframes` is an animation-specific function that is designed to be used inside of Angular2's
@@ -345,7 +340,7 @@ function state(name, styles) {
  * @return {?}
  */
 function keyframes(steps) {
-  return { type: 5 /* KeyframeSequence */, steps: steps };
+    return { type: 5 /* KeyframeSequence */, steps: steps };
 }
 /**
  * `transition` is an animation-specific function that is designed to be used inside of Angular2's
@@ -458,9 +453,8 @@ function keyframes(steps) {
  * @return {?}
  */
 function transition(stateChangeExpr, steps) {
-  return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps };
+    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps };
 }
-
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -471,541 +465,334 @@ function transition(stateChangeExpr, steps) {
  * @return {?}
  */
 function scheduleMicroTask(cb) {
-  Promise.resolve(null).then(cb);
+    Promise.resolve(null).then(cb);
 }
-
 /**
  * \@experimental Animation support is experimental.
  * @abstract
  */
-
-var AnimationPlayer = function () {
-  function AnimationPlayer() {
-    _classCallCheck(this, AnimationPlayer);
-  }
-
-  _createClass(AnimationPlayer, [{
-    key: 'onDone',
-
+var AnimationPlayer = (function () {
+    function AnimationPlayer() {
+    }
     /**
      * @abstract
      * @param {?} fn
      * @return {?}
      */
-    value: function onDone(fn) {}
+    AnimationPlayer.prototype.onDone = function (fn) { };
     /**
      * @abstract
      * @param {?} fn
      * @return {?}
      */
-
-  }, {
-    key: 'onStart',
-    value: function onStart(fn) {}
+    AnimationPlayer.prototype.onStart = function (fn) { };
     /**
      * @abstract
      * @param {?} fn
      * @return {?}
      */
-
-  }, {
-    key: 'onDestroy',
-    value: function onDestroy(fn) {}
+    AnimationPlayer.prototype.onDestroy = function (fn) { };
     /**
      * @abstract
      * @return {?}
      */
-
-  }, {
-    key: 'init',
-    value: function init() {}
+    AnimationPlayer.prototype.init = function () { };
     /**
      * @abstract
      * @return {?}
      */
-
-  }, {
-    key: 'hasStarted',
-    value: function hasStarted() {}
+    AnimationPlayer.prototype.hasStarted = function () { };
     /**
      * @abstract
      * @return {?}
      */
-
-  }, {
-    key: 'play',
-    value: function play() {}
+    AnimationPlayer.prototype.play = function () { };
     /**
      * @abstract
      * @return {?}
      */
-
-  }, {
-    key: 'pause',
-    value: function pause() {}
+    AnimationPlayer.prototype.pause = function () { };
     /**
      * @abstract
      * @return {?}
      */
-
-  }, {
-    key: 'restart',
-    value: function restart() {}
+    AnimationPlayer.prototype.restart = function () { };
     /**
      * @abstract
      * @return {?}
      */
-
-  }, {
-    key: 'finish',
-    value: function finish() {}
+    AnimationPlayer.prototype.finish = function () { };
     /**
      * @abstract
      * @return {?}
      */
-
-  }, {
-    key: 'destroy',
-    value: function destroy() {}
+    AnimationPlayer.prototype.destroy = function () { };
     /**
      * @abstract
      * @return {?}
      */
-
-  }, {
-    key: 'reset',
-    value: function reset() {}
+    AnimationPlayer.prototype.reset = function () { };
     /**
      * @abstract
      * @param {?} p
      * @return {?}
      */
-
-  }, {
-    key: 'setPosition',
-    value: function setPosition(p) {}
+    AnimationPlayer.prototype.setPosition = function (p) { };
     /**
      * @abstract
      * @return {?}
      */
-
-  }, {
-    key: 'getPosition',
-    value: function getPosition() {}
-    /**
-     * @return {?}
-     */
-
-  }, {
-    key: 'parentPlayer',
-    get: function get() {
-      throw new Error('NOT IMPLEMENTED: Base Class');
-    }
-    /**
-     * @param {?} player
-     * @return {?}
-     */
-    ,
-    set: function set(player) {
-      throw new Error('NOT IMPLEMENTED: Base Class');
-    }
-  }]);
-
-  return AnimationPlayer;
-}();
+    AnimationPlayer.prototype.getPosition = function () { };
+    Object.defineProperty(AnimationPlayer.prototype, "parentPlayer", {
+        /**
+         * @return {?}
+         */
+        get: function () { throw new Error('NOT IMPLEMENTED: Base Class'); },
+        /**
+         * @param {?} player
+         * @return {?}
+         */
+        set: function (player) { throw new Error('NOT IMPLEMENTED: Base Class'); },
+        enumerable: true,
+        configurable: true
+    });
+    return AnimationPlayer;
+}());
 /**
  * \@experimental Animation support is experimental.
  */
-
-
-var NoopAnimationPlayer = function () {
-  function NoopAnimationPlayer() {
-    var _this = this;
-
-    _classCallCheck(this, NoopAnimationPlayer);
-
-    this._onDoneFns = [];
-    this._onStartFns = [];
-    this._onDestroyFns = [];
-    this._started = false;
-    this._destroyed = false;
-    this._finished = false;
-    this.parentPlayer = null;
-    scheduleMicroTask(function () {
-      return _this._onFinish();
-    });
-  }
-  /**
-   * @return {?}
-   */
-
-
-  _createClass(NoopAnimationPlayer, [{
-    key: '_onFinish',
-    value: function _onFinish() {
-      if (!this._finished) {
-        this._finished = true;
-        this._onDoneFns.forEach(function (fn) {
-          return fn();
-        });
+var NoopAnimationPlayer = (function () {
+    function NoopAnimationPlayer() {
+        var _this = this;
         this._onDoneFns = [];
-      }
-    }
-    /**
-     * @param {?} fn
-     * @return {?}
-     */
-
-  }, {
-    key: 'onStart',
-    value: function onStart(fn) {
-      this._onStartFns.push(fn);
-    }
-    /**
-     * @param {?} fn
-     * @return {?}
-     */
-
-  }, {
-    key: 'onDone',
-    value: function onDone(fn) {
-      this._onDoneFns.push(fn);
-    }
-    /**
-     * @param {?} fn
-     * @return {?}
-     */
-
-  }, {
-    key: 'onDestroy',
-    value: function onDestroy(fn) {
-      this._onDestroyFns.push(fn);
-    }
-    /**
-     * @return {?}
-     */
-
-  }, {
-    key: 'hasStarted',
-    value: function hasStarted() {
-      return this._started;
-    }
-    /**
-     * @return {?}
-     */
-
-  }, {
-    key: 'init',
-    value: function init() {}
-    /**
-     * @return {?}
-     */
-
-  }, {
-    key: 'play',
-    value: function play() {
-      if (!this.hasStarted()) {
-        this._onStartFns.forEach(function (fn) {
-          return fn();
-        });
         this._onStartFns = [];
-      }
-      this._started = true;
-    }
-    /**
-     * @return {?}
-     */
-
-  }, {
-    key: 'pause',
-    value: function pause() {}
-    /**
-     * @return {?}
-     */
-
-  }, {
-    key: 'restart',
-    value: function restart() {}
-    /**
-     * @return {?}
-     */
-
-  }, {
-    key: 'finish',
-    value: function finish() {
-      this._onFinish();
-    }
-    /**
-     * @return {?}
-     */
-
-  }, {
-    key: 'destroy',
-    value: function destroy() {
-      if (!this._destroyed) {
-        this._destroyed = true;
-        this.finish();
-        this._onDestroyFns.forEach(function (fn) {
-          return fn();
-        });
         this._onDestroyFns = [];
-      }
+        this._started = false;
+        this._destroyed = false;
+        this._finished = false;
+        this.parentPlayer = null;
+        scheduleMicroTask(function () { return _this._onFinish(); });
     }
     /**
      * @return {?}
      */
-
-  }, {
-    key: 'reset',
-    value: function reset() {}
-    /**
-     * @param {?} p
-     * @return {?}
-     */
-
-  }, {
-    key: 'setPosition',
-    value: function setPosition(p) {}
-    /**
-     * @return {?}
-     */
-
-  }, {
-    key: 'getPosition',
-    value: function getPosition() {
-      return 0;
-    }
-  }]);
-
-  return NoopAnimationPlayer;
-}();
-
-var AnimationGroupPlayer = function () {
-  /**
-   * @param {?} _players
-   */
-  function AnimationGroupPlayer(_players) {
-    var _this2 = this;
-
-    _classCallCheck(this, AnimationGroupPlayer);
-
-    this._players = _players;
-    this._onDoneFns = [];
-    this._onStartFns = [];
-    this._finished = false;
-    this._started = false;
-    this._destroyed = false;
-    this._onDestroyFns = [];
-    this.parentPlayer = null;
-    var count = 0;
-    var total = this._players.length;
-    if (total == 0) {
-      scheduleMicroTask(function () {
-        return _this2._onFinish();
-      });
-    } else {
-      this._players.forEach(function (player) {
-        player.parentPlayer = _this2;
-        player.onDone(function () {
-          if (++count >= total) {
-            _this2._onFinish();
-          }
-        });
-      });
-    }
-  }
-  /**
-   * @return {?}
-   */
-
-
-  _createClass(AnimationGroupPlayer, [{
-    key: '_onFinish',
-    value: function _onFinish() {
-      if (!this._finished) {
-        this._finished = true;
-        this._onDoneFns.forEach(function (fn) {
-          return fn();
-        });
-        this._onDoneFns = [];
-      }
-    }
-    /**
-     * @return {?}
-     */
-
-  }, {
-    key: 'init',
-    value: function init() {
-      this._players.forEach(function (player) {
-        return player.init();
-      });
-    }
+    NoopAnimationPlayer.prototype._onFinish = function () {
+        if (!this._finished) {
+            this._finished = true;
+            this._onDoneFns.forEach(function (fn) { return fn(); });
+            this._onDoneFns = [];
+        }
+    };
     /**
      * @param {?} fn
      * @return {?}
      */
-
-  }, {
-    key: 'onStart',
-    value: function onStart(fn) {
-      this._onStartFns.push(fn);
-    }
+    NoopAnimationPlayer.prototype.onStart = function (fn) { this._onStartFns.push(fn); };
     /**
      * @param {?} fn
      * @return {?}
      */
-
-  }, {
-    key: 'onDone',
-    value: function onDone(fn) {
-      this._onDoneFns.push(fn);
-    }
+    NoopAnimationPlayer.prototype.onDone = function (fn) { this._onDoneFns.push(fn); };
     /**
      * @param {?} fn
      * @return {?}
      */
-
-  }, {
-    key: 'onDestroy',
-    value: function onDestroy(fn) {
-      this._onDestroyFns.push(fn);
-    }
+    NoopAnimationPlayer.prototype.onDestroy = function (fn) { this._onDestroyFns.push(fn); };
     /**
      * @return {?}
      */
-
-  }, {
-    key: 'hasStarted',
-    value: function hasStarted() {
-      return this._started;
-    }
+    NoopAnimationPlayer.prototype.hasStarted = function () { return this._started; };
     /**
      * @return {?}
      */
-
-  }, {
-    key: 'play',
-    value: function play() {
-      if (!this.parentPlayer) {
-        this.init();
-      }
-      if (!this.hasStarted()) {
-        this._onStartFns.forEach(function (fn) {
-          return fn();
-        });
-        this._onStartFns = [];
+    NoopAnimationPlayer.prototype.init = function () { };
+    /**
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.play = function () {
+        if (!this.hasStarted()) {
+            this._onStartFns.forEach(function (fn) { return fn(); });
+            this._onStartFns = [];
+        }
         this._started = true;
-      }
-      this._players.forEach(function (player) {
-        return player.play();
-      });
-    }
+    };
     /**
      * @return {?}
      */
-
-  }, {
-    key: 'pause',
-    value: function pause() {
-      this._players.forEach(function (player) {
-        return player.pause();
-      });
-    }
+    NoopAnimationPlayer.prototype.pause = function () { };
     /**
      * @return {?}
      */
-
-  }, {
-    key: 'restart',
-    value: function restart() {
-      this._players.forEach(function (player) {
-        return player.restart();
-      });
-    }
+    NoopAnimationPlayer.prototype.restart = function () { };
     /**
      * @return {?}
      */
-
-  }, {
-    key: 'finish',
-    value: function finish() {
-      this._onFinish();
-      this._players.forEach(function (player) {
-        return player.finish();
-      });
-    }
+    NoopAnimationPlayer.prototype.finish = function () { this._onFinish(); };
     /**
      * @return {?}
      */
-
-  }, {
-    key: 'destroy',
-    value: function destroy() {
-      if (!this._destroyed) {
-        this._onFinish();
-        this._players.forEach(function (player) {
-          return player.destroy();
-        });
-        this._destroyed = true;
-        this._onDestroyFns.forEach(function (fn) {
-          return fn();
-        });
-        this._onDestroyFns = [];
-      }
-    }
+    NoopAnimationPlayer.prototype.destroy = function () {
+        if (!this._destroyed) {
+            this._destroyed = true;
+            this.finish();
+            this._onDestroyFns.forEach(function (fn) { return fn(); });
+            this._onDestroyFns = [];
+        }
+    };
     /**
      * @return {?}
      */
-
-  }, {
-    key: 'reset',
-    value: function reset() {
-      this._players.forEach(function (player) {
-        return player.reset();
-      });
-      this._destroyed = false;
-      this._finished = false;
-      this._started = false;
-    }
+    NoopAnimationPlayer.prototype.reset = function () { };
     /**
      * @param {?} p
      * @return {?}
      */
-
-  }, {
-    key: 'setPosition',
-    value: function setPosition(p) {
-      this._players.forEach(function (player) {
-        player.setPosition(p);
-      });
+    NoopAnimationPlayer.prototype.setPosition = function (p) { };
+    /**
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.getPosition = function () { return 0; };
+    return NoopAnimationPlayer;
+}());
+var AnimationGroupPlayer = (function () {
+    /**
+     * @param {?} _players
+     */
+    function AnimationGroupPlayer(_players) {
+        var _this = this;
+        this._players = _players;
+        this._onDoneFns = [];
+        this._onStartFns = [];
+        this._finished = false;
+        this._started = false;
+        this._destroyed = false;
+        this._onDestroyFns = [];
+        this.parentPlayer = null;
+        var count = 0;
+        var total = this._players.length;
+        if (total == 0) {
+            scheduleMicroTask(function () { return _this._onFinish(); });
+        }
+        else {
+            this._players.forEach(function (player) {
+                player.parentPlayer = _this;
+                player.onDone(function () {
+                    if (++count >= total) {
+                        _this._onFinish();
+                    }
+                });
+            });
+        }
     }
     /**
      * @return {?}
      */
-
-  }, {
-    key: 'getPosition',
-    value: function getPosition() {
-      var /** @type {?} */min = 0;
-      this._players.forEach(function (player) {
-        var /** @type {?} */p = player.getPosition();
-        min = Math.min(p, min);
-      });
-      return min;
-    }
+    AnimationGroupPlayer.prototype._onFinish = function () {
+        if (!this._finished) {
+            this._finished = true;
+            this._onDoneFns.forEach(function (fn) { return fn(); });
+            this._onDoneFns = [];
+        }
+    };
     /**
      * @return {?}
      */
-
-  }, {
-    key: 'players',
-    get: function get() {
-      return this._players;
-    }
-  }]);
-
-  return AnimationGroupPlayer;
-}();
-
+    AnimationGroupPlayer.prototype.init = function () { this._players.forEach(function (player) { return player.init(); }); };
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.onStart = function (fn) { this._onStartFns.push(fn); };
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.onDone = function (fn) { this._onDoneFns.push(fn); };
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.onDestroy = function (fn) { this._onDestroyFns.push(fn); };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.hasStarted = function () { return this._started; };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.play = function () {
+        if (!this.parentPlayer) {
+            this.init();
+        }
+        if (!this.hasStarted()) {
+            this._onStartFns.forEach(function (fn) { return fn(); });
+            this._onStartFns = [];
+            this._started = true;
+        }
+        this._players.forEach(function (player) { return player.play(); });
+    };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.pause = function () { this._players.forEach(function (player) { return player.pause(); }); };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.restart = function () { this._players.forEach(function (player) { return player.restart(); }); };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.finish = function () {
+        this._onFinish();
+        this._players.forEach(function (player) { return player.finish(); });
+    };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.destroy = function () {
+        if (!this._destroyed) {
+            this._onFinish();
+            this._players.forEach(function (player) { return player.destroy(); });
+            this._destroyed = true;
+            this._onDestroyFns.forEach(function (fn) { return fn(); });
+            this._onDestroyFns = [];
+        }
+    };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.reset = function () {
+        this._players.forEach(function (player) { return player.reset(); });
+        this._destroyed = false;
+        this._finished = false;
+        this._started = false;
+    };
+    /**
+     * @param {?} p
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.setPosition = function (p) {
+        this._players.forEach(function (player) { player.setPosition(p); });
+    };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.getPosition = function () {
+        var /** @type {?} */ min = 0;
+        this._players.forEach(function (player) {
+            var /** @type {?} */ p = player.getPosition();
+            min = Math.min(p, min);
+        });
+        return min;
+    };
+    Object.defineProperty(AnimationGroupPlayer.prototype, "players", {
+        /**
+         * @return {?}
+         */
+        get: function () { return this._players; },
+        enumerable: true,
+        configurable: true
+    });
+    return AnimationGroupPlayer;
+}());
 export { AUTO_STYLE, animate, group, keyframes, sequence, state, style, transition, trigger, AnimationPlayer, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer };
