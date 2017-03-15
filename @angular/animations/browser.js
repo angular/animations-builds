@@ -1,9 +1,9 @@
 /**
- * @license Angular v4.0.0-rc.3-bf98d9d
+ * @license Angular v4.0.0-rc.3-6772c91
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
-import { NoopAnimationPlayer, sequence, ɵAnimationGroupPlayer, AUTO_STYLE } from '@angular/animations';
+import { NoopAnimationPlayer, sequence, ɵAnimationGroupPlayer, style, AUTO_STYLE } from '@angular/animations';
 
 /**
  * @experimental
@@ -469,9 +469,13 @@ class AnimationTimelineVisitor {
             this.visitKeyframeSequence(/** @type {?} */ (ast.styles), context);
         }
         else {
+            let /** @type {?} */ styleAst = (ast.styles);
+            if (!styleAst && timings.easing) {
+                styleAst = style({ easing: timings.easing });
+            }
             context.incrementTime(timings.duration);
-            if (astType == 6 /* Style */) {
-                this.visitStyle(/** @type {?} */ (ast.styles), context);
+            if (styleAst) {
+                this.visitStyle(styleAst, context);
             }
         }
         context.currentAnimateTimings = null;
@@ -1030,7 +1034,8 @@ class AnimationTriggerVisitor {
      * @return {?}
      */
     visitState(ast, context) {
-        context.states[ast.name] = normalizeStyles(ast.styles.styles);
+        const /** @type {?} */ styles = normalizeStyles(ast.styles.styles);
+        ast.name.split(/\s*,\s*/).forEach(name => { context.states[name] = styles; });
     }
     /**
      * @param {?} ast
@@ -1100,6 +1105,7 @@ class DomAnimationEngine {
         this._elementTriggerStates = new Map();
         this._triggers = Object.create(null);
         this._triggerListeners = new Map();
+        this._pendingListenerRemovals = new Map();
     }
     /**
      * @return {?}
@@ -1156,6 +1162,12 @@ class DomAnimationEngine {
                 return;
             }
         }
+        // this means that there are no animations to take on this
+        // leave operation therefore we should fire the done|start callbacks
+        if (this._triggerListeners.has(element)) {
+            element[MARKED_FOR_REMOVAL] = true;
+            this._queuedRemovals.set(element, () => { });
+        }
         domFn();
     }
     /**
@@ -1207,11 +1219,27 @@ class DomAnimationEngine {
         const /** @type {?} */ tuple = ({ triggerName: eventName, phase: eventPhase, callback });
         elementListeners.push(tuple);
         return () => {
-            const /** @type {?} */ index = elementListeners.indexOf(tuple);
-            if (index >= 0) {
-                elementListeners.splice(index, 1);
-            }
+            // this is queued up in the event that a removal animation is set
+            // to fire on the element (the listeners need to be set during flush)
+            getOrSetAsInMap(this._pendingListenerRemovals, element, []).push(tuple);
         };
+    }
+    /**
+     * @return {?}
+     */
+    _clearPendingListenerRemovals() {
+        this._pendingListenerRemovals.forEach((tuples, element) => {
+            const /** @type {?} */ elementListeners = this._triggerListeners.get(element);
+            if (elementListeners) {
+                tuples.forEach(tuple => {
+                    const /** @type {?} */ index = elementListeners.indexOf(tuple);
+                    if (index >= 0) {
+                        elementListeners.splice(index, 1);
+                    }
+                });
+            }
+        });
+        this._pendingListenerRemovals.clear();
     }
     /**
      * @param {?} element
@@ -1380,12 +1408,6 @@ class DomAnimationEngine {
                 if (parent[MARKED_FOR_REMOVAL])
                     continue parentLoop;
             }
-            // if a removal exists for the given element then we need cancel
-            // all the queued players so that a proper removal animation can go
-            if (this._queuedRemovals.has(element)) {
-                player.destroy();
-                continue;
-            }
             const /** @type {?} */ listeners = this._triggerListeners.get(element);
             if (listeners) {
                 listeners.forEach(tuple => {
@@ -1393,6 +1415,12 @@ class DomAnimationEngine {
                         listenOnPlayer(player, tuple.phase, event, tuple.callback);
                     }
                 });
+            }
+            // if a removal exists for the given element then we need cancel
+            // all the queued players so that a proper removal animation can go
+            if (this._queuedRemovals.has(element)) {
+                player.destroy();
+                continue;
             }
             this._markPlayerAsActive(element, player);
             // in the event that an animation throws an error then we do
@@ -1407,6 +1435,16 @@ class DomAnimationEngine {
      * @return {?}
      */
     flush() {
+        const /** @type {?} */ leaveListeners = new Map();
+        this._queuedRemovals.forEach((callback, element) => {
+            const /** @type {?} */ tuple = this._pendingListenerRemovals.get(element);
+            if (tuple) {
+                leaveListeners.set(element, tuple);
+                this._pendingListenerRemovals.delete(element);
+            }
+        });
+        this._clearPendingListenerRemovals();
+        this._pendingListenerRemovals = leaveListeners;
         this._flushQueuedAnimations();
         let /** @type {?} */ flushAgain = false;
         this._queuedRemovals.forEach((callback, element) => {
@@ -1438,11 +1476,16 @@ class DomAnimationEngine {
                 const /** @type {?} */ stateDetails = this._elementTriggerStates.get(element);
                 if (stateDetails) {
                     Object.keys(stateDetails).forEach(triggerName => {
+                        flushAgain = true;
                         const /** @type {?} */ oldValue = stateDetails[triggerName];
                         const /** @type {?} */ instruction = this._triggers[triggerName].matchTransition(oldValue, 'void');
                         if (instruction) {
                             players.push(this.animateTransition(element, instruction));
-                            flushAgain = true;
+                        }
+                        else {
+                            const /** @type {?} */ event = makeAnimationEvent(element, triggerName, oldValue, 'void', '', 0);
+                            const /** @type {?} */ player = new NoopAnimationPlayer();
+                            this._queuePlayer(element, triggerName, player, event);
                         }
                     });
                 }
@@ -1459,6 +1502,7 @@ class DomAnimationEngine {
         // this means that one or more leave animations were detected
         if (flushAgain) {
             this._flushQueuedAnimations();
+            this._clearPendingListenerRemovals();
         }
     }
 }

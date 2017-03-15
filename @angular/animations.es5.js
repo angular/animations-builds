@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.3-bf98d9d
+ * @license Angular v4.0.0-rc.3-6772c91
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -563,7 +563,6 @@ var AnimationPlayer = (function () {
  */
 var NoopAnimationPlayer = (function () {
     function NoopAnimationPlayer() {
-        var _this = this;
         this._onDoneFns = [];
         this._onStartFns = [];
         this._onDestroyFns = [];
@@ -571,7 +570,6 @@ var NoopAnimationPlayer = (function () {
         this._destroyed = false;
         this._finished = false;
         this.parentPlayer = null;
-        scheduleMicroTask(function () { return _this._onFinish(); });
     }
     /**
      * @return {?}
@@ -610,11 +608,19 @@ var NoopAnimationPlayer = (function () {
      * @return {?}
      */
     NoopAnimationPlayer.prototype.play = function () {
+        var _this = this;
         if (!this.hasStarted()) {
-            this._onStartFns.forEach(function (fn) { return fn(); });
-            this._onStartFns = [];
+            scheduleMicroTask(function () { return _this._onFinish(); });
+            this._onStart();
         }
         this._started = true;
+    };
+    /**
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype._onStart = function () {
+        this._onStartFns.forEach(function (fn) { return fn(); });
+        this._onStartFns = [];
     };
     /**
      * @return {?}
@@ -634,6 +640,9 @@ var NoopAnimationPlayer = (function () {
     NoopAnimationPlayer.prototype.destroy = function () {
         if (!this._destroyed) {
             this._destroyed = true;
+            if (!this.hasStarted()) {
+                this._onStart();
+            }
             this.finish();
             this._onDestroyFns.forEach(function (fn) { return fn(); });
             this._onDestroyFns = [];
