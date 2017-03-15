@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.3-5c0ea20
+ * @license Angular v4.0.0-rc.3-b00fe20
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1030,7 +1030,8 @@ class AnimationTriggerVisitor {
      * @return {?}
      */
     visitState(ast, context) {
-        context.states[ast.name] = normalizeStyles(ast.styles.styles);
+        const /** @type {?} */ styles = normalizeStyles(ast.styles.styles);
+        ast.name.split(/\s*,\s*/).forEach(name => { context.states[name] = styles; });
     }
     /**
      * @param {?} ast
