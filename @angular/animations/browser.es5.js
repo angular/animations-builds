@@ -4,11 +4,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-rc.3-f1b33ab
+ * @license Angular v4.0.0-rc.3-62d5543
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
-import { NoopAnimationPlayer, sequence, ɵAnimationGroupPlayer, AUTO_STYLE } from '@angular/animations';
+import { NoopAnimationPlayer, sequence, ɵAnimationGroupPlayer, style, AUTO_STYLE } from '@angular/animations';
 /**
  * @experimental
  */
@@ -495,9 +495,13 @@ var AnimationTimelineVisitor = (function () {
             this.visitKeyframeSequence(/** @type {?} */ (ast.styles), context);
         }
         else {
+            var /** @type {?} */ styleAst = (ast.styles);
+            if (!styleAst && timings.easing) {
+                styleAst = style({ easing: timings.easing });
+            }
             context.incrementTime(timings.duration);
-            if (astType == 6 /* Style */) {
-                this.visitStyle(/** @type {?} */ (ast.styles), context);
+            if (styleAst) {
+                this.visitStyle(styleAst, context);
             }
         }
         context.currentAnimateTimings = null;
