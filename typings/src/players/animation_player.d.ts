@@ -36,6 +36,7 @@ export declare class NoopAnimationPlayer implements AnimationPlayer {
     hasStarted(): boolean;
     init(): void;
     play(): void;
+    private _onStart();
     pause(): void;
     restart(): void;
     finish(): void;

@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-rc.3-80112a9
+ * @license Angular v4.0.0-rc.3-3f38c6f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1152,6 +1152,7 @@ var DomAnimationEngine = (function () {
         this._elementTriggerStates = new Map();
         this._triggers = Object.create(null);
         this._triggerListeners = new Map();
+        this._pendingListenerRemovals = new Map();
     }
     Object.defineProperty(DomAnimationEngine.prototype, "queuedPlayers", {
         /**
@@ -1218,6 +1219,12 @@ var DomAnimationEngine = (function () {
                 return;
             }
         }
+        // this means that there are no animations to take on this
+        // leave operation therefore we should fire the done|start callbacks
+        if (this._triggerListeners.has(element)) {
+            element[MARKED_FOR_REMOVAL] = true;
+            this._queuedRemovals.set(element, function () { });
+        }
         domFn();
     };
     /**
@@ -1255,6 +1262,7 @@ var DomAnimationEngine = (function () {
      * @return {?}
      */
     DomAnimationEngine.prototype.listen = function (element, eventName, eventPhase, callback) {
+        var _this = this;
         if (!eventPhase) {
             throw new Error("Unable to listen on the animation trigger \"" + eventName + "\" because the provided event is undefined!");
         }
@@ -1269,11 +1277,28 @@ var DomAnimationEngine = (function () {
         var /** @type {?} */ tuple = ({ triggerName: eventName, phase: eventPhase, callback: callback });
         elementListeners.push(tuple);
         return function () {
-            var /** @type {?} */ index = elementListeners.indexOf(tuple);
-            if (index >= 0) {
-                elementListeners.splice(index, 1);
-            }
+            // this is queued up in the event that a removal animation is set
+            // to fire on the element (the listeners need to be set during flush)
+            getOrSetAsInMap(_this._pendingListenerRemovals, element, []).push(tuple);
         };
+    };
+    /**
+     * @return {?}
+     */
+    DomAnimationEngine.prototype._clearPendingListenerRemovals = function () {
+        var _this = this;
+        this._pendingListenerRemovals.forEach(function (tuples, element) {
+            var /** @type {?} */ elementListeners = _this._triggerListeners.get(element);
+            if (elementListeners) {
+                tuples.forEach(function (tuple) {
+                    var /** @type {?} */ index = elementListeners.indexOf(tuple);
+                    if (index >= 0) {
+                        elementListeners.splice(index, 1);
+                    }
+                });
+            }
+        });
+        this._pendingListenerRemovals.clear();
     };
     /**
      * @param {?} element
@@ -1450,12 +1475,6 @@ var DomAnimationEngine = (function () {
                 if (parent[MARKED_FOR_REMOVAL])
                     return "continue-parentLoop";
             }
-            // if a removal exists for the given element then we need cancel
-            // all the queued players so that a proper removal animation can go
-            if (this_2._queuedRemovals.has(element)) {
-                player.destroy();
-                return "continue";
-            }
             var /** @type {?} */ listeners = this_2._triggerListeners.get(element);
             if (listeners) {
                 listeners.forEach(function (tuple) {
@@ -1463,6 +1482,12 @@ var DomAnimationEngine = (function () {
                         listenOnPlayer(player, tuple.phase, event, tuple.callback);
                     }
                 });
+            }
+            // if a removal exists for the given element then we need cancel
+            // all the queued players so that a proper removal animation can go
+            if (this_2._queuedRemovals.has(element)) {
+                player.destroy();
+                return "continue";
             }
             this_2._markPlayerAsActive(element, player);
             // in the event that an animation throws an error then we do
@@ -1485,6 +1510,16 @@ var DomAnimationEngine = (function () {
      */
     DomAnimationEngine.prototype.flush = function () {
         var _this = this;
+        var /** @type {?} */ leaveListeners = new Map();
+        this._queuedRemovals.forEach(function (callback, element) {
+            var /** @type {?} */ tuple = _this._pendingListenerRemovals.get(element);
+            if (tuple) {
+                leaveListeners.set(element, tuple);
+                _this._pendingListenerRemovals.delete(element);
+            }
+        });
+        this._clearPendingListenerRemovals();
+        this._pendingListenerRemovals = leaveListeners;
         this._flushQueuedAnimations();
         var /** @type {?} */ flushAgain = false;
         this._queuedRemovals.forEach(function (callback, element) {
@@ -1516,11 +1551,16 @@ var DomAnimationEngine = (function () {
                 var /** @type {?} */ stateDetails_1 = _this._elementTriggerStates.get(element);
                 if (stateDetails_1) {
                     Object.keys(stateDetails_1).forEach(function (triggerName) {
+                        flushAgain = true;
                         var /** @type {?} */ oldValue = stateDetails_1[triggerName];
                         var /** @type {?} */ instruction = _this._triggers[triggerName].matchTransition(oldValue, 'void');
                         if (instruction) {
                             players.push(_this.animateTransition(element, instruction));
-                            flushAgain = true;
+                        }
+                        else {
+                            var /** @type {?} */ event = makeAnimationEvent(element, triggerName, oldValue, 'void', '', 0);
+                            var /** @type {?} */ player = new NoopAnimationPlayer();
+                            _this._queuePlayer(element, triggerName, player, event);
                         }
                     });
                 }
@@ -1537,6 +1577,7 @@ var DomAnimationEngine = (function () {
         // this means that one or more leave animations were detected
         if (flushAgain) {
             this._flushQueuedAnimations();
+            this._clearPendingListenerRemovals();
         }
     };
     return DomAnimationEngine;

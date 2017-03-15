@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.3-80112a9
+ * @license Angular v4.0.0-rc.3-3f38c6f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -564,7 +564,6 @@ class NoopAnimationPlayer {
         this._destroyed = false;
         this._finished = false;
         this.parentPlayer = null;
-        scheduleMicroTask(() => this._onFinish());
     }
     /**
      * @return {?}
@@ -604,10 +603,17 @@ class NoopAnimationPlayer {
      */
     play() {
         if (!this.hasStarted()) {
-            this._onStartFns.forEach(fn => fn());
-            this._onStartFns = [];
+            scheduleMicroTask(() => this._onFinish());
+            this._onStart();
         }
         this._started = true;
+    }
+    /**
+     * @return {?}
+     */
+    _onStart() {
+        this._onStartFns.forEach(fn => fn());
+        this._onStartFns = [];
     }
     /**
      * @return {?}
@@ -627,6 +633,9 @@ class NoopAnimationPlayer {
     destroy() {
         if (!this._destroyed) {
             this._destroyed = true;
+            if (!this.hasStarted()) {
+                this._onStart();
+            }
             this.finish();
             this._onDestroyFns.forEach(fn => fn());
             this._onDestroyFns = [];

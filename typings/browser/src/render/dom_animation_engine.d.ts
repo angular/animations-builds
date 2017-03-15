@@ -32,6 +32,7 @@ export declare class DomAnimationEngine {
     private _elementTriggerStates;
     private _triggers;
     private _triggerListeners;
+    private _pendingListenerRemovals;
     constructor(_driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
     readonly queuedPlayers: AnimationPlayer[];
     readonly activePlayers: AnimationPlayer[];
@@ -40,6 +41,7 @@ export declare class DomAnimationEngine {
     onRemove(element: any, domFn: () => any): void;
     setProperty(element: any, property: string, value: any): void;
     listen(element: any, eventName: string, eventPhase: string, callback: (event: any) => any): () => void;
+    private _clearPendingListenerRemovals();
     private _onRemovalTransition(element);
     animateTransition(element: any, instruction: AnimationTransitionInstruction): AnimationPlayer;
     animateTimeline(element: any, instructions: AnimationTimelineInstruction[], previousPlayers?: AnimationPlayer[]): AnimationPlayer;
