@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-rc.3-a4076c7
+ * @license Angular v4.0.0-rc.3-992aa17
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2316,3 +2316,4 @@ function supportsWebAnimations() {
     return typeof Element !== 'undefined' && typeof ((Element)).prototype['animate'] === 'function';
 }
 export { AnimationDriver, AnimationEngine as ɵAnimationEngine, Animation as ɵAnimation, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, NoopAnimationDriver as ɵNoopAnimationDriver, DomAnimationEngine as ɵDomAnimationEngine, NoopAnimationEngine as ɵNoopAnimationEngine, WebAnimationsDriver as ɵWebAnimationsDriver, supportsWebAnimations as ɵsupportsWebAnimations };
+//# sourceMappingURL=browser.es5.js.map
