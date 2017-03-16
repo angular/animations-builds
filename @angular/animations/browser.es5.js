@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-rc.3-992aa17
+ * @license Angular v4.0.0-rc.3-492153a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -30,6 +30,13 @@ var AnimationDriver = (function () {
     return AnimationDriver;
 }());
 AnimationDriver.NOOP = new NoopAnimationDriver();
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @abstract
  */
@@ -97,6 +104,13 @@ var AnimationEngine = (function () {
     });
     return AnimationEngine;
 }());
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var /** @type {?} */ ONE_SECOND = 1000;
 /**
  * @param {?} exp
@@ -199,6 +213,13 @@ function eraseStyles(element, styles) {
     }
 }
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * @param {?} visitor
  * @param {?} node
  * @param {?} context
@@ -231,13 +252,7 @@ function visitAnimationNode(visitor, node, context) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */ var /** @type {?} */ ANY_STATE = '*';
+var ANY_STATE = '*';
 /**
  * @param {?} transitionValue
  * @param {?} errors
@@ -307,6 +322,13 @@ function makeLambdaFromStates(lhs, rhs) {
         return lhsMatch && rhsMatch;
     };
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @param {?} keyframes
  * @param {?} duration
@@ -752,6 +774,13 @@ function getOffset(ast) {
     }
     return offset;
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @param {?} triggerName
  * @param {?} fromState

@@ -1,12 +1,12 @@
 /**
- * @license Angular v4.0.0-rc.3-992aa17
+ * @license Angular v4.0.0-rc.3-492153a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
 /**
- * @experimental Animation support is experimental.
+ * \@experimental Animation support is experimental.
  */
-var /** @type {?} */ AUTO_STYLE = '*';
+var AUTO_STYLE = '*';
 /**
  * `trigger` is an animation-specific function that is designed to be used inside of Angular2's
  * animation DSL language. If this information is new, please navigate to the {\@link
