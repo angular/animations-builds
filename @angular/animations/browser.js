@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.5-f925910
+ * @license Angular v4.0.0-rc.5-6e9264a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1132,7 +1132,8 @@ class AnimationTriggerVisitor {
     }
 }
 
-const /** @type {?} */ MARKED_FOR_ANIMATION = 'ng-animate';
+const /** @type {?} */ MARKED_FOR_ANIMATION_CLASSNAME = 'ng-animating';
+const /** @type {?} */ MARKED_FOR_ANIMATION_SELECTOR = '.ng-animating';
 const /** @type {?} */ MARKED_FOR_REMOVAL = '$$ngRemove';
 class DomAnimationEngine {
     /**
@@ -1213,6 +1214,7 @@ class DomAnimationEngine {
             element[MARKED_FOR_REMOVAL] = true;
             this._queuedRemovals.set(element, () => { });
         }
+        this._onRemovalTransition(element).forEach(player => player.destroy());
         domFn();
     }
     /**
@@ -1294,7 +1296,7 @@ class DomAnimationEngine {
         // when a parent animation is set to trigger a removal we want to
         // find all of the children that are currently animating and clear
         // them out by destroying each of them.
-        const /** @type {?} */ elms = element.querySelectorAll(MARKED_FOR_ANIMATION);
+        const /** @type {?} */ elms = element.querySelectorAll(MARKED_FOR_ANIMATION_SELECTOR);
         for (let /** @type {?} */ i = 0; i < elms.length; i++) {
             const /** @type {?} */ elm = elms[i];
             const /** @type {?} */ activePlayers = this._activeElementAnimations.get(elm);
@@ -1436,8 +1438,8 @@ class DomAnimationEngine {
         const /** @type {?} */ tuple = ({ element, player, triggerName, event });
         this._queuedTransitionAnimations.push(tuple);
         player.init();
-        element.classList.add(MARKED_FOR_ANIMATION);
-        player.onDone(() => { element.classList.remove(MARKED_FOR_ANIMATION); });
+        element.classList.add(MARKED_FOR_ANIMATION_CLASSNAME);
+        player.onDone(() => { element.classList.remove(MARKED_FOR_ANIMATION_CLASSNAME); });
     }
     /**
      * @return {?}

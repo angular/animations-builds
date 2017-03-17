@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.5-f925910
+ * @license Angular v4.0.0-rc.5-6e9264a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1190,7 +1190,8 @@
         };
         return AnimationTriggerVisitor;
     }());
-    var /** @type {?} */ MARKED_FOR_ANIMATION = 'ng-animate';
+    var /** @type {?} */ MARKED_FOR_ANIMATION_CLASSNAME = 'ng-animating';
+    var /** @type {?} */ MARKED_FOR_ANIMATION_SELECTOR = '.ng-animating';
     var /** @type {?} */ MARKED_FOR_REMOVAL = '$$ngRemove';
     var DomAnimationEngine = (function () {
         /**
@@ -1281,6 +1282,7 @@
                 element[MARKED_FOR_REMOVAL] = true;
                 this._queuedRemovals.set(element, function () { });
             }
+            this._onRemovalTransition(element).forEach(function (player) { return player.destroy(); });
             domFn();
         };
         /**
@@ -1364,7 +1366,7 @@
             // when a parent animation is set to trigger a removal we want to
             // find all of the children that are currently animating and clear
             // them out by destroying each of them.
-            var /** @type {?} */ elms = element.querySelectorAll(MARKED_FOR_ANIMATION);
+            var /** @type {?} */ elms = element.querySelectorAll(MARKED_FOR_ANIMATION_SELECTOR);
             var _loop_1 = function (i) {
                 var /** @type {?} */ elm = elms[i];
                 var /** @type {?} */ activePlayers = this_1._activeElementAnimations.get(elm);
@@ -1514,8 +1516,8 @@
             var /** @type {?} */ tuple = ({ element: element, player: player, triggerName: triggerName, event: event });
             this._queuedTransitionAnimations.push(tuple);
             player.init();
-            element.classList.add(MARKED_FOR_ANIMATION);
-            player.onDone(function () { element.classList.remove(MARKED_FOR_ANIMATION); });
+            element.classList.add(MARKED_FOR_ANIMATION_CLASSNAME);
+            player.onDone(function () { element.classList.remove(MARKED_FOR_ANIMATION_CLASSNAME); });
         };
         /**
          * @return {?}
