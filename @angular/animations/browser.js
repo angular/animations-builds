@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.5-2d78c8c
+ * @license Angular v4.0.0-rc.5-f925910
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -519,11 +519,21 @@ class AnimationTimelineVisitor {
         }
         const /** @type {?} */ normalizedStyles = normalizeStyles(ast.styles);
         const /** @type {?} */ easing = context.currentAnimateTimings && context.currentAnimateTimings.easing;
-        if (easing) {
-            normalizedStyles['easing'] = easing;
-        }
-        context.currentTimeline.setStyles(normalizedStyles);
+        this._applyStyles(normalizedStyles, easing, context);
         context.previousNode = ast;
+    }
+    /**
+     * @param {?} styles
+     * @param {?} easing
+     * @param {?} context
+     * @return {?}
+     */
+    _applyStyles(styles, easing, context) {
+        if (styles.hasOwnProperty('easing')) {
+            easing = easing || (styles['easing']);
+            delete styles['easing'];
+        }
+        context.currentTimeline.setStyles(styles, easing);
     }
     /**
      * @param {?} ast
@@ -550,7 +560,7 @@ class AnimationTimelineVisitor {
                 (step.offset != null ? step.offset : parseFloat(/** @type {?} */ (normalizedStyles['offset']))) :
                 (i == limit ? MAX_KEYFRAME_OFFSET : i * offsetGap);
             innerTimeline.forwardTime(offset * duration);
-            innerTimeline.setStyles(normalizedStyles);
+            this._applyStyles(normalizedStyles, null, innerContext);
         });
         // this will ensure that the parent timeline gets all the styles from
         // the child even if the new timeline below is not used
@@ -571,6 +581,7 @@ class TimelineBuilder {
         this._globalTimelineStyles = _globalTimelineStyles;
         this.duration = 0;
         this.easing = '';
+        this._previousKeyframe = {};
         this._keyframes = new Map();
         this._styleSummary = {};
         this._backFill = {};
@@ -599,6 +610,9 @@ class TimelineBuilder {
      * @return {?}
      */
     _loadKeyframe() {
+        if (this._currentKeyframe) {
+            this._previousKeyframe = this._currentKeyframe;
+        }
         this._currentKeyframe = this._keyframes.get(this.duration);
         if (!this._currentKeyframe) {
             this._currentKeyframe = Object.create(this._backFill, {});
@@ -626,22 +640,24 @@ class TimelineBuilder {
      * @return {?}
      */
     _updateStyle(prop, value) {
-        if (prop != 'easing') {
-            this._localTimelineStyles[prop] = value;
-            this._globalTimelineStyles[prop] = value;
-            this._styleSummary[prop] = { time: this.currentTime, value };
-        }
+        this._localTimelineStyles[prop] = value;
+        this._globalTimelineStyles[prop] = value;
+        this._styleSummary[prop] = { time: this.currentTime, value };
     }
     /**
      * @param {?} styles
+     * @param {?=} easing
      * @return {?}
      */
-    setStyles(styles) {
+    setStyles(styles, easing = null) {
+        if (easing) {
+            this._previousKeyframe['easing'] = easing;
+        }
         Object.keys(styles).forEach(prop => {
             if (prop !== 'offset') {
                 const /** @type {?} */ val = styles[prop];
                 this._currentKeyframe[prop] = val;
-                if (prop !== 'easing' && !this._localTimelineStyles[prop]) {
+                if (!this._localTimelineStyles[prop]) {
                     this._backFill[prop] = this._globalTimelineStyles[prop] || AUTO_STYLE;
                 }
                 this._updateStyle(prop, val);
@@ -1214,8 +1230,8 @@ class DomAnimationEngine {
         if (!lookupRef) {
             this._elementTriggerStates.set(element, lookupRef = {});
         }
-        let /** @type {?} */ oldValue = lookupRef[property] || 'void';
-        if (oldValue != value) {
+        let /** @type {?} */ oldValue = lookupRef.hasOwnProperty(property) ? lookupRef[property] : 'void';
+        if (oldValue !== value) {
             let /** @type {?} */ instruction = trigger.matchTransition(oldValue, value);
             if (!instruction) {
                 // we do this to make sure we always have an animation player so

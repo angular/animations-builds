@@ -33,6 +33,7 @@ export declare class AnimationTimelineVisitor implements AnimationDslVisitor {
     visitGroup(ast: AnimationGroupMetadata, context: AnimationTimelineContext): void;
     visitAnimate(ast: AnimationAnimateMetadata, context: AnimationTimelineContext): void;
     visitStyle(ast: AnimationStyleMetadata, context: AnimationTimelineContext): void;
+    private _applyStyles(styles, easing, context);
     visitKeyframeSequence(ast: AnimationKeyframesSequenceMetadata, context: AnimationTimelineContext): void;
 }
 export declare class TimelineBuilder {
@@ -40,6 +41,7 @@ export declare class TimelineBuilder {
     private _globalTimelineStyles;
     duration: number;
     easing: string;
+    private _previousKeyframe;
     private _currentKeyframe;
     private _keyframes;
     private _styleSummary;
@@ -53,7 +55,7 @@ export declare class TimelineBuilder {
     forwardFrame(): void;
     forwardTime(time: number): void;
     private _updateStyle(prop, value);
-    setStyles(styles: ɵStyleData): void;
+    setStyles(styles: ɵStyleData, easing?: string): void;
     snapshotCurrentStyles(): void;
     getFinalKeyframe(): ɵStyleData;
     readonly properties: string[];
