@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-rc.4-fcaca45
+ * @license Angular v4.0.0-rc.5-d0bc83c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -545,11 +545,21 @@ var AnimationTimelineVisitor = (function () {
         }
         var /** @type {?} */ normalizedStyles = normalizeStyles(ast.styles);
         var /** @type {?} */ easing = context.currentAnimateTimings && context.currentAnimateTimings.easing;
-        if (easing) {
-            normalizedStyles['easing'] = easing;
-        }
-        context.currentTimeline.setStyles(normalizedStyles);
+        this._applyStyles(normalizedStyles, easing, context);
         context.previousNode = ast;
+    };
+    /**
+     * @param {?} styles
+     * @param {?} easing
+     * @param {?} context
+     * @return {?}
+     */
+    AnimationTimelineVisitor.prototype._applyStyles = function (styles, easing, context) {
+        if (styles.hasOwnProperty('easing')) {
+            easing = easing || (styles['easing']);
+            delete styles['easing'];
+        }
+        context.currentTimeline.setStyles(styles, easing);
     };
     /**
      * @param {?} ast
@@ -557,6 +567,7 @@ var AnimationTimelineVisitor = (function () {
      * @return {?}
      */
     AnimationTimelineVisitor.prototype.visitKeyframeSequence = function (ast, context) {
+        var _this = this;
         var /** @type {?} */ MAX_KEYFRAME_OFFSET = 1;
         var /** @type {?} */ limit = ast.steps.length - 1;
         var /** @type {?} */ firstKeyframe = ast.steps[0];
@@ -576,7 +587,7 @@ var AnimationTimelineVisitor = (function () {
                 (step.offset != null ? step.offset : parseFloat(/** @type {?} */ (normalizedStyles['offset']))) :
                 (i == limit ? MAX_KEYFRAME_OFFSET : i * offsetGap);
             innerTimeline.forwardTime(offset * duration);
-            innerTimeline.setStyles(normalizedStyles);
+            _this._applyStyles(normalizedStyles, null, innerContext);
         });
         // this will ensure that the parent timeline gets all the styles from
         // the child even if the new timeline below is not used
@@ -599,6 +610,7 @@ var TimelineBuilder = (function () {
         this._globalTimelineStyles = _globalTimelineStyles;
         this.duration = 0;
         this.easing = '';
+        this._previousKeyframe = {};
         this._keyframes = new Map();
         this._styleSummary = {};
         this._backFill = {};
@@ -632,6 +644,9 @@ var TimelineBuilder = (function () {
      * @return {?}
      */
     TimelineBuilder.prototype._loadKeyframe = function () {
+        if (this._currentKeyframe) {
+            this._previousKeyframe = this._currentKeyframe;
+        }
         this._currentKeyframe = this._keyframes.get(this.duration);
         if (!this._currentKeyframe) {
             this._currentKeyframe = Object.create(this._backFill, {});
@@ -659,23 +674,26 @@ var TimelineBuilder = (function () {
      * @return {?}
      */
     TimelineBuilder.prototype._updateStyle = function (prop, value) {
-        if (prop != 'easing') {
-            this._localTimelineStyles[prop] = value;
-            this._globalTimelineStyles[prop] = value;
-            this._styleSummary[prop] = { time: this.currentTime, value: value };
-        }
+        this._localTimelineStyles[prop] = value;
+        this._globalTimelineStyles[prop] = value;
+        this._styleSummary[prop] = { time: this.currentTime, value: value };
     };
     /**
      * @param {?} styles
+     * @param {?=} easing
      * @return {?}
      */
-    TimelineBuilder.prototype.setStyles = function (styles) {
+    TimelineBuilder.prototype.setStyles = function (styles, easing) {
         var _this = this;
+        if (easing === void 0) { easing = null; }
+        if (easing) {
+            this._previousKeyframe['easing'] = easing;
+        }
         Object.keys(styles).forEach(function (prop) {
             if (prop !== 'offset') {
                 var /** @type {?} */ val = styles[prop];
                 _this._currentKeyframe[prop] = val;
-                if (prop !== 'easing' && !_this._localTimelineStyles[prop]) {
+                if (!_this._localTimelineStyles[prop]) {
                     _this._backFill[prop] = _this._globalTimelineStyles[prop] || AUTO_STYLE;
                 }
                 _this._updateStyle(prop, val);
@@ -1275,8 +1293,8 @@ var DomAnimationEngine = (function () {
         if (!lookupRef) {
             this._elementTriggerStates.set(element, lookupRef = {});
         }
-        var /** @type {?} */ oldValue = lookupRef[property] || 'void';
-        if (oldValue != value) {
+        var /** @type {?} */ oldValue = lookupRef.hasOwnProperty(property) ? lookupRef[property] : 'void';
+        if (oldValue !== value) {
             var /** @type {?} */ instruction = trigger.matchTransition(oldValue, value);
             if (!instruction) {
                 // we do this to make sure we always have an animation player so
