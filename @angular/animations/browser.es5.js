@@ -4,11 +4,18 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-rc.5-5c5c2ae
+ * @license Angular v4.0.0-rc.5-bcc29ff
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
-import { NoopAnimationPlayer, sequence, ɵAnimationGroupPlayer, style, AUTO_STYLE } from '@angular/animations';
+import { AUTO_STYLE, NoopAnimationPlayer, sequence, style, ɵAnimationGroupPlayer } from '@angular/animations';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @experimental
  */
@@ -111,7 +118,7 @@ var AnimationEngine = (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var /** @type {?} */ ONE_SECOND = 1000;
+var ONE_SECOND = 1000;
 /**
  * @param {?} exp
  * @param {?} errors
@@ -345,6 +352,13 @@ function createTimelineInstruction(keyframes, duration, delay, easing) {
         totalTime: duration + delay, easing: easing
     };
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @param {?} ast
  * @param {?=} startingStyles
@@ -821,6 +835,13 @@ function createTransitionInstruction(triggerName, fromState, toState, isRemovalT
         timelines: timelines
     };
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var AnimationTransitionFactory = (function () {
     /**
      * @param {?} _triggerName
@@ -862,6 +883,13 @@ var AnimationTransitionFactory = (function () {
 function oneOrMoreTransitionsMatch(matchFns, currentState, nextState) {
     return matchFns.some(function (fn) { return fn(currentState, nextState); });
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @param {?} ast
  * @return {?}
@@ -1039,6 +1067,13 @@ var AnimationValidatorContext = (function () {
     return AnimationValidatorContext;
 }());
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * \@experimental Animation support is experimental.
  * @param {?} name
  * @param {?} definitions
@@ -1185,9 +1220,16 @@ var AnimationTriggerVisitor = (function () {
     };
     return AnimationTriggerVisitor;
 }());
-var /** @type {?} */ MARKED_FOR_ANIMATION_CLASSNAME = 'ng-animating';
-var /** @type {?} */ MARKED_FOR_ANIMATION_SELECTOR = '.ng-animating';
-var /** @type {?} */ MARKED_FOR_REMOVAL = '$$ngRemove';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var MARKED_FOR_ANIMATION_CLASSNAME = 'ng-animating';
+var MARKED_FOR_ANIMATION_SELECTOR = '.ng-animating';
+var MARKED_FOR_REMOVAL = '$$ngRemove';
 var DomAnimationEngine = (function () {
     /**
      * @param {?} _driver
@@ -1794,6 +1836,13 @@ var NoopAnimationStyleNormalizer = (function () {
     };
     return NoopAnimationStyleNormalizer;
 }());
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var Animation = (function () {
     /**
      * @param {?} input
@@ -1837,6 +1886,13 @@ var Animation = (function () {
     };
     return Animation;
 }());
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var WebAnimationsStyleNormalizer = (function (_super) {
     __extends(WebAnimationsStyleNormalizer, _super);
     function WebAnimationsStyleNormalizer() {
@@ -1875,7 +1931,7 @@ var WebAnimationsStyleNormalizer = (function (_super) {
     };
     return WebAnimationsStyleNormalizer;
 }(AnimationStyleNormalizer));
-var /** @type {?} */ DIMENSIONAL_PROP_MAP = makeBooleanMap('width,height,minWidth,minHeight,maxWidth,maxHeight,left,top,bottom,right,fontSize,outlineWidth,outlineOffset,paddingTop,paddingLeft,paddingBottom,paddingRight,marginTop,marginLeft,marginBottom,marginRight,borderRadius,borderWidth,borderTopWidth,borderLeftWidth,borderRightWidth,borderBottomWidth,textIndent'
+var DIMENSIONAL_PROP_MAP = makeBooleanMap('width,height,minWidth,minHeight,maxWidth,maxHeight,left,top,bottom,right,fontSize,outlineWidth,outlineOffset,paddingTop,paddingLeft,paddingBottom,paddingRight,marginTop,marginLeft,marginBottom,marginRight,borderRadius,borderWidth,borderTopWidth,borderLeftWidth,borderRightWidth,borderBottomWidth,textIndent'
     .split(','));
 /**
  * @param {?} keys
@@ -1886,7 +1942,7 @@ function makeBooleanMap(keys) {
     keys.forEach(function (key) { return map[key] = true; });
     return map;
 }
-var /** @type {?} */ DASH_CASE_REGEXP = /-+([a-z0-9])/g;
+var DASH_CASE_REGEXP = /-+([a-z0-9])/g;
 /**
  * @param {?} input
  * @return {?}
@@ -1900,8 +1956,15 @@ function dashCaseToCamelCase(input) {
         return m[1].toUpperCase();
     });
 }
-var /** @type {?} */ DEFAULT_STATE_VALUE = 'void';
-var /** @type {?} */ DEFAULT_STATE_STYLES = '*';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var DEFAULT_STATE_VALUE = 'void';
+var DEFAULT_STATE_STYLES = '*';
 var NoopAnimationEngine = (function (_super) {
     __extends(NoopAnimationEngine, _super);
     function NoopAnimationEngine() {
@@ -2090,6 +2153,13 @@ function makeAnimationEvent$1(element, triggerName, fromState, toState, phaseNam
 function makeStorageProp(property) {
     return '_@_' + property;
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var WebAnimationsPlayer = (function () {
     /**
      * @param {?} element
@@ -2333,6 +2403,13 @@ function _copyKeyframeStyles(styles) {
     });
     return newStyles;
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var WebAnimationsDriver = (function () {
     function WebAnimationsDriver() {
     }
@@ -2364,5 +2441,39 @@ var WebAnimationsDriver = (function () {
 function supportsWebAnimations() {
     return typeof Element !== 'undefined' && typeof ((Element)).prototype['animate'] === 'function';
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @module
+ * @description
+ * Entry point for all animation APIs of the animation browser package.
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @module
+ * @description
+ * Entry point for all public APIs of the animation package.
+ */
+/**
+ * Generated bundle index. Do not edit.
+ */
 export { AnimationDriver, AnimationEngine as ɵAnimationEngine, Animation as ɵAnimation, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, NoopAnimationDriver as ɵNoopAnimationDriver, DomAnimationEngine as ɵDomAnimationEngine, NoopAnimationEngine as ɵNoopAnimationEngine, WebAnimationsDriver as ɵWebAnimationsDriver, supportsWebAnimations as ɵsupportsWebAnimations };
 //# sourceMappingURL=browser.es5.js.map
