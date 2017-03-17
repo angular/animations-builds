@@ -1,12 +1,12 @@
 /**
- * @license Angular v4.0.0-rc.3-480a407
+ * @license Angular v4.0.0-rc.4-fcaca45
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
 /**
- * @experimental Animation support is experimental.
+ * \@experimental Animation support is experimental.
  */
-const /** @type {?} */ AUTO_STYLE = '*';
+const AUTO_STYLE = '*';
 /**
  * `trigger` is an animation-specific function that is designed to be used inside of Angular2's
  * animation DSL language. If this information is new, please navigate to the {\@link
@@ -793,3 +793,4 @@ class AnimationGroupPlayer {
 }
 
 export { AUTO_STYLE, animate, group, keyframes, sequence, state, style, transition, trigger, AnimationPlayer, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer };
+//# sourceMappingURL=animations.js.map

@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.3-480a407
+ * @license Angular v4.0.0-rc.4-fcaca45
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -35,6 +35,13 @@
         return AnimationDriver;
     }());
     AnimationDriver.NOOP = new NoopAnimationDriver();
+    /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
     /**
      * @abstract
      */
@@ -102,6 +109,13 @@
         });
         return AnimationEngine;
     }());
+    /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
     var /** @type {?} */ ONE_SECOND = 1000;
     /**
      * @param {?} exp
@@ -204,6 +218,13 @@
         }
     }
     /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    /**
      * @param {?} visitor
      * @param {?} node
      * @param {?} context
@@ -236,13 +257,7 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    /**
-     * @license
-     * Copyright Google Inc. All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */ var /** @type {?} */ ANY_STATE = '*';
+    var ANY_STATE = '*';
     /**
      * @param {?} transitionValue
      * @param {?} errors
@@ -312,6 +327,13 @@
             return lhsMatch && rhsMatch;
         };
     }
+    /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
     /**
      * @param {?} keyframes
      * @param {?} duration
@@ -757,6 +779,13 @@
         }
         return offset;
     }
+    /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
     /**
      * @param {?} triggerName
      * @param {?} fromState
@@ -2334,3 +2363,4 @@
     exports.ɵsupportsWebAnimations = supportsWebAnimations;
 
 }));
+//# sourceMappingURL=animations-browser.umd.js.map
