@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.5-bcc29ff
+ * @license Angular v4.0.0-rc.5-80075af
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1227,7 +1227,9 @@ class DomAnimationEngine {
      * @return {?}
      */
     onInsert(element, domFn) {
-        this._flaggedInserts.add(element);
+        if (element['nodeType'] == 1) {
+            this._flaggedInserts.add(element);
+        }
         domFn();
     }
     /**
@@ -1236,6 +1238,10 @@ class DomAnimationEngine {
      * @return {?}
      */
     onRemove(element, domFn) {
+        if (element['nodeType'] != 1) {
+            domFn();
+            return;
+        }
         let /** @type {?} */ lookupRef = this._elementTriggerStates.get(element);
         if (lookupRef) {
             const /** @type {?} */ possibleTriggers = Object.keys(lookupRef);
@@ -1908,7 +1914,9 @@ class NoopAnimationEngine extends AnimationEngine {
      */
     onRemove(element, domFn) {
         domFn();
-        this._flaggedRemovals.add(element);
+        if (element['nodeType'] == 1) {
+            this._flaggedRemovals.add(element);
+        }
     }
     /**
      * @param {?} element

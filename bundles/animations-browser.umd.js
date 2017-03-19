@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.5-bcc29ff
+ * @license Angular v4.0.0-rc.5-80075af
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -15,7 +15,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-rc.5-bcc29ff
+ * @license Angular v4.0.0-rc.5-80075af
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1299,7 +1299,9 @@ var DomAnimationEngine = (function () {
      * @return {?}
      */
     DomAnimationEngine.prototype.onInsert = function (element, domFn) {
-        this._flaggedInserts.add(element);
+        if (element['nodeType'] == 1) {
+            this._flaggedInserts.add(element);
+        }
         domFn();
     };
     /**
@@ -1309,6 +1311,10 @@ var DomAnimationEngine = (function () {
      */
     DomAnimationEngine.prototype.onRemove = function (element, domFn) {
         var _this = this;
+        if (element['nodeType'] != 1) {
+            domFn();
+            return;
+        }
         var /** @type {?} */ lookupRef = this._elementTriggerStates.get(element);
         if (lookupRef) {
             var /** @type {?} */ possibleTriggers = Object.keys(lookupRef);
@@ -2019,7 +2025,9 @@ var NoopAnimationEngine = (function (_super) {
      */
     NoopAnimationEngine.prototype.onRemove = function (element, domFn) {
         domFn();
-        this._flaggedRemovals.add(element);
+        if (element['nodeType'] == 1) {
+            this._flaggedRemovals.add(element);
+        }
     };
     /**
      * @param {?} element
