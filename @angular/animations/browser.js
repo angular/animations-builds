@@ -1,10 +1,17 @@
 /**
- * @license Angular v4.0.0-rc.5-d5a6e69
+ * @license Angular v4.0.0-rc.5-b7ba331
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
-import { NoopAnimationPlayer, sequence, ɵAnimationGroupPlayer, style, AUTO_STYLE } from '@angular/animations';
+import { AUTO_STYLE, NoopAnimationPlayer, sequence, style, ɵAnimationGroupPlayer } from '@angular/animations';
 
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @experimental
  */
@@ -91,7 +98,7 @@ class AnimationEngine {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const /** @type {?} */ ONE_SECOND = 1000;
+const ONE_SECOND = 1000;
 /**
  * @param {?} exp
  * @param {?} errors
@@ -328,6 +335,13 @@ function createTimelineInstruction(keyframes, duration, delay, easing) {
     };
 }
 
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @param {?} ast
  * @param {?=} startingStyles
@@ -780,6 +794,13 @@ function createTransitionInstruction(triggerName, fromState, toState, isRemovalT
     };
 }
 
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 class AnimationTransitionFactory {
     /**
      * @param {?} _triggerName
@@ -821,6 +842,13 @@ function oneOrMoreTransitionsMatch(matchFns, currentState, nextState) {
     return matchFns.some(fn => fn(currentState, nextState));
 }
 
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @param {?} ast
  * @return {?}
@@ -992,6 +1020,13 @@ class AnimationValidatorContext {
 }
 
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * \@experimental Animation support is experimental.
  * @param {?} name
  * @param {?} definitions
@@ -1132,8 +1167,17 @@ class AnimationTriggerVisitor {
     }
 }
 
-const /** @type {?} */ MARKED_FOR_ANIMATION = 'ng-animate';
-const /** @type {?} */ MARKED_FOR_REMOVAL = '$$ngRemove';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+const MARKED_FOR_ANIMATION_CLASSNAME = 'ng-animating';
+const MARKED_FOR_ANIMATION_SELECTOR = '.ng-animating';
+const MARKED_FOR_REMOVAL = '$$ngRemove';
+const VOID_STATE = 'void';
 class DomAnimationEngine {
     /**
      * @param {?} _driver
@@ -1184,7 +1228,9 @@ class DomAnimationEngine {
      * @return {?}
      */
     onInsert(element, domFn) {
-        this._flaggedInserts.add(element);
+        if (element['nodeType'] == 1) {
+            this._flaggedInserts.add(element);
+        }
         domFn();
     }
     /**
@@ -1193,12 +1239,16 @@ class DomAnimationEngine {
      * @return {?}
      */
     onRemove(element, domFn) {
+        if (element['nodeType'] != 1) {
+            domFn();
+            return;
+        }
         let /** @type {?} */ lookupRef = this._elementTriggerStates.get(element);
         if (lookupRef) {
             const /** @type {?} */ possibleTriggers = Object.keys(lookupRef);
             const /** @type {?} */ hasRemoval = possibleTriggers.some(triggerName => {
                 const /** @type {?} */ oldValue = lookupRef[triggerName];
-                const /** @type {?} */ instruction = this._triggers[triggerName].matchTransition(oldValue, 'void');
+                const /** @type {?} */ instruction = this._triggers[triggerName].matchTransition(oldValue, VOID_STATE);
                 return !!instruction;
             });
             if (hasRemoval) {
@@ -1213,6 +1263,7 @@ class DomAnimationEngine {
             element[MARKED_FOR_REMOVAL] = true;
             this._queuedRemovals.set(element, () => { });
         }
+        this._onRemovalTransition(element).forEach(player => player.destroy());
         domFn();
     }
     /**
@@ -1230,8 +1281,9 @@ class DomAnimationEngine {
         if (!lookupRef) {
             this._elementTriggerStates.set(element, lookupRef = {});
         }
-        let /** @type {?} */ oldValue = lookupRef.hasOwnProperty(property) ? lookupRef[property] : 'void';
+        let /** @type {?} */ oldValue = lookupRef.hasOwnProperty(property) ? lookupRef[property] : VOID_STATE;
         if (oldValue !== value) {
+            value = normalizeTriggerValue(value);
             let /** @type {?} */ instruction = trigger.matchTransition(oldValue, value);
             if (!instruction) {
                 // we do this to make sure we always have an animation player so
@@ -1294,7 +1346,7 @@ class DomAnimationEngine {
         // when a parent animation is set to trigger a removal we want to
         // find all of the children that are currently animating and clear
         // them out by destroying each of them.
-        const /** @type {?} */ elms = element.querySelectorAll(MARKED_FOR_ANIMATION);
+        const /** @type {?} */ elms = element.querySelectorAll(MARKED_FOR_ANIMATION_SELECTOR);
         for (let /** @type {?} */ i = 0; i < elms.length; i++) {
             const /** @type {?} */ elm = elms[i];
             const /** @type {?} */ activePlayers = this._activeElementAnimations.get(elm);
@@ -1340,9 +1392,9 @@ class DomAnimationEngine {
         // we first run this so that the previous animation player
         // data can be passed into the successive animation players
         let /** @type {?} */ totalTime = 0;
-        const /** @type {?} */ players = instruction.timelines.map(timelineInstruction => {
+        const /** @type {?} */ players = instruction.timelines.map((timelineInstruction, i) => {
             totalTime = Math.max(totalTime, timelineInstruction.totalTime);
-            return this._buildPlayer(element, timelineInstruction, previousPlayers);
+            return this._buildPlayer(element, timelineInstruction, previousPlayers, i);
         });
         previousPlayers.forEach(previousPlayer => previousPlayer.destroy());
         const /** @type {?} */ player = optimizeGroupPlayer(players);
@@ -1371,8 +1423,8 @@ class DomAnimationEngine {
      * @return {?}
      */
     animateTimeline(element, instructions, previousPlayers = []) {
-        const /** @type {?} */ players = instructions.map(instruction => {
-            const /** @type {?} */ player = this._buildPlayer(element, instruction, previousPlayers);
+        const /** @type {?} */ players = instructions.map((instruction, i) => {
+            const /** @type {?} */ player = this._buildPlayer(element, instruction, previousPlayers, i);
             player.onDestroy(() => { deleteFromArrayMap(this._activeElementAnimations, element, player); });
             player.init();
             this._markPlayerAsActive(element, player);
@@ -1384,9 +1436,16 @@ class DomAnimationEngine {
      * @param {?} element
      * @param {?} instruction
      * @param {?} previousPlayers
+     * @param {?=} index
      * @return {?}
      */
-    _buildPlayer(element, instruction, previousPlayers) {
+    _buildPlayer(element, instruction, previousPlayers, index = 0) {
+        // only the very first animation can absorb the previous styles. This
+        // is here to prevent the an overlap situation where a group animation
+        // absorbs previous styles multiple times for the same element.
+        if (index && previousPlayers.length) {
+            previousPlayers = [];
+        }
         return this._driver.animate(element, this._normalizeKeyframes(instruction.keyframes), instruction.duration, instruction.delay, instruction.easing, previousPlayers);
     }
     /**
@@ -1436,8 +1495,8 @@ class DomAnimationEngine {
         const /** @type {?} */ tuple = ({ element, player, triggerName, event });
         this._queuedTransitionAnimations.push(tuple);
         player.init();
-        element.classList.add(MARKED_FOR_ANIMATION);
-        player.onDone(() => { element.classList.remove(MARKED_FOR_ANIMATION); });
+        element.classList.add(MARKED_FOR_ANIMATION_CLASSNAME);
+        player.onDone(() => { element.classList.remove(MARKED_FOR_ANIMATION_CLASSNAME); });
     }
     /**
      * @return {?}
@@ -1523,12 +1582,12 @@ class DomAnimationEngine {
                     Object.keys(stateDetails).forEach(triggerName => {
                         flushAgain = true;
                         const /** @type {?} */ oldValue = stateDetails[triggerName];
-                        const /** @type {?} */ instruction = this._triggers[triggerName].matchTransition(oldValue, 'void');
+                        const /** @type {?} */ instruction = this._triggers[triggerName].matchTransition(oldValue, VOID_STATE);
                         if (instruction) {
                             players.push(this.animateTransition(element, instruction));
                         }
                         else {
-                            const /** @type {?} */ event = makeAnimationEvent(element, triggerName, oldValue, 'void', '', 0);
+                            const /** @type {?} */ event = makeAnimationEvent(element, triggerName, oldValue, VOID_STATE, '', 0);
                             const /** @type {?} */ player = new NoopAnimationPlayer();
                             this._queuePlayer(element, triggerName, player, event);
                         }
@@ -1661,6 +1720,18 @@ function copyAnimationEvent(e) {
 function makeAnimationEvent(element, triggerName, fromState, toState, phaseName, totalTime) {
     return ({ element, triggerName, fromState, toState, phaseName, totalTime });
 }
+/**
+ * @param {?} value
+ * @return {?}
+ */
+function normalizeTriggerValue(value) {
+    switch (typeof value) {
+        case 'boolean':
+            return value ? '1' : '0';
+        default:
+            return value ? value.toString() : null;
+    }
+}
 
 /**
  * \@experimental Animation support is experimental.
@@ -1706,6 +1777,13 @@ class NoopAnimationStyleNormalizer {
     }
 }
 
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 class Animation {
     /**
      * @param {?} input
@@ -1747,6 +1825,13 @@ class Animation {
     }
 }
 
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 class WebAnimationsStyleNormalizer extends AnimationStyleNormalizer {
     /**
      * @param {?} propertyName
@@ -1780,7 +1865,7 @@ class WebAnimationsStyleNormalizer extends AnimationStyleNormalizer {
         return strVal + unit;
     }
 }
-const /** @type {?} */ DIMENSIONAL_PROP_MAP = makeBooleanMap('width,height,minWidth,minHeight,maxWidth,maxHeight,left,top,bottom,right,fontSize,outlineWidth,outlineOffset,paddingTop,paddingLeft,paddingBottom,paddingRight,marginTop,marginLeft,marginBottom,marginRight,borderRadius,borderWidth,borderTopWidth,borderLeftWidth,borderRightWidth,borderBottomWidth,textIndent'
+const DIMENSIONAL_PROP_MAP = makeBooleanMap('width,height,minWidth,minHeight,maxWidth,maxHeight,left,top,bottom,right,fontSize,outlineWidth,outlineOffset,paddingTop,paddingLeft,paddingBottom,paddingRight,marginTop,marginLeft,marginBottom,marginRight,borderRadius,borderWidth,borderTopWidth,borderLeftWidth,borderRightWidth,borderBottomWidth,textIndent'
     .split(','));
 /**
  * @param {?} keys
@@ -1791,7 +1876,7 @@ function makeBooleanMap(keys) {
     keys.forEach(key => map[key] = true);
     return map;
 }
-const /** @type {?} */ DASH_CASE_REGEXP = /-+([a-z0-9])/g;
+const DASH_CASE_REGEXP = /-+([a-z0-9])/g;
 /**
  * @param {?} input
  * @return {?}
@@ -1800,8 +1885,15 @@ function dashCaseToCamelCase(input) {
     return input.replace(DASH_CASE_REGEXP, (...m) => m[1].toUpperCase());
 }
 
-const /** @type {?} */ DEFAULT_STATE_VALUE = 'void';
-const /** @type {?} */ DEFAULT_STATE_STYLES = '*';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+const DEFAULT_STATE_VALUE = 'void';
+const DEFAULT_STATE_STYLES = '*';
 class NoopAnimationEngine extends AnimationEngine {
     constructor() {
         super(...arguments);
@@ -1843,7 +1935,9 @@ class NoopAnimationEngine extends AnimationEngine {
      */
     onRemove(element, domFn) {
         domFn();
-        this._flaggedRemovals.add(element);
+        if (element['nodeType'] == 1) {
+            this._flaggedRemovals.add(element);
+        }
     }
     /**
      * @param {?} element
@@ -1978,6 +2072,13 @@ function makeStorageProp(property) {
     return '_@_' + property;
 }
 
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 class WebAnimationsPlayer {
     /**
      * @param {?} element
@@ -2042,7 +2143,7 @@ class WebAnimationsPlayer {
             let /** @type {?} */ startingKeyframe = keyframes[0];
             let /** @type {?} */ missingStyleProps = [];
             previousStyleProps.forEach(prop => {
-                if (startingKeyframe[prop] != null) {
+                if (!startingKeyframe.hasOwnProperty(prop)) {
                     missingStyleProps.push(prop);
                 }
                 startingKeyframe[prop] = this.previousStyles[prop];
@@ -2210,6 +2311,13 @@ function _copyKeyframeStyles(styles) {
     return newStyles;
 }
 
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 class WebAnimationsDriver {
     /**
      * @param {?} element
@@ -2237,6 +2345,44 @@ class WebAnimationsDriver {
 function supportsWebAnimations() {
     return typeof Element !== 'undefined' && typeof ((Element)).prototype['animate'] === 'function';
 }
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @module
+ * @description
+ * Entry point for all animation APIs of the animation browser package.
+ */
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @module
+ * @description
+ * Entry point for all public APIs of the animation package.
+ */
+
+/**
+ * Generated bundle index. Do not edit.
+ */
 
 export { AnimationDriver, AnimationEngine as ɵAnimationEngine, Animation as ɵAnimation, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, NoopAnimationDriver as ɵNoopAnimationDriver, DomAnimationEngine as ɵDomAnimationEngine, NoopAnimationEngine as ɵNoopAnimationEngine, WebAnimationsDriver as ɵWebAnimationsDriver, supportsWebAnimations as ɵsupportsWebAnimations };
 //# sourceMappingURL=browser.js.map

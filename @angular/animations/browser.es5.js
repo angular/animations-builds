@@ -4,11 +4,18 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-rc.5-d5a6e69
+ * @license Angular v4.0.0-rc.5-b7ba331
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
-import { NoopAnimationPlayer, sequence, ɵAnimationGroupPlayer, style, AUTO_STYLE } from '@angular/animations';
+import { AUTO_STYLE, NoopAnimationPlayer, sequence, style, ɵAnimationGroupPlayer } from '@angular/animations';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @experimental
  */
@@ -111,7 +118,7 @@ var AnimationEngine = (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var /** @type {?} */ ONE_SECOND = 1000;
+var ONE_SECOND = 1000;
 /**
  * @param {?} exp
  * @param {?} errors
@@ -345,6 +352,13 @@ function createTimelineInstruction(keyframes, duration, delay, easing) {
         totalTime: duration + delay, easing: easing
     };
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @param {?} ast
  * @param {?=} startingStyles
@@ -821,6 +835,13 @@ function createTransitionInstruction(triggerName, fromState, toState, isRemovalT
         timelines: timelines
     };
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var AnimationTransitionFactory = (function () {
     /**
      * @param {?} _triggerName
@@ -862,6 +883,13 @@ var AnimationTransitionFactory = (function () {
 function oneOrMoreTransitionsMatch(matchFns, currentState, nextState) {
     return matchFns.some(function (fn) { return fn(currentState, nextState); });
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @param {?} ast
  * @return {?}
@@ -1039,6 +1067,13 @@ var AnimationValidatorContext = (function () {
     return AnimationValidatorContext;
 }());
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * \@experimental Animation support is experimental.
  * @param {?} name
  * @param {?} definitions
@@ -1185,8 +1220,17 @@ var AnimationTriggerVisitor = (function () {
     };
     return AnimationTriggerVisitor;
 }());
-var /** @type {?} */ MARKED_FOR_ANIMATION = 'ng-animate';
-var /** @type {?} */ MARKED_FOR_REMOVAL = '$$ngRemove';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var MARKED_FOR_ANIMATION_CLASSNAME = 'ng-animating';
+var MARKED_FOR_ANIMATION_SELECTOR = '.ng-animating';
+var MARKED_FOR_REMOVAL = '$$ngRemove';
+var VOID_STATE = 'void';
 var DomAnimationEngine = (function () {
     /**
      * @param {?} _driver
@@ -1246,7 +1290,9 @@ var DomAnimationEngine = (function () {
      * @return {?}
      */
     DomAnimationEngine.prototype.onInsert = function (element, domFn) {
-        this._flaggedInserts.add(element);
+        if (element['nodeType'] == 1) {
+            this._flaggedInserts.add(element);
+        }
         domFn();
     };
     /**
@@ -1256,12 +1302,16 @@ var DomAnimationEngine = (function () {
      */
     DomAnimationEngine.prototype.onRemove = function (element, domFn) {
         var _this = this;
+        if (element['nodeType'] != 1) {
+            domFn();
+            return;
+        }
         var /** @type {?} */ lookupRef = this._elementTriggerStates.get(element);
         if (lookupRef) {
             var /** @type {?} */ possibleTriggers = Object.keys(lookupRef);
             var /** @type {?} */ hasRemoval = possibleTriggers.some(function (triggerName) {
                 var /** @type {?} */ oldValue = lookupRef[triggerName];
-                var /** @type {?} */ instruction = _this._triggers[triggerName].matchTransition(oldValue, 'void');
+                var /** @type {?} */ instruction = _this._triggers[triggerName].matchTransition(oldValue, VOID_STATE);
                 return !!instruction;
             });
             if (hasRemoval) {
@@ -1276,6 +1326,7 @@ var DomAnimationEngine = (function () {
             element[MARKED_FOR_REMOVAL] = true;
             this._queuedRemovals.set(element, function () { });
         }
+        this._onRemovalTransition(element).forEach(function (player) { return player.destroy(); });
         domFn();
     };
     /**
@@ -1293,8 +1344,9 @@ var DomAnimationEngine = (function () {
         if (!lookupRef) {
             this._elementTriggerStates.set(element, lookupRef = {});
         }
-        var /** @type {?} */ oldValue = lookupRef.hasOwnProperty(property) ? lookupRef[property] : 'void';
+        var /** @type {?} */ oldValue = lookupRef.hasOwnProperty(property) ? lookupRef[property] : VOID_STATE;
         if (oldValue !== value) {
+            value = normalizeTriggerValue(value);
             var /** @type {?} */ instruction = trigger.matchTransition(oldValue, value);
             if (!instruction) {
                 // we do this to make sure we always have an animation player so
@@ -1359,7 +1411,7 @@ var DomAnimationEngine = (function () {
         // when a parent animation is set to trigger a removal we want to
         // find all of the children that are currently animating and clear
         // them out by destroying each of them.
-        var /** @type {?} */ elms = element.querySelectorAll(MARKED_FOR_ANIMATION);
+        var /** @type {?} */ elms = element.querySelectorAll(MARKED_FOR_ANIMATION_SELECTOR);
         var _loop_1 = function (i) {
             var /** @type {?} */ elm = elms[i];
             var /** @type {?} */ activePlayers = this_1._activeElementAnimations.get(elm);
@@ -1410,9 +1462,9 @@ var DomAnimationEngine = (function () {
         // we first run this so that the previous animation player
         // data can be passed into the successive animation players
         var /** @type {?} */ totalTime = 0;
-        var /** @type {?} */ players = instruction.timelines.map(function (timelineInstruction) {
+        var /** @type {?} */ players = instruction.timelines.map(function (timelineInstruction, i) {
             totalTime = Math.max(totalTime, timelineInstruction.totalTime);
-            return _this._buildPlayer(element, timelineInstruction, previousPlayers);
+            return _this._buildPlayer(element, timelineInstruction, previousPlayers, i);
         });
         previousPlayers.forEach(function (previousPlayer) { return previousPlayer.destroy(); });
         var /** @type {?} */ player = optimizeGroupPlayer(players);
@@ -1443,8 +1495,8 @@ var DomAnimationEngine = (function () {
     DomAnimationEngine.prototype.animateTimeline = function (element, instructions, previousPlayers) {
         var _this = this;
         if (previousPlayers === void 0) { previousPlayers = []; }
-        var /** @type {?} */ players = instructions.map(function (instruction) {
-            var /** @type {?} */ player = _this._buildPlayer(element, instruction, previousPlayers);
+        var /** @type {?} */ players = instructions.map(function (instruction, i) {
+            var /** @type {?} */ player = _this._buildPlayer(element, instruction, previousPlayers, i);
             player.onDestroy(function () { deleteFromArrayMap(_this._activeElementAnimations, element, player); });
             player.init();
             _this._markPlayerAsActive(element, player);
@@ -1456,9 +1508,17 @@ var DomAnimationEngine = (function () {
      * @param {?} element
      * @param {?} instruction
      * @param {?} previousPlayers
+     * @param {?=} index
      * @return {?}
      */
-    DomAnimationEngine.prototype._buildPlayer = function (element, instruction, previousPlayers) {
+    DomAnimationEngine.prototype._buildPlayer = function (element, instruction, previousPlayers, index) {
+        if (index === void 0) { index = 0; }
+        // only the very first animation can absorb the previous styles. This
+        // is here to prevent the an overlap situation where a group animation
+        // absorbs previous styles multiple times for the same element.
+        if (index && previousPlayers.length) {
+            previousPlayers = [];
+        }
         return this._driver.animate(element, this._normalizeKeyframes(instruction.keyframes), instruction.duration, instruction.delay, instruction.easing, previousPlayers);
     };
     /**
@@ -1509,8 +1569,8 @@ var DomAnimationEngine = (function () {
         var /** @type {?} */ tuple = ({ element: element, player: player, triggerName: triggerName, event: event });
         this._queuedTransitionAnimations.push(tuple);
         player.init();
-        element.classList.add(MARKED_FOR_ANIMATION);
-        player.onDone(function () { element.classList.remove(MARKED_FOR_ANIMATION); });
+        element.classList.add(MARKED_FOR_ANIMATION_CLASSNAME);
+        player.onDone(function () { element.classList.remove(MARKED_FOR_ANIMATION_CLASSNAME); });
     };
     /**
      * @return {?}
@@ -1604,12 +1664,12 @@ var DomAnimationEngine = (function () {
                     Object.keys(stateDetails_1).forEach(function (triggerName) {
                         flushAgain = true;
                         var /** @type {?} */ oldValue = stateDetails_1[triggerName];
-                        var /** @type {?} */ instruction = _this._triggers[triggerName].matchTransition(oldValue, 'void');
+                        var /** @type {?} */ instruction = _this._triggers[triggerName].matchTransition(oldValue, VOID_STATE);
                         if (instruction) {
                             players.push(_this.animateTransition(element, instruction));
                         }
                         else {
-                            var /** @type {?} */ event = makeAnimationEvent(element, triggerName, oldValue, 'void', '', 0);
+                            var /** @type {?} */ event = makeAnimationEvent(element, triggerName, oldValue, VOID_STATE, '', 0);
                             var /** @type {?} */ player = new NoopAnimationPlayer();
                             _this._queuePlayer(element, triggerName, player, event);
                         }
@@ -1744,6 +1804,18 @@ function makeAnimationEvent(element, triggerName, fromState, toState, phaseName,
     return ({ element: element, triggerName: triggerName, fromState: fromState, toState: toState, phaseName: phaseName, totalTime: totalTime });
 }
 /**
+ * @param {?} value
+ * @return {?}
+ */
+function normalizeTriggerValue(value) {
+    switch (typeof value) {
+        case 'boolean':
+            return value ? '1' : '0';
+        default:
+            return value ? value.toString() : null;
+    }
+}
+/**
  * \@experimental Animation support is experimental.
  * @abstract
  */
@@ -1792,6 +1864,13 @@ var NoopAnimationStyleNormalizer = (function () {
     };
     return NoopAnimationStyleNormalizer;
 }());
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var Animation = (function () {
     /**
      * @param {?} input
@@ -1835,6 +1914,13 @@ var Animation = (function () {
     };
     return Animation;
 }());
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var WebAnimationsStyleNormalizer = (function (_super) {
     __extends(WebAnimationsStyleNormalizer, _super);
     function WebAnimationsStyleNormalizer() {
@@ -1873,7 +1959,7 @@ var WebAnimationsStyleNormalizer = (function (_super) {
     };
     return WebAnimationsStyleNormalizer;
 }(AnimationStyleNormalizer));
-var /** @type {?} */ DIMENSIONAL_PROP_MAP = makeBooleanMap('width,height,minWidth,minHeight,maxWidth,maxHeight,left,top,bottom,right,fontSize,outlineWidth,outlineOffset,paddingTop,paddingLeft,paddingBottom,paddingRight,marginTop,marginLeft,marginBottom,marginRight,borderRadius,borderWidth,borderTopWidth,borderLeftWidth,borderRightWidth,borderBottomWidth,textIndent'
+var DIMENSIONAL_PROP_MAP = makeBooleanMap('width,height,minWidth,minHeight,maxWidth,maxHeight,left,top,bottom,right,fontSize,outlineWidth,outlineOffset,paddingTop,paddingLeft,paddingBottom,paddingRight,marginTop,marginLeft,marginBottom,marginRight,borderRadius,borderWidth,borderTopWidth,borderLeftWidth,borderRightWidth,borderBottomWidth,textIndent'
     .split(','));
 /**
  * @param {?} keys
@@ -1884,7 +1970,7 @@ function makeBooleanMap(keys) {
     keys.forEach(function (key) { return map[key] = true; });
     return map;
 }
-var /** @type {?} */ DASH_CASE_REGEXP = /-+([a-z0-9])/g;
+var DASH_CASE_REGEXP = /-+([a-z0-9])/g;
 /**
  * @param {?} input
  * @return {?}
@@ -1898,8 +1984,15 @@ function dashCaseToCamelCase(input) {
         return m[1].toUpperCase();
     });
 }
-var /** @type {?} */ DEFAULT_STATE_VALUE = 'void';
-var /** @type {?} */ DEFAULT_STATE_STYLES = '*';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var DEFAULT_STATE_VALUE = 'void';
+var DEFAULT_STATE_STYLES = '*';
 var NoopAnimationEngine = (function (_super) {
     __extends(NoopAnimationEngine, _super);
     function NoopAnimationEngine() {
@@ -1944,7 +2037,9 @@ var NoopAnimationEngine = (function (_super) {
      */
     NoopAnimationEngine.prototype.onRemove = function (element, domFn) {
         domFn();
-        this._flaggedRemovals.add(element);
+        if (element['nodeType'] == 1) {
+            this._flaggedRemovals.add(element);
+        }
     };
     /**
      * @param {?} element
@@ -2088,6 +2183,13 @@ function makeAnimationEvent$1(element, triggerName, fromState, toState, phaseNam
 function makeStorageProp(property) {
     return '_@_' + property;
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var WebAnimationsPlayer = (function () {
     /**
      * @param {?} element
@@ -2155,7 +2257,7 @@ var WebAnimationsPlayer = (function () {
             var /** @type {?} */ startingKeyframe_1 = keyframes[0];
             var /** @type {?} */ missingStyleProps_1 = [];
             previousStyleProps.forEach(function (prop) {
-                if (startingKeyframe_1[prop] != null) {
+                if (!startingKeyframe_1.hasOwnProperty(prop)) {
                     missingStyleProps_1.push(prop);
                 }
                 startingKeyframe_1[prop] = _this.previousStyles[prop];
@@ -2331,6 +2433,13 @@ function _copyKeyframeStyles(styles) {
     });
     return newStyles;
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var WebAnimationsDriver = (function () {
     function WebAnimationsDriver() {
     }
@@ -2362,5 +2471,39 @@ var WebAnimationsDriver = (function () {
 function supportsWebAnimations() {
     return typeof Element !== 'undefined' && typeof ((Element)).prototype['animate'] === 'function';
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @module
+ * @description
+ * Entry point for all animation APIs of the animation browser package.
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @module
+ * @description
+ * Entry point for all public APIs of the animation package.
+ */
+/**
+ * Generated bundle index. Do not edit.
+ */
 export { AnimationDriver, AnimationEngine as ɵAnimationEngine, Animation as ɵAnimation, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, NoopAnimationDriver as ɵNoopAnimationDriver, DomAnimationEngine as ɵDomAnimationEngine, NoopAnimationEngine as ɵNoopAnimationEngine, WebAnimationsDriver as ɵWebAnimationsDriver, supportsWebAnimations as ɵsupportsWebAnimations };
 //# sourceMappingURL=browser.es5.js.map
