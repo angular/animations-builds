@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-rc.5-de3d2ee
+ * @license Angular v4.0.0-rc.5-2489e4b
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1230,6 +1230,7 @@ var AnimationTriggerVisitor = (function () {
 var MARKED_FOR_ANIMATION_CLASSNAME = 'ng-animating';
 var MARKED_FOR_ANIMATION_SELECTOR = '.ng-animating';
 var MARKED_FOR_REMOVAL = '$$ngRemove';
+var VOID_STATE = 'void';
 var DomAnimationEngine = (function () {
     /**
      * @param {?} _driver
@@ -1310,7 +1311,7 @@ var DomAnimationEngine = (function () {
             var /** @type {?} */ possibleTriggers = Object.keys(lookupRef);
             var /** @type {?} */ hasRemoval = possibleTriggers.some(function (triggerName) {
                 var /** @type {?} */ oldValue = lookupRef[triggerName];
-                var /** @type {?} */ instruction = _this._triggers[triggerName].matchTransition(oldValue, 'void');
+                var /** @type {?} */ instruction = _this._triggers[triggerName].matchTransition(oldValue, VOID_STATE);
                 return !!instruction;
             });
             if (hasRemoval) {
@@ -1343,8 +1344,9 @@ var DomAnimationEngine = (function () {
         if (!lookupRef) {
             this._elementTriggerStates.set(element, lookupRef = {});
         }
-        var /** @type {?} */ oldValue = lookupRef.hasOwnProperty(property) ? lookupRef[property] : 'void';
+        var /** @type {?} */ oldValue = lookupRef.hasOwnProperty(property) ? lookupRef[property] : VOID_STATE;
         if (oldValue !== value) {
+            value = normalizeTriggerValue(value);
             var /** @type {?} */ instruction = trigger.matchTransition(oldValue, value);
             if (!instruction) {
                 // we do this to make sure we always have an animation player so
@@ -1460,9 +1462,9 @@ var DomAnimationEngine = (function () {
         // we first run this so that the previous animation player
         // data can be passed into the successive animation players
         var /** @type {?} */ totalTime = 0;
-        var /** @type {?} */ players = instruction.timelines.map(function (timelineInstruction) {
+        var /** @type {?} */ players = instruction.timelines.map(function (timelineInstruction, i) {
             totalTime = Math.max(totalTime, timelineInstruction.totalTime);
-            return _this._buildPlayer(element, timelineInstruction, previousPlayers);
+            return _this._buildPlayer(element, timelineInstruction, previousPlayers, i);
         });
         previousPlayers.forEach(function (previousPlayer) { return previousPlayer.destroy(); });
         var /** @type {?} */ player = optimizeGroupPlayer(players);
@@ -1493,8 +1495,8 @@ var DomAnimationEngine = (function () {
     DomAnimationEngine.prototype.animateTimeline = function (element, instructions, previousPlayers) {
         var _this = this;
         if (previousPlayers === void 0) { previousPlayers = []; }
-        var /** @type {?} */ players = instructions.map(function (instruction) {
-            var /** @type {?} */ player = _this._buildPlayer(element, instruction, previousPlayers);
+        var /** @type {?} */ players = instructions.map(function (instruction, i) {
+            var /** @type {?} */ player = _this._buildPlayer(element, instruction, previousPlayers, i);
             player.onDestroy(function () { deleteFromArrayMap(_this._activeElementAnimations, element, player); });
             player.init();
             _this._markPlayerAsActive(element, player);
@@ -1506,9 +1508,17 @@ var DomAnimationEngine = (function () {
      * @param {?} element
      * @param {?} instruction
      * @param {?} previousPlayers
+     * @param {?=} index
      * @return {?}
      */
-    DomAnimationEngine.prototype._buildPlayer = function (element, instruction, previousPlayers) {
+    DomAnimationEngine.prototype._buildPlayer = function (element, instruction, previousPlayers, index) {
+        if (index === void 0) { index = 0; }
+        // only the very first animation can absorb the previous styles. This
+        // is here to prevent the an overlap situation where a group animation
+        // absorbs previous styles multiple times for the same element.
+        if (index && previousPlayers.length) {
+            previousPlayers = [];
+        }
         return this._driver.animate(element, this._normalizeKeyframes(instruction.keyframes), instruction.duration, instruction.delay, instruction.easing, previousPlayers);
     };
     /**
@@ -1654,12 +1664,12 @@ var DomAnimationEngine = (function () {
                     Object.keys(stateDetails_1).forEach(function (triggerName) {
                         flushAgain = true;
                         var /** @type {?} */ oldValue = stateDetails_1[triggerName];
-                        var /** @type {?} */ instruction = _this._triggers[triggerName].matchTransition(oldValue, 'void');
+                        var /** @type {?} */ instruction = _this._triggers[triggerName].matchTransition(oldValue, VOID_STATE);
                         if (instruction) {
                             players.push(_this.animateTransition(element, instruction));
                         }
                         else {
-                            var /** @type {?} */ event = makeAnimationEvent(element, triggerName, oldValue, 'void', '', 0);
+                            var /** @type {?} */ event = makeAnimationEvent(element, triggerName, oldValue, VOID_STATE, '', 0);
                             var /** @type {?} */ player = new NoopAnimationPlayer();
                             _this._queuePlayer(element, triggerName, player, event);
                         }
@@ -1792,6 +1802,18 @@ function copyAnimationEvent(e) {
  */
 function makeAnimationEvent(element, triggerName, fromState, toState, phaseName, totalTime) {
     return ({ element: element, triggerName: triggerName, fromState: fromState, toState: toState, phaseName: phaseName, totalTime: totalTime });
+}
+/**
+ * @param {?} value
+ * @return {?}
+ */
+function normalizeTriggerValue(value) {
+    switch (typeof value) {
+        case 'boolean':
+            return value ? '1' : '0';
+        default:
+            return value ? value.toString() : null;
+    }
 }
 /**
  * \@experimental Animation support is experimental.
@@ -2235,7 +2257,7 @@ var WebAnimationsPlayer = (function () {
             var /** @type {?} */ startingKeyframe_1 = keyframes[0];
             var /** @type {?} */ missingStyleProps_1 = [];
             previousStyleProps.forEach(function (prop) {
-                if (startingKeyframe_1[prop] != null) {
+                if (!startingKeyframe_1.hasOwnProperty(prop)) {
                     missingStyleProps_1.push(prop);
                 }
                 startingKeyframe_1[prop] = _this.previousStyles[prop];

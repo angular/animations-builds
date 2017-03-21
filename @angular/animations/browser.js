@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.5-de3d2ee
+ * @license Angular v4.0.0-rc.5-2489e4b
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1177,6 +1177,7 @@ class AnimationTriggerVisitor {
 const MARKED_FOR_ANIMATION_CLASSNAME = 'ng-animating';
 const MARKED_FOR_ANIMATION_SELECTOR = '.ng-animating';
 const MARKED_FOR_REMOVAL = '$$ngRemove';
+const VOID_STATE = 'void';
 class DomAnimationEngine {
     /**
      * @param {?} _driver
@@ -1247,7 +1248,7 @@ class DomAnimationEngine {
             const /** @type {?} */ possibleTriggers = Object.keys(lookupRef);
             const /** @type {?} */ hasRemoval = possibleTriggers.some(triggerName => {
                 const /** @type {?} */ oldValue = lookupRef[triggerName];
-                const /** @type {?} */ instruction = this._triggers[triggerName].matchTransition(oldValue, 'void');
+                const /** @type {?} */ instruction = this._triggers[triggerName].matchTransition(oldValue, VOID_STATE);
                 return !!instruction;
             });
             if (hasRemoval) {
@@ -1280,8 +1281,9 @@ class DomAnimationEngine {
         if (!lookupRef) {
             this._elementTriggerStates.set(element, lookupRef = {});
         }
-        let /** @type {?} */ oldValue = lookupRef.hasOwnProperty(property) ? lookupRef[property] : 'void';
+        let /** @type {?} */ oldValue = lookupRef.hasOwnProperty(property) ? lookupRef[property] : VOID_STATE;
         if (oldValue !== value) {
+            value = normalizeTriggerValue(value);
             let /** @type {?} */ instruction = trigger.matchTransition(oldValue, value);
             if (!instruction) {
                 // we do this to make sure we always have an animation player so
@@ -1390,9 +1392,9 @@ class DomAnimationEngine {
         // we first run this so that the previous animation player
         // data can be passed into the successive animation players
         let /** @type {?} */ totalTime = 0;
-        const /** @type {?} */ players = instruction.timelines.map(timelineInstruction => {
+        const /** @type {?} */ players = instruction.timelines.map((timelineInstruction, i) => {
             totalTime = Math.max(totalTime, timelineInstruction.totalTime);
-            return this._buildPlayer(element, timelineInstruction, previousPlayers);
+            return this._buildPlayer(element, timelineInstruction, previousPlayers, i);
         });
         previousPlayers.forEach(previousPlayer => previousPlayer.destroy());
         const /** @type {?} */ player = optimizeGroupPlayer(players);
@@ -1421,8 +1423,8 @@ class DomAnimationEngine {
      * @return {?}
      */
     animateTimeline(element, instructions, previousPlayers = []) {
-        const /** @type {?} */ players = instructions.map(instruction => {
-            const /** @type {?} */ player = this._buildPlayer(element, instruction, previousPlayers);
+        const /** @type {?} */ players = instructions.map((instruction, i) => {
+            const /** @type {?} */ player = this._buildPlayer(element, instruction, previousPlayers, i);
             player.onDestroy(() => { deleteFromArrayMap(this._activeElementAnimations, element, player); });
             player.init();
             this._markPlayerAsActive(element, player);
@@ -1434,9 +1436,16 @@ class DomAnimationEngine {
      * @param {?} element
      * @param {?} instruction
      * @param {?} previousPlayers
+     * @param {?=} index
      * @return {?}
      */
-    _buildPlayer(element, instruction, previousPlayers) {
+    _buildPlayer(element, instruction, previousPlayers, index = 0) {
+        // only the very first animation can absorb the previous styles. This
+        // is here to prevent the an overlap situation where a group animation
+        // absorbs previous styles multiple times for the same element.
+        if (index && previousPlayers.length) {
+            previousPlayers = [];
+        }
         return this._driver.animate(element, this._normalizeKeyframes(instruction.keyframes), instruction.duration, instruction.delay, instruction.easing, previousPlayers);
     }
     /**
@@ -1573,12 +1582,12 @@ class DomAnimationEngine {
                     Object.keys(stateDetails).forEach(triggerName => {
                         flushAgain = true;
                         const /** @type {?} */ oldValue = stateDetails[triggerName];
-                        const /** @type {?} */ instruction = this._triggers[triggerName].matchTransition(oldValue, 'void');
+                        const /** @type {?} */ instruction = this._triggers[triggerName].matchTransition(oldValue, VOID_STATE);
                         if (instruction) {
                             players.push(this.animateTransition(element, instruction));
                         }
                         else {
-                            const /** @type {?} */ event = makeAnimationEvent(element, triggerName, oldValue, 'void', '', 0);
+                            const /** @type {?} */ event = makeAnimationEvent(element, triggerName, oldValue, VOID_STATE, '', 0);
                             const /** @type {?} */ player = new NoopAnimationPlayer();
                             this._queuePlayer(element, triggerName, player, event);
                         }
@@ -1710,6 +1719,18 @@ function copyAnimationEvent(e) {
  */
 function makeAnimationEvent(element, triggerName, fromState, toState, phaseName, totalTime) {
     return ({ element, triggerName, fromState, toState, phaseName, totalTime });
+}
+/**
+ * @param {?} value
+ * @return {?}
+ */
+function normalizeTriggerValue(value) {
+    switch (typeof value) {
+        case 'boolean':
+            return value ? '1' : '0';
+        default:
+            return value ? value.toString() : null;
+    }
 }
 
 /**
@@ -2122,7 +2143,7 @@ class WebAnimationsPlayer {
             let /** @type {?} */ startingKeyframe = keyframes[0];
             let /** @type {?} */ missingStyleProps = [];
             previousStyleProps.forEach(prop => {
-                if (startingKeyframe[prop] != null) {
+                if (!startingKeyframe.hasOwnProperty(prop)) {
                     missingStyleProps.push(prop);
                 }
                 startingKeyframe[prop] = this.previousStyles[prop];

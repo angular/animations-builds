@@ -45,7 +45,7 @@ export declare class DomAnimationEngine {
     private _onRemovalTransition(element);
     animateTransition(element: any, instruction: AnimationTransitionInstruction): AnimationPlayer;
     animateTimeline(element: any, instructions: AnimationTimelineInstruction[], previousPlayers?: AnimationPlayer[]): AnimationPlayer;
-    private _buildPlayer(element, instruction, previousPlayers);
+    private _buildPlayer(element, instruction, previousPlayers, index?);
     private _normalizeKeyframes(keyframes);
     private _markPlayerAsActive(element, player);
     private _queuePlayer(element, triggerName, player, event);
