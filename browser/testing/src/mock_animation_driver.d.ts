@@ -32,6 +32,7 @@ export declare class MockAnimationPlayer extends NoopAnimationPlayer {
     previousStyles: {
         [key: string]: string | number;
     };
+    private _onInitFns;
     constructor(element: any, keyframes: {
         [key: string]: string | number;
     }[], duration: number, delay: number, easing: string, previousPlayers: any[]);
