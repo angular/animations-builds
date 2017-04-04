@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.0-691cb98
+ * @license Angular v4.1.0-beta.0-64f1bf6
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -10,7 +10,7 @@
 }(this, (function (exports) { 'use strict';
 
 /**
- * @license Angular v4.1.0-beta.0-691cb98
+ * @license Angular v4.1.0-beta.0-64f1bf6
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -57,7 +57,7 @@ var Animation = (function () {
  */
 var AUTO_STYLE = '*';
 /**
- * \@internal
+ * \@experimental Animation support is experimental.
  */
 var PRE_STYLE = '!';
 /**
@@ -973,6 +973,7 @@ var AnimationGroupPlayer = (function () {
 exports.Animation = Animation;
 exports.AnimationBuilder = AnimationBuilder;
 exports.AUTO_STYLE = AUTO_STYLE;
+exports.PRE_STYLE = PRE_STYLE;
 exports.animate = animate;
 exports.animateChild = animateChild;
 exports.animation = animation;
@@ -989,7 +990,6 @@ exports.trigger = trigger;
 exports.wait = wait;
 exports.AnimationPlayer = AnimationPlayer;
 exports.NoopAnimationPlayer = NoopAnimationPlayer;
-exports.ɵPRE_STYLE = PRE_STYLE;
 exports.ɵAnimationGroupPlayer = AnimationGroupPlayer;
 
 Object.defineProperty(exports, '__esModule', { value: true });

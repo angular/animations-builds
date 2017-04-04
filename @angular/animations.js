@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.0-691cb98
+ * @license Angular v4.1.0-beta.0-64f1bf6
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -41,7 +41,7 @@ class Animation {
  */
 const AUTO_STYLE = '*';
 /**
- * \@internal
+ * \@experimental Animation support is experimental.
  */
 const PRE_STYLE = '!';
 /**
@@ -965,5 +965,5 @@ class AnimationGroupPlayer {
  * Generated bundle index. Do not edit.
  */
 
-export { Animation, AnimationBuilder, AUTO_STYLE, animate, animateChild, animation, group, keyframes, query, queryAll, sequence, stagger, state, style, transition, trigger, wait, AnimationPlayer, NoopAnimationPlayer, PRE_STYLE as ɵPRE_STYLE, AnimationGroupPlayer as ɵAnimationGroupPlayer };
+export { Animation, AnimationBuilder, AUTO_STYLE, PRE_STYLE, animate, animateChild, animation, group, keyframes, query, queryAll, sequence, stagger, state, style, transition, trigger, wait, AnimationPlayer, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer };
 //# sourceMappingURL=animations.js.map

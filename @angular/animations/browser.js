@@ -1,9 +1,9 @@
 /**
- * @license Angular v4.1.0-beta.0-691cb98
+ * @license Angular v4.1.0-beta.0-64f1bf6
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
-import { AUTO_STYLE, NoopAnimationPlayer, sequence, style, ɵAnimationGroupPlayer, ɵPRE_STYLE } from '@angular/animations';
+import { AUTO_STYLE, NoopAnimationPlayer, PRE_STYLE, sequence, style, ɵAnimationGroupPlayer } from '@angular/animations';
 
 /**
  * @license
@@ -389,7 +389,7 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles, p
         Object.keys(kf).forEach(prop => {
             let /** @type {?} */ normalizedProp = prop;
             let /** @type {?} */ normalizedValue = kf[prop];
-            if (normalizedValue == ɵPRE_STYLE) {
+            if (normalizedValue == PRE_STYLE) {
                 normalizedValue = preStyles[prop];
             }
             else if (normalizedValue == AUTO_STYLE) {
@@ -2168,7 +2168,7 @@ class TimelineBuilder {
             const /** @type {?} */ finalKeyframe = copyStyles(keyframe, true);
             Object.keys(finalKeyframe).forEach(prop => {
                 const /** @type {?} */ value = finalKeyframe[prop];
-                if (value == ɵPRE_STYLE) {
+                if (value == PRE_STYLE) {
                     preStyleProps.add(prop);
                 }
                 else if (value == AUTO_STYLE) {
@@ -3530,7 +3530,7 @@ class TransitionAnimationEngine {
             [];
         // PRE STAGE: fill the ! styles
         const /** @type {?} */ preStylesMap = allPreStyleElements.size ?
-            cloakAndComputeStyles(this._driver, enterNodes, allPreStyleElements, ɵPRE_STYLE) :
+            cloakAndComputeStyles(this._driver, enterNodes, allPreStyleElements, PRE_STYLE) :
             new Map();
         // POST STAGE: fill the * styles
         const /** @type {?} */ postStylesMap = cloakAndComputeStyles(this._driver, leaveNodes, allPostStyleElements, AUTO_STYLE);

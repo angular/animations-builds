@@ -4,11 +4,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-beta.0-691cb98
+ * @license Angular v4.1.0-beta.0-64f1bf6
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
-import { AUTO_STYLE, NoopAnimationPlayer, sequence, style, ɵAnimationGroupPlayer, ɵPRE_STYLE } from '@angular/animations';
+import { AUTO_STYLE, NoopAnimationPlayer, PRE_STYLE, sequence, style, ɵAnimationGroupPlayer } from '@angular/animations';
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -402,7 +402,7 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles, p
         Object.keys(kf).forEach(function (prop) {
             var /** @type {?} */ normalizedProp = prop;
             var /** @type {?} */ normalizedValue = kf[prop];
-            if (normalizedValue == ɵPRE_STYLE) {
+            if (normalizedValue == PRE_STYLE) {
                 normalizedValue = preStyles[prop];
             }
             else if (normalizedValue == AUTO_STYLE) {
@@ -2262,7 +2262,7 @@ var TimelineBuilder = (function () {
             var /** @type {?} */ finalKeyframe = copyStyles(keyframe, true);
             Object.keys(finalKeyframe).forEach(function (prop) {
                 var /** @type {?} */ value = finalKeyframe[prop];
-                if (value == ɵPRE_STYLE) {
+                if (value == PRE_STYLE) {
                     preStyleProps.add(prop);
                 }
                 else if (value == AUTO_STYLE) {
@@ -3672,7 +3672,7 @@ var TransitionAnimationEngine = (function () {
             [];
         // PRE STAGE: fill the ! styles
         var /** @type {?} */ preStylesMap = allPreStyleElements.size ?
-            cloakAndComputeStyles(this._driver, enterNodes, allPreStyleElements, ɵPRE_STYLE) :
+            cloakAndComputeStyles(this._driver, enterNodes, allPreStyleElements, PRE_STYLE) :
             new Map();
         // POST STAGE: fill the * styles
         var /** @type {?} */ postStylesMap = cloakAndComputeStyles(this._driver, leaveNodes, allPostStyleElements, AUTO_STYLE);
