@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.0-c933b75
+ * @license Angular v4.1.0-beta.0-f4f621a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -15,7 +15,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-beta.0-c933b75
+ * @license Angular v4.1.0-beta.0-f4f621a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3913,6 +3913,9 @@ var TransitionAnimationEngine = (function () {
         var /** @type {?} */ allConsumedElements = new Set();
         var /** @type {?} */ allNewPlayers = instruction.timelines.map(function (timelineInstruction) {
             var /** @type {?} */ element = timelineInstruction.element;
+            // FIXME (matsko): make sure to-be-removed animations are removed properly
+            if (element['REMOVED'])
+                return new _angular_animations.NoopAnimationPlayer();
             var /** @type {?} */ isQueriedElement = element !== rootElement;
             var /** @type {?} */ previousPlayers = EMPTY_PLAYER_ARRAY;
             if (!allConsumedElements.has(element)) {
@@ -4230,7 +4233,12 @@ function cloakAndComputeStyles(driver, elements, elementPropsMap, defaultStyle) 
     var /** @type {?} */ valuesMap = new Map();
     elementPropsMap.forEach(function (props, element) {
         var /** @type {?} */ styles = {};
-        props.forEach(function (prop) { styles[prop] = driver.computeStyle(element, prop, defaultStyle); });
+        props.forEach(function (prop) {
+            var /** @type {?} */ value = styles[prop] = driver.computeStyle(element, prop, defaultStyle);
+            if (value == '' && value.length == 0) {
+                element['REMOVED'] = true;
+            }
+        });
         valuesMap.set(element, styles);
     });
     elements.forEach(function (element, i) { return cloakElement(element, cloakVals[i]); });

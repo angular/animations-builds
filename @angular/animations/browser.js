@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.0-c933b75
+ * @license Angular v4.1.0-beta.0-f4f621a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3758,6 +3758,9 @@ class TransitionAnimationEngine {
         const /** @type {?} */ allConsumedElements = new Set();
         const /** @type {?} */ allNewPlayers = instruction.timelines.map(timelineInstruction => {
             const /** @type {?} */ element = timelineInstruction.element;
+            // FIXME (matsko): make sure to-be-removed animations are removed properly
+            if (element['REMOVED'])
+                return new NoopAnimationPlayer();
             const /** @type {?} */ isQueriedElement = element !== rootElement;
             let /** @type {?} */ previousPlayers = EMPTY_PLAYER_ARRAY;
             if (!allConsumedElements.has(element)) {
@@ -4060,7 +4063,12 @@ function cloakAndComputeStyles(driver, elements, elementPropsMap, defaultStyle) 
     const /** @type {?} */ valuesMap = new Map();
     elementPropsMap.forEach((props, element) => {
         const /** @type {?} */ styles = {};
-        props.forEach(prop => { styles[prop] = driver.computeStyle(element, prop, defaultStyle); });
+        props.forEach(prop => {
+            const /** @type {?} */ value = styles[prop] = driver.computeStyle(element, prop, defaultStyle);
+            if (value == '' && value.length == 0) {
+                element['REMOVED'] = true;
+            }
+        });
         valuesMap.set(element, styles);
     });
     elements.forEach((element, i) => cloakElement(element, cloakVals[i]));
