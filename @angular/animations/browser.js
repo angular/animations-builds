@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.0-294a205
+ * @license Angular v4.1.0-beta.0-f4b5784
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -426,6 +426,7 @@ function listenOnPlayer(player, eventName, event, callback) {
             player.onStart(() => { callback(event && copyAnimationEvent(event, 'start', player.totalTime)); });
             break;
         case 'done':
+        case 'onDone':
             player.onDone(() => { callback(event && copyAnimationEvent(event, 'done', player.totalTime)); });
             break;
         case 'destroy':
