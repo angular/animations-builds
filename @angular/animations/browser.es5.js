@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-beta.0-64f1bf6
+ * @license Angular v4.1.0-beta.0-c933b75
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -279,8 +279,8 @@ function normalizeAnimationEntry(steps) {
 }
 // this is a naive approach to search/replace
 // TODO: check to see that transforms are not effected
-var SIMPLE_STYLE_INTERPOLATION_REGEX = /\$\w+/;
-var ADVANCED_STYLE_INTERPOLATION_REGEX = /\$\{([-\w\s]+)\}/;
+var SIMPLE_STYLE_INTERPOLATION_REGEX = /\$\w+/g;
+var ADVANCED_STYLE_INTERPOLATION_REGEX = /\$\{([-\w\s]+)\}/g;
 /**
  * @param {?} value
  * @param {?} locals
@@ -2947,6 +2947,18 @@ var StateValue = (function () {
         this.value = normalizeTriggerValue(value);
         this.data = isObj ? input : { value: value };
     }
+    /**
+     * @param {?} values
+     * @return {?}
+     */
+    StateValue.prototype.absorbValues = function (values) {
+        var _this = this;
+        Object.keys(values).forEach(function (prop) {
+            if (_this.data[prop] == null) {
+                _this.data[prop] = values[prop];
+            }
+        });
+    };
     return StateValue;
 }());
 var VOID_VALUE = 'void';
@@ -3061,6 +3073,10 @@ var AnimationTransitionNamespace = (function () {
         }
         var /** @type {?} */ fromState = triggersWithStates[triggerName];
         var /** @type {?} */ toState = new StateValue(value);
+        var /** @type {?} */ isObj = value && value.hasOwnProperty('value');
+        if (!isObj && fromState) {
+            toState.absorbValues(fromState.data);
+        }
         triggersWithStates[triggerName] = toState;
         if (!fromState) {
             fromState = DEFAULT_STATE_VALUE;

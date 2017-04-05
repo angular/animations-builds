@@ -26,6 +26,9 @@ export declare class StateValue {
         [key: string]: any;
     };
     constructor(input: any);
+    absorbValues(values: {
+        [key: string]: any;
+    }): void;
 }
 export declare const VOID_VALUE = "void";
 export declare const DEFAULT_STATE_VALUE: StateValue;

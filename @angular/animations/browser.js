@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.0-64f1bf6
+ * @license Angular v4.1.0-beta.0-c933b75
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -265,8 +265,8 @@ function normalizeAnimationEntry(steps) {
 }
 // this is a naive approach to search/replace
 // TODO: check to see that transforms are not effected
-const SIMPLE_STYLE_INTERPOLATION_REGEX = /\$\w+/;
-const ADVANCED_STYLE_INTERPOLATION_REGEX = /\$\{([-\w\s]+)\}/;
+const SIMPLE_STYLE_INTERPOLATION_REGEX = /\$\w+/g;
+const ADVANCED_STYLE_INTERPOLATION_REGEX = /\$\{([-\w\s]+)\}/g;
 /**
  * @param {?} value
  * @param {?} locals
@@ -2823,6 +2823,17 @@ class StateValue {
         this.value = normalizeTriggerValue(value);
         this.data = isObj ? input : { value: value };
     }
+    /**
+     * @param {?} values
+     * @return {?}
+     */
+    absorbValues(values) {
+        Object.keys(values).forEach(prop => {
+            if (this.data[prop] == null) {
+                this.data[prop] = values[prop];
+            }
+        });
+    }
 }
 const VOID_VALUE = 'void';
 const DEFAULT_STATE_VALUE = new StateValue(VOID_VALUE);
@@ -2933,6 +2944,10 @@ class AnimationTransitionNamespace {
         }
         let /** @type {?} */ fromState = triggersWithStates[triggerName];
         const /** @type {?} */ toState = new StateValue(value);
+        const /** @type {?} */ isObj = value && value.hasOwnProperty('value');
+        if (!isObj && fromState) {
+            toState.absorbValues(fromState.data);
+        }
         triggersWithStates[triggerName] = toState;
         if (!fromState) {
             fromState = DEFAULT_STATE_VALUE;
