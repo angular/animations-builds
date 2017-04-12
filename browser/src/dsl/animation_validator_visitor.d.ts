@@ -25,7 +25,7 @@ export declare class AnimationValidatorVisitor implements AnimationDslVisitor {
 export declare class AnimationValidatorContext {
     errors: string[];
     currentTime: number;
-    currentAnimateTimings: AnimateTimings;
+    currentAnimateTimings: AnimateTimings | null;
     collectedStyles: {
         [propName: string]: StyleTimeTuple;
     };

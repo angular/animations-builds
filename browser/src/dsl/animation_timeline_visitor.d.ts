@@ -17,7 +17,7 @@ export declare class AnimationTimelineContext {
     errors: any[];
     timelines: TimelineBuilder[];
     currentTimeline: TimelineBuilder;
-    currentAnimateTimings: AnimateTimings;
+    currentAnimateTimings: AnimateTimings | null;
     previousNode: AnimationMetadata;
     subContextCount: number;
     constructor(errors: any[], timelines: TimelineBuilder[], initialTimeline?: TimelineBuilder);
@@ -38,9 +38,8 @@ export declare class AnimationTimelineVisitor implements AnimationDslVisitor {
 }
 export declare class TimelineBuilder {
     startTime: number;
-    private _globalTimelineStyles;
     duration: number;
-    easing: string;
+    easing: string | null;
     private _previousKeyframe;
     private _currentKeyframe;
     private _keyframes;
@@ -48,7 +47,8 @@ export declare class TimelineBuilder {
     private _localTimelineStyles;
     private _backFill;
     private _currentEmptyStepKeyframe;
-    constructor(startTime: number, _globalTimelineStyles?: ɵStyleData);
+    private _globalTimelineStyles;
+    constructor(startTime: number, globalTimelineStyles?: ɵStyleData);
     hasStyling(): boolean;
     readonly currentTime: number;
     fork(currentTime?: number): TimelineBuilder;
@@ -57,7 +57,7 @@ export declare class TimelineBuilder {
     forwardTime(time: number): void;
     private _updateStyle(prop, value);
     allowOnlyTimelineStyles(): boolean;
-    setStyles(styles: ɵStyleData, easing?: string, treatAsEmptyStep?: boolean): void;
+    setStyles(styles: ɵStyleData, easing?: string | null, treatAsEmptyStep?: boolean): void;
     snapshotCurrentStyles(): void;
     getFinalKeyframe(): ɵStyleData;
     readonly properties: string[];

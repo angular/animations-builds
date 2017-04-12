@@ -16,5 +16,5 @@ export declare class AnimationTransitionFactory {
     constructor(_triggerName: string, ast: AnimationTransitionMetadata, matchFns: TransitionMatcherFn[], _stateStyles: {
         [stateName: string]: ɵStyleData;
     });
-    match(currentState: any, nextState: any): AnimationTransitionInstruction;
+    match(currentState: any, nextState: any): AnimationTransitionInstruction | undefined;
 }

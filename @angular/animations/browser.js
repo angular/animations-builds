@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.0-04fb29b
+ * @license Angular v4.1.0-beta.0-38d75d4
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -358,7 +358,7 @@ class AnimationTimelineContext {
      * @param {?} timelines
      * @param {?=} initialTimeline
      */
-    constructor(errors, timelines, initialTimeline = null) {
+    constructor(errors, timelines, initialTimeline) {
         this.errors = errors;
         this.timelines = timelines;
         this.previousNode = ({});
@@ -555,10 +555,10 @@ class AnimationTimelineVisitor {
             offsetGap = MAX_KEYFRAME_OFFSET / limit;
         }
         const /** @type {?} */ startTime = context.currentTimeline.duration;
-        const /** @type {?} */ duration = context.currentAnimateTimings.duration;
+        const /** @type {?} */ duration = ((context.currentAnimateTimings)).duration;
         const /** @type {?} */ innerContext = context.createSubContext();
         const /** @type {?} */ innerTimeline = innerContext.currentTimeline;
-        innerTimeline.easing = context.currentAnimateTimings.easing;
+        innerTimeline.easing = ((context.currentAnimateTimings)).easing;
         ast.steps.forEach((step, i) => {
             const /** @type {?} */ normalizedStyles = normalizeStyles(step.styles);
             const /** @type {?} */ offset = containsOffsets ?
@@ -579,11 +579,10 @@ class AnimationTimelineVisitor {
 class TimelineBuilder {
     /**
      * @param {?} startTime
-     * @param {?=} _globalTimelineStyles
+     * @param {?=} globalTimelineStyles
      */
-    constructor(startTime, _globalTimelineStyles = null) {
+    constructor(startTime, globalTimelineStyles) {
         this.startTime = startTime;
-        this._globalTimelineStyles = _globalTimelineStyles;
         this.duration = 0;
         this.easing = '';
         this._previousKeyframe = {};
@@ -592,9 +591,8 @@ class TimelineBuilder {
         this._backFill = {};
         this._currentEmptyStepKeyframe = null;
         this._localTimelineStyles = Object.create(this._backFill, {});
-        if (!this._globalTimelineStyles) {
-            this._globalTimelineStyles = this._localTimelineStyles;
-        }
+        this._globalTimelineStyles =
+            globalTimelineStyles ? globalTimelineStyles : this._localTimelineStyles;
         this._loadKeyframe();
     }
     /**
@@ -619,7 +617,7 @@ class TimelineBuilder {
         if (this._currentKeyframe) {
             this._previousKeyframe = this._currentKeyframe;
         }
-        this._currentKeyframe = this._keyframes.get(this.duration);
+        this._currentKeyframe = ((this._keyframes.get(this.duration)));
         if (!this._currentKeyframe) {
             this._currentKeyframe = Object.create(this._backFill, {});
             this._keyframes.set(this.duration, this._currentKeyframe);
@@ -646,8 +644,8 @@ class TimelineBuilder {
      * @return {?}
      */
     _updateStyle(prop, value) {
-        this._localTimelineStyles[prop] = value;
-        this._globalTimelineStyles[prop] = value;
+        this._localTimelineStyles[prop] = value; /** @type {?} */
+        ((this._globalTimelineStyles))[prop] = value;
         this._styleSummary[prop] = { time: this.currentTime, value };
     }
     /**
@@ -662,7 +660,7 @@ class TimelineBuilder {
      */
     setStyles(styles, easing = null, treatAsEmptyStep = false) {
         if (easing) {
-            this._previousKeyframe['easing'] = easing;
+            ((this._previousKeyframe))['easing'] = easing;
         }
         if (treatAsEmptyStep) {
             // special case for animate(duration):
@@ -702,7 +700,7 @@ class TimelineBuilder {
     /**
      * @return {?}
      */
-    getFinalKeyframe() { return this._keyframes.get(this.duration); }
+    getFinalKeyframe() { return ((this._keyframes.get(this.duration))); }
     /**
      * @return {?}
      */
@@ -773,7 +771,7 @@ function getOffset(ast) {
             offset = (styles['offset']);
         }
     }
-    return offset;
+    return ((offset));
 }
 
 /**
@@ -1012,13 +1010,13 @@ class AnimationValidatorVisitor {
         }
         const /** @type {?} */ limit = length - 1;
         const /** @type {?} */ currentTime = context.currentTime;
-        const /** @type {?} */ animateDuration = context.currentAnimateTimings.duration;
+        const /** @type {?} */ animateDuration = ((context.currentAnimateTimings)).duration;
         ast.steps.forEach((step, i) => {
             const /** @type {?} */ offset = generatedOffset > 0 ? (i == limit ? 1 : (generatedOffset * i)) : offsets[i];
             const /** @type {?} */ durationUpToThisFrame = offset * animateDuration;
             context.currentTime =
-                currentTime + context.currentAnimateTimings.delay + durationUpToThisFrame;
-            context.currentAnimateTimings.duration = durationUpToThisFrame;
+                currentTime + ((context.currentAnimateTimings)).delay + durationUpToThisFrame; /** @type {?} */
+            ((context.currentAnimateTimings)).duration = durationUpToThisFrame;
             this.visitStyle(step, context);
         });
     }
@@ -1100,6 +1098,7 @@ class AnimationTrigger {
             if (result)
                 return result;
         }
+        return null;
     }
 }
 class AnimationTriggerContext {
@@ -1227,7 +1226,7 @@ class DomAnimationEngine {
      * @param {?=} name
      * @return {?}
      */
-    registerTrigger(trigger, name = null) {
+    registerTrigger(trigger, name) {
         name = name || trigger.name;
         if (this._triggers[name]) {
             return;
@@ -1259,7 +1258,7 @@ class DomAnimationEngine {
         if (lookupRef) {
             const /** @type {?} */ possibleTriggers = Object.keys(lookupRef);
             const /** @type {?} */ hasRemoval = possibleTriggers.some(triggerName => {
-                const /** @type {?} */ oldValue = lookupRef[triggerName];
+                const /** @type {?} */ oldValue = ((lookupRef))[triggerName];
                 const /** @type {?} */ instruction = this._triggers[triggerName].matchTransition(oldValue, VOID_STATE);
                 return !!instruction;
             });
@@ -1377,7 +1376,7 @@ class DomAnimationEngine {
         }
         // we make a copy of the array because the actual source array is modified
         // each time a player is finished/destroyed (the forEach loop would fail otherwise)
-        return copyArray(this._activeElementAnimations.get(element));
+        return copyArray(/** @type {?} */ ((this._activeElementAnimations.get(element))));
     }
     /**
      * @param {?} element
@@ -1514,7 +1513,7 @@ class DomAnimationEngine {
      */
     _flushQueuedAnimations() {
         parentLoop: while (this._queuedTransitionAnimations.length) {
-            const { player, element, triggerName, event } = this._queuedTransitionAnimations.shift();
+            const { player, element, triggerName, event } = ((this._queuedTransitionAnimations.shift()));
             let /** @type {?} */ parent = element;
             while (parent = parent.parentNode) {
                 // this means that a parent element will or will not
@@ -1920,7 +1919,7 @@ class NoopAnimationEngine extends AnimationEngine {
      * @param {?=} name
      * @return {?}
      */
-    registerTrigger(trigger, name = null) {
+    registerTrigger(trigger, name) {
         name = name || trigger.name;
         if (this._triggerStyles[name]) {
             return;
@@ -2040,7 +2039,7 @@ class NoopAnimationEngine extends AnimationEngine {
         });
         // remove all the listeners after everything is complete
         Array.from(this._listeners.keys()).forEach(element => {
-            const /** @type {?} */ listenersToKeep = this._listeners.get(element).filter(l => !l.doRemove);
+            const /** @type {?} */ listenersToKeep = ((this._listeners.get(element))).filter(l => !l.doRemove);
             if (listenersToKeep.length) {
                 this._listeners.set(element, listenersToKeep);
             }

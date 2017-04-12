@@ -26,5 +26,5 @@ export declare class AnimationTrigger {
         [stateName: string]: ɵStyleData;
     }, _transitionAsts: AnimationTransitionMetadata[]);
     createFallbackInstruction(currentState: any, nextState: any): AnimationTransitionInstruction;
-    matchTransition(currentState: any, nextState: any): AnimationTransitionInstruction;
+    matchTransition(currentState: any, nextState: any): AnimationTransitionInstruction | null;
 }

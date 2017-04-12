@@ -7,7 +7,7 @@ export declare class AnimationGroupPlayer implements AnimationPlayer {
     private _started;
     private _destroyed;
     private _onDestroyFns;
-    parentPlayer: AnimationPlayer;
+    parentPlayer: AnimationPlayer | null;
     constructor(_players: AnimationPlayer[]);
     private _onFinish();
     init(): void;
