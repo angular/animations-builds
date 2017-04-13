@@ -28,7 +28,7 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     private _destroyed;
     private _finalKeyframe;
     time: number;
-    parentPlayer: AnimationPlayer;
+    parentPlayer: AnimationPlayer | null;
     previousStyles: {
         [styleName: string]: string | number;
     };

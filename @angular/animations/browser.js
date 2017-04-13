@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.0-f4b5784
+ * @license Angular v4.1.0-beta.1-c664486
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -137,12 +137,12 @@ function parseTimeExpression(exp, errors, allowNegativeValues) {
     const /** @type {?} */ regex = /^(-?[\.\d]+)(m?s)(?:\s+(-?[\.\d]+)(m?s))?(?:\s+([-a-z]+(?:\(.+?\))?))?$/i;
     let /** @type {?} */ duration;
     let /** @type {?} */ delay = 0;
-    let /** @type {?} */ easing = null;
+    let /** @type {?} */ easing = '';
     if (typeof exp === 'string') {
         const /** @type {?} */ matches = exp.match(regex);
         if (matches === null) {
             errors.push(`The provided timing value "${exp}" is invalid.`);
-            return { duration: 0, delay: 0, easing: null };
+            return { duration: 0, delay: 0, easing: '' };
         }
         let /** @type {?} */ durationMatch = parseFloat(matches[1]);
         const /** @type {?} */ durationUnit = matches[2];
@@ -307,10 +307,12 @@ function matchAndValidate(regex, prefixLength, suffixLength, str, locals, errors
  * @return {?}
  */
 function interpolateStyleLocals(value, locals, errors) {
-    let /** @type {?} */ str = value.toString();
+    let /** @type {?} */ original = value.toString();
+    let /** @type {?} */ str = original;
     str = matchAndReplace(SIMPLE_STYLE_INTERPOLATION_REGEX, 1, 0, str, locals, errors);
     str = matchAndReplace(ADVANCED_STYLE_INTERPOLATION_REGEX, 2, 1, str, locals, errors);
-    return str;
+    // we do this to assert that numeric values stay as they are
+    return str == original ? value : str;
 }
 /**
  * @param {?} regex
@@ -322,12 +324,12 @@ function interpolateStyleLocals(value, locals, errors) {
  * @return {?}
  */
 function matchAndReplace(regex, prefixLength, suffixLength, str, locals, errors) {
-    return str.replace(regex, varName => {
-        varName = varName.substring(prefixLength, varName.length - suffixLength); // drop the $ or ${}
+    return str.replace(regex, exp => {
+        const /** @type {?} */ varName = exp.substring(prefixLength, exp.length - suffixLength); // drop the $ or ${}
         let /** @type {?} */ localVal = locals[varName];
         // this means that the value was never overidden by the data passed in by the user
-        if (localVal === true) {
-            errors.push(`Please provide a value for the animation variable $${varName}`);
+        if (!locals.hasOwnProperty(varName)) {
+            errors.push(`Please provide a value for the animation variable ${exp}`);
             localVal = '';
         }
         return localVal.toString();
@@ -373,11 +375,11 @@ function optimizeGroupPlayer(players) {
  * @param {?} normalizer
  * @param {?} element
  * @param {?} keyframes
- * @param {?} preStyles
- * @param {?} postStyles
+ * @param {?=} preStyles
+ * @param {?=} postStyles
  * @return {?}
  */
-function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles, postStyles) {
+function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles = {}, postStyles = {}) {
     const /** @type {?} */ errors = [];
     const /** @type {?} */ normalizedKeyframes = [];
     let /** @type {?} */ previousOffset = -1;
@@ -385,7 +387,7 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles, p
     keyframes.forEach(kf => {
         const /** @type {?} */ offset = (kf['offset']);
         const /** @type {?} */ isSameOffset = offset == previousOffset;
-        const /** @type {?} */ normalizedKeyframe = isSameOffset ? previousKeyframe : {};
+        const /** @type {?} */ normalizedKeyframe = (isSameOffset && previousKeyframe) || {};
         Object.keys(kf).forEach(prop => {
             let /** @type {?} */ normalizedProp = prop;
             let /** @type {?} */ normalizedValue = kf[prop];
@@ -426,7 +428,6 @@ function listenOnPlayer(player, eventName, event, callback) {
             player.onStart(() => { callback(event && copyAnimationEvent(event, 'start', player.totalTime)); });
             break;
         case 'done':
-        case 'onDone':
             player.onDone(() => { callback(event && copyAnimationEvent(event, 'done', player.totalTime)); });
             break;
         case 'destroy':
@@ -452,7 +453,7 @@ function copyAnimationEvent(e, phaseName, totalTime) {
  * @param {?=} totalTime
  * @return {?}
  */
-function makeAnimationEvent(element, triggerName, fromState, toState, phaseName = null, totalTime = null) {
+function makeAnimationEvent(element, triggerName, fromState, toState, phaseName = '', totalTime = 0) {
     return { element, triggerName, fromState, toState, phaseName, totalTime };
 }
 /**
@@ -476,6 +477,16 @@ function getOrSetAsInMap(map, key, defaultValue) {
         }
     }
     return value;
+}
+/**
+ * @param {?} command
+ * @return {?}
+ */
+function parseTimelineCommand(command) {
+    const /** @type {?} */ separatorPos = command.indexOf(':');
+    const /** @type {?} */ id = command.substring(1, separatorPos);
+    const /** @type {?} */ action = command.substr(separatorPos + 1);
+    return [id, action];
 }
 
 /**
@@ -549,7 +560,7 @@ class AnimationTransitionAst extends AnimationAst {
     /**
      * @param {?} matchers
      * @param {?} animation
-     * @param {?} locals
+     * @param {?=} locals
      */
     constructor(matchers, animation, locals) {
         super();
@@ -625,7 +636,7 @@ class AnimationStyleAst extends AnimationAst {
     /**
      * @param {?} styles
      * @param {?} easing
-     * @param {?} offset
+     * @param {?=} offset
      */
     constructor(styles, easing, offset) {
         super();
@@ -663,12 +674,12 @@ class AnimationKeyframesSequenceAst extends AnimationAst {
 class AnimationReferenceAst extends AnimationAst {
     /**
      * @param {?} animation
-     * @param {?} locals
+     * @param {?=} defaults
      */
-    constructor(animation, locals) {
+    constructor(animation, defaults = {}) {
         super();
         this.animation = animation;
-        this.locals = locals;
+        this.defaults = defaults;
     }
     /**
      * @param {?} visitor
@@ -681,9 +692,9 @@ class AnimationReferenceAst extends AnimationAst {
 }
 class AnimationAnimateChildAst extends AnimationAst {
     /**
-     * @param {?} timings
-     * @param {?} animation
-     * @param {?} locals
+     * @param {?=} timings
+     * @param {?=} animation
+     * @param {?=} locals
      */
     constructor(timings, animation, locals) {
         super();
@@ -764,10 +775,10 @@ class AnimationWaitAst extends AnimationAst {
 class AnimationTimingAst extends AnimationAst {
     /**
      * @param {?} duration
-     * @param {?} delay
-     * @param {?} easing
+     * @param {?=} delay
+     * @param {?=} easing
      */
-    constructor(duration, delay, easing) {
+    constructor(duration, delay = 0, easing) {
         super();
         this.duration = duration;
         this.delay = delay;
@@ -1044,7 +1055,7 @@ class AnimationAstBuilderVisitor {
     visitAnimate(metadata, context) {
         const /** @type {?} */ timingAst = constructTimingAst(metadata.timings, context.errors);
         context.currentAnimateTimings = timingAst;
-        let /** @type {?} */ styles = null;
+        let /** @type {?} */ styles;
         let /** @type {?} */ styleMetadata = metadata.styles ? metadata.styles : style({});
         if (styleMetadata.type == 6 /* KeyframeSequence */) {
             styles =
@@ -1104,7 +1115,7 @@ class AnimationAstBuilderVisitor {
         else {
             styles.push(metadata.styles);
         }
-        let /** @type {?} */ collectedEasing = null;
+        let /** @type {?} */ collectedEasing;
         styles.forEach(styleData => {
             if (isObject(styleData)) {
                 const /** @type {?} */ styleMap = (styleData);
@@ -1133,7 +1144,7 @@ class AnimationAstBuilderVisitor {
             if (typeof tuple == 'string')
                 return;
             Object.keys(tuple).forEach(prop => {
-                const /** @type {?} */ collectedStyles = context.collectedStyles[context.currentQuerySelector];
+                const /** @type {?} */ collectedStyles = context.collectedStyles[((context.currentQuerySelector))];
                 const /** @type {?} */ collectedEntry = collectedStyles[prop];
                 let /** @type {?} */ updateCollectedStyle = true;
                 if (collectedEntry) {
@@ -1164,7 +1175,7 @@ class AnimationAstBuilderVisitor {
     visitKeyframeSequence(metadata, context) {
         if (!context.currentAnimateTimings) {
             context.errors.push(`keyframes() must be placed inside of a call to animate()`);
-            return;
+            return new AnimationKeyframesSequenceAst([]);
         }
         const /** @type {?} */ MAX_KEYFRAME_OFFSET = 1;
         let /** @type {?} */ totalKeyframesWithOffsets = 0;
@@ -1202,13 +1213,13 @@ class AnimationAstBuilderVisitor {
         }
         const /** @type {?} */ limit = length - 1;
         const /** @type {?} */ currentTime = context.currentTime;
-        const /** @type {?} */ animateDuration = context.currentAnimateTimings.duration;
+        const /** @type {?} */ currentAnimateTimings = ((context.currentAnimateTimings));
+        const /** @type {?} */ animateDuration = currentAnimateTimings.duration;
         keyframes.forEach((kf, i) => {
             const /** @type {?} */ offset = generatedOffset > 0 ? (i == limit ? 1 : (generatedOffset * i)) : offsets[i];
             const /** @type {?} */ durationUpToThisFrame = offset * animateDuration;
-            context.currentTime =
-                currentTime + context.currentAnimateTimings.delay + durationUpToThisFrame;
-            context.currentAnimateTimings.duration = durationUpToThisFrame;
+            context.currentTime = currentTime + currentAnimateTimings.delay + durationUpToThisFrame;
+            currentAnimateTimings.duration = durationUpToThisFrame;
             this._validateStyleAst(kf, context);
             kf.offset = offset;
         });
@@ -1229,9 +1240,10 @@ class AnimationAstBuilderVisitor {
      * @return {?}
      */
     visitAnimateChild(metadata, context) {
-        let /** @type {?} */ animationArg = null;
-        let /** @type {?} */ timings = null;
-        let /** @type {?} */ locals = null;
+        let /** @type {?} */ animationArg;
+        let /** @type {?} */ timings;
+        let /** @type {?} */ locals;
+        let /** @type {?} */ arg;
         const /** @type {?} */ args = metadata.args;
         switch (countArgs(args)) {
             case 0:
@@ -1240,7 +1252,7 @@ class AnimationAstBuilderVisitor {
                 break;
             case 1:
                 // animateChild(string|definition|number)
-                const /** @type {?} */ arg = args[0];
+                arg = args[0];
                 if (typeof arg == 'string' || arg >= 0) {
                     // animateChild(string|number)
                     context.depCount++;
@@ -1252,15 +1264,15 @@ class AnimationAstBuilderVisitor {
                 }
                 break;
             case 2:
-                animationArg = (args[0]);
-                if (animationArg['type']) {
+                arg = (args[0]);
+                if (arg['type']) {
                     // animateChild(definition, locals)
-                    animationArg = (args[0]);
+                    animationArg = (arg);
                     locals = normalizeLocals(/** @type {?} */ (args[1]));
                 }
                 else {
                     // animateChild(string|number, definition)
-                    timings = resolveTimingValue(/** @type {?} */ (args[0]), context.errors);
+                    timings = resolveTimingValue(/** @type {?} */ (arg), context.errors);
                     animationArg = (args[1]);
                 }
                 break;
@@ -1271,7 +1283,7 @@ class AnimationAstBuilderVisitor {
                 locals = normalizeLocals(/** @type {?} */ (args[2]));
                 break;
         }
-        const /** @type {?} */ animation = animationArg ? this.visitReference(animationArg, context) : null;
+        const /** @type {?} */ animation = animationArg ? this.visitReference(animationArg, context) : undefined;
         return new AnimationAnimateChildAst(timings, animation, locals);
     }
     /**
@@ -1280,7 +1292,7 @@ class AnimationAstBuilderVisitor {
      * @return {?}
      */
     visitQuery(metadata, context) {
-        const /** @type {?} */ parentSelector = context.currentQuerySelector;
+        const /** @type {?} */ parentSelector = ((context.currentQuerySelector));
         context.queryCount++;
         context.currentQuery = metadata;
         const [selector, includeSelf] = normalizeSelector(metadata.selector);
@@ -1360,7 +1372,7 @@ function normalizeSelector(selector) {
  * @return {?}
  */
 function normalizeLocals(obj) {
-    return obj ? copyObj(obj) : null;
+    return obj ? copyObj(obj) : undefined;
 }
 /**
  * @param {?} args
@@ -1377,6 +1389,10 @@ class AnimationAstBuilderContext {
         this.errors = errors;
         this.queryCount = 0;
         this.depCount = 0;
+        this.currentTransition = null;
+        this.currentQuery = null;
+        this.currentQuerySelector = null;
+        this.currentAnimateTimings = null;
         this.currentTime = 0;
         this.collectedStyles = {};
         this.locals = null;
@@ -1391,7 +1407,7 @@ class AnimationAstBuilderContext {
  * @return {?}
  */
 function consumeOffset(styles) {
-    let /** @type {?} */ offset = null;
+    let /** @type {?} */ offset;
     if (typeof styles == 'string')
         return offset;
     if (Array.isArray(styles)) {
@@ -1454,7 +1470,7 @@ function constructTimingAst(value, errors) {
  * @param {?} postStyleProps
  * @param {?} duration
  * @param {?} delay
- * @param {?} easing
+ * @param {?=} easing
  * @param {?=} subTimeline
  * @return {?}
  */
@@ -1536,7 +1552,7 @@ class ElementInstructionMap {
  * @param {?=} errors
  * @return {?}
  */
-function buildAnimationTimelines(rootElement, ast, startingStyles = {}, finalStyles = {}, locals, subInstructions, errors) {
+function buildAnimationTimelines(rootElement, ast, startingStyles = {}, finalStyles = {}, locals, subInstructions, errors = []) {
     return new AnimationTimelineBuilderVisitor().buildKeyframes(rootElement, ast, startingStyles, finalStyles, locals, subInstructions, errors);
 }
 const DEFAULT_NOOP_PREVIOUS_NODE = ({});
@@ -1548,20 +1564,20 @@ class AnimationTimelineContext {
      * @param {?} timelines
      * @param {?=} initialTimeline
      */
-    constructor(element, subInstructions, errors, timelines, initialTimeline = null) {
+    constructor(element, subInstructions, errors, timelines, initialTimeline) {
         this.element = element;
+        this.subInstructions = subInstructions;
         this.errors = errors;
         this.timelines = timelines;
         this.parentContext = null;
+        this.currentAnimateTimings = null;
         this.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
         this.subContextCount = 0;
-        this.locals = null;
         this.currentQueryIndex = 0;
         this.currentQueryTotal = 0;
         this.currentStaggerTime = 0;
         this.currentTimeline = initialTimeline || new TimelineBuilder(element, 0);
         timelines.push(this.currentTimeline);
-        this.subInstructions = subInstructions || new ElementInstructionMap();
     }
     /**
      * @param {?=} element
@@ -1573,7 +1589,7 @@ class AnimationTimelineContext {
         const /** @type {?} */ context = new AnimationTimelineContext(target, this.subInstructions, this.errors, this.timelines, this.currentTimeline.fork(target, newTime));
         context.previousNode = this.previousNode;
         context.currentAnimateTimings = this.currentAnimateTimings;
-        context.locals = this.locals ? copyObj(this.locals) : null;
+        context.locals = this.locals ? copyObj(this.locals) : undefined;
         context.currentQueryIndex = this.currentQueryIndex;
         context.currentQueryTotal = this.currentQueryTotal;
         context.parentContext = this;
@@ -1592,7 +1608,7 @@ class AnimationTimelineContext {
     }
     /**
      * @param {?} instruction
-     * @param {?} timings
+     * @param {?=} timings
      * @return {?}
      */
     appendInstructionToTimeline(instruction, timings) {
@@ -1624,20 +1640,18 @@ class AnimationTimelineBuilderVisitor {
      * @param {?=} errors
      * @return {?}
      */
-    buildKeyframes(rootElement, ast, startingStyles, finalStyles, locals, subInstructions = null, errors) {
+    buildKeyframes(rootElement, ast, startingStyles, finalStyles, locals, subInstructions, errors = []) {
+        subInstructions = subInstructions || new ElementInstructionMap();
         const /** @type {?} */ context = new AnimationTimelineContext(rootElement, subInstructions, errors, []);
-        if (locals && Object.keys(locals).length == 0) {
-            locals = null;
-        }
-        context.locals = locals;
-        context.currentTimeline.setStyles([startingStyles], null, false, context.errors, locals);
+        context.locals = locals || {};
+        context.currentTimeline.setStyles([startingStyles], undefined, false, context.errors, locals);
         ast.visit(this, context);
         // this checks to see if an actual animation happened
         const /** @type {?} */ timelines = context.timelines.filter(timeline => timeline.containsAnimation());
         if (timelines.length && Object.keys(finalStyles).length) {
             const /** @type {?} */ tl = timelines[timelines.length - 1];
             if (!tl.allowOnlyTimelineStyles()) {
-                tl.setStyles([finalStyles], null, false, context.errors, locals);
+                tl.setStyles([finalStyles], undefined, false, context.errors, locals);
             }
         }
         return timelines.length ? timelines.map(timeline => timeline.buildKeyframes()) :
@@ -1728,11 +1742,12 @@ class AnimationTimelineBuilderVisitor {
         // in the `animation()` declaration. This way if the user has
         // not provided them in the `animateChild()` call (which is called
         // just before this then it will substitute them in
-        if (ast.locals) {
-            context.locals = context.locals || {};
-            Object.keys(ast.locals).forEach(varName => {
-                if (!context.locals.hasOwnProperty(varName)) {
-                    context.locals[varName] = ast.locals[varName];
+        const /** @type {?} */ defaults = ast.defaults;
+        if (defaults) {
+            const /** @type {?} */ locals = context.locals = context.locals || {};
+            Object.keys(defaults).forEach(varName => {
+                if (!locals.hasOwnProperty(varName)) {
+                    locals[varName] = defaults[varName];
                 }
             });
         }
@@ -1788,7 +1803,9 @@ class AnimationTimelineBuilderVisitor {
      */
     visitTiming(ast, context) {
         if (ast instanceof DynamicAnimationTimingAst) {
-            const /** @type {?} */ strValue = interpolateStyleLocals(ast.value, context.locals, context.errors);
+            const /** @type {?} */ strValue = context.locals ?
+                interpolateStyleLocals(ast.value, context.locals, context.errors) :
+                ast.value.toString();
             return resolveTimingValue(strValue, context.errors);
         }
         else {
@@ -1850,11 +1867,12 @@ class AnimationTimelineBuilderVisitor {
      * @return {?}
      */
     visitKeyframeSequence(ast, context) {
-        const /** @type {?} */ startTime = context.currentTimeline.duration;
-        const /** @type {?} */ duration = context.currentAnimateTimings.duration;
+        const /** @type {?} */ currentAnimateTimings = ((context.currentAnimateTimings));
+        const /** @type {?} */ startTime = (((context.currentTimeline))).duration;
+        const /** @type {?} */ duration = currentAnimateTimings.duration;
         const /** @type {?} */ innerContext = context.createSubContext();
         const /** @type {?} */ innerTimeline = innerContext.currentTimeline;
-        innerTimeline.easing = context.currentAnimateTimings.easing;
+        innerTimeline.easing = currentAnimateTimings.easing;
         ast.styles.forEach(step => {
             innerTimeline.forwardTime(step.offset * duration);
             this._applyStyles(step.styles, step.easing, false, innerContext);
@@ -1922,7 +1940,7 @@ class AnimationTimelineBuilderVisitor {
      * @return {?}
      */
     visitStagger(ast, context) {
-        const /** @type {?} */ parentContext = context.parentContext;
+        const /** @type {?} */ parentContext = ((context.parentContext));
         const /** @type {?} */ tl = context.currentTimeline;
         const /** @type {?} */ timings = ast.timings;
         const /** @type {?} */ duration = Math.abs(timings.duration);
@@ -1982,8 +2000,8 @@ class TimelineBuilder {
         this.startTime = startTime;
         this._elementTimelineStylesLookup = _elementTimelineStylesLookup;
         this.duration = 0;
-        this.easing = '';
         this._previousKeyframe = {};
+        this._currentKeyframe = {};
         this._keyframes = new Map();
         this._styleSummary = {};
         this._backFill = {};
@@ -2043,7 +2061,7 @@ class TimelineBuilder {
         if (this._currentKeyframe) {
             this._previousKeyframe = this._currentKeyframe;
         }
-        this._currentKeyframe = this._keyframes.get(this.duration);
+        this._currentKeyframe = ((this._keyframes.get(this.duration)));
         if (!this._currentKeyframe) {
             this._currentKeyframe = Object.create(this._backFill, {});
             this._keyframes.set(this.duration, this._currentKeyframe);
@@ -2088,7 +2106,7 @@ class TimelineBuilder {
      * @param {?=} locals
      * @return {?}
      */
-    setStyles(input, easing, treatAsEmptyStep, errors, locals = null) {
+    setStyles(input, easing, treatAsEmptyStep, errors, locals) {
         if (easing) {
             this._previousKeyframe['easing'] = easing;
         }
@@ -2110,7 +2128,7 @@ class TimelineBuilder {
             Object.keys(styles).forEach(prop => {
                 let /** @type {?} */ val = styles[prop];
                 if (locals) {
-                    val = interpolateStyleLocals(val, locals, errors);
+                    val = interpolateStyleLocals(styles[prop], locals, errors);
                 }
                 this._currentKeyframe[prop] = val;
                 if (!this._localTimelineStyles[prop]) {
@@ -2335,7 +2353,7 @@ class Animation {
      * @param {?=} subInstructions
      * @return {?}
      */
-    buildTimelines(element, startingStyles, destinationStyles, locals, subInstructions = null) {
+    buildTimelines(element, startingStyles, destinationStyles, locals, subInstructions) {
         const /** @type {?} */ start = Array.isArray(startingStyles) ? normalizeStyles(startingStyles) : (startingStyles);
         const /** @type {?} */ dest = Array.isArray(destinationStyles) ? normalizeStyles(destinationStyles) : (destinationStyles);
         const /** @type {?} */ errors = [];
@@ -2525,13 +2543,14 @@ class AnimationTransitionFactory {
      * @param {?=} subInstructions
      * @return {?}
      */
-    build(element, currentState, nextState, locals = null, subInstructions = null) {
-        let /** @type {?} */ animationLocals = null;
-        if (this.ast.locals) {
+    build(element, currentState, nextState, locals, subInstructions) {
+        let /** @type {?} */ animationLocals = {};
+        const /** @type {?} */ transitionLocals = this.ast.locals;
+        if (transitionLocals) {
             animationLocals = ((locals || {}));
             Object.keys(this.ast.locals).forEach(prop => {
                 if (!animationLocals.hasOwnProperty(prop)) {
-                    animationLocals[prop] = this.ast.locals[prop];
+                    animationLocals[prop] = transitionLocals[prop];
                 }
             });
         }
@@ -2623,7 +2642,8 @@ class AnimationTrigger {
      * @return {?}
      */
     matchTransition(currentState, nextState) {
-        return this.transitionFactories.find(f => f.match(currentState, nextState));
+        const /** @type {?} */ entry = this.transitionFactories.find(f => f.match(currentState, nextState));
+        return entry || null;
     }
 }
 /**
@@ -2676,7 +2696,7 @@ class TimelineAnimationEngine {
     /**
      * @param {?} i
      * @param {?} preStyles
-     * @param {?} postStyles
+     * @param {?=} postStyles
      * @return {?}
      */
     _buildPlayer(i, preStyles, postStyles) {
@@ -2705,6 +2725,7 @@ class TimelineAnimationEngine {
         }
         else {
             errors.push('The requested animation doesn\'t exist or has already been destroyed');
+            instructions = [];
         }
         if (errors.length) {
             throw new Error(`Unable to create the animation due to the following errors: ${errors.join("\n")}`);
@@ -2755,7 +2776,7 @@ class TimelineAnimationEngine {
      */
     listen(id, element, eventName, callback) {
         // triggerName, fromState, toState are all ignored for timeline animations
-        const /** @type {?} */ baseEvent = makeAnimationEvent(element, null, null, null);
+        const /** @type {?} */ baseEvent = makeAnimationEvent(element, '', '', '');
         listenOnPlayer(this._getPlayer(id), eventName, baseEvent, callback);
         return () => { };
     }
@@ -2970,7 +2991,7 @@ class AnimationTransitionNamespace {
         let /** @type {?} */ isFallbackTransition = false;
         if (!transition) {
             if (!defaultToFallback)
-                return null;
+                return;
             transition = trigger.fallbackTransition;
             isFallbackTransition = true;
         }
@@ -3114,7 +3135,8 @@ class AnimationTransitionNamespace {
                 visitedTriggers.add(triggerName);
                 const /** @type {?} */ trigger = this._triggers[triggerName];
                 const /** @type {?} */ transition = trigger.fallbackTransition;
-                const /** @type {?} */ fromState = engine.statesByElement.get(element)[triggerName] || DEFAULT_STATE_VALUE;
+                const /** @type {?} */ elementStates = ((engine.statesByElement.get(element)));
+                const /** @type {?} */ fromState = elementStates[triggerName] || DEFAULT_STATE_VALUE;
                 const /** @type {?} */ toState = new StateValue(VOID_VALUE);
                 const /** @type {?} */ player = new TransitionAnimationPlayer(this.id, triggerName, element);
                 this._engine.totalQueuedPlayers++;
@@ -3268,6 +3290,12 @@ class TransitionAnimationEngine {
             // been inserted so that we know exactly where to place it in
             // the namespace list
             this.newHostElements.set(hostElement, ns);
+            // given that this host element is apart of the animation code, it
+            // may or may not be inserted by a parent node that is an of an
+            // animation renderer type. If this happens then we can still have
+            // access to this item when we query for :enter nodes. If the parent
+            // is a renderer then the set data-structure will normalize the entry
+            this.newlyInserted.add(hostElement);
         }
         return this._namespaceLookup[namespaceId] = ns;
     }
@@ -3493,6 +3521,8 @@ class TransitionAnimationEngine {
             const /** @type {?} */ ns = this._namespaceList[i];
             ns.drainQueuedTransitions().forEach(entry => {
                 const /** @type {?} */ instruction = this._buildInstruction(entry, subTimelines);
+                if (!instruction)
+                    return;
                 const /** @type {?} */ player = entry.player;
                 const /** @type {?} */ element = entry.element;
                 // if a unmatched transition is queued to go then it SHOULD NOT render
@@ -3514,7 +3544,7 @@ class TransitionAnimationEngine {
                 instruction.preStyleProps.forEach((stringMap, element) => {
                     const /** @type {?} */ props = Object.keys(stringMap);
                     if (props.length) {
-                        let /** @type {?} */ setVal = allPreStyleElements.get(element);
+                        let /** @type {?} */ setVal = ((allPreStyleElements.get(element)));
                         if (!setVal) {
                             allPreStyleElements.set(element, setVal = new Set());
                         }
@@ -3523,7 +3553,7 @@ class TransitionAnimationEngine {
                 });
                 instruction.postStyleProps.forEach((stringMap, element) => {
                     const /** @type {?} */ props = Object.keys(stringMap);
-                    let /** @type {?} */ setVal = allPostStyleElements.get(element);
+                    let /** @type {?} */ setVal = ((allPostStyleElements.get(element)));
                     if (!setVal) {
                         allPostStyleElements.set(element, setVal = new Set());
                     }
@@ -3847,7 +3877,7 @@ class TransitionAnimationPlayer {
             return;
         this._player = player;
         Object.keys(this._queuedCallbacks).forEach(phase => {
-            this._queuedCallbacks[phase].forEach(callback => { listenOnPlayer(player, phase, null, callback); });
+            this._queuedCallbacks[phase].forEach(callback => listenOnPlayer(player, phase, null, callback));
         });
         this._queuedCallbacks = {};
         this._containsRealPlayer = true;
@@ -4017,6 +4047,16 @@ function cloakElement(element, value) {
     element.style.display = value != null ? value : 'none';
     return oldValue;
 }
+let elementMatches;
+if (Element.prototype.matches) {
+    elementMatches = (element, selector) => element.matches(selector);
+}
+else {
+    const /** @type {?} */ proto = (Element.prototype);
+    const /** @type {?} */ fn = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
+        proto.oMatchesSelector || proto.webkitMatchesSelector;
+    elementMatches = (element, selector) => fn.apply(element, [selector]);
+}
 /**
  * @param {?} rootElement
  * @param {?} selector
@@ -4025,7 +4065,7 @@ function cloakElement(element, value) {
 function filterNodeClasses(rootElement, selector) {
     const /** @type {?} */ rootElements = [];
     let /** @type {?} */ cursor = rootElement;
-    let /** @type {?} */ nextCursor = null;
+    let /** @type {?} */ nextCursor = {};
     do {
         nextCursor = cursor.querySelector(selector);
         if (!nextCursor) {
@@ -4035,7 +4075,7 @@ function filterNodeClasses(rootElement, selector) {
             nextCursor = cursor = cursor.nextElementSibling;
         }
         else {
-            while (nextCursor && nextCursor.matches(selector)) {
+            while (nextCursor && elementMatches(nextCursor, selector)) {
                 rootElements.push(nextCursor);
                 nextCursor = nextCursor.nextElementSibling;
                 if (nextCursor) {
@@ -4164,7 +4204,7 @@ class DomAnimationEngine {
     setProperty(namespaceId, element, property, value) {
         // @@property
         if (property.charAt(0) == '@') {
-            const [id, action] = parseCustomCommand(property);
+            const [id, action] = parseTimelineCommand(property);
             const /** @type {?} */ args = (value);
             this._timelineEngine.command(id, element, action, args);
             return false;
@@ -4182,7 +4222,7 @@ class DomAnimationEngine {
     listen(namespaceId, element, eventName, eventPhase, callback) {
         // @@listen
         if (eventName.charAt(0) == '@') {
-            const [id, action] = parseCustomCommand(eventName);
+            const [id, action] = parseTimelineCommand(eventName);
             return this._timelineEngine.listen(id, element, action, callback);
         }
         return this._transitionEngine.listen(namespaceId, element, eventName, eventPhase, callback);
@@ -4199,16 +4239,6 @@ class DomAnimationEngine {
             .concat(/** @type {?} */ (this._timelineEngine.players));
     }
 }
-/**
- * @param {?} command
- * @return {?}
- */
-function parseCustomCommand(command) {
-    const /** @type {?} */ separatorPos = command.indexOf(':');
-    const /** @type {?} */ id = command.substring(1, separatorPos);
-    const /** @type {?} */ action = command.substr(separatorPos + 1);
-    return [id, action];
-}
 
 /**
  * @license
@@ -4220,14 +4250,19 @@ function parseCustomCommand(command) {
 const DEFAULT_STATE_VALUE$1 = 'void';
 const DEFAULT_STATE_STYLES = '*';
 class NoopAnimationEngine extends AnimationEngine {
-    constructor() {
-        super(...arguments);
+    /**
+     * @param {?} driver
+     * @param {?} normalizer
+     */
+    constructor(driver, normalizer) {
+        super();
         this._listeners = new Map();
         this._changes = [];
         this._flaggedRemovals = new Set();
         this._onDoneFns = [];
         this._triggerStyles = Object.create(null);
         this.onRemovalComplete = (element, context) => { };
+        this._timelineEngine = new TimelineAnimationEngine(driver, normalizer);
     }
     /**
      * @param {?} componentId
@@ -4276,8 +4311,12 @@ class NoopAnimationEngine extends AnimationEngine {
      * @return {?}
      */
     setProperty(namespaceId, element, property, value) {
-        if (property.charAt(0) == '@')
-            return; // TODO
+        if (property.charAt(0) == '@') {
+            const [id, action] = parseTimelineCommand(property);
+            const /** @type {?} */ args = (value);
+            this._timelineEngine.command(id, element, action, args);
+            return false;
+        }
         const /** @type {?} */ namespacedName = namespaceId + '#' + property;
         const /** @type {?} */ storageProp = makeStorageProp(namespacedName);
         const /** @type {?} */ oldValue = element[storageProp] || DEFAULT_STATE_VALUE$1;
@@ -4294,6 +4333,7 @@ class NoopAnimationEngine extends AnimationEngine {
                 setStyles(element, toStateStyles);
             }
         });
+        return true;
     }
     /**
      * @param {?} namespaceId
@@ -4304,8 +4344,10 @@ class NoopAnimationEngine extends AnimationEngine {
      * @return {?}
      */
     listen(namespaceId, element, eventName, eventPhase, callback) {
-        if (eventName.charAt(0) == '@')
-            return; // TODO
+        if (eventName.charAt(0) == '@') {
+            const [id, action] = parseTimelineCommand(eventName);
+            return this._timelineEngine.listen(id, element, action, callback);
+        }
         let /** @type {?} */ listeners = this._listeners.get(element);
         if (!listeners) {
             this._listeners.set(element, listeners = []);
@@ -4369,7 +4411,7 @@ class NoopAnimationEngine extends AnimationEngine {
         });
         // remove all the listeners after everything is complete
         Array.from(this._listeners.keys()).forEach(element => {
-            const /** @type {?} */ listenersToKeep = this._listeners.get(element).filter(l => !l.doRemove);
+            const /** @type {?} */ listenersToKeep = ((this._listeners.get(element))).filter(l => !l.doRemove);
             if (listenersToKeep.length) {
                 this._listeners.set(element, listenersToKeep);
             }

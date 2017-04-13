@@ -16,7 +16,7 @@ export declare class TimelineAnimationEngine {
     players: AnimationPlayer[];
     constructor(_driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
     register(id: string, metadata: AnimationMetadata | AnimationMetadata[]): void;
-    private _buildPlayer(i, preStyles, postStyles);
+    private _buildPlayer(i, preStyles, postStyles?);
     create(id: string, element: any, locals?: {
         [key: string]: string | number;
     }): AnimationPlayer;

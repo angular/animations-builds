@@ -10,38 +10,38 @@ import { AnimationAnimateAst, AnimationAnimateChildAst, AnimationAst, AnimationA
 import { AnimationTimelineInstruction } from './animation_timeline_instruction';
 import { ElementInstructionMap } from './element_instruction_map';
 export declare function buildAnimationTimelines(rootElement: any, ast: AnimationAst, startingStyles: ɵStyleData, finalStyles: ɵStyleData, locals: {
-    [varName: string]: string | number | boolean;
-}, subInstructions: ElementInstructionMap, errors: any[]): AnimationTimelineInstruction[];
+    [varName: string]: string | number;
+}, subInstructions?: ElementInstructionMap, errors?: any[]): AnimationTimelineInstruction[];
 export declare type StyleAtTime = {
     time: number;
     value: string | number;
 };
 export declare class AnimationTimelineContext {
     element: any;
+    subInstructions: ElementInstructionMap;
     errors: any[];
     timelines: TimelineBuilder[];
-    parentContext: AnimationTimelineContext;
+    parentContext: AnimationTimelineContext | null;
     currentTimeline: TimelineBuilder;
-    currentAnimateTimings: AnimateTimings;
+    currentAnimateTimings: AnimateTimings | null;
     previousNode: AnimationAst;
     subContextCount: number;
     locals: {
-        [varName: string]: string | number | boolean;
-    };
-    subInstructions: ElementInstructionMap;
+        [varName: string]: string | number;
+    } | undefined;
     currentQueryIndex: number;
     currentQueryTotal: number;
     currentStaggerTime: number;
     constructor(element: any, subInstructions: ElementInstructionMap, errors: any[], timelines: TimelineBuilder[], initialTimeline?: TimelineBuilder);
     createSubContext(element?: any, newTime?: number): AnimationTimelineContext;
     transformIntoNewTimeline(newTime?: number): TimelineBuilder;
-    appendInstructionToTimeline(instruction: AnimationTimelineInstruction, timings: AnimateTimings): AnimateTimings;
+    appendInstructionToTimeline(instruction: AnimationTimelineInstruction, timings?: AnimateTimings): AnimateTimings;
     incrementTime(time: number): void;
 }
 export declare class AnimationTimelineBuilderVisitor implements AnimationAstVisitor {
     buildKeyframes(rootElement: any, ast: AnimationAst, startingStyles: ɵStyleData, finalStyles: ɵStyleData, locals: {
-        [varName: string]: string | number | boolean;
-    }, subInstructions: ElementInstructionMap, errors: any[]): AnimationTimelineInstruction[];
+        [varName: string]: string | number;
+    }, subInstructions?: ElementInstructionMap, errors?: any[]): AnimationTimelineInstruction[];
     visitTrigger(ast: AnimationTriggerAst, context: any): any;
     visitState(ast: AnimationStateAst, context: any): any;
     visitTransition(ast: AnimationTransitionAst, context: any): any;
@@ -64,7 +64,7 @@ export declare class TimelineBuilder {
     startTime: number;
     private _elementTimelineStylesLookup;
     duration: number;
-    easing: string;
+    easing: string | undefined;
     private _previousKeyframe;
     private _currentKeyframe;
     private _keyframes;
@@ -85,11 +85,11 @@ export declare class TimelineBuilder {
     forwardTime(time: number): void;
     private _updateStyle(prop, value);
     allowOnlyTimelineStyles(): boolean;
-    setStyles(input: (ɵStyleData | string)[], easing: string, treatAsEmptyStep: boolean, errors: any[], locals?: {
-        [varName: string]: string | number | boolean;
+    setStyles(input: (ɵStyleData | string)[], easing: string | undefined, treatAsEmptyStep: boolean, errors: any[], locals?: {
+        [varName: string]: string | number;
     }): void;
     snapshotCurrentStyles(): void;
-    getFinalKeyframe(): ɵStyleData;
+    getFinalKeyframe(): ɵStyleData | undefined;
     readonly properties: string[];
     mergeTimelineCollectedStyles(timeline: TimelineBuilder): void;
     buildKeyframes(): AnimationTimelineInstruction;

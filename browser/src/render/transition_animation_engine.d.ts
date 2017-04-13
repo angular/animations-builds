@@ -46,7 +46,7 @@ export declare class AnimationTransitionNamespace {
     listen(element: any, name: string, phase: string, callback: (event: any) => boolean): () => any;
     register(name: string, ast: AnimationTrigger): boolean;
     private _getTrigger(name);
-    trigger(element: any, triggerName: string, value: any, defaultToFallback?: boolean): TransitionAnimationPlayer;
+    trigger(element: any, triggerName: string, value: any, defaultToFallback?: boolean): TransitionAnimationPlayer | undefined;
     deregister(name: string): void;
     private _onElementDestroy(element);
     private _destroyInnerNodes(rootElement, context, animate?);

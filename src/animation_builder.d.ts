@@ -11,13 +11,13 @@ import { AnimationPlayer } from './players/animation_player';
  * @experimental Animation support is experimental.
  */
 export declare abstract class AnimationBuilder {
-    abstract build(animation: AnimationMetadata | AnimationMetadata): Animation;
+    abstract build(animation: AnimationMetadata | AnimationMetadata[]): Animation;
 }
 /**
  * @experimental Animation support is experimental.
  */
 export declare abstract class Animation {
-    abstract create(element: any, locals: {
+    abstract create(element: any, locals?: {
         [key: string]: string | number;
     }): AnimationPlayer;
 }

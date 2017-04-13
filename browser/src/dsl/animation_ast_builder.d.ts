@@ -35,10 +35,10 @@ export declare class AnimationAstBuilderContext {
     errors: any[];
     queryCount: number;
     depCount: number;
-    currentTransition: AnimationTransitionMetadata;
-    currentQuery: AnimationQueryMetadata;
-    currentQuerySelector: string;
-    currentAnimateTimings: AnimationTimingAst;
+    currentTransition: AnimationTransitionMetadata | null;
+    currentQuery: AnimationQueryMetadata | null;
+    currentQuerySelector: string | null;
+    currentAnimateTimings: AnimationTimingAst | null;
     currentTime: number;
     collectedStyles: {
         [selectorName: string]: {
@@ -46,7 +46,7 @@ export declare class AnimationAstBuilderContext {
         };
     };
     locals: {
-        [varName: string]: string | number | boolean;
-    };
+        [varName: string]: string | number;
+    } | null;
     constructor(errors: any[]);
 }

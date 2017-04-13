@@ -15,7 +15,7 @@ export declare abstract class AnimationPlayer {
     abstract reset(): void;
     abstract setPosition(p: any): void;
     abstract getPosition(): number;
-    parentPlayer: AnimationPlayer;
+    parentPlayer: AnimationPlayer | null;
     readonly totalTime: number;
 }
 /**
@@ -28,7 +28,7 @@ export declare class NoopAnimationPlayer implements AnimationPlayer {
     private _started;
     private _destroyed;
     private _finished;
-    parentPlayer: AnimationPlayer;
+    parentPlayer: AnimationPlayer | null;
     totalTime: number;
     constructor();
     private _onFinish();

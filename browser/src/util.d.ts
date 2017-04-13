@@ -29,9 +29,9 @@ export declare function setStyles(element: any, styles: ɵStyleData): void;
 export declare function eraseStyles(element: any, styles: ɵStyleData): void;
 export declare function normalizeAnimationEntry(steps: AnimationMetadata | AnimationMetadata[]): AnimationMetadata;
 export declare function validateStyleLocals(value: string | number, locals: {
-    [varName: string]: string | number | boolean;
+    [varName: string]: string | number;
 }, errors: any[]): void;
 export declare function interpolateStyleLocals(value: string | number, locals: {
-    [varName: string]: string | number | boolean;
-}, errors: any[]): string;
+    [varName: string]: string | number;
+}, errors: any[]): string | number;
 export declare function iteratorToArray(iterator: any): any[];

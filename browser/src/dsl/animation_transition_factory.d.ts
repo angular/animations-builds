@@ -19,5 +19,5 @@ export declare class AnimationTransitionFactory {
     match(currentState: any, nextState: any): boolean;
     build(element: any, currentState: any, nextState: any, locals?: {
         [varName: string]: string | number;
-    }, subInstructions?: ElementInstructionMap): AnimationTransitionInstruction;
+    }, subInstructions?: ElementInstructionMap): AnimationTransitionInstruction | undefined;
 }

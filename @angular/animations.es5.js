@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.0-f4b5784
+ * @license Angular v4.1.0-beta.1-c664486
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -35,7 +35,7 @@ var Animation = (function () {
     /**
      * @abstract
      * @param {?} element
-     * @param {?} locals
+     * @param {?=} locals
      * @return {?}
      */
     Animation.prototype.create = function (element, locals) { };
@@ -496,7 +496,6 @@ function keyframes(steps) {
  * @return {?}
  */
 function transition(stateChangeExpr, steps, locals) {
-    if (locals === void 0) { locals = null; }
     return { type: 2 /* Transition */, expr: stateChangeExpr, animation: steps, locals: locals };
 }
 /**
@@ -506,7 +505,6 @@ function transition(stateChangeExpr, steps, locals) {
  * @return {?}
  */
 function animation(steps, locals) {
-    if (locals === void 0) { locals = null; }
     return { type: 8 /* Definition */, animation: steps, locals: locals };
 }
 /**

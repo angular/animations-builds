@@ -7,17 +7,21 @@
  */
 import { AnimationPlayer, AnimationTriggerMetadata } from '@angular/animations';
 import { AnimationEngine } from '../animation_engine';
+import { AnimationStyleNormalizer } from '../dsl/style_normalization/animation_style_normalizer';
+import { AnimationDriver } from './animation_driver';
 export declare class NoopAnimationEngine extends AnimationEngine {
     private _listeners;
     private _changes;
     private _flaggedRemovals;
     private _onDoneFns;
     private _triggerStyles;
+    private _timelineEngine;
     onRemovalComplete: (element: any, context: any) => void;
+    constructor(driver: AnimationDriver, normalizer: AnimationStyleNormalizer);
     registerTrigger(componentId: string, namespaceId: string, hostElement: any, name: string, metadata: AnimationTriggerMetadata): void;
     onInsert(namespaceId: string, element: any, parent: any, insertBefore: boolean): void;
     onRemove(namespaceId: string, element: any, context: any): void;
-    setProperty(namespaceId: string, element: any, property: string, value: any): void;
+    setProperty(namespaceId: string, element: any, property: string, value: any): boolean;
     listen(namespaceId: string, element: any, eventName: string, eventPhase: string, callback: (event: any) => any): () => any;
     flush(): void;
     readonly players: AnimationPlayer[];

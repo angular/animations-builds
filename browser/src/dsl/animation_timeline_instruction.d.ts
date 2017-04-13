@@ -15,8 +15,8 @@ export interface AnimationTimelineInstruction extends AnimationEngineInstruction
     duration: number;
     delay: number;
     totalTime: number;
-    easing: string;
+    easing: string | undefined;
     stretchStartingKeyframe?: boolean;
     subTimeline: boolean;
 }
-export declare function createTimelineInstruction(element: any, keyframes: ɵStyleData[], preStyleProps: string[], postStyleProps: string[], duration: number, delay: number, easing: string, subTimeline?: boolean): AnimationTimelineInstruction;
+export declare function createTimelineInstruction(element: any, keyframes: ɵStyleData[], preStyleProps: string[], postStyleProps: string[], duration: number, delay: number, easing?: string, subTimeline?: boolean): AnimationTimelineInstruction;

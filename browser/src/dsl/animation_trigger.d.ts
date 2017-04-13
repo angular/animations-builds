@@ -25,5 +25,5 @@ export declare class AnimationTrigger {
     };
     constructor(name: string, ast: AnimationTriggerAst);
     readonly containsQueries: boolean;
-    matchTransition(currentState: any, nextState: any): AnimationTransitionFactory;
+    matchTransition(currentState: any, nextState: any): AnimationTransitionFactory | null;
 }

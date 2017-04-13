@@ -50,12 +50,12 @@ export declare class AnimationTransitionAst extends AnimationAst {
     matchers: ((fromState: string, toState: string) => boolean)[];
     animation: AnimationAst;
     locals: {
-        [varName: string]: string | number | boolean;
+        [varName: string]: string | number;
     };
     queryCount: number;
     depCount: number;
-    constructor(matchers: ((fromState: string, toState: string) => boolean)[], animation: AnimationAst, locals: {
-        [varName: string]: string | number | boolean;
+    constructor(matchers: ((fromState: string, toState: string) => boolean)[], animation: AnimationAst, locals?: {
+        [varName: string]: string | number;
     });
     visit(visitor: AnimationAstVisitor, context: any): any;
 }
@@ -77,10 +77,10 @@ export declare class AnimationAnimateAst extends AnimationAst {
 }
 export declare class AnimationStyleAst extends AnimationAst {
     styles: (ɵStyleData | string)[];
-    easing: string;
+    easing: string | undefined;
     offset: number;
     isEmptyStep: boolean;
-    constructor(styles: (ɵStyleData | string)[], easing: string, offset: number);
+    constructor(styles: (ɵStyleData | string)[], easing: string | undefined, offset?: number);
     visit(visitor: AnimationAstVisitor, context: any): any;
 }
 export declare class AnimationKeyframesSequenceAst extends AnimationAst {
@@ -90,11 +90,11 @@ export declare class AnimationKeyframesSequenceAst extends AnimationAst {
 }
 export declare class AnimationReferenceAst extends AnimationAst {
     animation: AnimationAst;
-    locals: {
-        [varName: string]: string | number | boolean;
+    defaults: {
+        [varName: string]: any;
     };
-    constructor(animation: AnimationAst, locals: {
-        [varName: string]: string | number | boolean;
+    constructor(animation: AnimationAst, defaults?: {
+        [varName: string]: any;
     });
     visit(visitor: AnimationAstVisitor, context: any): any;
 }
@@ -104,7 +104,7 @@ export declare class AnimationAnimateChildAst extends AnimationAst {
     locals: {
         [varName: string]: string | number | boolean;
     };
-    constructor(timings: AnimateTimings, animation: AnimationReferenceAst, locals: {
+    constructor(timings?: AnimateTimings, animation?: AnimationReferenceAst, locals?: {
         [varName: string]: string | number | boolean;
     });
     visit(visitor: AnimationAstVisitor, context: any): any;
@@ -133,7 +133,7 @@ export declare class AnimationTimingAst extends AnimationAst {
     duration: number;
     delay: number;
     easing: string;
-    constructor(duration: number, delay: number, easing: string);
+    constructor(duration: number, delay?: number, easing?: string);
     visit(visitor: AnimationAstVisitor, context: any): any;
 }
 export declare class DynamicAnimationTimingAst extends AnimationTimingAst {
