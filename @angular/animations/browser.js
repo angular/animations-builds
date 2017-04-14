@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.1-c664486
+ * @license Angular v4.1.0-beta.1-6f3710e
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -425,13 +425,13 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles = 
 function listenOnPlayer(player, eventName, event, callback) {
     switch (eventName) {
         case 'start':
-            player.onStart(() => { callback(event && copyAnimationEvent(event, 'start', player.totalTime)); });
+            player.onStart(() => callback(event && copyAnimationEvent(event, 'start', player.totalTime)));
             break;
         case 'done':
-            player.onDone(() => { callback(event && copyAnimationEvent(event, 'done', player.totalTime)); });
+            player.onDone(() => callback(event && copyAnimationEvent(event, 'done', player.totalTime)));
             break;
         case 'destroy':
-            player.onDestroy(() => { callback(event && copyAnimationEvent(event, 'destroy', player.totalTime)); });
+            player.onDestroy(() => callback(event && copyAnimationEvent(event, 'destroy', player.totalTime)));
             break;
     }
 }
@@ -3877,7 +3877,7 @@ class TransitionAnimationPlayer {
             return;
         this._player = player;
         Object.keys(this._queuedCallbacks).forEach(phase => {
-            this._queuedCallbacks[phase].forEach(callback => listenOnPlayer(player, phase, null, callback));
+            this._queuedCallbacks[phase].forEach(callback => listenOnPlayer(player, phase, undefined, callback));
         });
         this._queuedCallbacks = {};
         this._containsRealPlayer = true;

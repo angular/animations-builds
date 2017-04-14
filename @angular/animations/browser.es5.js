@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-beta.1-c664486
+ * @license Angular v4.1.0-beta.1-6f3710e
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -440,13 +440,13 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles, p
 function listenOnPlayer(player, eventName, event, callback) {
     switch (eventName) {
         case 'start':
-            player.onStart(function () { callback(event && copyAnimationEvent(event, 'start', player.totalTime)); });
+            player.onStart(function () { return callback(event && copyAnimationEvent(event, 'start', player.totalTime)); });
             break;
         case 'done':
-            player.onDone(function () { callback(event && copyAnimationEvent(event, 'done', player.totalTime)); });
+            player.onDone(function () { return callback(event && copyAnimationEvent(event, 'done', player.totalTime)); });
             break;
         case 'destroy':
-            player.onDestroy(function () { callback(event && copyAnimationEvent(event, 'destroy', player.totalTime)); });
+            player.onDestroy(function () { return callback(event && copyAnimationEvent(event, 'destroy', player.totalTime)); });
             break;
     }
 }
@@ -4031,7 +4031,7 @@ var TransitionAnimationPlayer = (function () {
             return;
         this._player = player;
         Object.keys(this._queuedCallbacks).forEach(function (phase) {
-            _this._queuedCallbacks[phase].forEach(function (callback) { return listenOnPlayer(player, phase, null, callback); });
+            _this._queuedCallbacks[phase].forEach(function (callback) { return listenOnPlayer(player, phase, undefined, callback); });
         });
         this._queuedCallbacks = {};
         this._containsRealPlayer = true;
