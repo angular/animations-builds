@@ -15,7 +15,8 @@ export declare const NG_TRIGGER_CLASSNAME = "ng-trigger";
 export declare const NG_TRIGGER_SELECTOR = ".ng-trigger";
 export declare const NG_ANIMATING_CLASSNAME = "ng-animating";
 export declare const NG_ANIMATING_SELECTOR = ".ng-animating";
-export declare function resolveTimingValue(timings: string | number | AnimateTimings, errors: any[], allowNegativeValues?: boolean): AnimateTimings;
+export declare function resolveTimingValue(value: string | number): number;
+export declare function resolveTiming(timings: string | number | AnimateTimings, errors: any[], allowNegativeValues?: boolean): AnimateTimings;
 export declare function copyObj(obj: {
     [key: string]: any;
 }, destination?: {
@@ -29,9 +30,9 @@ export declare function setStyles(element: any, styles: ɵStyleData): void;
 export declare function eraseStyles(element: any, styles: ɵStyleData): void;
 export declare function normalizeAnimationEntry(steps: AnimationMetadata | AnimationMetadata[]): AnimationMetadata;
 export declare function validateStyleLocals(value: string | number, locals: {
-    [varName: string]: string | number;
+    [name: string]: any;
 }, errors: any[]): void;
-export declare function interpolateStyleLocals(value: string | number, locals: {
+export declare function interpolateLocals(value: string | number, locals: {
     [varName: string]: string | number;
 }, errors: any[]): string | number;
 export declare function iteratorToArray(iterator: any): any[];

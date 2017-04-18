@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationQueryMetadata, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata, AnimationWaitMetadata } from '@angular/animations';
+import { AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationQueryMetadata, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata } from '@angular/animations';
 export interface AnimationDslVisitor {
     visitTrigger(ast: AnimationTriggerMetadata, context: any): any;
     visitState(ast: AnimationStateMetadata, context: any): any;
@@ -19,6 +19,5 @@ export interface AnimationDslVisitor {
     visitAnimateChild(ast: AnimationAnimateChildMetadata, context: any): any;
     visitQuery(ast: AnimationQueryMetadata, context: any): any;
     visitStagger(ast: AnimationStaggerMetadata, context: any): any;
-    visitWait(ast: AnimationWaitMetadata, context: any): any;
 }
 export declare function visitAnimationNode(visitor: AnimationDslVisitor, node: AnimationMetadata, context: any): any;

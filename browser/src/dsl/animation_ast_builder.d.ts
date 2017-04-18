@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationQueryMetadata, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata, AnimationWaitMetadata } from '@angular/animations';
-import { AnimationAnimateAst, AnimationAnimateChildAst, AnimationAst, AnimationGroupAst, AnimationKeyframesSequenceAst, AnimationQueryAst, AnimationReferenceAst, AnimationSequenceAst, AnimationStaggerAst, AnimationStateAst, AnimationStyleAst, AnimationTimingAst, AnimationTransitionAst, AnimationTriggerAst, AnimationWaitAst } from './animation_ast';
+import { AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationQueryMetadata, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata } from '@angular/animations';
+import { AnimationAnimateAst, AnimationAnimateChildAst, AnimationAst, AnimationGroupAst, AnimationKeyframesSequenceAst, AnimationQueryAst, AnimationReferenceAst, AnimationSequenceAst, AnimationStaggerAst, AnimationStateAst, AnimationStyleAst, AnimationTimingAst, AnimationTransitionAst, AnimationTriggerAst } from './animation_ast';
 import { AnimationDslVisitor } from './animation_dsl_visitor';
 export declare function buildAnimationAst(metadata: AnimationMetadata | AnimationMetadata[], errors: any[]): AnimationAst;
 export declare class AnimationAstBuilderVisitor implements AnimationDslVisitor {
@@ -25,7 +25,6 @@ export declare class AnimationAstBuilderVisitor implements AnimationDslVisitor {
     visitAnimateChild(metadata: AnimationAnimateChildMetadata, context: AnimationAstBuilderContext): AnimationAnimateChildAst;
     visitQuery(metadata: AnimationQueryMetadata, context: AnimationAstBuilderContext): AnimationQueryAst;
     visitStagger(metadata: AnimationStaggerMetadata, context: AnimationAstBuilderContext): AnimationStaggerAst;
-    visitWait(metadata: AnimationWaitMetadata, context: AnimationAstBuilderContext): AnimationWaitAst;
 }
 export declare type StyleTimeTuple = {
     startTime: number;
@@ -46,7 +45,7 @@ export declare class AnimationAstBuilderContext {
         };
     };
     locals: {
-        [varName: string]: string | number;
+        [name: string]: any;
     } | null;
     constructor(errors: any[]);
 }

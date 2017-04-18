@@ -25,11 +25,13 @@ export interface AnimationAstVisitor {
     visitAnimateChild(ast: AnimationAnimateChildAst, context: any): any;
     visitQuery(ast: AnimationQueryAst, context: any): any;
     visitStagger(ast: AnimationStaggerAst, context: any): any;
-    visitWait(ast: AnimationWaitAst, context: any): any;
     visitTiming(ast: AnimationTimingAst, context: any): any;
 }
 export declare abstract class AnimationAst {
     abstract visit(ast: AnimationAstVisitor, context: any): any;
+    locals?: {
+        [name: string]: any;
+    } | undefined;
 }
 export declare class AnimationTriggerAst extends AnimationAst {
     name: string;
@@ -99,13 +101,12 @@ export declare class AnimationReferenceAst extends AnimationAst {
     visit(visitor: AnimationAstVisitor, context: any): any;
 }
 export declare class AnimationAnimateChildAst extends AnimationAst {
-    timings: AnimateTimings;
     animation: AnimationReferenceAst;
     locals: {
-        [varName: string]: string | number | boolean;
+        [name: string]: any;
     };
-    constructor(timings?: AnimateTimings, animation?: AnimationReferenceAst, locals?: {
-        [varName: string]: string | number | boolean;
+    constructor(animation?: AnimationReferenceAst, locals?: {
+        [name: string]: any;
     });
     visit(visitor: AnimationAstVisitor, context: any): any;
 }
@@ -121,12 +122,6 @@ export declare class AnimationStaggerAst extends AnimationAst {
     timings: AnimateTimings;
     animation: AnimationAst;
     constructor(timings: AnimateTimings, animation: AnimationAst);
-    visit(visitor: AnimationAstVisitor, context: any): any;
-}
-export declare class AnimationWaitAst extends AnimationAst {
-    delay: number;
-    animation: AnimationAst;
-    constructor(delay: number, animation?: AnimationAst);
     visit(visitor: AnimationAstVisitor, context: any): any;
 }
 export declare class AnimationTimingAst extends AnimationAst {

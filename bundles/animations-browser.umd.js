@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.1-6f3710e
+ * @license Angular v4.1.0-beta.1-b46aba9
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -15,7 +15,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-beta.1-6f3710e
+ * @license Angular v4.1.0-beta.1-b46aba9
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -140,12 +140,37 @@ var NG_TRIGGER_SELECTOR = '.ng-trigger';
 var NG_ANIMATING_CLASSNAME = 'ng-animating';
 var NG_ANIMATING_SELECTOR = '.ng-animating';
 /**
+ * @param {?} value
+ * @return {?}
+ */
+function resolveTimingValue(value) {
+    if (typeof value == 'number')
+        return value;
+    var /** @type {?} */ matches = ((value)).match(/^(-?[\.\d]+)(m?s)/);
+    if (!matches || matches.length < 2)
+        return 0;
+    return _convertTimeValueToMS(parseFloat(matches[1]), matches[2]);
+}
+/**
+ * @param {?} value
+ * @param {?} unit
+ * @return {?}
+ */
+function _convertTimeValueToMS(value, unit) {
+    switch (unit) {
+        case 's':
+            return value * ONE_SECOND;
+        default:
+            return value;
+    }
+}
+/**
  * @param {?} timings
  * @param {?} errors
  * @param {?=} allowNegativeValues
  * @return {?}
  */
-function resolveTimingValue(timings, errors, allowNegativeValues) {
+function resolveTiming(timings, errors, allowNegativeValues) {
     return timings.hasOwnProperty('duration') ? (timings) :
         parseTimeExpression(/** @type {?} */ (timings), errors, allowNegativeValues);
 }
@@ -166,20 +191,10 @@ function parseTimeExpression(exp, errors, allowNegativeValues) {
             errors.push("The provided timing value \"" + exp + "\" is invalid.");
             return { duration: 0, delay: 0, easing: '' };
         }
-        var /** @type {?} */ durationMatch = parseFloat(matches[1]);
-        var /** @type {?} */ durationUnit = matches[2];
-        if (durationUnit == 's') {
-            durationMatch *= ONE_SECOND;
-        }
-        duration = Math.floor(durationMatch);
+        duration = _convertTimeValueToMS(parseFloat(matches[1]), matches[2]);
         var /** @type {?} */ delayMatch = matches[3];
-        var /** @type {?} */ delayUnit = matches[4];
         if (delayMatch != null) {
-            var /** @type {?} */ delayVal = parseFloat(delayMatch);
-            if (delayUnit != null && delayUnit == 's') {
-                delayVal *= ONE_SECOND;
-            }
-            delay = Math.floor(delayVal);
+            delay = _convertTimeValueToMS(Math.floor(parseFloat(delayMatch)), matches[4]);
         }
         var /** @type {?} */ easingVal = matches[5];
         if (easingVal) {
@@ -316,10 +331,10 @@ function matchAndValidate(regex, prefixLength, suffixLength, str, locals, errors
     var /** @type {?} */ matches = str.toString().match(regex);
     if (matches) {
         matches.forEach(function (varName) {
-            varName =
+            varName = '$' +
                 varName.substring(prefixLength, varName.length - suffixLength); // drop the $ or ${}
             if (!locals.hasOwnProperty(varName)) {
-                errors.push("Unable to resolve the local animation variable $" + varName + " in the given list of values");
+                errors.push("Unable to resolve the local animation variable " + varName + " in the given list of values");
             }
         });
     }
@@ -330,7 +345,7 @@ function matchAndValidate(regex, prefixLength, suffixLength, str, locals, errors
  * @param {?} errors
  * @return {?}
  */
-function interpolateStyleLocals(value, locals, errors) {
+function interpolateLocals(value, locals, errors) {
     var /** @type {?} */ original = value.toString();
     var /** @type {?} */ str = original;
     str = matchAndReplace(SIMPLE_STYLE_INTERPOLATION_REGEX, 1, 0, str, locals, errors);
@@ -349,7 +364,7 @@ function interpolateStyleLocals(value, locals, errors) {
  */
 function matchAndReplace(regex, prefixLength, suffixLength, str, locals, errors) {
     return str.replace(regex, function (exp) {
-        var /** @type {?} */ varName = exp.substring(prefixLength, exp.length - suffixLength); // drop the $ or ${}
+        var /** @type {?} */ varName = '$' + exp.substring(prefixLength, exp.length - suffixLength); // drop the $ or ${}
         var /** @type {?} */ localVal = locals[varName];
         // this means that the value was never overidden by the data passed in by the user
         if (!locals.hasOwnProperty(varName)) {
@@ -750,13 +765,11 @@ var AnimationReferenceAst = (function (_super) {
 var AnimationAnimateChildAst = (function (_super) {
     __extends(AnimationAnimateChildAst, _super);
     /**
-     * @param {?=} timings
      * @param {?=} animation
      * @param {?=} locals
      */
-    function AnimationAnimateChildAst(timings, animation, locals) {
+    function AnimationAnimateChildAst(animation, locals) {
         var _this = _super.call(this) || this;
-        _this.timings = timings;
         _this.animation = animation;
         _this.locals = locals;
         return _this;
@@ -818,28 +831,6 @@ var AnimationStaggerAst = (function (_super) {
         return visitor.visitStagger(this, context);
     };
     return AnimationStaggerAst;
-}(AnimationAst));
-var AnimationWaitAst = (function (_super) {
-    __extends(AnimationWaitAst, _super);
-    /**
-     * @param {?} delay
-     * @param {?=} animation
-     */
-    function AnimationWaitAst(delay, animation) {
-        var _this = _super.call(this) || this;
-        _this.delay = delay;
-        _this.animation = animation;
-        return _this;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    AnimationWaitAst.prototype.visit = function (visitor, context) {
-        return visitor.visitWait(this, context);
-    };
-    return AnimationWaitAst;
 }(AnimationAst));
 var AnimationTimingAst = (function (_super) {
     __extends(AnimationTimingAst, _super);
@@ -917,7 +908,7 @@ function visitAnimationNode(visitor, node, context) {
             return visitor.visitKeyframeSequence(/** @type {?} */ (node), context);
         case 7 /* Style */:
             return visitor.visitStyle(/** @type {?} */ (node), context);
-        case 8 /* Definition */:
+        case 8 /* Reference */:
             return visitor.visitReference(/** @type {?} */ (node), context);
         case 9 /* AnimateChild */:
             return visitor.visitAnimateChild(/** @type {?} */ (node), context);
@@ -925,8 +916,6 @@ function visitAnimationNode(visitor, node, context) {
             return visitor.visitQuery(/** @type {?} */ (node), context);
         case 11 /* Stagger */:
             return visitor.visitStagger(/** @type {?} */ (node), context);
-        case 12 /* Wait */:
-            return visitor.visitWait(/** @type {?} */ (node), context);
         default:
             throw new Error("Unable to resolve animation metadata node #" + node.type);
     }
@@ -1105,7 +1094,11 @@ var AnimationAstBuilderVisitor = (function () {
      */
     AnimationAstBuilderVisitor.prototype.visitSequence = function (metadata, context) {
         var _this = this;
-        return new AnimationSequenceAst(metadata.steps.map(function (s) { return visitAnimationNode(_this, s, context); }));
+        var /** @type {?} */ ast = new AnimationSequenceAst(metadata.steps.map(function (s) { return visitAnimationNode(_this, s, context); }));
+        if (metadata.locals && Object.keys(metadata.locals).length) {
+            ast.locals = metadata.locals;
+        }
+        return ast;
     };
     /**
      * @param {?} metadata
@@ -1118,12 +1111,16 @@ var AnimationAstBuilderVisitor = (function () {
         var /** @type {?} */ furthestTime = 0;
         var /** @type {?} */ steps = metadata.steps.map(function (step) {
             context.currentTime = currentTime;
-            var /** @type {?} */ ast = visitAnimationNode(_this, step, context);
+            var /** @type {?} */ innerAst = visitAnimationNode(_this, step, context);
             furthestTime = Math.max(furthestTime, context.currentTime);
-            return ast;
+            return innerAst;
         });
         context.currentTime = furthestTime;
-        return new AnimationGroupAst(steps);
+        var /** @type {?} */ ast = new AnimationGroupAst(steps);
+        if (metadata.locals && Object.keys(metadata.locals).length) {
+            ast.locals = metadata.locals;
+        }
+        return ast;
     };
     /**
      * @param {?} metadata
@@ -1320,7 +1317,6 @@ var AnimationAstBuilderVisitor = (function () {
      */
     AnimationAstBuilderVisitor.prototype.visitAnimateChild = function (metadata, context) {
         var /** @type {?} */ animationArg;
-        var /** @type {?} */ timings;
         var /** @type {?} */ locals;
         var /** @type {?} */ arg;
         var /** @type {?} */ args = metadata.args;
@@ -1330,40 +1326,29 @@ var AnimationAstBuilderVisitor = (function () {
                 context.depCount++;
                 break;
             case 1:
-                // animateChild(string|definition|number)
+                // animateChild(definition|locals)
                 arg = args[0];
-                if (typeof arg == 'string' || arg >= 0) {
-                    // animateChild(string|number)
-                    context.depCount++;
-                    timings = resolveTimingValue(/** @type {?} */ (arg), context.errors);
-                }
-                else if (((arg)).type == 8 /* Definition */) {
+                if (arg['type'] == 8 /* Reference */) {
                     // animateChild(definition)
                     animationArg = (arg);
+                }
+                else if (Object.keys(arg).length) {
+                    // animateChild(locals)
+                    context.depCount++;
+                    locals = normalizeLocals(/** @type {?} */ (arg));
                 }
                 break;
             case 2:
                 arg = (args[0]);
-                if (arg['type']) {
+                if (arg['type'] == 8 /* Reference */) {
                     // animateChild(definition, locals)
                     animationArg = (arg);
                     locals = normalizeLocals(/** @type {?} */ (args[1]));
                 }
-                else {
-                    // animateChild(string|number, definition)
-                    timings = resolveTimingValue(/** @type {?} */ (arg), context.errors);
-                    animationArg = (args[1]);
-                }
-                break;
-            default:
-                // animateChild(string|number, definition, locals)
-                timings = resolveTimingValue(/** @type {?} */ (args[0]), context.errors);
-                animationArg = (args[1]);
-                locals = normalizeLocals(/** @type {?} */ (args[2]));
                 break;
         }
         var /** @type {?} */ animation = animationArg ? this.visitReference(animationArg, context) : undefined;
-        return new AnimationAnimateChildAst(timings, animation, locals);
+        return new AnimationAnimateChildAst(animation, locals);
     };
     /**
      * @param {?} metadata
@@ -1381,7 +1366,11 @@ var AnimationAstBuilderVisitor = (function () {
         var /** @type {?} */ entry = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
         context.currentQuery = null;
         context.currentQuerySelector = parentSelector;
-        return new AnimationQueryAst(selector, metadata.multi, includeSelf, entry);
+        var /** @type {?} */ ast = new AnimationQueryAst(selector, metadata.multi, includeSelf, entry);
+        if (metadata.locals && Object.keys(metadata.locals).length) {
+            ast.locals = metadata.locals;
+        }
+        return ast;
     };
     /**
      * @param {?} metadata
@@ -1402,32 +1391,11 @@ var AnimationAstBuilderVisitor = (function () {
                 break;
             default:
                 // stagger(timing, animation)
-                timings = resolveTimingValue(/** @type {?} */ (metadata.args[0]), context.errors, true);
+                timings = resolveTiming(/** @type {?} */ (metadata.args[0]), context.errors, true);
                 animation = visitAnimationNode(this, normalizeAnimationEntry(metadata.args[1]), context);
                 break;
         }
         return new AnimationStaggerAst(timings, animation);
-    };
-    /**
-     * @param {?} metadata
-     * @param {?} context
-     * @return {?}
-     */
-    AnimationAstBuilderVisitor.prototype.visitWait = function (metadata, context) {
-        var /** @type {?} */ timings = resolveTimingValue(metadata.delay, context.errors);
-        if (timings.duration < 0) {
-            context.errors.push('Negative wait delays are not supported');
-        }
-        if (timings.duration && timings.delay) {
-            context.errors.push('Wait delays can only support a single timing value');
-        }
-        if (timings.easing) {
-            context.errors.push('Wait delays cannot support easing values');
-        }
-        var /** @type {?} */ animation = metadata.animation ?
-            visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context) :
-            null;
-        return new AnimationWaitAst(timings.duration, animation);
     };
     return AnimationAstBuilderVisitor;
 }());
@@ -1525,7 +1493,7 @@ function constructTimingAst(value, errors) {
         timings = (value);
     }
     else if (typeof value == 'number') {
-        var /** @type {?} */ duration = resolveTimingValue(/** @type {?} */ (value), errors).duration;
+        var /** @type {?} */ duration = resolveTiming(/** @type {?} */ (value), errors).duration;
         return new AnimationTimingAst(/** @type {?} */ (value), 0, '');
     }
     var /** @type {?} */ strValue = (value);
@@ -1533,7 +1501,7 @@ function constructTimingAst(value, errors) {
     if (isDynamic) {
         return new DynamicAnimationTimingAst(strValue);
     }
-    timings = timings || resolveTimingValue(strValue, errors);
+    timings = timings || resolveTiming(strValue, errors);
     return new AnimationTimingAst(timings.duration, timings.delay, timings.easing);
 }
 /**
@@ -1656,6 +1624,7 @@ var AnimationTimelineContext = (function () {
         this.currentAnimateTimings = null;
         this.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
         this.subContextCount = 0;
+        this.locals = {};
         this.currentQueryIndex = 0;
         this.currentQueryTotal = 0;
         this.currentStaggerTime = 0;
@@ -1663,18 +1632,55 @@ var AnimationTimelineContext = (function () {
         timelines.push(this.currentTimeline);
     }
     /**
+     * @param {?=} newLocals
+     * @param {?=} skipIfExists
+     * @return {?}
+     */
+    AnimationTimelineContext.prototype.updateLocals = function (newLocals, skipIfExists) {
+        var _this = this;
+        if (!newLocals)
+            return;
+        Object.keys(newLocals).forEach(function (name) {
+            var /** @type {?} */ value = newLocals[name];
+            if (!skipIfExists || !newLocals.hasOwnProperty(name)) {
+                _this.locals[name] = value;
+            }
+        });
+        if (newLocals.hasOwnProperty('duration')) {
+            this.locals['duration'] = resolveTimingValue(newLocals['duration']);
+        }
+        if (newLocals.hasOwnProperty('delay')) {
+            this.locals['delay'] = resolveTimingValue(newLocals['delay']);
+        }
+    };
+    /**
+     * @return {?}
+     */
+    AnimationTimelineContext.prototype._copyLocals = function () {
+        var _this = this;
+        var /** @type {?} */ locals = {};
+        if (this.locals) {
+            Object.keys(this.locals).forEach(function (name) {
+                if (name.charAt(0) == '$') {
+                    locals[name] = _this.locals[name];
+                }
+            });
+        }
+        return locals;
+    };
+    /**
+     * @param {?=} locals
      * @param {?=} element
      * @param {?=} newTime
      * @return {?}
      */
-    AnimationTimelineContext.prototype.createSubContext = function (element, newTime) {
-        if (element === void 0) { element = null; }
-        if (newTime === void 0) { newTime = 0; }
+    AnimationTimelineContext.prototype.createSubContext = function (locals, element, newTime) {
         var /** @type {?} */ target = element || this.element;
-        var /** @type {?} */ context = new AnimationTimelineContext(target, this.subInstructions, this.errors, this.timelines, this.currentTimeline.fork(target, newTime));
+        var /** @type {?} */ context = new AnimationTimelineContext(target, this.subInstructions, this.errors, this.timelines, this.currentTimeline.fork(target, newTime || 0));
         context.previousNode = this.previousNode;
         context.currentAnimateTimings = this.currentAnimateTimings;
-        context.locals = this.locals ? copyObj(this.locals) : undefined;
+        context.locals = this._copyLocals();
+        context.updateLocals(locals);
         context.currentQueryIndex = this.currentQueryIndex;
         context.currentQueryTotal = this.currentQueryTotal;
         context.parentContext = this;
@@ -1686,22 +1692,22 @@ var AnimationTimelineContext = (function () {
      * @return {?}
      */
     AnimationTimelineContext.prototype.transformIntoNewTimeline = function (newTime) {
-        if (newTime === void 0) { newTime = 0; }
         this.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
-        this.currentTimeline = this.currentTimeline.fork(this.element, newTime);
+        this.currentTimeline = this.currentTimeline.fork(this.element, newTime || 0);
         this.timelines.push(this.currentTimeline);
         return this.currentTimeline;
     };
     /**
      * @param {?} instruction
-     * @param {?=} timings
+     * @param {?} timings
      * @return {?}
      */
     AnimationTimelineContext.prototype.appendInstructionToTimeline = function (instruction, timings) {
         var /** @type {?} */ updatedTimings = {
-            duration: timings ? timings.duration : instruction.duration,
-            delay: this.currentTimeline.currentTime + (timings ? timings.delay : 0) + instruction.delay,
-            easing: timings ? timings.easing : instruction.easing
+            duration: timings.duration != null ? timings.duration : instruction.duration,
+            delay: this.currentTimeline.currentTime + (timings.delay != null ? timings.delay : 0) +
+                instruction.delay,
+            easing: timings.easing != null ? timings.easing : instruction.easing
         };
         var /** @type {?} */ builder = new SubTimelineBuilder(instruction.element, instruction.keyframes, instruction.preStyleProps, instruction.postStyleProps, updatedTimings, instruction.stretchStartingKeyframe);
         this.timelines.push(builder);
@@ -1713,6 +1719,16 @@ var AnimationTimelineContext = (function () {
      */
     AnimationTimelineContext.prototype.incrementTime = function (time) {
         this.currentTimeline.forwardTime(this.currentTimeline.duration + time);
+    };
+    /**
+     * @param {?} delay
+     * @return {?}
+     */
+    AnimationTimelineContext.prototype.delayNextStep = function (delay) {
+        // negative delays are not yet supported
+        if (delay > 0) {
+            this.currentTimeline.delayNextStep(delay);
+        }
     };
     return AnimationTimelineContext;
 }());
@@ -1777,8 +1793,7 @@ var AnimationTimelineBuilderVisitor = (function () {
      * @return {?}
      */
     AnimationTimelineBuilderVisitor.prototype.visitAnimateChild = function (ast, context) {
-        var /** @type {?} */ innerContext = context.createSubContext();
-        innerContext.locals = ast.locals ? copyObj(ast.locals) : context.locals;
+        var /** @type {?} */ innerContext = context.createSubContext(ast.locals);
         if (ast.animation) {
             innerContext.transformIntoNewTimeline();
             this.visitReference(ast.animation, innerContext);
@@ -1787,40 +1802,37 @@ var AnimationTimelineBuilderVisitor = (function () {
         else {
             var /** @type {?} */ elementInstructions = context.subInstructions.consume(context.element);
             if (elementInstructions) {
-                this._visitSubInstructions(elementInstructions, ast.timings, context);
+                var /** @type {?} */ startTime = context.currentTimeline.currentTime;
+                var /** @type {?} */ endTime = this._visitSubInstructions(elementInstructions, innerContext);
+                if (startTime != endTime) {
+                    // we do this on the upper context because we created a sub context for
+                    // the sub child animations
+                    context.transformIntoNewTimeline(endTime);
+                }
             }
         }
         context.previousNode = ast;
     };
     /**
      * @param {?} instructions
-     * @param {?} timings
      * @param {?} context
      * @return {?}
      */
-    AnimationTimelineBuilderVisitor.prototype._visitSubInstructions = function (instructions, timings, context) {
-        if (timings && timings.duration === 0)
-            return;
-        var /** @type {?} */ rootElement = context.element;
+    AnimationTimelineBuilderVisitor.prototype._visitSubInstructions = function (instructions, context) {
+        var /** @type {?} */ locals = context.locals || {};
         var /** @type {?} */ startTime = context.currentTimeline.currentTime;
         var /** @type {?} */ furthestTime = startTime;
-        instructions.forEach(function (instruction) {
-            var /** @type {?} */ instructionTimings = context.appendInstructionToTimeline(instruction, timings);
-            furthestTime = Math.max(furthestTime, instructionTimings.duration + instructionTimings.delay);
-        });
-        // create an animation for the element containing sub animations which contains
-        // keyframes from start to finish to cover the entire animation so the player
-        // for the container element will complete once everything below has finished
-        if (startTime != furthestTime) {
-            // there is no need to set a delay here since it is already known by the inner
-            // timeline start time (it is updated within the appendInstructionToTimeline code)
-            var /** @type {?} */ delay = 0;
-            var /** @type {?} */ parentTimings = { duration: furthestTime - startTime, delay: delay, easing: '' };
-            var /** @type {?} */ keyframes = [{ offset: 0 }, { offset: 1 }];
-            var /** @type {?} */ parentInstruction = createTimelineInstruction(rootElement, keyframes, [], [], parentTimings.duration, delay, '', true);
-            context.appendInstructionToTimeline(parentInstruction, parentTimings);
-            context.transformIntoNewTimeline(furthestTime);
+        // this is a special-case for when a user wants to skip a sub
+        // animation from being fired entirely.
+        var /** @type {?} */ duration = (locals['duration']);
+        if (duration !== 0) {
+            var /** @type {?} */ timings_1 = { duration: duration, delay: locals['delay'], easing: locals['easing'] };
+            instructions.forEach(function (instruction) {
+                var /** @type {?} */ instructionTimings = context.appendInstructionToTimeline(instruction, timings_1);
+                furthestTime = Math.max(furthestTime, instructionTimings.duration + instructionTimings.delay);
+            });
         }
+        return furthestTime;
     };
     /**
      * @param {?} ast
@@ -1828,19 +1840,7 @@ var AnimationTimelineBuilderVisitor = (function () {
      * @return {?}
      */
     AnimationTimelineBuilderVisitor.prototype.visitReference = function (ast, context) {
-        // we traverse over all of the DEFAULT local values defined
-        // in the `animation()` declaration. This way if the user has
-        // not provided them in the `animateChild()` call (which is called
-        // just before this then it will substitute them in
-        var /** @type {?} */ defaults = ast.defaults;
-        if (defaults) {
-            var /** @type {?} */ locals_1 = context.locals = context.locals || {};
-            Object.keys(defaults).forEach(function (varName) {
-                if (!locals_1.hasOwnProperty(varName)) {
-                    locals_1[varName] = defaults[varName];
-                }
-            });
-        }
+        context.updateLocals(ast.locals, true);
         ast.animation.visit(this, context);
         context.previousNode = ast;
     };
@@ -1856,6 +1856,13 @@ var AnimationTimelineBuilderVisitor = (function () {
             context.currentTimeline.forwardFrame();
             context.currentTimeline.snapshotCurrentStyles();
             context.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
+        }
+        if (ast.locals) {
+            context.createSubContext(ast.locals);
+            context.transformIntoNewTimeline();
+            if (ast.locals.hasOwnProperty('delay')) {
+                context.delayNextStep(/** @type {?} */ (ast.locals['delay']));
+            }
         }
         ast.steps.forEach(function (s) { return s.visit(_this, context); });
         // this means that some animation function within the sequence
@@ -1875,8 +1882,12 @@ var AnimationTimelineBuilderVisitor = (function () {
         var _this = this;
         var /** @type {?} */ innerTimelines = [];
         var /** @type {?} */ furthestTime = context.currentTimeline.currentTime;
+        var /** @type {?} */ hasDelay = ast.locals && ast.locals.hasOwnProperty('delay');
         ast.steps.forEach(function (s) {
-            var /** @type {?} */ innerContext = context.createSubContext();
+            var /** @type {?} */ innerContext = context.createSubContext(ast.locals);
+            if (hasDelay) {
+                innerContext.delayNextStep(/** @type {?} */ (innerContext.locals['delay']));
+            }
             s.visit(_this, innerContext);
             furthestTime = Math.max(furthestTime, innerContext.currentTimeline.currentTime);
             innerTimelines.push(innerContext.currentTimeline);
@@ -1896,9 +1907,9 @@ var AnimationTimelineBuilderVisitor = (function () {
     AnimationTimelineBuilderVisitor.prototype.visitTiming = function (ast, context) {
         if (ast instanceof DynamicAnimationTimingAst) {
             var /** @type {?} */ strValue = context.locals ?
-                interpolateStyleLocals(ast.value, context.locals, context.errors) :
+                interpolateLocals(ast.value, context.locals, context.errors) :
                 ast.value.toString();
-            return resolveTimingValue(strValue, context.errors);
+            return resolveTiming(strValue, context.errors);
         }
         else {
             return { duration: ast.duration, delay: ast.delay, easing: ast.easing };
@@ -1988,6 +1999,7 @@ var AnimationTimelineBuilderVisitor = (function () {
         // in the event that the first step before this is a style step we need
         // to ensure the styles are applied before the children are animated
         var /** @type {?} */ startTime = context.currentTimeline.currentTime;
+        var /** @type {?} */ hasDelay = ast.locals && ast.locals.hasOwnProperty('delay');
         if (context.previousNode instanceof AnimationStyleAst ||
             (startTime == 0 && context.currentTimeline.getCurrentStyleProperties().length)) {
             context.currentTimeline.forwardFrame();
@@ -2000,7 +2012,10 @@ var AnimationTimelineBuilderVisitor = (function () {
         var /** @type {?} */ sameElementTimeline = null;
         elms.forEach(function (element, i) {
             context.currentQueryIndex = i;
-            var /** @type {?} */ innerContext = context.createSubContext(element);
+            var /** @type {?} */ innerContext = context.createSubContext(ast.locals, element);
+            if (hasDelay) {
+                innerContext.delayNextStep(/** @type {?} */ (innerContext.locals['delay']));
+            }
             var /** @type {?} */ tl = innerContext.currentTimeline;
             if (element === context.element) {
                 sameElementTimeline = tl;
@@ -2062,26 +2077,6 @@ var AnimationTimelineBuilderVisitor = (function () {
         parentContext.currentStaggerTime =
             (tl.currentTime - startingTime) + (tl.startTime - parentContext.currentTimeline.startTime);
     };
-    /**
-     * @param {?} ast
-     * @param {?} context
-     * @return {?}
-     */
-    AnimationTimelineBuilderVisitor.prototype.visitWait = function (ast, context) {
-        if (ast.delay) {
-            if (context.previousNode instanceof AnimationStyleAst) {
-                context.currentTimeline.forwardFrame();
-                context.currentTimeline.snapshotCurrentStyles();
-                context.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
-            }
-            context.currentTimeline.delayNextStep(ast.delay);
-            context.currentTimeline.snapshotCurrentStyles();
-        }
-        if (ast.animation) {
-            ast.animation.visit(this, context);
-        }
-        context.previousNode = ast;
-    };
     return AnimationTimelineBuilderVisitor;
 }());
 var TimelineBuilder = (function () {
@@ -2140,11 +2135,6 @@ var TimelineBuilder = (function () {
             this.forwardTime(this.currentTime + delay);
         }
     };
-    /**
-     * @param {?} duration
-     * @return {?}
-     */
-    TimelineBuilder.prototype.warpTiming = function (duration) { this.duration = duration; };
     /**
      * @param {?} element
      * @param {?=} currentTime
@@ -2229,7 +2219,7 @@ var TimelineBuilder = (function () {
             Object.keys(styles_1).forEach(function (prop) {
                 var /** @type {?} */ val = styles_1[prop];
                 if (locals) {
-                    val = interpolateStyleLocals(styles_1[prop], locals, errors);
+                    val = interpolateLocals(styles_1[prop], locals, errors);
                 }
                 _this._currentKeyframe[prop] = val;
                 if (!_this._localTimelineStyles[prop]) {
@@ -3917,8 +3907,8 @@ var TransitionAnimationEngine = (function () {
             var /** @type {?} */ previousPlayers = _this._getPreviousPlayers(element, instruction, isQueriedElement, targetNameSpaceId, targetTriggerName);
             previousPlayers.forEach(function (player) {
                 var /** @type {?} */ realPlayer = (player.getRealPlayer());
-                if (realPlayer['beforeDestroy']) {
-                    realPlayer['beforeDestroy']();
+                if (realPlayer.beforeDestroy) {
+                    realPlayer.beforeDestroy();
                 }
                 players.push(player);
             });
@@ -3941,6 +3931,7 @@ var TransitionAnimationEngine = (function () {
         // data can be passed into the successive animation players
         var /** @type {?} */ allQueriedPlayers = [];
         var /** @type {?} */ allConsumedElements = new Set();
+        var /** @type {?} */ allSubElements = new Set();
         var /** @type {?} */ allNewPlayers = instruction.timelines.map(function (timelineInstruction) {
             var /** @type {?} */ element = timelineInstruction.element;
             // FIXME (matsko): make sure to-be-removed animations are removed properly
@@ -3962,7 +3953,7 @@ var TransitionAnimationEngine = (function () {
             // this means that this particular player belongs to a sub trigger. It is
             // important that we match this player up with the corresponding (@trigger.listener)
             if (timelineInstruction.subTimeline && skippedPlayersMap) {
-                getOrSetAsInMap(skippedPlayersMap, element, []).push(player);
+                allSubElements.add(element);
             }
             if (isQueriedElement) {
                 var /** @type {?} */ wrappedPlayer = new TransitionAnimationPlayer(namespaceId, triggerName, element);
@@ -3981,6 +3972,9 @@ var TransitionAnimationEngine = (function () {
             allConsumedElements.forEach(function (element) { element.classList.remove(NG_ANIMATING_CLASSNAME); });
             setStyles(rootElement, instruction.toStyles);
         });
+        // this basically makes all of the callbacks for sub element animations
+        // be dependent on the upper players for when they finish
+        allSubElements.forEach(function (element) { getOrSetAsInMap(skippedPlayersMap, element, []).push(player); });
         return player;
     };
     /**
@@ -4275,7 +4269,9 @@ function cloakAndComputeStyles(driver, elements, elementPropsMap, defaultStyle) 
         var /** @type {?} */ styles = {};
         props.forEach(function (prop) {
             var /** @type {?} */ value = styles[prop] = driver.computeStyle(element, prop, defaultStyle);
-            if (value == '' && value.length == 0) {
+            // there is no easy way to detect this because a sub element could be removed
+            // by a parent animation element being detached.
+            if (value && value.length == 0) {
                 element['REMOVED'] = true;
             }
         });

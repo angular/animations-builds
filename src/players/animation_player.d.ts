@@ -17,6 +17,7 @@ export declare abstract class AnimationPlayer {
     abstract getPosition(): number;
     parentPlayer: AnimationPlayer | null;
     readonly totalTime: number;
+    beforeDestroy?: () => any;
 }
 /**
  * @experimental Animation support is experimental.

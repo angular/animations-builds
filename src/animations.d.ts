@@ -12,6 +12,6 @@
  */
 export { Animation, AnimationBuilder } from './animation_builder';
 export { AnimationEvent } from './animation_event';
-export { AUTO_STYLE, AnimateTimings, AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationMetadataType, AnimationQueryMetadata, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata, AnimationWaitMetadata, PRE_STYLE, animate, animateChild, animation, group, keyframes, query, queryAll, sequence, stagger, state, style, transition, trigger, wait, ɵStyleData } from './animation_metadata';
+export { AUTO_STYLE, AnimateTimings, AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationMetadataType, AnimationQueryMetadata, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata, PRE_STYLE, animate, animateChild, animation, group, keyframes, query, queryAll, sequence, stagger, state, style, transition, trigger, ɵStyleData } from './animation_metadata';
 export { AnimationPlayer, NoopAnimationPlayer } from './players/animation_player';
 export * from './private_export';
