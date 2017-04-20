@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.1-b46aba9
+ * @license Angular v4.1.0-beta.1-47acf3d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -15,7 +15,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-beta.1-b46aba9
+ * @license Angular v4.1.0-beta.1-47acf3d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -431,7 +431,7 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles, p
         Object.keys(kf).forEach(function (prop) {
             var /** @type {?} */ normalizedProp = prop;
             var /** @type {?} */ normalizedValue = kf[prop];
-            if (normalizedValue == _angular_animations.PRE_STYLE) {
+            if (normalizedValue == _angular_animations.ɵPRE_STYLE) {
                 normalizedValue = preStyles[prop];
             }
             else if (normalizedValue == _angular_animations.AUTO_STYLE) {
@@ -546,8 +546,8 @@ function parseTimelineCommand(command) {
 /**
  * @abstract
  */
-var AnimationAst = (function () {
-    function AnimationAst() {
+var Ast = (function () {
+    function Ast() {
     }
     /**
      * @abstract
@@ -555,17 +555,17 @@ var AnimationAst = (function () {
      * @param {?} context
      * @return {?}
      */
-    AnimationAst.prototype.visit = function (ast, context) { };
-    return AnimationAst;
+    Ast.prototype.visit = function (ast, context) { };
+    return Ast;
 }());
-var AnimationTriggerAst = (function (_super) {
-    __extends(AnimationTriggerAst, _super);
+var TriggerAst = (function (_super) {
+    __extends(TriggerAst, _super);
     /**
      * @param {?} name
      * @param {?} states
      * @param {?} transitions
      */
-    function AnimationTriggerAst(name, states, transitions) {
+    function TriggerAst(name, states, transitions) {
         var _this = _super.call(this) || this;
         _this.name = name;
         _this.states = states;
@@ -579,18 +579,16 @@ var AnimationTriggerAst = (function (_super) {
      * @param {?} context
      * @return {?}
      */
-    AnimationTriggerAst.prototype.visit = function (visitor, context) {
-        return visitor.visitTrigger(this, context);
-    };
-    return AnimationTriggerAst;
-}(AnimationAst));
-var AnimationStateAst = (function (_super) {
-    __extends(AnimationStateAst, _super);
+    TriggerAst.prototype.visit = function (visitor, context) { return visitor.visitTrigger(this, context); };
+    return TriggerAst;
+}(Ast));
+var StateAst = (function (_super) {
+    __extends(StateAst, _super);
     /**
      * @param {?} name
      * @param {?} style
      */
-    function AnimationStateAst(name, style$$1) {
+    function StateAst(name, style$$1) {
         var _this = _super.call(this) || this;
         _this.name = name;
         _this.style = style$$1;
@@ -601,23 +599,19 @@ var AnimationStateAst = (function (_super) {
      * @param {?} context
      * @return {?}
      */
-    AnimationStateAst.prototype.visit = function (visitor, context) {
-        return visitor.visitState(this, context);
-    };
-    return AnimationStateAst;
-}(AnimationAst));
-var AnimationTransitionAst = (function (_super) {
-    __extends(AnimationTransitionAst, _super);
+    StateAst.prototype.visit = function (visitor, context) { return visitor.visitState(this, context); };
+    return StateAst;
+}(Ast));
+var TransitionAst = (function (_super) {
+    __extends(TransitionAst, _super);
     /**
      * @param {?} matchers
      * @param {?} animation
-     * @param {?=} locals
      */
-    function AnimationTransitionAst(matchers, animation, locals) {
+    function TransitionAst(matchers, animation) {
         var _this = _super.call(this) || this;
         _this.matchers = matchers;
         _this.animation = animation;
-        _this.locals = locals;
         _this.queryCount = 0;
         _this.depCount = 0;
         return _this;
@@ -627,17 +621,15 @@ var AnimationTransitionAst = (function (_super) {
      * @param {?} context
      * @return {?}
      */
-    AnimationTransitionAst.prototype.visit = function (visitor, context) {
-        return visitor.visitTransition(this, context);
-    };
-    return AnimationTransitionAst;
-}(AnimationAst));
-var AnimationSequenceAst = (function (_super) {
-    __extends(AnimationSequenceAst, _super);
+    TransitionAst.prototype.visit = function (visitor, context) { return visitor.visitTransition(this, context); };
+    return TransitionAst;
+}(Ast));
+var SequenceAst = (function (_super) {
+    __extends(SequenceAst, _super);
     /**
      * @param {?} steps
      */
-    function AnimationSequenceAst(steps) {
+    function SequenceAst(steps) {
         var _this = _super.call(this) || this;
         _this.steps = steps;
         return _this;
@@ -647,17 +639,15 @@ var AnimationSequenceAst = (function (_super) {
      * @param {?} context
      * @return {?}
      */
-    AnimationSequenceAst.prototype.visit = function (visitor, context) {
-        return visitor.visitSequence(this, context);
-    };
-    return AnimationSequenceAst;
-}(AnimationAst));
-var AnimationGroupAst = (function (_super) {
-    __extends(AnimationGroupAst, _super);
+    SequenceAst.prototype.visit = function (visitor, context) { return visitor.visitSequence(this, context); };
+    return SequenceAst;
+}(Ast));
+var GroupAst = (function (_super) {
+    __extends(GroupAst, _super);
     /**
      * @param {?} steps
      */
-    function AnimationGroupAst(steps) {
+    function GroupAst(steps) {
         var _this = _super.call(this) || this;
         _this.steps = steps;
         return _this;
@@ -667,18 +657,16 @@ var AnimationGroupAst = (function (_super) {
      * @param {?} context
      * @return {?}
      */
-    AnimationGroupAst.prototype.visit = function (visitor, context) {
-        return visitor.visitGroup(this, context);
-    };
-    return AnimationGroupAst;
-}(AnimationAst));
-var AnimationAnimateAst = (function (_super) {
-    __extends(AnimationAnimateAst, _super);
+    GroupAst.prototype.visit = function (visitor, context) { return visitor.visitGroup(this, context); };
+    return GroupAst;
+}(Ast));
+var AnimateAst = (function (_super) {
+    __extends(AnimateAst, _super);
     /**
      * @param {?} timings
      * @param {?} style
      */
-    function AnimationAnimateAst(timings, style$$1) {
+    function AnimateAst(timings, style$$1) {
         var _this = _super.call(this) || this;
         _this.timings = timings;
         _this.style = style$$1;
@@ -689,19 +677,17 @@ var AnimationAnimateAst = (function (_super) {
      * @param {?} context
      * @return {?}
      */
-    AnimationAnimateAst.prototype.visit = function (visitor, context) {
-        return visitor.visitAnimate(this, context);
-    };
-    return AnimationAnimateAst;
-}(AnimationAst));
-var AnimationStyleAst = (function (_super) {
-    __extends(AnimationStyleAst, _super);
+    AnimateAst.prototype.visit = function (visitor, context) { return visitor.visitAnimate(this, context); };
+    return AnimateAst;
+}(Ast));
+var StyleAst = (function (_super) {
+    __extends(StyleAst, _super);
     /**
      * @param {?} styles
      * @param {?} easing
-     * @param {?=} offset
+     * @param {?} offset
      */
-    function AnimationStyleAst(styles, easing, offset) {
+    function StyleAst(styles, easing, offset) {
         var _this = _super.call(this) || this;
         _this.styles = styles;
         _this.easing = easing;
@@ -714,17 +700,15 @@ var AnimationStyleAst = (function (_super) {
      * @param {?} context
      * @return {?}
      */
-    AnimationStyleAst.prototype.visit = function (visitor, context) {
-        return visitor.visitStyle(this, context);
-    };
-    return AnimationStyleAst;
-}(AnimationAst));
-var AnimationKeyframesSequenceAst = (function (_super) {
-    __extends(AnimationKeyframesSequenceAst, _super);
+    StyleAst.prototype.visit = function (visitor, context) { return visitor.visitStyle(this, context); };
+    return StyleAst;
+}(Ast));
+var KeyframesAst = (function (_super) {
+    __extends(KeyframesAst, _super);
     /**
      * @param {?} styles
      */
-    function AnimationKeyframesSequenceAst(styles) {
+    function KeyframesAst(styles) {
         var _this = _super.call(this) || this;
         _this.styles = styles;
         return _this;
@@ -734,22 +718,17 @@ var AnimationKeyframesSequenceAst = (function (_super) {
      * @param {?} context
      * @return {?}
      */
-    AnimationKeyframesSequenceAst.prototype.visit = function (visitor, context) {
-        return visitor.visitKeyframeSequence(this, context);
-    };
-    return AnimationKeyframesSequenceAst;
-}(AnimationAst));
-var AnimationReferenceAst = (function (_super) {
-    __extends(AnimationReferenceAst, _super);
+    KeyframesAst.prototype.visit = function (visitor, context) { return visitor.visitKeyframes(this, context); };
+    return KeyframesAst;
+}(Ast));
+var ReferenceAst = (function (_super) {
+    __extends(ReferenceAst, _super);
     /**
      * @param {?} animation
-     * @param {?=} defaults
      */
-    function AnimationReferenceAst(animation, defaults) {
-        if (defaults === void 0) { defaults = {}; }
+    function ReferenceAst(animation) {
         var _this = _super.call(this) || this;
         _this.animation = animation;
-        _this.defaults = defaults;
         return _this;
     }
     /**
@@ -757,21 +736,30 @@ var AnimationReferenceAst = (function (_super) {
      * @param {?} context
      * @return {?}
      */
-    AnimationReferenceAst.prototype.visit = function (visitor, context) {
-        return visitor.visitReference(this, context);
-    };
-    return AnimationReferenceAst;
-}(AnimationAst));
-var AnimationAnimateChildAst = (function (_super) {
-    __extends(AnimationAnimateChildAst, _super);
+    ReferenceAst.prototype.visit = function (visitor, context) { return visitor.visitReference(this, context); };
+    return ReferenceAst;
+}(Ast));
+var AnimateChildAst = (function (_super) {
+    __extends(AnimateChildAst, _super);
+    function AnimateChildAst() {
+        return _super.call(this) || this;
+    }
     /**
-     * @param {?=} animation
-     * @param {?=} locals
+     * @param {?} visitor
+     * @param {?} context
+     * @return {?}
      */
-    function AnimationAnimateChildAst(animation, locals) {
+    AnimateChildAst.prototype.visit = function (visitor, context) { return visitor.visitAnimateChild(this, context); };
+    return AnimateChildAst;
+}(Ast));
+var AnimateRefAst = (function (_super) {
+    __extends(AnimateRefAst, _super);
+    /**
+     * @param {?} animation
+     */
+    function AnimateRefAst(animation) {
         var _this = _super.call(this) || this;
         _this.animation = animation;
-        _this.locals = locals;
         return _this;
     }
     /**
@@ -779,20 +767,18 @@ var AnimationAnimateChildAst = (function (_super) {
      * @param {?} context
      * @return {?}
      */
-    AnimationAnimateChildAst.prototype.visit = function (visitor, context) {
-        return visitor.visitAnimateChild(this, context);
-    };
-    return AnimationAnimateChildAst;
-}(AnimationAst));
-var AnimationQueryAst = (function (_super) {
-    __extends(AnimationQueryAst, _super);
+    AnimateRefAst.prototype.visit = function (visitor, context) { return visitor.visitAnimateRef(this, context); };
+    return AnimateRefAst;
+}(Ast));
+var QueryAst = (function (_super) {
+    __extends(QueryAst, _super);
     /**
      * @param {?} selector
      * @param {?} multi
      * @param {?} includeSelf
      * @param {?} animation
      */
-    function AnimationQueryAst(selector, multi, includeSelf, animation) {
+    function QueryAst(selector, multi, includeSelf, animation) {
         var _this = _super.call(this) || this;
         _this.selector = selector;
         _this.multi = multi;
@@ -805,18 +791,16 @@ var AnimationQueryAst = (function (_super) {
      * @param {?} context
      * @return {?}
      */
-    AnimationQueryAst.prototype.visit = function (visitor, context) {
-        return visitor.visitQuery(this, context);
-    };
-    return AnimationQueryAst;
-}(AnimationAst));
-var AnimationStaggerAst = (function (_super) {
-    __extends(AnimationStaggerAst, _super);
+    QueryAst.prototype.visit = function (visitor, context) { return visitor.visitQuery(this, context); };
+    return QueryAst;
+}(Ast));
+var StaggerAst = (function (_super) {
+    __extends(StaggerAst, _super);
     /**
      * @param {?} timings
      * @param {?} animation
      */
-    function AnimationStaggerAst(timings, animation) {
+    function StaggerAst(timings, animation) {
         var _this = _super.call(this) || this;
         _this.timings = timings;
         _this.animation = animation;
@@ -827,20 +811,19 @@ var AnimationStaggerAst = (function (_super) {
      * @param {?} context
      * @return {?}
      */
-    AnimationStaggerAst.prototype.visit = function (visitor, context) {
-        return visitor.visitStagger(this, context);
-    };
-    return AnimationStaggerAst;
-}(AnimationAst));
-var AnimationTimingAst = (function (_super) {
-    __extends(AnimationTimingAst, _super);
+    StaggerAst.prototype.visit = function (visitor, context) { return visitor.visitStagger(this, context); };
+    return StaggerAst;
+}(Ast));
+var TimingAst = (function (_super) {
+    __extends(TimingAst, _super);
     /**
      * @param {?} duration
      * @param {?=} delay
      * @param {?=} easing
      */
-    function AnimationTimingAst(duration, delay, easing) {
+    function TimingAst(duration, delay, easing) {
         if (delay === void 0) { delay = 0; }
+        if (easing === void 0) { easing = null; }
         var _this = _super.call(this) || this;
         _this.duration = duration;
         _this.delay = delay;
@@ -852,17 +835,15 @@ var AnimationTimingAst = (function (_super) {
      * @param {?} context
      * @return {?}
      */
-    AnimationTimingAst.prototype.visit = function (visitor, context) {
-        return visitor.visitTiming(this, context);
-    };
-    return AnimationTimingAst;
-}(AnimationAst));
-var DynamicAnimationTimingAst = (function (_super) {
-    __extends(DynamicAnimationTimingAst, _super);
+    TimingAst.prototype.visit = function (visitor, context) { return visitor.visitTiming(this, context); };
+    return TimingAst;
+}(Ast));
+var DynamicTimingAst = (function (_super) {
+    __extends(DynamicTimingAst, _super);
     /**
      * @param {?} value
      */
-    function DynamicAnimationTimingAst(value) {
+    function DynamicTimingAst(value) {
         var _this = _super.call(this, 0, 0, '') || this;
         _this.value = value;
         return _this;
@@ -872,11 +853,9 @@ var DynamicAnimationTimingAst = (function (_super) {
      * @param {?} context
      * @return {?}
      */
-    DynamicAnimationTimingAst.prototype.visit = function (visitor, context) {
-        return visitor.visitTiming(this, context);
-    };
-    return DynamicAnimationTimingAst;
-}(AnimationTimingAst));
+    DynamicTimingAst.prototype.visit = function (visitor, context) { return visitor.visitTiming(this, context); };
+    return DynamicTimingAst;
+}(TimingAst));
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -892,29 +871,31 @@ var DynamicAnimationTimingAst = (function (_super) {
  */
 function visitAnimationNode(visitor, node, context) {
     switch (node.type) {
-        case 0 /* Trigger */:
+        case 7 /* Trigger */:
             return visitor.visitTrigger(/** @type {?} */ (node), context);
-        case 1 /* State */:
+        case 0 /* State */:
             return visitor.visitState(/** @type {?} */ (node), context);
-        case 2 /* Transition */:
+        case 1 /* Transition */:
             return visitor.visitTransition(/** @type {?} */ (node), context);
-        case 3 /* Sequence */:
+        case 2 /* Sequence */:
             return visitor.visitSequence(/** @type {?} */ (node), context);
-        case 4 /* Group */:
+        case 3 /* Group */:
             return visitor.visitGroup(/** @type {?} */ (node), context);
-        case 5 /* Animate */:
+        case 4 /* Animate */:
             return visitor.visitAnimate(/** @type {?} */ (node), context);
-        case 6 /* KeyframeSequence */:
-            return visitor.visitKeyframeSequence(/** @type {?} */ (node), context);
-        case 7 /* Style */:
+        case 5 /* Keyframes */:
+            return visitor.visitKeyframes(/** @type {?} */ (node), context);
+        case 6 /* Style */:
             return visitor.visitStyle(/** @type {?} */ (node), context);
         case 8 /* Reference */:
             return visitor.visitReference(/** @type {?} */ (node), context);
         case 9 /* AnimateChild */:
             return visitor.visitAnimateChild(/** @type {?} */ (node), context);
-        case 10 /* Query */:
+        case 10 /* AnimateRef */:
+            return visitor.visitAnimateRef(/** @type {?} */ (node), context);
+        case 11 /* Query */:
             return visitor.visitQuery(/** @type {?} */ (node), context);
-        case 11 /* Stagger */:
+        case 12 /* Stagger */:
             return visitor.visitStagger(/** @type {?} */ (node), context);
         default:
             throw new Error("Unable to resolve animation metadata node #" + node.type);
@@ -1040,7 +1021,7 @@ var AnimationAstBuilderVisitor = (function () {
         var /** @type {?} */ states = [];
         var /** @type {?} */ transitions = [];
         metadata.definitions.forEach(function (def) {
-            if (def.type == 1 /* State */) {
+            if (def.type == 0 /* State */) {
                 var /** @type {?} */ stateDef_1 = (def);
                 var /** @type {?} */ name = stateDef_1.name;
                 name.split(/\s*,\s*/).forEach(function (n) {
@@ -1049,7 +1030,7 @@ var AnimationAstBuilderVisitor = (function () {
                 });
                 stateDef_1.name = name;
             }
-            else if (def.type == 2 /* Transition */) {
+            else if (def.type == 1 /* Transition */) {
                 var /** @type {?} */ transition = _this.visitTransition(/** @type {?} */ (def), context);
                 queryCount += transition.queryCount;
                 depCount += transition.depCount;
@@ -1059,7 +1040,7 @@ var AnimationAstBuilderVisitor = (function () {
                 context.errors.push('only state() and transition() definitions can sit inside of a trigger()');
             }
         });
-        var /** @type {?} */ ast = new AnimationTriggerAst(metadata.name, states, transitions);
+        var /** @type {?} */ ast = new TriggerAst(metadata.name, states, transitions);
         ast.queryCount = queryCount;
         ast.depCount = depCount;
         return ast;
@@ -1070,7 +1051,7 @@ var AnimationAstBuilderVisitor = (function () {
      * @return {?}
      */
     AnimationAstBuilderVisitor.prototype.visitState = function (metadata, context) {
-        return new AnimationStateAst(metadata.name, this.visitStyle(metadata.styles, context));
+        return new StateAst(metadata.name, this.visitStyle(metadata.styles, context));
     };
     /**
      * @param {?} metadata
@@ -1082,7 +1063,8 @@ var AnimationAstBuilderVisitor = (function () {
         context.depCount = 0;
         var /** @type {?} */ entry = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
         var /** @type {?} */ matchers = parseTransitionExpr(metadata.expr, context.errors);
-        var /** @type {?} */ ast = new AnimationTransitionAst(matchers, entry, normalizeLocals(metadata.locals));
+        var /** @type {?} */ ast = new TransitionAst(matchers, entry);
+        ast.locals = normalizeLocals(metadata.locals);
         ast.queryCount = context.queryCount;
         ast.depCount = context.depCount;
         return ast;
@@ -1094,7 +1076,7 @@ var AnimationAstBuilderVisitor = (function () {
      */
     AnimationAstBuilderVisitor.prototype.visitSequence = function (metadata, context) {
         var _this = this;
-        var /** @type {?} */ ast = new AnimationSequenceAst(metadata.steps.map(function (s) { return visitAnimationNode(_this, s, context); }));
+        var /** @type {?} */ ast = new SequenceAst(metadata.steps.map(function (s) { return visitAnimationNode(_this, s, context); }));
         if (metadata.locals && Object.keys(metadata.locals).length) {
             ast.locals = metadata.locals;
         }
@@ -1116,7 +1098,7 @@ var AnimationAstBuilderVisitor = (function () {
             return innerAst;
         });
         context.currentTime = furthestTime;
-        var /** @type {?} */ ast = new AnimationGroupAst(steps);
+        var /** @type {?} */ ast = new GroupAst(steps);
         if (metadata.locals && Object.keys(metadata.locals).length) {
             ast.locals = metadata.locals;
         }
@@ -1132,9 +1114,8 @@ var AnimationAstBuilderVisitor = (function () {
         context.currentAnimateTimings = timingAst;
         var /** @type {?} */ styles;
         var /** @type {?} */ styleMetadata = metadata.styles ? metadata.styles : _angular_animations.style({});
-        if (styleMetadata.type == 6 /* KeyframeSequence */) {
-            styles =
-                this.visitKeyframeSequence(/** @type {?} */ (styleMetadata), context);
+        if (styleMetadata.type == 5 /* Keyframes */) {
+            styles = this.visitKeyframes(/** @type {?} */ (styleMetadata), context);
         }
         else {
             var /** @type {?} */ styleMetadata_1 = (metadata.styles);
@@ -1153,7 +1134,7 @@ var AnimationAstBuilderVisitor = (function () {
             styles = styleAst;
         }
         context.currentAnimateTimings = null;
-        return new AnimationAnimateAst(timingAst, styles);
+        return new AnimateAst(timingAst, styles);
     };
     /**
      * @param {?} metadata
@@ -1190,7 +1171,7 @@ var AnimationAstBuilderVisitor = (function () {
         else {
             styles.push(metadata.styles);
         }
-        var /** @type {?} */ collectedEasing;
+        var /** @type {?} */ collectedEasing = null;
         styles.forEach(function (styleData) {
             if (isObject(styleData)) {
                 var /** @type {?} */ styleMap = (styleData);
@@ -1201,7 +1182,7 @@ var AnimationAstBuilderVisitor = (function () {
                 }
             }
         });
-        return new AnimationStyleAst(styles, collectedEasing, metadata.offset);
+        return new StyleAst(styles, collectedEasing, metadata.offset);
     };
     /**
      * @param {?} ast
@@ -1247,11 +1228,11 @@ var AnimationAstBuilderVisitor = (function () {
      * @param {?} context
      * @return {?}
      */
-    AnimationAstBuilderVisitor.prototype.visitKeyframeSequence = function (metadata, context) {
+    AnimationAstBuilderVisitor.prototype.visitKeyframes = function (metadata, context) {
         var _this = this;
         if (!context.currentAnimateTimings) {
             context.errors.push("keyframes() must be placed inside of a call to animate()");
-            return new AnimationKeyframesSequenceAst([]);
+            return new KeyframesAst([]);
         }
         var /** @type {?} */ MAX_KEYFRAME_OFFSET = 1;
         var /** @type {?} */ totalKeyframesWithOffsets = 0;
@@ -1299,7 +1280,7 @@ var AnimationAstBuilderVisitor = (function () {
             _this._validateStyleAst(kf, context);
             kf.offset = offset;
         });
-        return new AnimationKeyframesSequenceAst(keyframes);
+        return new KeyframesAst(keyframes);
     };
     /**
      * @param {?} metadata
@@ -1308,7 +1289,11 @@ var AnimationAstBuilderVisitor = (function () {
      */
     AnimationAstBuilderVisitor.prototype.visitReference = function (metadata, context) {
         var /** @type {?} */ entry = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
-        return new AnimationReferenceAst(entry, normalizeLocals(metadata.locals));
+        var /** @type {?} */ ast = new ReferenceAst(entry);
+        if (metadata.locals) {
+            ast.locals = normalizeLocals(metadata.locals);
+        }
+        return ast;
     };
     /**
      * @param {?} metadata
@@ -1316,39 +1301,23 @@ var AnimationAstBuilderVisitor = (function () {
      * @return {?}
      */
     AnimationAstBuilderVisitor.prototype.visitAnimateChild = function (metadata, context) {
-        var /** @type {?} */ animationArg;
-        var /** @type {?} */ locals;
-        var /** @type {?} */ arg;
-        var /** @type {?} */ args = metadata.args;
-        switch (countArgs(args)) {
-            case 0:
-                // animateChild()
-                context.depCount++;
-                break;
-            case 1:
-                // animateChild(definition|locals)
-                arg = args[0];
-                if (arg['type'] == 8 /* Reference */) {
-                    // animateChild(definition)
-                    animationArg = (arg);
-                }
-                else if (Object.keys(arg).length) {
-                    // animateChild(locals)
-                    context.depCount++;
-                    locals = normalizeLocals(/** @type {?} */ (arg));
-                }
-                break;
-            case 2:
-                arg = (args[0]);
-                if (arg['type'] == 8 /* Reference */) {
-                    // animateChild(definition, locals)
-                    animationArg = (arg);
-                    locals = normalizeLocals(/** @type {?} */ (args[1]));
-                }
-                break;
+        context.depCount++;
+        var /** @type {?} */ ast = new AnimateChildAst();
+        if (metadata.locals) {
+            ast.locals = normalizeLocals(metadata.locals);
         }
-        var /** @type {?} */ animation = animationArg ? this.visitReference(animationArg, context) : undefined;
-        return new AnimationAnimateChildAst(animation, locals);
+        return ast;
+    };
+    /**
+     * @param {?} metadata
+     * @param {?} context
+     * @return {?}
+     */
+    AnimationAstBuilderVisitor.prototype.visitAnimateRef = function (metadata, context) {
+        var /** @type {?} */ animation = this.visitReference(metadata.animation, context);
+        var /** @type {?} */ ast = new AnimateRefAst(animation);
+        ast.locals = normalizeLocals(metadata.locals);
+        return ast;
     };
     /**
      * @param {?} metadata
@@ -1366,7 +1335,8 @@ var AnimationAstBuilderVisitor = (function () {
         var /** @type {?} */ entry = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
         context.currentQuery = null;
         context.currentQuerySelector = parentSelector;
-        var /** @type {?} */ ast = new AnimationQueryAst(selector, metadata.multi, includeSelf, entry);
+        var /** @type {?} */ ast = new QueryAst(selector, metadata.multi, includeSelf, entry);
+        ast.originalSelector = metadata.selector;
         if (metadata.locals && Object.keys(metadata.locals).length) {
             ast.locals = metadata.locals;
         }
@@ -1381,21 +1351,11 @@ var AnimationAstBuilderVisitor = (function () {
         if (!context.currentQuery || !context.currentQuery.multi) {
             context.errors.push("stagger() can only be used inside of queryAll()");
         }
-        var /** @type {?} */ timings;
-        var /** @type {?} */ animation;
-        switch (countArgs(metadata.args)) {
-            case 1:
-                // stagger(animation)
-                timings = ({ duration: 0, delay: 0, easing: 'full' });
-                animation = visitAnimationNode(this, normalizeAnimationEntry(metadata.args[0]), context);
-                break;
-            default:
-                // stagger(timing, animation)
-                timings = resolveTiming(/** @type {?} */ (metadata.args[0]), context.errors, true);
-                animation = visitAnimationNode(this, normalizeAnimationEntry(metadata.args[1]), context);
-                break;
-        }
-        return new AnimationStaggerAst(timings, animation);
+        var /** @type {?} */ timings = metadata.timings === 'full' ?
+            { duration: 0, delay: 0, easing: 'full' } :
+            resolveTiming(metadata.timings, context.errors, true);
+        var /** @type {?} */ animation = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
+        return new StaggerAst(timings, animation);
     };
     return AnimationAstBuilderVisitor;
 }());
@@ -1420,14 +1380,7 @@ function normalizeSelector(selector) {
  * @return {?}
  */
 function normalizeLocals(obj) {
-    return obj ? copyObj(obj) : undefined;
-}
-/**
- * @param {?} args
- * @return {?}
- */
-function countArgs(args) {
-    return args.reduce(function (count, arg) { return (arg != null ? 1 : 0) + count; }, 0);
+    return obj ? copyObj(obj) : null;
 }
 var AnimationAstBuilderContext = (function () {
     /**
@@ -1456,9 +1409,9 @@ var AnimationAstBuilderContext = (function () {
  * @return {?}
  */
 function consumeOffset(styles) {
-    var /** @type {?} */ offset;
     if (typeof styles == 'string')
-        return offset;
+        return null;
+    var /** @type {?} */ offset = null;
     if (Array.isArray(styles)) {
         styles.forEach(function (styleTuple) {
             if (isObject(styleTuple) && styleTuple.hasOwnProperty('offset')) {
@@ -1494,15 +1447,15 @@ function constructTimingAst(value, errors) {
     }
     else if (typeof value == 'number') {
         var /** @type {?} */ duration = resolveTiming(/** @type {?} */ (value), errors).duration;
-        return new AnimationTimingAst(/** @type {?} */ (value), 0, '');
+        return new TimingAst(/** @type {?} */ (value), 0, '');
     }
     var /** @type {?} */ strValue = (value);
     var /** @type {?} */ isDynamic = strValue.split(/\s+/).some(function (v) { return v.charAt(0) == '$'; });
     if (isDynamic) {
-        return new DynamicAnimationTimingAst(strValue);
+        return new DynamicTimingAst(strValue);
     }
     timings = timings || resolveTiming(strValue, errors);
-    return new AnimationTimingAst(timings.duration, timings.delay, timings.easing);
+    return new TimingAst(timings.duration, timings.delay, timings.easing);
 }
 /**
  * @license
@@ -1523,6 +1476,7 @@ function constructTimingAst(value, errors) {
  * @return {?}
  */
 function createTimelineInstruction(element, keyframes, preStyleProps, postStyleProps, duration, delay, easing, subTimeline) {
+    if (easing === void 0) { easing = null; }
     if (subTimeline === void 0) { subTimeline = false; }
     return {
         type: 1 /* TimelineAnimation */,
@@ -1632,7 +1586,7 @@ var AnimationTimelineContext = (function () {
         timelines.push(this.currentTimeline);
     }
     /**
-     * @param {?=} newLocals
+     * @param {?} newLocals
      * @param {?=} skipIfExists
      * @return {?}
      */
@@ -1675,6 +1629,7 @@ var AnimationTimelineContext = (function () {
      * @return {?}
      */
     AnimationTimelineContext.prototype.createSubContext = function (locals, element, newTime) {
+        if (locals === void 0) { locals = null; }
         var /** @type {?} */ target = element || this.element;
         var /** @type {?} */ context = new AnimationTimelineContext(target, this.subInstructions, this.errors, this.timelines, this.currentTimeline.fork(target, newTime || 0));
         context.previousNode = this.previousNode;
@@ -1750,14 +1705,14 @@ var AnimationTimelineBuilderVisitor = (function () {
         subInstructions = subInstructions || new ElementInstructionMap();
         var /** @type {?} */ context = new AnimationTimelineContext(rootElement, subInstructions, errors, []);
         context.locals = locals || {};
-        context.currentTimeline.setStyles([startingStyles], undefined, false, context.errors, locals);
+        context.currentTimeline.setStyles([startingStyles], null, false, context.errors, locals);
         ast.visit(this, context);
         // this checks to see if an actual animation happened
         var /** @type {?} */ timelines = context.timelines.filter(function (timeline) { return timeline.containsAnimation(); });
         if (timelines.length && Object.keys(finalStyles).length) {
             var /** @type {?} */ tl = timelines[timelines.length - 1];
             if (!tl.allowOnlyTimelineStyles()) {
-                tl.setStyles([finalStyles], undefined, false, context.errors, locals);
+                tl.setStyles([finalStyles], null, false, context.errors, locals);
             }
         }
         return timelines.length ? timelines.map(function (timeline) { return timeline.buildKeyframes(); }) :
@@ -1793,24 +1748,29 @@ var AnimationTimelineBuilderVisitor = (function () {
      * @return {?}
      */
     AnimationTimelineBuilderVisitor.prototype.visitAnimateChild = function (ast, context) {
-        var /** @type {?} */ innerContext = context.createSubContext(ast.locals);
-        if (ast.animation) {
-            innerContext.transformIntoNewTimeline();
-            this.visitReference(ast.animation, innerContext);
-            context.transformIntoNewTimeline(innerContext.currentTimeline.currentTime);
-        }
-        else {
-            var /** @type {?} */ elementInstructions = context.subInstructions.consume(context.element);
-            if (elementInstructions) {
-                var /** @type {?} */ startTime = context.currentTimeline.currentTime;
-                var /** @type {?} */ endTime = this._visitSubInstructions(elementInstructions, innerContext);
-                if (startTime != endTime) {
-                    // we do this on the upper context because we created a sub context for
-                    // the sub child animations
-                    context.transformIntoNewTimeline(endTime);
-                }
+        var /** @type {?} */ elementInstructions = context.subInstructions.consume(context.element);
+        if (elementInstructions) {
+            var /** @type {?} */ innerContext = context.createSubContext(ast.locals);
+            var /** @type {?} */ startTime = context.currentTimeline.currentTime;
+            var /** @type {?} */ endTime = this._visitSubInstructions(elementInstructions, innerContext);
+            if (startTime != endTime) {
+                // we do this on the upper context because we created a sub context for
+                // the sub child animations
+                context.transformIntoNewTimeline(endTime);
             }
         }
+        context.previousNode = ast;
+    };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
+    AnimationTimelineBuilderVisitor.prototype.visitAnimateRef = function (ast, context) {
+        var /** @type {?} */ innerContext = context.createSubContext(ast.locals);
+        innerContext.transformIntoNewTimeline();
+        this.visitReference(ast.animation, innerContext);
+        context.transformIntoNewTimeline(innerContext.currentTimeline.currentTime);
         context.previousNode = ast;
     };
     /**
@@ -1829,7 +1789,8 @@ var AnimationTimelineBuilderVisitor = (function () {
             var /** @type {?} */ timings_1 = { duration: duration, delay: locals['delay'], easing: locals['easing'] };
             instructions.forEach(function (instruction) {
                 var /** @type {?} */ instructionTimings = context.appendInstructionToTimeline(instruction, timings_1);
-                furthestTime = Math.max(furthestTime, instructionTimings.duration + instructionTimings.delay);
+                furthestTime =
+                    Math.max(furthestTime, instructionTimings.duration + instructionTimings.delay);
             });
         }
         return furthestTime;
@@ -1852,7 +1813,7 @@ var AnimationTimelineBuilderVisitor = (function () {
     AnimationTimelineBuilderVisitor.prototype.visitSequence = function (ast, context) {
         var _this = this;
         var /** @type {?} */ subContextCount = context.subContextCount;
-        if (context.previousNode instanceof AnimationStyleAst) {
+        if (context.previousNode instanceof StyleAst) {
             context.currentTimeline.forwardFrame();
             context.currentTimeline.snapshotCurrentStyles();
             context.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
@@ -1905,7 +1866,7 @@ var AnimationTimelineBuilderVisitor = (function () {
      * @return {?}
      */
     AnimationTimelineBuilderVisitor.prototype.visitTiming = function (ast, context) {
-        if (ast instanceof DynamicAnimationTimingAst) {
+        if (ast instanceof DynamicTimingAst) {
             var /** @type {?} */ strValue = context.locals ?
                 interpolateLocals(ast.value, context.locals, context.errors) :
                 ast.value.toString();
@@ -1927,8 +1888,8 @@ var AnimationTimelineBuilderVisitor = (function () {
             context.currentTimeline.snapshotCurrentStyles();
         }
         var /** @type {?} */ style$$1 = ast.style;
-        if (style$$1 instanceof AnimationKeyframesSequenceAst) {
-            this.visitKeyframeSequence(style$$1, context);
+        if (style$$1 instanceof KeyframesAst) {
+            this.visitKeyframes(style$$1, context);
         }
         else {
             context.incrementTime(timings.duration);
@@ -1947,7 +1908,7 @@ var AnimationTimelineBuilderVisitor = (function () {
         // a call to animate(). If the clock is not forwarded by one frame then
         // the style() calls will be merged into the previous animate() call
         // which is incorrect.
-        if (!context.currentAnimateTimings && context.previousNode instanceof AnimationAnimateAst) {
+        if (!context.currentAnimateTimings && context.previousNode instanceof AnimateAst) {
             context.currentTimeline.forwardFrame();
         }
         var /** @type {?} */ easing = (context.currentAnimateTimings && context.currentAnimateTimings.easing) || ast.easing;
@@ -1969,7 +1930,7 @@ var AnimationTimelineBuilderVisitor = (function () {
      * @param {?} context
      * @return {?}
      */
-    AnimationTimelineBuilderVisitor.prototype.visitKeyframeSequence = function (ast, context) {
+    AnimationTimelineBuilderVisitor.prototype.visitKeyframes = function (ast, context) {
         var _this = this;
         var /** @type {?} */ currentAnimateTimings = ((context.currentAnimateTimings));
         var /** @type {?} */ startTime = (((context.currentTimeline))).duration;
@@ -1999,15 +1960,16 @@ var AnimationTimelineBuilderVisitor = (function () {
         // in the event that the first step before this is a style step we need
         // to ensure the styles are applied before the children are animated
         var /** @type {?} */ startTime = context.currentTimeline.currentTime;
-        var /** @type {?} */ hasDelay = ast.locals && ast.locals.hasOwnProperty('delay');
-        if (context.previousNode instanceof AnimationStyleAst ||
+        var /** @type {?} */ locals = ast.locals || {};
+        var /** @type {?} */ hasDelay = locals.hasOwnProperty('delay');
+        if (context.previousNode instanceof StyleAst ||
             (startTime == 0 && context.currentTimeline.getCurrentStyleProperties().length)) {
             context.currentTimeline.forwardFrame();
             context.currentTimeline.snapshotCurrentStyles();
             context.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
         }
         var /** @type {?} */ furthestTime = startTime;
-        var /** @type {?} */ elms = invokeQuery(context.element, ast.selector, ast.multi, ast.includeSelf);
+        var /** @type {?} */ elms = invokeQuery(context.element, ast.selector, ast.originalSelector, ast.multi, ast.includeSelf, locals['optional'] ? true : false, context.errors);
         context.currentQueryTotal = elms.length;
         var /** @type {?} */ sameElementTimeline = null;
         elms.forEach(function (element, i) {
@@ -2026,7 +1988,7 @@ var AnimationTimelineBuilderVisitor = (function () {
             var /** @type {?} */ endTime = tl.currentTime;
             // this means that the query itself ONLY took on styling calls. When this
             // happens we need to gaurantee that the styles are applied on screen.
-            if (innerContext.previousNode instanceof AnimationStyleAst && startTime == endTime) {
+            if (innerContext.previousNode instanceof StyleAst && startTime == endTime) {
                 tl.forwardFrame();
                 tl.snapshotCurrentStyles();
                 endTime = tl.currentTime;
@@ -2284,7 +2246,7 @@ var TimelineBuilder = (function () {
             var /** @type {?} */ finalKeyframe = copyStyles(keyframe, true);
             Object.keys(finalKeyframe).forEach(function (prop) {
                 var /** @type {?} */ value = finalKeyframe[prop];
-                if (value == _angular_animations.PRE_STYLE) {
+                if (value == _angular_animations.ɵPRE_STYLE) {
                     preStyleProps.add(prop);
                 }
                 else if (value == _angular_animations.AUTO_STYLE) {
@@ -2378,11 +2340,14 @@ var SubTimelineBuilder = (function (_super) {
 /**
  * @param {?} rootElement
  * @param {?} selector
+ * @param {?} originalSelector
  * @param {?} multi
  * @param {?} includeSelf
+ * @param {?} optional
+ * @param {?} errors
  * @return {?}
  */
-function invokeQuery(rootElement, selector, multi, includeSelf) {
+function invokeQuery(rootElement, selector, originalSelector, multi, includeSelf, optional, errors) {
     var /** @type {?} */ results = [];
     if (includeSelf) {
         results.push(rootElement);
@@ -2395,6 +2360,10 @@ function invokeQuery(rootElement, selector, multi, includeSelf) {
         if (elm) {
             results.push(elm);
         }
+    }
+    if (!optional && results.length == 0) {
+        var /** @type {?} */ fn = multi ? 'queryAll' : 'query';
+        errors.push("`" + fn + "(\"" + originalSelector + "\")` returned zero elements. (Use `" + fn + "(\"" + originalSelector + "\", { optional: true })` if you wish to allow this.)");
     }
     return results;
 }
@@ -2775,8 +2744,8 @@ var AnimationTrigger = (function () {
  */
 function createFallbackTransition(triggerName, states) {
     var /** @type {?} */ matchers = [function (fromState, toState) { return true; }];
-    var /** @type {?} */ animation = new AnimationSequenceAst([]);
-    var /** @type {?} */ transition = new AnimationTransitionAst(matchers, animation, {});
+    var /** @type {?} */ animation = new SequenceAst([]);
+    var /** @type {?} */ transition = new TransitionAst(matchers, animation);
     return new AnimationTransitionFactory(triggerName, transition, states);
 }
 /**
@@ -3502,12 +3471,7 @@ var TransitionAnimationEngine = (function () {
      * @param {?} id
      * @return {?}
      */
-    TransitionAnimationEngine.prototype._fetchNamespace = function (id) {
-        var /** @type {?} */ ns = this._namespaceLookup[id];
-        if (!ns) {
-        }
-        return ns;
-    };
+    TransitionAnimationEngine.prototype._fetchNamespace = function (id) { return this._namespaceLookup[id]; };
     /**
      * @param {?} namespaceId
      * @param {?} element
@@ -3636,17 +3600,6 @@ var TransitionAnimationEngine = (function () {
     /**
      * @return {?}
      */
-    TransitionAnimationEngine.prototype._populateEnterElements = function () {
-        var /** @type {?} */ allEnterNodes = iteratorToArray(this.newlyInserted.values());
-        allEnterNodes.forEach(function (element) { return element.classList.add(POTENTIAL_ENTER_CLASSNAME); });
-        var /** @type {?} */ enterNodes = filterNodeClasses(document.body, POTENTIAL_ENTER_SELECTOR);
-        enterNodes.forEach(function (element) { return element.classList.add(ENTER_CLASSNAME); });
-        allEnterNodes.forEach(function (element) { return element.classList.remove(POTENTIAL_ENTER_CLASSNAME); });
-        return enterNodes;
-    };
-    /**
-     * @return {?}
-     */
     TransitionAnimationEngine.prototype._flushAnimations = function () {
         var _this = this;
         var /** @type {?} */ subTimelines = new ElementInstructionMap();
@@ -3658,7 +3611,8 @@ var TransitionAnimationEngine = (function () {
         var /** @type {?} */ allPostStyleElements = new Map();
         // this must occur before the instructions are built below such that
         // the :enter queries match the elements
-        var /** @type {?} */ enterNodes = this._populateEnterElements();
+        var /** @type {?} */ allEnterNodes = iteratorToArray(this.newlyInserted.values());
+        var /** @type {?} */ enterNodes = collectEnterElements(allEnterNodes);
         for (var /** @type {?} */ i = this._namespaceList.length - 1; i >= 0; i--) {
             var /** @type {?} */ ns = this._namespaceList[i];
             ns.drainQueuedTransitions().forEach(function (entry) {
@@ -3670,6 +3624,8 @@ var TransitionAnimationEngine = (function () {
                 // if a unmatched transition is queued to go then it SHOULD NOT render
                 // an animation and cancel the previously running animations.
                 if (entry.isFallbackTransition && !instruction.isRemovalTransition) {
+                    eraseStyles(element, instruction.fromStyles);
+                    player.onDestroy(function () { return setStyles(element, instruction.toStyles); });
                     skippedPlayers.push(player);
                     return;
                 }
@@ -3718,7 +3674,7 @@ var TransitionAnimationEngine = (function () {
             [];
         // PRE STAGE: fill the ! styles
         var /** @type {?} */ preStylesMap = allPreStyleElements.size ?
-            cloakAndComputeStyles(this._driver, enterNodes, allPreStyleElements, _angular_animations.PRE_STYLE) :
+            cloakAndComputeStyles(this._driver, enterNodes, allPreStyleElements, _angular_animations.ɵPRE_STYLE) :
             new Map();
         // POST STAGE: fill the * styles
         var /** @type {?} */ postStylesMap = cloakAndComputeStyles(this._driver, leaveNodes, allPostStyleElements, _angular_animations.AUTO_STYLE);
@@ -4210,15 +4166,17 @@ function cloakElement(element, value) {
     element.style.display = value != null ? value : 'none';
     return oldValue;
 }
-var elementMatches;
-if (Element.prototype.matches) {
-    elementMatches = function (element, selector) { return element.matches(selector); };
-}
-else {
-    var /** @type {?} */ proto = (Element.prototype);
-    var /** @type {?} */ fn_1 = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
-        proto.oMatchesSelector || proto.webkitMatchesSelector;
-    elementMatches = function (element, selector) { return fn_1.apply(element, [selector]); };
+var elementMatches = function (element, selector) { return false; };
+if (typeof Element == 'function') {
+    if (Element.prototype.matches) {
+        elementMatches = function (element, selector) { return element.matches(selector); };
+    }
+    else {
+        var /** @type {?} */ proto = (Element.prototype);
+        var /** @type {?} */ fn_1 = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
+            proto.oMatchesSelector || proto.webkitMatchesSelector;
+        elementMatches = function (element, selector) { return fn_1.apply(element, [selector]); };
+    }
 }
 /**
  * @param {?} rootElement
@@ -4288,6 +4246,17 @@ function listToArray(list) {
     var /** @type {?} */ arr = [];
     arr.push.apply(arr, ((list)));
     return arr;
+}
+/**
+ * @param {?} allEnterNodes
+ * @return {?}
+ */
+function collectEnterElements(allEnterNodes) {
+    allEnterNodes.forEach(function (element) { return element.classList.add(POTENTIAL_ENTER_CLASSNAME); });
+    var /** @type {?} */ enterNodes = filterNodeClasses(document.body, POTENTIAL_ENTER_SELECTOR);
+    enterNodes.forEach(function (element) { return element.classList.add(ENTER_CLASSNAME); });
+    allEnterNodes.forEach(function (element) { return element.classList.remove(POTENTIAL_ENTER_CLASSNAME); });
+    return enterNodes;
 }
 /**
  * @license

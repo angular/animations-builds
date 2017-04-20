@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { AnimateTimings, ɵStyleData } from '@angular/animations';
-import { AnimationAnimateAst, AnimationAnimateChildAst, AnimationAst, AnimationAstVisitor, AnimationGroupAst, AnimationKeyframesSequenceAst, AnimationQueryAst, AnimationReferenceAst, AnimationSequenceAst, AnimationStaggerAst, AnimationStateAst, AnimationStyleAst, AnimationTimingAst, AnimationTransitionAst, AnimationTriggerAst } from './animation_ast';
+import { AnimateAst, AnimateChildAst, AnimateRefAst, Ast, AstVisitor, GroupAst, KeyframesAst, QueryAst, ReferenceAst, SequenceAst, StaggerAst, StateAst, StyleAst, TimingAst, TransitionAst, TriggerAst } from './animation_ast';
 import { AnimationTimelineInstruction } from './animation_timeline_instruction';
 import { ElementInstructionMap } from './element_instruction_map';
-export declare function buildAnimationTimelines(rootElement: any, ast: AnimationAst, startingStyles: ɵStyleData, finalStyles: ɵStyleData, locals: {
+export declare function buildAnimationTimelines(rootElement: any, ast: Ast, startingStyles: ɵStyleData, finalStyles: ɵStyleData, locals: {
     [name: string]: any;
 }, subInstructions?: ElementInstructionMap, errors?: any[]): AnimationTimelineInstruction[];
 export declare type StyleAtTime = {
@@ -24,7 +24,7 @@ export declare class AnimationTimelineContext {
     parentContext: AnimationTimelineContext | null;
     currentTimeline: TimelineBuilder;
     currentAnimateTimings: AnimateTimings | null;
-    previousNode: AnimationAst;
+    previousNode: Ast;
     subContextCount: number;
     locals: {
         [name: string]: any;
@@ -33,44 +33,45 @@ export declare class AnimationTimelineContext {
     currentQueryTotal: number;
     currentStaggerTime: number;
     constructor(element: any, subInstructions: ElementInstructionMap, errors: any[], timelines: TimelineBuilder[], initialTimeline?: TimelineBuilder);
-    updateLocals(newLocals?: {
+    updateLocals(newLocals: {
         [name: string]: any;
-    }, skipIfExists?: boolean): void;
+    } | null, skipIfExists?: boolean): void;
     private _copyLocals();
     createSubContext(locals?: {
         [name: string]: any;
-    }, element?: any, newTime?: number): AnimationTimelineContext;
+    } | null, element?: any, newTime?: number): AnimationTimelineContext;
     transformIntoNewTimeline(newTime?: number): TimelineBuilder;
     appendInstructionToTimeline(instruction: AnimationTimelineInstruction, timings: AnimateTimings): AnimateTimings;
     incrementTime(time: number): void;
     delayNextStep(delay: number): void;
 }
-export declare class AnimationTimelineBuilderVisitor implements AnimationAstVisitor {
-    buildKeyframes(rootElement: any, ast: AnimationAst, startingStyles: ɵStyleData, finalStyles: ɵStyleData, locals: {
+export declare class AnimationTimelineBuilderVisitor implements AstVisitor {
+    buildKeyframes(rootElement: any, ast: Ast, startingStyles: ɵStyleData, finalStyles: ɵStyleData, locals: {
         [name: string]: any;
     }, subInstructions?: ElementInstructionMap, errors?: any[]): AnimationTimelineInstruction[];
-    visitTrigger(ast: AnimationTriggerAst, context: AnimationTimelineContext): any;
-    visitState(ast: AnimationStateAst, context: AnimationTimelineContext): any;
-    visitTransition(ast: AnimationTransitionAst, context: AnimationTimelineContext): any;
-    visitAnimateChild(ast: AnimationAnimateChildAst, context: AnimationTimelineContext): any;
+    visitTrigger(ast: TriggerAst, context: AnimationTimelineContext): any;
+    visitState(ast: StateAst, context: AnimationTimelineContext): any;
+    visitTransition(ast: TransitionAst, context: AnimationTimelineContext): any;
+    visitAnimateChild(ast: AnimateChildAst, context: AnimationTimelineContext): any;
+    visitAnimateRef(ast: AnimateRefAst, context: AnimationTimelineContext): any;
     private _visitSubInstructions(instructions, context);
-    visitReference(ast: AnimationReferenceAst, context: AnimationTimelineContext): void;
-    visitSequence(ast: AnimationSequenceAst, context: AnimationTimelineContext): void;
-    visitGroup(ast: AnimationGroupAst, context: AnimationTimelineContext): void;
-    visitTiming(ast: AnimationTimingAst, context: AnimationTimelineContext): AnimateTimings;
-    visitAnimate(ast: AnimationAnimateAst, context: AnimationTimelineContext): void;
-    visitStyle(ast: AnimationStyleAst, context: AnimationTimelineContext): void;
+    visitReference(ast: ReferenceAst, context: AnimationTimelineContext): void;
+    visitSequence(ast: SequenceAst, context: AnimationTimelineContext): void;
+    visitGroup(ast: GroupAst, context: AnimationTimelineContext): void;
+    visitTiming(ast: TimingAst, context: AnimationTimelineContext): AnimateTimings;
+    visitAnimate(ast: AnimateAst, context: AnimationTimelineContext): void;
+    visitStyle(ast: StyleAst, context: AnimationTimelineContext): void;
     private _applyStyles(styles, easing, treatAsEmptyStep, context);
-    visitKeyframeSequence(ast: AnimationKeyframesSequenceAst, context: AnimationTimelineContext): void;
-    visitQuery(ast: AnimationQueryAst, context: AnimationTimelineContext): void;
-    visitStagger(ast: AnimationStaggerAst, context: AnimationTimelineContext): void;
+    visitKeyframes(ast: KeyframesAst, context: AnimationTimelineContext): void;
+    visitQuery(ast: QueryAst, context: AnimationTimelineContext): void;
+    visitStagger(ast: StaggerAst, context: AnimationTimelineContext): void;
 }
 export declare class TimelineBuilder {
     element: any;
     startTime: number;
     private _elementTimelineStylesLookup;
     duration: number;
-    easing: string | undefined;
+    easing: string | null;
     private _previousKeyframe;
     private _currentKeyframe;
     private _keyframes;
@@ -90,7 +91,7 @@ export declare class TimelineBuilder {
     forwardTime(time: number): void;
     private _updateStyle(prop, value);
     allowOnlyTimelineStyles(): boolean;
-    setStyles(input: (ɵStyleData | string)[], easing: string | undefined, treatAsEmptyStep: boolean, errors: any[], locals?: {
+    setStyles(input: (ɵStyleData | string)[], easing: string | null, treatAsEmptyStep: boolean, errors: any[], locals?: {
         [name: string]: any;
     }): void;
     snapshotCurrentStyles(): void;

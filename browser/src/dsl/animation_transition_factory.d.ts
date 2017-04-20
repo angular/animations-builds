@@ -6,14 +6,14 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ɵStyleData } from '@angular/animations';
-import { AnimationTransitionAst } from './animation_ast';
+import { TransitionAst } from './animation_ast';
 import { AnimationTransitionInstruction } from './animation_transition_instruction';
 import { ElementInstructionMap } from './element_instruction_map';
 export declare class AnimationTransitionFactory {
     private _triggerName;
-    ast: AnimationTransitionAst;
+    ast: TransitionAst;
     private _stateStyles;
-    constructor(_triggerName: string, ast: AnimationTransitionAst, _stateStyles: {
+    constructor(_triggerName: string, ast: TransitionAst, _stateStyles: {
         [stateName: string]: ɵStyleData;
     });
     match(currentState: any, nextState: any): boolean;

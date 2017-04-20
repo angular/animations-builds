@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.1-b46aba9
+ * @license Angular v4.1.0-beta.1-47acf3d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -10,7 +10,7 @@
 }(this, (function (exports) { 'use strict';
 
 /**
- * @license Angular v4.1.0-beta.1-b46aba9
+ * @license Angular v4.1.0-beta.1-47acf3d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -56,10 +56,6 @@ var Animation = (function () {
  * \@experimental Animation support is experimental.
  */
 var AUTO_STYLE = '*';
-/**
- * \@experimental Animation support is experimental.
- */
-var PRE_STYLE = '!';
 /**
  * `trigger` is an animation-specific function that is designed to be used inside of Angular's
  * animation DSL language. If this information is new, please navigate to the {\@link
@@ -115,7 +111,7 @@ var PRE_STYLE = '!';
  * @return {?}
  */
 function trigger(name, definitions) {
-    return { type: 0 /* Trigger */, name: name, definitions: definitions };
+    return { type: 7 /* Trigger */, name: name, definitions: definitions };
 }
 /**
  * `animate` is an animation-specific function that is designed to be used inside of Angular's
@@ -166,7 +162,8 @@ function trigger(name, definitions) {
  * @return {?}
  */
 function animate(timings, styles) {
-    return { type: 5 /* Animate */, styles: styles, timings: timings };
+    if (styles === void 0) { styles = null; }
+    return { type: 4 /* Animate */, styles: styles, timings: timings };
 }
 /**
  * `group` is an animation-specific function that is designed to be used inside of Angular's
@@ -203,7 +200,8 @@ function animate(timings, styles) {
  * @return {?}
  */
 function group(steps, locals) {
-    return { type: 4 /* Group */, steps: steps, locals: locals };
+    if (locals === void 0) { locals = null; }
+    return { type: 3 /* Group */, steps: steps, locals: locals };
 }
 /**
  * `sequence` is an animation-specific function that is designed to be used inside of Angular's
@@ -243,7 +241,8 @@ function group(steps, locals) {
  * @return {?}
  */
 function sequence(steps, locals) {
-    return { type: 3 /* Sequence */, steps: steps, locals: locals };
+    if (locals === void 0) { locals = null; }
+    return { type: 2 /* Sequence */, steps: steps, locals: locals };
 }
 /**
  * `style` is an animation-specific function that is designed to be used inside of Angular's
@@ -290,7 +289,7 @@ function sequence(steps, locals) {
  * @return {?}
  */
 function style(tokens) {
-    return { type: 7 /* Style */, styles: tokens };
+    return { type: 6 /* Style */, styles: tokens, offset: null };
 }
 /**
  * `state` is an animation-specific function that is designed to be used inside of Angular's
@@ -344,7 +343,7 @@ function style(tokens) {
  * @return {?}
  */
 function state(name, styles) {
-    return { type: 1 /* State */, name: name, styles: styles };
+    return { type: 0 /* State */, name: name, styles: styles };
 }
 /**
  * `keyframes` is an animation-specific function that is designed to be used inside of Angular's
@@ -394,7 +393,7 @@ function state(name, styles) {
  * @return {?}
  */
 function keyframes(steps) {
-    return { type: 6 /* KeyframeSequence */, steps: steps };
+    return { type: 5 /* Keyframes */, steps: steps };
 }
 /**
  * `transition` is an animation-specific function that is designed to be used inside of Angular's
@@ -508,7 +507,8 @@ function keyframes(steps) {
  * @return {?}
  */
 function transition(stateChangeExpr, steps, locals) {
-    return { type: 2 /* Transition */, expr: stateChangeExpr, animation: steps, locals: locals };
+    if (locals === void 0) { locals = null; }
+    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, locals: locals };
 }
 /**
  * \@experimental Animation support is experimental.
@@ -517,18 +517,27 @@ function transition(stateChangeExpr, steps, locals) {
  * @return {?}
  */
 function animation(steps, locals) {
+    if (locals === void 0) { locals = null; }
     return { type: 8 /* Reference */, animation: steps, locals: locals };
 }
 /**
- * @param {...?} args
+ * \@experimental Animation support is experimental.
+ * @param {?=} locals
  * @return {?}
  */
-function animateChild() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    return { type: 9 /* AnimateChild */, args: args };
+function animateChild(locals) {
+    if (locals === void 0) { locals = null; }
+    return { type: 9 /* AnimateChild */, locals: locals };
+}
+/**
+ * \@experimental Animation support is experimental.
+ * @param {?} animation
+ * @param {?=} locals
+ * @return {?}
+ */
+function useAnimation(animation, locals) {
+    if (locals === void 0) { locals = null; }
+    return { type: 10 /* AnimateRef */, animation: animation, locals: locals };
 }
 /**
  * \@experimental Animation support is experimental.
@@ -538,7 +547,8 @@ function animateChild() {
  * @return {?}
  */
 function query(selector, animation, locals) {
-    return { type: 10 /* Query */, multi: false, selector: selector, animation: animation, locals: locals };
+    if (locals === void 0) { locals = null; }
+    return { type: 11 /* Query */, multi: false, selector: selector, animation: animation, locals: locals };
 }
 /**
  * \@experimental Animation support is experimental.
@@ -548,18 +558,17 @@ function query(selector, animation, locals) {
  * @return {?}
  */
 function queryAll(selector, animation, locals) {
-    return { type: 10 /* Query */, multi: true, selector: selector, animation: animation, locals: locals };
+    if (locals === void 0) { locals = null; }
+    return { type: 11 /* Query */, multi: true, selector: selector, animation: animation, locals: locals };
 }
 /**
- * @param {...?} args
+ * \@experimental Animation support is experimental.
+ * @param {?} timings
+ * @param {?} animation
  * @return {?}
  */
-function stagger() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    return { type: 11 /* Stagger */, args: args };
+function stagger(timings, animation) {
+    return { type: 12 /* Stagger */, timings: timings, animation: animation };
 }
 /**
  * @license
@@ -961,11 +970,18 @@ var AnimationGroupPlayer = (function () {
     });
     return AnimationGroupPlayer;
 }());
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var ɵPRE_STYLE = '!';
 
 exports.Animation = Animation;
 exports.AnimationBuilder = AnimationBuilder;
 exports.AUTO_STYLE = AUTO_STYLE;
-exports.PRE_STYLE = PRE_STYLE;
 exports.animate = animate;
 exports.animateChild = animateChild;
 exports.animation = animation;
@@ -979,9 +995,11 @@ exports.state = state;
 exports.style = style;
 exports.transition = transition;
 exports.trigger = trigger;
+exports.useAnimation = useAnimation;
 exports.AnimationPlayer = AnimationPlayer;
 exports.NoopAnimationPlayer = NoopAnimationPlayer;
 exports.ɵAnimationGroupPlayer = AnimationGroupPlayer;
+exports.ɵPRE_STYLE = ɵPRE_STYLE;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

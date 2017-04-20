@@ -5,26 +5,27 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationQueryMetadata, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata } from '@angular/animations';
-import { AnimationAnimateAst, AnimationAnimateChildAst, AnimationAst, AnimationGroupAst, AnimationKeyframesSequenceAst, AnimationQueryAst, AnimationReferenceAst, AnimationSequenceAst, AnimationStaggerAst, AnimationStateAst, AnimationStyleAst, AnimationTimingAst, AnimationTransitionAst, AnimationTriggerAst } from './animation_ast';
+import { AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationAnimateRefMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationQueryMetadata, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata } from '@angular/animations';
+import { AnimateAst, AnimateChildAst, AnimateRefAst, Ast, GroupAst, KeyframesAst, QueryAst, ReferenceAst, SequenceAst, StaggerAst, StateAst, StyleAst, TimingAst, TransitionAst, TriggerAst } from './animation_ast';
 import { AnimationDslVisitor } from './animation_dsl_visitor';
-export declare function buildAnimationAst(metadata: AnimationMetadata | AnimationMetadata[], errors: any[]): AnimationAst;
+export declare function buildAnimationAst(metadata: AnimationMetadata | AnimationMetadata[], errors: any[]): Ast;
 export declare class AnimationAstBuilderVisitor implements AnimationDslVisitor {
-    build(metadata: AnimationMetadata | AnimationMetadata[], errors: any[]): AnimationAst;
-    visitTrigger(metadata: AnimationTriggerMetadata, context: AnimationAstBuilderContext): AnimationTriggerAst;
-    visitState(metadata: AnimationStateMetadata, context: AnimationAstBuilderContext): AnimationStateAst;
-    visitTransition(metadata: AnimationTransitionMetadata, context: AnimationAstBuilderContext): AnimationTransitionAst;
-    visitSequence(metadata: AnimationSequenceMetadata, context: AnimationAstBuilderContext): AnimationSequenceAst;
-    visitGroup(metadata: AnimationGroupMetadata, context: AnimationAstBuilderContext): AnimationGroupAst;
-    visitAnimate(metadata: AnimationAnimateMetadata, context: AnimationAstBuilderContext): AnimationAnimateAst;
-    visitStyle(metadata: AnimationStyleMetadata, context: AnimationAstBuilderContext): AnimationStyleAst;
+    build(metadata: AnimationMetadata | AnimationMetadata[], errors: any[]): Ast;
+    visitTrigger(metadata: AnimationTriggerMetadata, context: AnimationAstBuilderContext): TriggerAst;
+    visitState(metadata: AnimationStateMetadata, context: AnimationAstBuilderContext): StateAst;
+    visitTransition(metadata: AnimationTransitionMetadata, context: AnimationAstBuilderContext): TransitionAst;
+    visitSequence(metadata: AnimationSequenceMetadata, context: AnimationAstBuilderContext): SequenceAst;
+    visitGroup(metadata: AnimationGroupMetadata, context: AnimationAstBuilderContext): GroupAst;
+    visitAnimate(metadata: AnimationAnimateMetadata, context: AnimationAstBuilderContext): AnimateAst;
+    visitStyle(metadata: AnimationStyleMetadata, context: AnimationAstBuilderContext): StyleAst;
     private _makeStyleAst(metadata, context);
     private _validateStyleAst(ast, context);
-    visitKeyframeSequence(metadata: AnimationKeyframesSequenceMetadata, context: AnimationAstBuilderContext): AnimationKeyframesSequenceAst;
-    visitReference(metadata: AnimationReferenceMetadata, context: AnimationAstBuilderContext): AnimationReferenceAst;
-    visitAnimateChild(metadata: AnimationAnimateChildMetadata, context: AnimationAstBuilderContext): AnimationAnimateChildAst;
-    visitQuery(metadata: AnimationQueryMetadata, context: AnimationAstBuilderContext): AnimationQueryAst;
-    visitStagger(metadata: AnimationStaggerMetadata, context: AnimationAstBuilderContext): AnimationStaggerAst;
+    visitKeyframes(metadata: AnimationKeyframesSequenceMetadata, context: AnimationAstBuilderContext): KeyframesAst;
+    visitReference(metadata: AnimationReferenceMetadata, context: AnimationAstBuilderContext): ReferenceAst;
+    visitAnimateChild(metadata: AnimationAnimateChildMetadata, context: AnimationAstBuilderContext): AnimateChildAst;
+    visitAnimateRef(metadata: AnimationAnimateRefMetadata, context: AnimationAstBuilderContext): AnimateRefAst;
+    visitQuery(metadata: AnimationQueryMetadata, context: AnimationAstBuilderContext): QueryAst;
+    visitStagger(metadata: AnimationStaggerMetadata, context: AnimationAstBuilderContext): StaggerAst;
 }
 export declare type StyleTimeTuple = {
     startTime: number;
@@ -37,7 +38,7 @@ export declare class AnimationAstBuilderContext {
     currentTransition: AnimationTransitionMetadata | null;
     currentQuery: AnimationQueryMetadata | null;
     currentQuerySelector: string | null;
-    currentAnimateTimings: AnimationTimingAst | null;
+    currentAnimateTimings: TimingAst | null;
     currentTime: number;
     collectedStyles: {
         [selectorName: string]: {

@@ -1,9 +1,9 @@
 /**
- * @license Angular v4.1.0-beta.1-b46aba9
+ * @license Angular v4.1.0-beta.1-47acf3d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
-import { AUTO_STYLE, NoopAnimationPlayer, PRE_STYLE, sequence, style, ɵAnimationGroupPlayer } from '@angular/animations';
+import { AUTO_STYLE, NoopAnimationPlayer, sequence, style, ɵAnimationGroupPlayer, ɵPRE_STYLE } from '@angular/animations';
 
 /**
  * @license
@@ -406,7 +406,7 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles = 
         Object.keys(kf).forEach(prop => {
             let /** @type {?} */ normalizedProp = prop;
             let /** @type {?} */ normalizedValue = kf[prop];
-            if (normalizedValue == PRE_STYLE) {
+            if (normalizedValue == ɵPRE_STYLE) {
                 normalizedValue = preStyles[prop];
             }
             else if (normalizedValue == AUTO_STYLE) {
@@ -520,7 +520,7 @@ function parseTimelineCommand(command) {
 /**
  * @abstract
  */
-class AnimationAst {
+class Ast {
     /**
      * @abstract
      * @param {?} ast
@@ -529,7 +529,7 @@ class AnimationAst {
      */
     visit(ast, context) { }
 }
-class AnimationTriggerAst extends AnimationAst {
+class TriggerAst extends Ast {
     /**
      * @param {?} name
      * @param {?} states
@@ -548,11 +548,9 @@ class AnimationTriggerAst extends AnimationAst {
      * @param {?} context
      * @return {?}
      */
-    visit(visitor, context) {
-        return visitor.visitTrigger(this, context);
-    }
+    visit(visitor, context) { return visitor.visitTrigger(this, context); }
 }
-class AnimationStateAst extends AnimationAst {
+class StateAst extends Ast {
     /**
      * @param {?} name
      * @param {?} style
@@ -567,21 +565,17 @@ class AnimationStateAst extends AnimationAst {
      * @param {?} context
      * @return {?}
      */
-    visit(visitor, context) {
-        return visitor.visitState(this, context);
-    }
+    visit(visitor, context) { return visitor.visitState(this, context); }
 }
-class AnimationTransitionAst extends AnimationAst {
+class TransitionAst extends Ast {
     /**
      * @param {?} matchers
      * @param {?} animation
-     * @param {?=} locals
      */
-    constructor(matchers, animation, locals) {
+    constructor(matchers, animation) {
         super();
         this.matchers = matchers;
         this.animation = animation;
-        this.locals = locals;
         this.queryCount = 0;
         this.depCount = 0;
     }
@@ -590,11 +584,9 @@ class AnimationTransitionAst extends AnimationAst {
      * @param {?} context
      * @return {?}
      */
-    visit(visitor, context) {
-        return visitor.visitTransition(this, context);
-    }
+    visit(visitor, context) { return visitor.visitTransition(this, context); }
 }
-class AnimationSequenceAst extends AnimationAst {
+class SequenceAst extends Ast {
     /**
      * @param {?} steps
      */
@@ -607,11 +599,9 @@ class AnimationSequenceAst extends AnimationAst {
      * @param {?} context
      * @return {?}
      */
-    visit(visitor, context) {
-        return visitor.visitSequence(this, context);
-    }
+    visit(visitor, context) { return visitor.visitSequence(this, context); }
 }
-class AnimationGroupAst extends AnimationAst {
+class GroupAst extends Ast {
     /**
      * @param {?} steps
      */
@@ -624,11 +614,9 @@ class AnimationGroupAst extends AnimationAst {
      * @param {?} context
      * @return {?}
      */
-    visit(visitor, context) {
-        return visitor.visitGroup(this, context);
-    }
+    visit(visitor, context) { return visitor.visitGroup(this, context); }
 }
-class AnimationAnimateAst extends AnimationAst {
+class AnimateAst extends Ast {
     /**
      * @param {?} timings
      * @param {?} style
@@ -643,15 +631,13 @@ class AnimationAnimateAst extends AnimationAst {
      * @param {?} context
      * @return {?}
      */
-    visit(visitor, context) {
-        return visitor.visitAnimate(this, context);
-    }
+    visit(visitor, context) { return visitor.visitAnimate(this, context); }
 }
-class AnimationStyleAst extends AnimationAst {
+class StyleAst extends Ast {
     /**
      * @param {?} styles
      * @param {?} easing
-     * @param {?=} offset
+     * @param {?} offset
      */
     constructor(styles, easing, offset) {
         super();
@@ -665,11 +651,9 @@ class AnimationStyleAst extends AnimationAst {
      * @param {?} context
      * @return {?}
      */
-    visit(visitor, context) {
-        return visitor.visitStyle(this, context);
-    }
+    visit(visitor, context) { return visitor.visitStyle(this, context); }
 }
-class AnimationKeyframesSequenceAst extends AnimationAst {
+class KeyframesAst extends Ast {
     /**
      * @param {?} styles
      */
@@ -682,49 +666,48 @@ class AnimationKeyframesSequenceAst extends AnimationAst {
      * @param {?} context
      * @return {?}
      */
-    visit(visitor, context) {
-        return visitor.visitKeyframeSequence(this, context);
-    }
+    visit(visitor, context) { return visitor.visitKeyframes(this, context); }
 }
-class AnimationReferenceAst extends AnimationAst {
+class ReferenceAst extends Ast {
     /**
      * @param {?} animation
-     * @param {?=} defaults
      */
-    constructor(animation, defaults = {}) {
+    constructor(animation) {
         super();
         this.animation = animation;
-        this.defaults = defaults;
     }
     /**
      * @param {?} visitor
      * @param {?} context
      * @return {?}
      */
-    visit(visitor, context) {
-        return visitor.visitReference(this, context);
-    }
+    visit(visitor, context) { return visitor.visitReference(this, context); }
 }
-class AnimationAnimateChildAst extends AnimationAst {
+class AnimateChildAst extends Ast {
+    constructor() { super(); }
     /**
-     * @param {?=} animation
-     * @param {?=} locals
+     * @param {?} visitor
+     * @param {?} context
+     * @return {?}
      */
-    constructor(animation, locals) {
+    visit(visitor, context) { return visitor.visitAnimateChild(this, context); }
+}
+class AnimateRefAst extends Ast {
+    /**
+     * @param {?} animation
+     */
+    constructor(animation) {
         super();
         this.animation = animation;
-        this.locals = locals;
     }
     /**
      * @param {?} visitor
      * @param {?} context
      * @return {?}
      */
-    visit(visitor, context) {
-        return visitor.visitAnimateChild(this, context);
-    }
+    visit(visitor, context) { return visitor.visitAnimateRef(this, context); }
 }
-class AnimationQueryAst extends AnimationAst {
+class QueryAst extends Ast {
     /**
      * @param {?} selector
      * @param {?} multi
@@ -743,11 +726,9 @@ class AnimationQueryAst extends AnimationAst {
      * @param {?} context
      * @return {?}
      */
-    visit(visitor, context) {
-        return visitor.visitQuery(this, context);
-    }
+    visit(visitor, context) { return visitor.visitQuery(this, context); }
 }
-class AnimationStaggerAst extends AnimationAst {
+class StaggerAst extends Ast {
     /**
      * @param {?} timings
      * @param {?} animation
@@ -762,17 +743,15 @@ class AnimationStaggerAst extends AnimationAst {
      * @param {?} context
      * @return {?}
      */
-    visit(visitor, context) {
-        return visitor.visitStagger(this, context);
-    }
+    visit(visitor, context) { return visitor.visitStagger(this, context); }
 }
-class AnimationTimingAst extends AnimationAst {
+class TimingAst extends Ast {
     /**
      * @param {?} duration
      * @param {?=} delay
      * @param {?=} easing
      */
-    constructor(duration, delay = 0, easing) {
+    constructor(duration, delay = 0, easing = null) {
         super();
         this.duration = duration;
         this.delay = delay;
@@ -783,11 +762,9 @@ class AnimationTimingAst extends AnimationAst {
      * @param {?} context
      * @return {?}
      */
-    visit(visitor, context) {
-        return visitor.visitTiming(this, context);
-    }
+    visit(visitor, context) { return visitor.visitTiming(this, context); }
 }
-class DynamicAnimationTimingAst extends AnimationTimingAst {
+class DynamicTimingAst extends TimingAst {
     /**
      * @param {?} value
      */
@@ -800,9 +777,7 @@ class DynamicAnimationTimingAst extends AnimationTimingAst {
      * @param {?} context
      * @return {?}
      */
-    visit(visitor, context) {
-        return visitor.visitTiming(this, context);
-    }
+    visit(visitor, context) { return visitor.visitTiming(this, context); }
 }
 
 /**
@@ -820,29 +795,31 @@ class DynamicAnimationTimingAst extends AnimationTimingAst {
  */
 function visitAnimationNode(visitor, node, context) {
     switch (node.type) {
-        case 0 /* Trigger */:
+        case 7 /* Trigger */:
             return visitor.visitTrigger(/** @type {?} */ (node), context);
-        case 1 /* State */:
+        case 0 /* State */:
             return visitor.visitState(/** @type {?} */ (node), context);
-        case 2 /* Transition */:
+        case 1 /* Transition */:
             return visitor.visitTransition(/** @type {?} */ (node), context);
-        case 3 /* Sequence */:
+        case 2 /* Sequence */:
             return visitor.visitSequence(/** @type {?} */ (node), context);
-        case 4 /* Group */:
+        case 3 /* Group */:
             return visitor.visitGroup(/** @type {?} */ (node), context);
-        case 5 /* Animate */:
+        case 4 /* Animate */:
             return visitor.visitAnimate(/** @type {?} */ (node), context);
-        case 6 /* KeyframeSequence */:
-            return visitor.visitKeyframeSequence(/** @type {?} */ (node), context);
-        case 7 /* Style */:
+        case 5 /* Keyframes */:
+            return visitor.visitKeyframes(/** @type {?} */ (node), context);
+        case 6 /* Style */:
             return visitor.visitStyle(/** @type {?} */ (node), context);
         case 8 /* Reference */:
             return visitor.visitReference(/** @type {?} */ (node), context);
         case 9 /* AnimateChild */:
             return visitor.visitAnimateChild(/** @type {?} */ (node), context);
-        case 10 /* Query */:
+        case 10 /* AnimateRef */:
+            return visitor.visitAnimateRef(/** @type {?} */ (node), context);
+        case 11 /* Query */:
             return visitor.visitQuery(/** @type {?} */ (node), context);
-        case 11 /* Stagger */:
+        case 12 /* Stagger */:
             return visitor.visitStagger(/** @type {?} */ (node), context);
         default:
             throw new Error(`Unable to resolve animation metadata node #${node.type}`);
@@ -967,7 +944,7 @@ class AnimationAstBuilderVisitor {
         const /** @type {?} */ states = [];
         const /** @type {?} */ transitions = [];
         metadata.definitions.forEach(def => {
-            if (def.type == 1 /* State */) {
+            if (def.type == 0 /* State */) {
                 const /** @type {?} */ stateDef = (def);
                 const /** @type {?} */ name = stateDef.name;
                 name.split(/\s*,\s*/).forEach(n => {
@@ -976,7 +953,7 @@ class AnimationAstBuilderVisitor {
                 });
                 stateDef.name = name;
             }
-            else if (def.type == 2 /* Transition */) {
+            else if (def.type == 1 /* Transition */) {
                 const /** @type {?} */ transition = this.visitTransition(/** @type {?} */ (def), context);
                 queryCount += transition.queryCount;
                 depCount += transition.depCount;
@@ -986,7 +963,7 @@ class AnimationAstBuilderVisitor {
                 context.errors.push('only state() and transition() definitions can sit inside of a trigger()');
             }
         });
-        const /** @type {?} */ ast = new AnimationTriggerAst(metadata.name, states, transitions);
+        const /** @type {?} */ ast = new TriggerAst(metadata.name, states, transitions);
         ast.queryCount = queryCount;
         ast.depCount = depCount;
         return ast;
@@ -997,7 +974,7 @@ class AnimationAstBuilderVisitor {
      * @return {?}
      */
     visitState(metadata, context) {
-        return new AnimationStateAst(metadata.name, this.visitStyle(metadata.styles, context));
+        return new StateAst(metadata.name, this.visitStyle(metadata.styles, context));
     }
     /**
      * @param {?} metadata
@@ -1009,7 +986,8 @@ class AnimationAstBuilderVisitor {
         context.depCount = 0;
         const /** @type {?} */ entry = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
         const /** @type {?} */ matchers = parseTransitionExpr(metadata.expr, context.errors);
-        const /** @type {?} */ ast = new AnimationTransitionAst(matchers, entry, normalizeLocals(metadata.locals));
+        const /** @type {?} */ ast = new TransitionAst(matchers, entry);
+        ast.locals = normalizeLocals(metadata.locals);
         ast.queryCount = context.queryCount;
         ast.depCount = context.depCount;
         return ast;
@@ -1020,7 +998,7 @@ class AnimationAstBuilderVisitor {
      * @return {?}
      */
     visitSequence(metadata, context) {
-        const /** @type {?} */ ast = new AnimationSequenceAst(metadata.steps.map(s => visitAnimationNode(this, s, context)));
+        const /** @type {?} */ ast = new SequenceAst(metadata.steps.map(s => visitAnimationNode(this, s, context)));
         if (metadata.locals && Object.keys(metadata.locals).length) {
             ast.locals = metadata.locals;
         }
@@ -1041,7 +1019,7 @@ class AnimationAstBuilderVisitor {
             return innerAst;
         });
         context.currentTime = furthestTime;
-        const /** @type {?} */ ast = new AnimationGroupAst(steps);
+        const /** @type {?} */ ast = new GroupAst(steps);
         if (metadata.locals && Object.keys(metadata.locals).length) {
             ast.locals = metadata.locals;
         }
@@ -1057,9 +1035,8 @@ class AnimationAstBuilderVisitor {
         context.currentAnimateTimings = timingAst;
         let /** @type {?} */ styles;
         let /** @type {?} */ styleMetadata = metadata.styles ? metadata.styles : style({});
-        if (styleMetadata.type == 6 /* KeyframeSequence */) {
-            styles =
-                this.visitKeyframeSequence(/** @type {?} */ (styleMetadata), context);
+        if (styleMetadata.type == 5 /* Keyframes */) {
+            styles = this.visitKeyframes(/** @type {?} */ (styleMetadata), context);
         }
         else {
             let /** @type {?} */ styleMetadata = (metadata.styles);
@@ -1078,7 +1055,7 @@ class AnimationAstBuilderVisitor {
             styles = styleAst;
         }
         context.currentAnimateTimings = null;
-        return new AnimationAnimateAst(timingAst, styles);
+        return new AnimateAst(timingAst, styles);
     }
     /**
      * @param {?} metadata
@@ -1115,7 +1092,7 @@ class AnimationAstBuilderVisitor {
         else {
             styles.push(metadata.styles);
         }
-        let /** @type {?} */ collectedEasing;
+        let /** @type {?} */ collectedEasing = null;
         styles.forEach(styleData => {
             if (isObject(styleData)) {
                 const /** @type {?} */ styleMap = (styleData);
@@ -1126,7 +1103,7 @@ class AnimationAstBuilderVisitor {
                 }
             }
         });
-        return new AnimationStyleAst(styles, collectedEasing, metadata.offset);
+        return new StyleAst(styles, collectedEasing, metadata.offset);
     }
     /**
      * @param {?} ast
@@ -1172,10 +1149,10 @@ class AnimationAstBuilderVisitor {
      * @param {?} context
      * @return {?}
      */
-    visitKeyframeSequence(metadata, context) {
+    visitKeyframes(metadata, context) {
         if (!context.currentAnimateTimings) {
             context.errors.push(`keyframes() must be placed inside of a call to animate()`);
-            return new AnimationKeyframesSequenceAst([]);
+            return new KeyframesAst([]);
         }
         const /** @type {?} */ MAX_KEYFRAME_OFFSET = 1;
         let /** @type {?} */ totalKeyframesWithOffsets = 0;
@@ -1223,7 +1200,7 @@ class AnimationAstBuilderVisitor {
             this._validateStyleAst(kf, context);
             kf.offset = offset;
         });
-        return new AnimationKeyframesSequenceAst(keyframes);
+        return new KeyframesAst(keyframes);
     }
     /**
      * @param {?} metadata
@@ -1232,7 +1209,11 @@ class AnimationAstBuilderVisitor {
      */
     visitReference(metadata, context) {
         const /** @type {?} */ entry = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
-        return new AnimationReferenceAst(entry, normalizeLocals(metadata.locals));
+        const /** @type {?} */ ast = new ReferenceAst(entry);
+        if (metadata.locals) {
+            ast.locals = normalizeLocals(metadata.locals);
+        }
+        return ast;
     }
     /**
      * @param {?} metadata
@@ -1240,39 +1221,23 @@ class AnimationAstBuilderVisitor {
      * @return {?}
      */
     visitAnimateChild(metadata, context) {
-        let /** @type {?} */ animationArg;
-        let /** @type {?} */ locals;
-        let /** @type {?} */ arg;
-        const /** @type {?} */ args = metadata.args;
-        switch (countArgs(args)) {
-            case 0:
-                // animateChild()
-                context.depCount++;
-                break;
-            case 1:
-                // animateChild(definition|locals)
-                arg = args[0];
-                if (arg['type'] == 8 /* Reference */) {
-                    // animateChild(definition)
-                    animationArg = (arg);
-                }
-                else if (Object.keys(arg).length) {
-                    // animateChild(locals)
-                    context.depCount++;
-                    locals = normalizeLocals(/** @type {?} */ (arg));
-                }
-                break;
-            case 2:
-                arg = (args[0]);
-                if (arg['type'] == 8 /* Reference */) {
-                    // animateChild(definition, locals)
-                    animationArg = (arg);
-                    locals = normalizeLocals(/** @type {?} */ (args[1]));
-                }
-                break;
+        context.depCount++;
+        const /** @type {?} */ ast = new AnimateChildAst();
+        if (metadata.locals) {
+            ast.locals = normalizeLocals(metadata.locals);
         }
-        const /** @type {?} */ animation = animationArg ? this.visitReference(animationArg, context) : undefined;
-        return new AnimationAnimateChildAst(animation, locals);
+        return ast;
+    }
+    /**
+     * @param {?} metadata
+     * @param {?} context
+     * @return {?}
+     */
+    visitAnimateRef(metadata, context) {
+        const /** @type {?} */ animation = this.visitReference(metadata.animation, context);
+        const /** @type {?} */ ast = new AnimateRefAst(animation);
+        ast.locals = normalizeLocals(metadata.locals);
+        return ast;
     }
     /**
      * @param {?} metadata
@@ -1290,7 +1255,8 @@ class AnimationAstBuilderVisitor {
         const /** @type {?} */ entry = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
         context.currentQuery = null;
         context.currentQuerySelector = parentSelector;
-        const /** @type {?} */ ast = new AnimationQueryAst(selector, metadata.multi, includeSelf, entry);
+        const /** @type {?} */ ast = new QueryAst(selector, metadata.multi, includeSelf, entry);
+        ast.originalSelector = metadata.selector;
         if (metadata.locals && Object.keys(metadata.locals).length) {
             ast.locals = metadata.locals;
         }
@@ -1305,21 +1271,11 @@ class AnimationAstBuilderVisitor {
         if (!context.currentQuery || !context.currentQuery.multi) {
             context.errors.push(`stagger() can only be used inside of queryAll()`);
         }
-        let /** @type {?} */ timings;
-        let /** @type {?} */ animation;
-        switch (countArgs(metadata.args)) {
-            case 1:
-                // stagger(animation)
-                timings = ({ duration: 0, delay: 0, easing: 'full' });
-                animation = visitAnimationNode(this, normalizeAnimationEntry(metadata.args[0]), context);
-                break;
-            default:
-                // stagger(timing, animation)
-                timings = resolveTiming(/** @type {?} */ (metadata.args[0]), context.errors, true);
-                animation = visitAnimationNode(this, normalizeAnimationEntry(metadata.args[1]), context);
-                break;
-        }
-        return new AnimationStaggerAst(timings, animation);
+        const /** @type {?} */ timings = metadata.timings === 'full' ?
+            { duration: 0, delay: 0, easing: 'full' } :
+            resolveTiming(metadata.timings, context.errors, true);
+        const /** @type {?} */ animation = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
+        return new StaggerAst(timings, animation);
     }
 }
 /**
@@ -1343,14 +1299,7 @@ function normalizeSelector(selector) {
  * @return {?}
  */
 function normalizeLocals(obj) {
-    return obj ? copyObj(obj) : undefined;
-}
-/**
- * @param {?} args
- * @return {?}
- */
-function countArgs(args) {
-    return args.reduce((count, arg) => (arg != null ? 1 : 0) + count, 0);
+    return obj ? copyObj(obj) : null;
 }
 class AnimationAstBuilderContext {
     /**
@@ -1378,9 +1327,9 @@ class AnimationAstBuilderContext {
  * @return {?}
  */
 function consumeOffset(styles) {
-    let /** @type {?} */ offset;
     if (typeof styles == 'string')
-        return offset;
+        return null;
+    let /** @type {?} */ offset = null;
     if (Array.isArray(styles)) {
         styles.forEach(styleTuple => {
             if (isObject(styleTuple) && styleTuple.hasOwnProperty('offset')) {
@@ -1416,15 +1365,15 @@ function constructTimingAst(value, errors) {
     }
     else if (typeof value == 'number') {
         const /** @type {?} */ duration = resolveTiming(/** @type {?} */ (value), errors).duration;
-        return new AnimationTimingAst(/** @type {?} */ (value), 0, '');
+        return new TimingAst(/** @type {?} */ (value), 0, '');
     }
     const /** @type {?} */ strValue = (value);
     const /** @type {?} */ isDynamic = strValue.split(/\s+/).some(v => v.charAt(0) == '$');
     if (isDynamic) {
-        return new DynamicAnimationTimingAst(strValue);
+        return new DynamicTimingAst(strValue);
     }
     timings = timings || resolveTiming(strValue, errors);
-    return new AnimationTimingAst(timings.duration, timings.delay, timings.easing);
+    return new TimingAst(timings.duration, timings.delay, timings.easing);
 }
 
 /**
@@ -1445,7 +1394,7 @@ function constructTimingAst(value, errors) {
  * @param {?=} subTimeline
  * @return {?}
  */
-function createTimelineInstruction(element, keyframes, preStyleProps, postStyleProps, duration, delay, easing, subTimeline = false) {
+function createTimelineInstruction(element, keyframes, preStyleProps, postStyleProps, duration, delay, easing = null, subTimeline = false) {
     return {
         type: 1 /* TimelineAnimation */,
         element,
@@ -1552,7 +1501,7 @@ class AnimationTimelineContext {
         timelines.push(this.currentTimeline);
     }
     /**
-     * @param {?=} newLocals
+     * @param {?} newLocals
      * @param {?=} skipIfExists
      * @return {?}
      */
@@ -1592,7 +1541,7 @@ class AnimationTimelineContext {
      * @param {?=} newTime
      * @return {?}
      */
-    createSubContext(locals, element, newTime) {
+    createSubContext(locals = null, element, newTime) {
         const /** @type {?} */ target = element || this.element;
         const /** @type {?} */ context = new AnimationTimelineContext(target, this.subInstructions, this.errors, this.timelines, this.currentTimeline.fork(target, newTime || 0));
         context.previousNode = this.previousNode;
@@ -1664,14 +1613,14 @@ class AnimationTimelineBuilderVisitor {
         subInstructions = subInstructions || new ElementInstructionMap();
         const /** @type {?} */ context = new AnimationTimelineContext(rootElement, subInstructions, errors, []);
         context.locals = locals || {};
-        context.currentTimeline.setStyles([startingStyles], undefined, false, context.errors, locals);
+        context.currentTimeline.setStyles([startingStyles], null, false, context.errors, locals);
         ast.visit(this, context);
         // this checks to see if an actual animation happened
         const /** @type {?} */ timelines = context.timelines.filter(timeline => timeline.containsAnimation());
         if (timelines.length && Object.keys(finalStyles).length) {
             const /** @type {?} */ tl = timelines[timelines.length - 1];
             if (!tl.allowOnlyTimelineStyles()) {
-                tl.setStyles([finalStyles], undefined, false, context.errors, locals);
+                tl.setStyles([finalStyles], null, false, context.errors, locals);
             }
         }
         return timelines.length ? timelines.map(timeline => timeline.buildKeyframes()) :
@@ -1707,24 +1656,29 @@ class AnimationTimelineBuilderVisitor {
      * @return {?}
      */
     visitAnimateChild(ast, context) {
-        const /** @type {?} */ innerContext = context.createSubContext(ast.locals);
-        if (ast.animation) {
-            innerContext.transformIntoNewTimeline();
-            this.visitReference(ast.animation, innerContext);
-            context.transformIntoNewTimeline(innerContext.currentTimeline.currentTime);
-        }
-        else {
-            const /** @type {?} */ elementInstructions = context.subInstructions.consume(context.element);
-            if (elementInstructions) {
-                const /** @type {?} */ startTime = context.currentTimeline.currentTime;
-                const /** @type {?} */ endTime = this._visitSubInstructions(elementInstructions, innerContext);
-                if (startTime != endTime) {
-                    // we do this on the upper context because we created a sub context for
-                    // the sub child animations
-                    context.transformIntoNewTimeline(endTime);
-                }
+        const /** @type {?} */ elementInstructions = context.subInstructions.consume(context.element);
+        if (elementInstructions) {
+            const /** @type {?} */ innerContext = context.createSubContext(ast.locals);
+            const /** @type {?} */ startTime = context.currentTimeline.currentTime;
+            const /** @type {?} */ endTime = this._visitSubInstructions(elementInstructions, innerContext);
+            if (startTime != endTime) {
+                // we do this on the upper context because we created a sub context for
+                // the sub child animations
+                context.transformIntoNewTimeline(endTime);
             }
         }
+        context.previousNode = ast;
+    }
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
+    visitAnimateRef(ast, context) {
+        const /** @type {?} */ innerContext = context.createSubContext(ast.locals);
+        innerContext.transformIntoNewTimeline();
+        this.visitReference(ast.animation, innerContext);
+        context.transformIntoNewTimeline(innerContext.currentTimeline.currentTime);
         context.previousNode = ast;
     }
     /**
@@ -1743,7 +1697,8 @@ class AnimationTimelineBuilderVisitor {
             const /** @type {?} */ timings = { duration, delay: locals['delay'], easing: locals['easing'] };
             instructions.forEach(instruction => {
                 const /** @type {?} */ instructionTimings = context.appendInstructionToTimeline(instruction, timings);
-                furthestTime = Math.max(furthestTime, instructionTimings.duration + instructionTimings.delay);
+                furthestTime =
+                    Math.max(furthestTime, instructionTimings.duration + instructionTimings.delay);
             });
         }
         return furthestTime;
@@ -1765,7 +1720,7 @@ class AnimationTimelineBuilderVisitor {
      */
     visitSequence(ast, context) {
         const /** @type {?} */ subContextCount = context.subContextCount;
-        if (context.previousNode instanceof AnimationStyleAst) {
+        if (context.previousNode instanceof StyleAst) {
             context.currentTimeline.forwardFrame();
             context.currentTimeline.snapshotCurrentStyles();
             context.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
@@ -1817,7 +1772,7 @@ class AnimationTimelineBuilderVisitor {
      * @return {?}
      */
     visitTiming(ast, context) {
-        if (ast instanceof DynamicAnimationTimingAst) {
+        if (ast instanceof DynamicTimingAst) {
             const /** @type {?} */ strValue = context.locals ?
                 interpolateLocals(ast.value, context.locals, context.errors) :
                 ast.value.toString();
@@ -1839,8 +1794,8 @@ class AnimationTimelineBuilderVisitor {
             context.currentTimeline.snapshotCurrentStyles();
         }
         const /** @type {?} */ style$$1 = ast.style;
-        if (style$$1 instanceof AnimationKeyframesSequenceAst) {
-            this.visitKeyframeSequence(style$$1, context);
+        if (style$$1 instanceof KeyframesAst) {
+            this.visitKeyframes(style$$1, context);
         }
         else {
             context.incrementTime(timings.duration);
@@ -1859,7 +1814,7 @@ class AnimationTimelineBuilderVisitor {
         // a call to animate(). If the clock is not forwarded by one frame then
         // the style() calls will be merged into the previous animate() call
         // which is incorrect.
-        if (!context.currentAnimateTimings && context.previousNode instanceof AnimationAnimateAst) {
+        if (!context.currentAnimateTimings && context.previousNode instanceof AnimateAst) {
             context.currentTimeline.forwardFrame();
         }
         const /** @type {?} */ easing = (context.currentAnimateTimings && context.currentAnimateTimings.easing) || ast.easing;
@@ -1881,7 +1836,7 @@ class AnimationTimelineBuilderVisitor {
      * @param {?} context
      * @return {?}
      */
-    visitKeyframeSequence(ast, context) {
+    visitKeyframes(ast, context) {
         const /** @type {?} */ currentAnimateTimings = ((context.currentAnimateTimings));
         const /** @type {?} */ startTime = (((context.currentTimeline))).duration;
         const /** @type {?} */ duration = currentAnimateTimings.duration;
@@ -1909,15 +1864,16 @@ class AnimationTimelineBuilderVisitor {
         // in the event that the first step before this is a style step we need
         // to ensure the styles are applied before the children are animated
         const /** @type {?} */ startTime = context.currentTimeline.currentTime;
-        const /** @type {?} */ hasDelay = ast.locals && ast.locals.hasOwnProperty('delay');
-        if (context.previousNode instanceof AnimationStyleAst ||
+        const /** @type {?} */ locals = ast.locals || {};
+        const /** @type {?} */ hasDelay = locals.hasOwnProperty('delay');
+        if (context.previousNode instanceof StyleAst ||
             (startTime == 0 && context.currentTimeline.getCurrentStyleProperties().length)) {
             context.currentTimeline.forwardFrame();
             context.currentTimeline.snapshotCurrentStyles();
             context.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
         }
         let /** @type {?} */ furthestTime = startTime;
-        const /** @type {?} */ elms = invokeQuery(context.element, ast.selector, ast.multi, ast.includeSelf);
+        const /** @type {?} */ elms = invokeQuery(context.element, ast.selector, ast.originalSelector, ast.multi, ast.includeSelf, locals['optional'] ? true : false, context.errors);
         context.currentQueryTotal = elms.length;
         let /** @type {?} */ sameElementTimeline = null;
         elms.forEach((element, i) => {
@@ -1936,7 +1892,7 @@ class AnimationTimelineBuilderVisitor {
             let /** @type {?} */ endTime = tl.currentTime;
             // this means that the query itself ONLY took on styling calls. When this
             // happens we need to gaurantee that the styles are applied on screen.
-            if (innerContext.previousNode instanceof AnimationStyleAst && startTime == endTime) {
+            if (innerContext.previousNode instanceof StyleAst && startTime == endTime) {
                 tl.forwardFrame();
                 tl.snapshotCurrentStyles();
                 endTime = tl.currentTime;
@@ -2181,7 +2137,7 @@ class TimelineBuilder {
             const /** @type {?} */ finalKeyframe = copyStyles(keyframe, true);
             Object.keys(finalKeyframe).forEach(prop => {
                 const /** @type {?} */ value = finalKeyframe[prop];
-                if (value == PRE_STYLE) {
+                if (value == ɵPRE_STYLE) {
                     preStyleProps.add(prop);
                 }
                 else if (value == AUTO_STYLE) {
@@ -2270,11 +2226,14 @@ class SubTimelineBuilder extends TimelineBuilder {
 /**
  * @param {?} rootElement
  * @param {?} selector
+ * @param {?} originalSelector
  * @param {?} multi
  * @param {?} includeSelf
+ * @param {?} optional
+ * @param {?} errors
  * @return {?}
  */
-function invokeQuery(rootElement, selector, multi, includeSelf) {
+function invokeQuery(rootElement, selector, originalSelector, multi, includeSelf, optional, errors) {
     let /** @type {?} */ results = [];
     if (includeSelf) {
         results.push(rootElement);
@@ -2287,6 +2246,10 @@ function invokeQuery(rootElement, selector, multi, includeSelf) {
         if (elm) {
             results.push(elm);
         }
+    }
+    if (!optional && results.length == 0) {
+        const /** @type {?} */ fn = multi ? 'queryAll' : 'query';
+        errors.push(`\`${fn}("${originalSelector}")\` returned zero elements. (Use \`${fn}("${originalSelector}", { optional: true })\` if you wish to allow this.)`);
     }
     return results;
 }
@@ -2647,8 +2610,8 @@ class AnimationTrigger {
  */
 function createFallbackTransition(triggerName, states) {
     const /** @type {?} */ matchers = [(fromState, toState) => true];
-    const /** @type {?} */ animation = new AnimationSequenceAst([]);
-    const /** @type {?} */ transition = new AnimationTransitionAst(matchers, animation, {});
+    const /** @type {?} */ animation = new SequenceAst([]);
+    const /** @type {?} */ transition = new TransitionAst(matchers, animation);
     return new AnimationTransitionFactory(triggerName, transition, states);
 }
 
@@ -3357,12 +3320,7 @@ class TransitionAnimationEngine {
      * @param {?} id
      * @return {?}
      */
-    _fetchNamespace(id) {
-        const /** @type {?} */ ns = this._namespaceLookup[id];
-        if (!ns) {
-        }
-        return ns;
-    }
+    _fetchNamespace(id) { return this._namespaceLookup[id]; }
     /**
      * @param {?} namespaceId
      * @param {?} element
@@ -3489,17 +3447,6 @@ class TransitionAnimationEngine {
     /**
      * @return {?}
      */
-    _populateEnterElements() {
-        const /** @type {?} */ allEnterNodes = iteratorToArray(this.newlyInserted.values());
-        allEnterNodes.forEach(element => element.classList.add(POTENTIAL_ENTER_CLASSNAME));
-        const /** @type {?} */ enterNodes = filterNodeClasses(document.body, POTENTIAL_ENTER_SELECTOR);
-        enterNodes.forEach(element => element.classList.add(ENTER_CLASSNAME));
-        allEnterNodes.forEach(element => element.classList.remove(POTENTIAL_ENTER_CLASSNAME));
-        return enterNodes;
-    }
-    /**
-     * @return {?}
-     */
     _flushAnimations() {
         const /** @type {?} */ subTimelines = new ElementInstructionMap();
         const /** @type {?} */ skippedPlayers = [];
@@ -3510,7 +3457,8 @@ class TransitionAnimationEngine {
         const /** @type {?} */ allPostStyleElements = new Map();
         // this must occur before the instructions are built below such that
         // the :enter queries match the elements
-        const /** @type {?} */ enterNodes = this._populateEnterElements();
+        const /** @type {?} */ allEnterNodes = iteratorToArray(this.newlyInserted.values());
+        const /** @type {?} */ enterNodes = collectEnterElements(allEnterNodes);
         for (let /** @type {?} */ i = this._namespaceList.length - 1; i >= 0; i--) {
             const /** @type {?} */ ns = this._namespaceList[i];
             ns.drainQueuedTransitions().forEach(entry => {
@@ -3522,6 +3470,8 @@ class TransitionAnimationEngine {
                 // if a unmatched transition is queued to go then it SHOULD NOT render
                 // an animation and cancel the previously running animations.
                 if (entry.isFallbackTransition && !instruction.isRemovalTransition) {
+                    eraseStyles(element, instruction.fromStyles);
+                    player.onDestroy(() => setStyles(element, instruction.toStyles));
                     skippedPlayers.push(player);
                     return;
                 }
@@ -3570,7 +3520,7 @@ class TransitionAnimationEngine {
             [];
         // PRE STAGE: fill the ! styles
         const /** @type {?} */ preStylesMap = allPreStyleElements.size ?
-            cloakAndComputeStyles(this._driver, enterNodes, allPreStyleElements, PRE_STYLE) :
+            cloakAndComputeStyles(this._driver, enterNodes, allPreStyleElements, ɵPRE_STYLE) :
             new Map();
         // POST STAGE: fill the * styles
         const /** @type {?} */ postStylesMap = cloakAndComputeStyles(this._driver, leaveNodes, allPostStyleElements, AUTO_STYLE);
@@ -4045,15 +3995,17 @@ function cloakElement(element, value) {
     element.style.display = value != null ? value : 'none';
     return oldValue;
 }
-let elementMatches;
-if (Element.prototype.matches) {
-    elementMatches = (element, selector) => element.matches(selector);
-}
-else {
-    const /** @type {?} */ proto = (Element.prototype);
-    const /** @type {?} */ fn = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
-        proto.oMatchesSelector || proto.webkitMatchesSelector;
-    elementMatches = (element, selector) => fn.apply(element, [selector]);
+let elementMatches = (element, selector) => false;
+if (typeof Element == 'function') {
+    if (Element.prototype.matches) {
+        elementMatches = (element, selector) => element.matches(selector);
+    }
+    else {
+        const /** @type {?} */ proto = (Element.prototype);
+        const /** @type {?} */ fn = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
+            proto.oMatchesSelector || proto.webkitMatchesSelector;
+        elementMatches = (element, selector) => fn.apply(element, [selector]);
+    }
 }
 /**
  * @param {?} rootElement
@@ -4123,6 +4075,17 @@ function listToArray(list) {
     const /** @type {?} */ arr = [];
     arr.push(...((list)));
     return arr;
+}
+/**
+ * @param {?} allEnterNodes
+ * @return {?}
+ */
+function collectEnterElements(allEnterNodes) {
+    allEnterNodes.forEach(element => element.classList.add(POTENTIAL_ENTER_CLASSNAME));
+    const /** @type {?} */ enterNodes = filterNodeClasses(document.body, POTENTIAL_ENTER_SELECTOR);
+    enterNodes.forEach(element => element.classList.add(ENTER_CLASSNAME));
+    allEnterNodes.forEach(element => element.classList.remove(POTENTIAL_ENTER_CLASSNAME));
+    return enterNodes;
 }
 
 /**

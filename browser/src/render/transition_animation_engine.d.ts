@@ -95,7 +95,6 @@ export declare class TransitionAnimationEngine {
     private _buildInstruction(entry, subTimelines);
     destroyInnerAnimations(containerElement: any): void;
     flush(): void;
-    private _populateEnterElements();
     private _flushAnimations();
     elementContainsData(namespaceId: string, element: any): boolean;
     afterFlush(callback: () => any): void;

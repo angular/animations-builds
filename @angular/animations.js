@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.1-b46aba9
+ * @license Angular v4.1.0-beta.1-47acf3d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -40,10 +40,6 @@ class Animation {
  * \@experimental Animation support is experimental.
  */
 const AUTO_STYLE = '*';
-/**
- * \@experimental Animation support is experimental.
- */
-const PRE_STYLE = '!';
 /**
  * `trigger` is an animation-specific function that is designed to be used inside of Angular's
  * animation DSL language. If this information is new, please navigate to the {\@link
@@ -99,7 +95,7 @@ const PRE_STYLE = '!';
  * @return {?}
  */
 function trigger(name, definitions) {
-    return { type: 0 /* Trigger */, name, definitions };
+    return { type: 7 /* Trigger */, name, definitions };
 }
 /**
  * `animate` is an animation-specific function that is designed to be used inside of Angular's
@@ -149,8 +145,8 @@ function trigger(name, definitions) {
  * @param {?=} styles
  * @return {?}
  */
-function animate(timings, styles) {
-    return { type: 5 /* Animate */, styles: styles, timings: timings };
+function animate(timings, styles = null) {
+    return { type: 4 /* Animate */, styles, timings };
 }
 /**
  * `group` is an animation-specific function that is designed to be used inside of Angular's
@@ -186,8 +182,8 @@ function animate(timings, styles) {
  * @param {?=} locals
  * @return {?}
  */
-function group(steps, locals) {
-    return { type: 4 /* Group */, steps, locals };
+function group(steps, locals = null) {
+    return { type: 3 /* Group */, steps, locals };
 }
 /**
  * `sequence` is an animation-specific function that is designed to be used inside of Angular's
@@ -226,8 +222,8 @@ function group(steps, locals) {
  * @param {?=} locals
  * @return {?}
  */
-function sequence(steps, locals) {
-    return { type: 3 /* Sequence */, steps, locals };
+function sequence(steps, locals = null) {
+    return { type: 2 /* Sequence */, steps, locals };
 }
 /**
  * `style` is an animation-specific function that is designed to be used inside of Angular's
@@ -274,7 +270,7 @@ function sequence(steps, locals) {
  * @return {?}
  */
 function style(tokens) {
-    return { type: 7 /* Style */, styles: tokens };
+    return { type: 6 /* Style */, styles: tokens, offset: null };
 }
 /**
  * `state` is an animation-specific function that is designed to be used inside of Angular's
@@ -328,7 +324,7 @@ function style(tokens) {
  * @return {?}
  */
 function state(name, styles) {
-    return { type: 1 /* State */, name: name, styles: styles };
+    return { type: 0 /* State */, name, styles };
 }
 /**
  * `keyframes` is an animation-specific function that is designed to be used inside of Angular's
@@ -378,7 +374,7 @@ function state(name, styles) {
  * @return {?}
  */
 function keyframes(steps) {
-    return { type: 6 /* KeyframeSequence */, steps: steps };
+    return { type: 5 /* Keyframes */, steps };
 }
 /**
  * `transition` is an animation-specific function that is designed to be used inside of Angular's
@@ -491,8 +487,8 @@ function keyframes(steps) {
  * @param {?=} locals
  * @return {?}
  */
-function transition(stateChangeExpr, steps, locals) {
-    return { type: 2 /* Transition */, expr: stateChangeExpr, animation: steps, locals };
+function transition(stateChangeExpr, steps, locals = null) {
+    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, locals };
 }
 /**
  * \@experimental Animation support is experimental.
@@ -500,15 +496,25 @@ function transition(stateChangeExpr, steps, locals) {
  * @param {?=} locals
  * @return {?}
  */
-function animation(steps, locals) {
+function animation(steps, locals = null) {
     return { type: 8 /* Reference */, animation: steps, locals };
 }
 /**
- * @param {...?} args
+ * \@experimental Animation support is experimental.
+ * @param {?=} locals
  * @return {?}
  */
-function animateChild(...args) {
-    return { type: 9 /* AnimateChild */, args };
+function animateChild(locals = null) {
+    return { type: 9 /* AnimateChild */, locals };
+}
+/**
+ * \@experimental Animation support is experimental.
+ * @param {?} animation
+ * @param {?=} locals
+ * @return {?}
+ */
+function useAnimation(animation, locals = null) {
+    return { type: 10 /* AnimateRef */, animation, locals };
 }
 /**
  * \@experimental Animation support is experimental.
@@ -517,8 +523,8 @@ function animateChild(...args) {
  * @param {?=} locals
  * @return {?}
  */
-function query(selector, animation, locals) {
-    return { type: 10 /* Query */, multi: false, selector, animation, locals };
+function query(selector, animation, locals = null) {
+    return { type: 11 /* Query */, multi: false, selector, animation, locals };
 }
 /**
  * \@experimental Animation support is experimental.
@@ -527,15 +533,17 @@ function query(selector, animation, locals) {
  * @param {?=} locals
  * @return {?}
  */
-function queryAll(selector, animation, locals) {
-    return { type: 10 /* Query */, multi: true, selector, animation, locals };
+function queryAll(selector, animation, locals = null) {
+    return { type: 11 /* Query */, multi: true, selector, animation, locals };
 }
 /**
- * @param {...?} args
+ * \@experimental Animation support is experimental.
+ * @param {?} timings
+ * @param {?} animation
  * @return {?}
  */
-function stagger(...args) {
-    return { type: 11 /* Stagger */, args };
+function stagger(timings, animation) {
+    return { type: 12 /* Stagger */, timings, animation };
 }
 
 /**
@@ -929,6 +937,7 @@ class AnimationGroupPlayer {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+const ɵPRE_STYLE = '!';
 
 /**
  * @license
@@ -960,5 +969,5 @@ class AnimationGroupPlayer {
  * Generated bundle index. Do not edit.
  */
 
-export { Animation, AnimationBuilder, AUTO_STYLE, PRE_STYLE, animate, animateChild, animation, group, keyframes, query, queryAll, sequence, stagger, state, style, transition, trigger, AnimationPlayer, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer };
+export { Animation, AnimationBuilder, AUTO_STYLE, animate, animateChild, animation, group, keyframes, query, queryAll, sequence, stagger, state, style, transition, trigger, useAnimation, AnimationPlayer, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
 //# sourceMappingURL=animations.js.map
