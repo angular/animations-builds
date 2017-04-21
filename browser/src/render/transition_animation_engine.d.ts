@@ -81,6 +81,7 @@ export declare class TransitionAnimationEngine {
     private _whenQuietFns;
     namespacesByHostElement: Map<any, AnimationTransitionNamespace>;
     onRemovalComplete: (element: any, context: any) => void;
+    _onRemovalComplete(element: any, context: any): void;
     constructor(_driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
     readonly queuedPlayers: TransitionAnimationPlayer[];
     createNamespace(namespaceId: string, hostElement: any): AnimationTransitionNamespace;

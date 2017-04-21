@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-beta.1-47acf3d
+ * @license Angular v4.1.0-beta.1-70384db
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -965,6 +965,12 @@ function makeLambdaFromStates(lhs, rhs) {
     return function (fromState, toState) {
         var /** @type {?} */ lhsMatch = lhs == ANY_STATE || lhs == fromState;
         var /** @type {?} */ rhsMatch = rhs == ANY_STATE || rhs == toState;
+        if (!lhsMatch && typeof fromState === 'boolean') {
+            lhsMatch = fromState ? lhs === 'true' : lhs === 'false';
+        }
+        if (!rhsMatch && typeof toState === 'boolean') {
+            rhsMatch = toState ? rhs === 'true' : rhs === 'false';
+        }
         return lhsMatch && rhsMatch;
     };
 }
@@ -2703,6 +2709,8 @@ var AnimationTrigger = (function () {
                 }
             });
         });
+        balanceProperties(this.states, 'true', '1');
+        balanceProperties(this.states, 'false', '0');
         ast.transitions.forEach(function (ast) {
             _this.transitionFactories.push(new AnimationTransitionFactory(name, ast, _this.states));
         });
@@ -2737,6 +2745,22 @@ function createFallbackTransition(triggerName, states) {
     var /** @type {?} */ animation = new SequenceAst([]);
     var /** @type {?} */ transition = new TransitionAst(matchers, animation);
     return new AnimationTransitionFactory(triggerName, transition, states);
+}
+/**
+ * @param {?} obj
+ * @param {?} key1
+ * @param {?} key2
+ * @return {?}
+ */
+function balanceProperties(obj, key1, key2) {
+    if (obj.hasOwnProperty(key1)) {
+        if (!obj.hasOwnProperty(key2)) {
+            obj[key2] = obj[key1];
+        }
+    }
+    else if (obj.hasOwnProperty(key2)) {
+        obj[key1] = obj[key2];
+    }
 }
 /**
  * @license
@@ -2961,6 +2985,7 @@ var AnimationTransitionNamespace = (function () {
         this._queue = [];
         this._elementListeners = new Map();
         this._hostClassName = 'ng-tns-' + id;
+        hostElement.classList.add(this._hostClassName);
     }
     /**
      * @param {?} element
@@ -3042,9 +3067,6 @@ var AnimationTransitionNamespace = (function () {
         if (defaultToFallback === void 0) { defaultToFallback = true; }
         var /** @type {?} */ trigger = this._getTrigger(triggerName);
         var /** @type {?} */ player = new TransitionAnimationPlayer(this.id, triggerName, element);
-        if (!document.body.contains(element)) {
-            return player;
-        }
         var /** @type {?} */ triggersWithStates = this._engine.statesByElement.get(element);
         if (!triggersWithStates) {
             element.classList.add(NG_TRIGGER_CLASSNAME);
@@ -3184,7 +3206,7 @@ var AnimationTransitionNamespace = (function () {
                 optimizeGroupPlayer(players_1).onDone(function () {
                     engine.destroyInnerAnimations(element);
                     _this._onElementDestroy(element);
-                    engine.onRemovalComplete(element, context);
+                    engine._onRemovalComplete(element, context);
                 });
                 return;
             }
@@ -3248,7 +3270,7 @@ var AnimationTransitionNamespace = (function () {
             engine.queuedRemovals.set(element, function () {
                 engine.destroyInnerAnimations(element);
                 _this._onElementDestroy(element);
-                engine.onRemovalComplete(element, context);
+                engine._onRemovalComplete(element, context);
             });
         }
         else {
@@ -3256,7 +3278,7 @@ var AnimationTransitionNamespace = (function () {
             // that the callbacks can be fired
             engine.afterFlush(function () { return _this._onElementDestroy(element); });
             engine.destroyInnerAnimations(element);
-            engine.onRemovalComplete(element, context);
+            engine._onRemovalComplete(element, context);
         }
     };
     /**
@@ -3354,6 +3376,12 @@ var TransitionAnimationEngine = (function () {
         this.namespacesByHostElement = new Map();
         this.onRemovalComplete = function (element, context) { };
     }
+    /**
+     * @param {?} element
+     * @param {?} context
+     * @return {?}
+     */
+    TransitionAnimationEngine.prototype._onRemovalComplete = function (element, context) { this.onRemovalComplete(element, context); };
     Object.defineProperty(TransitionAnimationEngine.prototype, "queuedPlayers", {
         /**
          * @return {?}
@@ -3501,7 +3529,7 @@ var TransitionAnimationEngine = (function () {
      */
     TransitionAnimationEngine.prototype.removeNode = function (namespaceId, element, context, doNotRecurse) {
         if (!isElementNode(element)) {
-            this.onRemovalComplete(element, context);
+            this._onRemovalComplete(element, context);
             return;
         }
         this._fetchNamespace(namespaceId).removeNode(element, context, doNotRecurse);
@@ -3600,17 +3628,22 @@ var TransitionAnimationEngine = (function () {
         var /** @type {?} */ allPreStyleElements = new Map();
         var /** @type {?} */ allPostStyleElements = new Map();
         // this must occur before the instructions are built below such that
-        // the :enter queries match the elements
+        // the :enter queries match the elements (since the timeline queries
+        // are fired during instruction building).
         var /** @type {?} */ allEnterNodes = iteratorToArray(this.newlyInserted.values());
         var /** @type {?} */ enterNodes = collectEnterElements(allEnterNodes);
         for (var /** @type {?} */ i = this._namespaceList.length - 1; i >= 0; i--) {
             var /** @type {?} */ ns = this._namespaceList[i];
             ns.drainQueuedTransitions().forEach(function (entry) {
+                var /** @type {?} */ player = entry.player;
+                var /** @type {?} */ element = entry.element;
+                if (!document.body.contains(element)) {
+                    player.destroy();
+                    return;
+                }
                 var /** @type {?} */ instruction = _this._buildInstruction(entry, subTimelines);
                 if (!instruction)
                     return;
-                var /** @type {?} */ player = entry.player;
-                var /** @type {?} */ element = entry.element;
                 // if a unmatched transition is queued to go then it SHOULD NOT render
                 // an animation and cancel the previously running animations.
                 if (entry.isFallbackTransition && !instruction.isRemovalTransition) {
@@ -3711,15 +3744,6 @@ var TransitionAnimationEngine = (function () {
                 player.setRealPlayer(innerPlayer);
             }
         });
-        rootPlayers.forEach(function (player) {
-            _this.players.push(player);
-            player.onDone(function () {
-                player.destroy();
-                var /** @type {?} */ index = _this.players.indexOf(player);
-                _this.players.splice(index, 1);
-            });
-            player.play();
-        });
         // the reason why we don't actually play the animation is
         // because all that a skipped player is designed to do is to
         // fire the start/done transition callback events
@@ -3756,6 +3780,15 @@ var TransitionAnimationEngine = (function () {
                     fn();
                 }
             }
+        });
+        rootPlayers.forEach(function (player) {
+            _this.players.push(player);
+            player.onDone(function () {
+                player.destroy();
+                var /** @type {?} */ index = _this.players.indexOf(player);
+                _this.players.splice(index, 1);
+            });
+            player.play();
         });
         enterNodes.forEach(function (element) { return element.classList.remove(ENTER_CLASSNAME); });
         return rootPlayers;
@@ -4219,7 +4252,7 @@ function cloakAndComputeStyles(driver, elements, elementPropsMap, defaultStyle) 
             var /** @type {?} */ value = styles[prop] = driver.computeStyle(element, prop, defaultStyle);
             // there is no easy way to detect this because a sub element could be removed
             // by a parent animation element being detached.
-            if (value && value.length == 0) {
+            if (!value || value.length == 0) {
                 element['REMOVED'] = true;
             }
         });

@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.1-47acf3d
+ * @license Angular v4.1.0-beta.1-70384db
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -898,8 +898,14 @@ function parseAnimationAlias(alias, errors) {
  */
 function makeLambdaFromStates(lhs, rhs) {
     return (fromState, toState) => {
-        const /** @type {?} */ lhsMatch = lhs == ANY_STATE || lhs == fromState;
-        const /** @type {?} */ rhsMatch = rhs == ANY_STATE || rhs == toState;
+        let /** @type {?} */ lhsMatch = lhs == ANY_STATE || lhs == fromState;
+        let /** @type {?} */ rhsMatch = rhs == ANY_STATE || rhs == toState;
+        if (!lhsMatch && typeof fromState === 'boolean') {
+            lhsMatch = fromState ? lhs === 'true' : lhs === 'false';
+        }
+        if (!rhsMatch && typeof toState === 'boolean') {
+            rhsMatch = toState ? rhs === 'true' : rhs === 'false';
+        }
         return lhsMatch && rhsMatch;
     };
 }
@@ -2584,6 +2590,8 @@ class AnimationTrigger {
                 }
             });
         });
+        balanceProperties(this.states, 'true', '1');
+        balanceProperties(this.states, 'false', '0');
         ast.transitions.forEach(ast => {
             this.transitionFactories.push(new AnimationTransitionFactory(name, ast, this.states));
         });
@@ -2613,6 +2621,22 @@ function createFallbackTransition(triggerName, states) {
     const /** @type {?} */ animation = new SequenceAst([]);
     const /** @type {?} */ transition = new TransitionAst(matchers, animation);
     return new AnimationTransitionFactory(triggerName, transition, states);
+}
+/**
+ * @param {?} obj
+ * @param {?} key1
+ * @param {?} key2
+ * @return {?}
+ */
+function balanceProperties(obj, key1, key2) {
+    if (obj.hasOwnProperty(key1)) {
+        if (!obj.hasOwnProperty(key2)) {
+            obj[key2] = obj[key1];
+        }
+    }
+    else if (obj.hasOwnProperty(key2)) {
+        obj[key1] = obj[key2];
+    }
 }
 
 /**
@@ -2834,6 +2858,7 @@ class AnimationTransitionNamespace {
         this._queue = [];
         this._elementListeners = new Map();
         this._hostClassName = 'ng-tns-' + id;
+        hostElement.classList.add(this._hostClassName);
     }
     /**
      * @param {?} element
@@ -2912,9 +2937,6 @@ class AnimationTransitionNamespace {
     trigger(element, triggerName, value, defaultToFallback = true) {
         const /** @type {?} */ trigger = this._getTrigger(triggerName);
         const /** @type {?} */ player = new TransitionAnimationPlayer(this.id, triggerName, element);
-        if (!document.body.contains(element)) {
-            return player;
-        }
         let /** @type {?} */ triggersWithStates = this._engine.statesByElement.get(element);
         if (!triggersWithStates) {
             element.classList.add(NG_TRIGGER_CLASSNAME);
@@ -3050,7 +3072,7 @@ class AnimationTransitionNamespace {
                 optimizeGroupPlayer(players).onDone(() => {
                     engine.destroyInnerAnimations(element);
                     this._onElementDestroy(element);
-                    engine.onRemovalComplete(element, context);
+                    engine._onRemovalComplete(element, context);
                 });
                 return;
             }
@@ -3114,7 +3136,7 @@ class AnimationTransitionNamespace {
             engine.queuedRemovals.set(element, () => {
                 engine.destroyInnerAnimations(element);
                 this._onElementDestroy(element);
-                engine.onRemovalComplete(element, context);
+                engine._onRemovalComplete(element, context);
             });
         }
         else {
@@ -3122,7 +3144,7 @@ class AnimationTransitionNamespace {
             // that the callbacks can be fired
             engine.afterFlush(() => this._onElementDestroy(element));
             engine.destroyInnerAnimations(element);
-            engine.onRemovalComplete(element, context);
+            engine._onRemovalComplete(element, context);
         }
     }
     /**
@@ -3218,6 +3240,12 @@ class TransitionAnimationEngine {
         this.namespacesByHostElement = new Map();
         this.onRemovalComplete = (element, context) => { };
     }
+    /**
+     * @param {?} element
+     * @param {?} context
+     * @return {?}
+     */
+    _onRemovalComplete(element, context) { this.onRemovalComplete(element, context); }
     /**
      * @return {?}
      */
@@ -3360,7 +3388,7 @@ class TransitionAnimationEngine {
      */
     removeNode(namespaceId, element, context, doNotRecurse) {
         if (!isElementNode(element)) {
-            this.onRemovalComplete(element, context);
+            this._onRemovalComplete(element, context);
             return;
         }
         this._fetchNamespace(namespaceId).removeNode(element, context, doNotRecurse);
@@ -3456,17 +3484,22 @@ class TransitionAnimationEngine {
         const /** @type {?} */ allPreStyleElements = new Map();
         const /** @type {?} */ allPostStyleElements = new Map();
         // this must occur before the instructions are built below such that
-        // the :enter queries match the elements
+        // the :enter queries match the elements (since the timeline queries
+        // are fired during instruction building).
         const /** @type {?} */ allEnterNodes = iteratorToArray(this.newlyInserted.values());
         const /** @type {?} */ enterNodes = collectEnterElements(allEnterNodes);
         for (let /** @type {?} */ i = this._namespaceList.length - 1; i >= 0; i--) {
             const /** @type {?} */ ns = this._namespaceList[i];
             ns.drainQueuedTransitions().forEach(entry => {
+                const /** @type {?} */ player = entry.player;
+                const /** @type {?} */ element = entry.element;
+                if (!document.body.contains(element)) {
+                    player.destroy();
+                    return;
+                }
                 const /** @type {?} */ instruction = this._buildInstruction(entry, subTimelines);
                 if (!instruction)
                     return;
-                const /** @type {?} */ player = entry.player;
-                const /** @type {?} */ element = entry.element;
                 // if a unmatched transition is queued to go then it SHOULD NOT render
                 // an animation and cancel the previously running animations.
                 if (entry.isFallbackTransition && !instruction.isRemovalTransition) {
@@ -3567,15 +3600,6 @@ class TransitionAnimationEngine {
                 player.setRealPlayer(innerPlayer);
             }
         });
-        rootPlayers.forEach(player => {
-            this.players.push(player);
-            player.onDone(() => {
-                player.destroy();
-                const /** @type {?} */ index = this.players.indexOf(player);
-                this.players.splice(index, 1);
-            });
-            player.play();
-        });
         // the reason why we don't actually play the animation is
         // because all that a skipped player is designed to do is to
         // fire the start/done transition callback events
@@ -3612,6 +3636,15 @@ class TransitionAnimationEngine {
                     fn();
                 }
             }
+        });
+        rootPlayers.forEach(player => {
+            this.players.push(player);
+            player.onDone(() => {
+                player.destroy();
+                const /** @type {?} */ index = this.players.indexOf(player);
+                this.players.splice(index, 1);
+            });
+            player.play();
         });
         enterNodes.forEach(element => element.classList.remove(ENTER_CLASSNAME));
         return rootPlayers;
@@ -4058,7 +4091,7 @@ function cloakAndComputeStyles(driver, elements, elementPropsMap, defaultStyle) 
             const /** @type {?} */ value = styles[prop] = driver.computeStyle(element, prop, defaultStyle);
             // there is no easy way to detect this because a sub element could be removed
             // by a parent animation element being detached.
-            if (value && value.length == 0) {
+            if (!value || value.length == 0) {
                 element['REMOVED'] = true;
             }
         });
