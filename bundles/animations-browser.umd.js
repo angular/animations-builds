@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-rc.0-46b20be
+ * @license Angular v4.1.0-ed4eaf3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -15,7 +15,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-rc.0-46b20be
+ * @license Angular v4.1.0-ed4eaf3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1550,6 +1550,7 @@ var ElementInstructionMap = (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+var ONE_FRAME_IN_MILLISECONDS = 1;
 /**
  * @param {?} rootElement
  * @param {?} ast
@@ -1711,14 +1712,14 @@ var AnimationTimelineBuilderVisitor = (function () {
         subInstructions = subInstructions || new ElementInstructionMap();
         var /** @type {?} */ context = new AnimationTimelineContext(rootElement, subInstructions, errors, []);
         context.locals = locals || {};
-        context.currentTimeline.setStyles([startingStyles], null, false, context.errors, locals);
+        context.currentTimeline.setStyles([startingStyles], null, context.errors, locals);
         ast.visit(this, context);
         // this checks to see if an actual animation happened
         var /** @type {?} */ timelines = context.timelines.filter(function (timeline) { return timeline.containsAnimation(); });
         if (timelines.length && Object.keys(finalStyles).length) {
             var /** @type {?} */ tl = timelines[timelines.length - 1];
             if (!tl.allowOnlyTimelineStyles()) {
-                tl.setStyles([finalStyles], null, false, context.errors, locals);
+                tl.setStyles([finalStyles], null, context.errors, locals);
             }
         }
         return timelines.length ? timelines.map(function (timeline) { return timeline.buildKeyframes(); }) :
@@ -1819,15 +1820,14 @@ var AnimationTimelineBuilderVisitor = (function () {
     AnimationTimelineBuilderVisitor.prototype.visitSequence = function (ast, context) {
         var _this = this;
         var /** @type {?} */ subContextCount = context.subContextCount;
-        if (context.previousNode instanceof StyleAst) {
-            context.currentTimeline.forwardFrame();
-            context.currentTimeline.snapshotCurrentStyles();
-            context.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
-        }
         if (ast.locals) {
             context.createSubContext(ast.locals);
             context.transformIntoNewTimeline();
             if (ast.locals.hasOwnProperty('delay')) {
+                if (context.previousNode instanceof StyleAst) {
+                    context.currentTimeline.snapshotCurrentStyles();
+                    context.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
+                }
                 context.delayNextStep(/** @type {?} */ (ast.locals['delay']));
             }
         }
@@ -1889,9 +1889,10 @@ var AnimationTimelineBuilderVisitor = (function () {
      */
     AnimationTimelineBuilderVisitor.prototype.visitAnimate = function (ast, context) {
         var /** @type {?} */ timings = context.currentAnimateTimings = this.visitTiming(ast.timings, context);
+        var /** @type {?} */ timeline = context.currentTimeline;
         if (timings.delay) {
             context.incrementTime(timings.delay);
-            context.currentTimeline.snapshotCurrentStyles();
+            timeline.snapshotCurrentStyles();
         }
         var /** @type {?} */ style$$1 = ast.style;
         if (style$$1 instanceof KeyframesAst) {
@@ -1900,6 +1901,7 @@ var AnimationTimelineBuilderVisitor = (function () {
         else {
             context.incrementTime(timings.duration);
             this.visitStyle(/** @type {?} */ (style$$1), context);
+            timeline.applyStylesToKeyframe();
         }
         context.currentAnimateTimings = null;
         context.previousNode = ast;
@@ -1910,26 +1912,21 @@ var AnimationTimelineBuilderVisitor = (function () {
      * @return {?}
      */
     AnimationTimelineBuilderVisitor.prototype.visitStyle = function (ast, context) {
-        // this is a special case when a style() call is issued directly after
-        // a call to animate(). If the clock is not forwarded by one frame then
-        // the style() calls will be merged into the previous animate() call
-        // which is incorrect.
-        if (!context.currentAnimateTimings && context.previousNode instanceof AnimateAst) {
-            context.currentTimeline.forwardFrame();
+        var /** @type {?} */ timeline = context.currentTimeline;
+        var /** @type {?} */ timings = ((context.currentAnimateTimings));
+        // this is a special case for when a style() call
+        // directly follows  an animate() call (but not inside of an animate() call)
+        if (!timings && timeline.getCurrentStyleProperties().length) {
+            timeline.forwardFrame();
         }
-        var /** @type {?} */ easing = (context.currentAnimateTimings && context.currentAnimateTimings.easing) || ast.easing;
-        this._applyStyles(ast.styles, easing, ast.isEmptyStep, context);
+        var /** @type {?} */ easing = (timings && timings.easing) || ast.easing;
+        if (ast.isEmptyStep) {
+            timeline.applyEmptyStep(easing);
+        }
+        else {
+            timeline.setStyles(ast.styles, easing, context.errors, context.locals);
+        }
         context.previousNode = ast;
-    };
-    /**
-     * @param {?} styles
-     * @param {?} easing
-     * @param {?} treatAsEmptyStep
-     * @param {?} context
-     * @return {?}
-     */
-    AnimationTimelineBuilderVisitor.prototype._applyStyles = function (styles, easing, treatAsEmptyStep, context) {
-        context.currentTimeline.setStyles(styles, easing, treatAsEmptyStep, context.errors, context.locals);
     };
     /**
      * @param {?} ast
@@ -1937,7 +1934,6 @@ var AnimationTimelineBuilderVisitor = (function () {
      * @return {?}
      */
     AnimationTimelineBuilderVisitor.prototype.visitKeyframes = function (ast, context) {
-        var _this = this;
         var /** @type {?} */ currentAnimateTimings = ((context.currentAnimateTimings));
         var /** @type {?} */ startTime = (((context.currentTimeline))).duration;
         var /** @type {?} */ duration = currentAnimateTimings.duration;
@@ -1946,7 +1942,8 @@ var AnimationTimelineBuilderVisitor = (function () {
         innerTimeline.easing = currentAnimateTimings.easing;
         ast.styles.forEach(function (step) {
             innerTimeline.forwardTime(step.offset * duration);
-            _this._applyStyles(step.styles, step.easing, false, innerContext);
+            innerTimeline.setStyles(step.styles, step.easing, context.errors, context.locals);
+            innerTimeline.applyStylesToKeyframe();
         });
         // this will ensure that the parent timeline gets all the styles from
         // the child even if the new timeline below is not used
@@ -1967,10 +1964,10 @@ var AnimationTimelineBuilderVisitor = (function () {
         // to ensure the styles are applied before the children are animated
         var /** @type {?} */ startTime = context.currentTimeline.currentTime;
         var /** @type {?} */ locals = ast.locals || {};
-        var /** @type {?} */ hasDelay = locals.hasOwnProperty('delay');
-        if (context.previousNode instanceof StyleAst ||
-            (startTime == 0 && context.currentTimeline.getCurrentStyleProperties().length)) {
-            context.currentTimeline.forwardFrame();
+        var /** @type {?} */ delayVal = locals.hasOwnProperty('delay') ? (locals['delay']) : 0;
+        if (delayVal &&
+            (context.previousNode instanceof StyleAst ||
+                (startTime == 0 && context.currentTimeline.getCurrentStyleProperties().length))) {
             context.currentTimeline.snapshotCurrentStyles();
             context.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
         }
@@ -1981,25 +1978,14 @@ var AnimationTimelineBuilderVisitor = (function () {
         elms.forEach(function (element, i) {
             context.currentQueryIndex = i;
             var /** @type {?} */ innerContext = context.createSubContext(ast.locals, element);
-            if (hasDelay) {
-                innerContext.delayNextStep(/** @type {?} */ (innerContext.locals['delay']));
+            if (delayVal) {
+                innerContext.delayNextStep(delayVal);
             }
-            var /** @type {?} */ tl = innerContext.currentTimeline;
             if (element === context.element) {
-                sameElementTimeline = tl;
+                sameElementTimeline = innerContext.currentTimeline;
             }
-            var /** @type {?} */ startTime = tl.currentTime;
             ast.animation.visit(_this, innerContext);
-            tl = innerContext.currentTimeline;
-            var /** @type {?} */ endTime = tl.currentTime;
-            // this means that the query itself ONLY took on styling calls. When this
-            // happens we need to gaurantee that the styles are applied on screen.
-            if (innerContext.previousNode instanceof StyleAst && startTime == endTime) {
-                tl.forwardFrame();
-                tl.snapshotCurrentStyles();
-                endTime = tl.currentTime;
-                innerContext.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
-            }
+            var /** @type {?} */ endTime = innerContext.currentTimeline.currentTime;
             furthestTime = Math.max(furthestTime, endTime);
         });
         context.currentQueryIndex = 0;
@@ -2052,21 +2038,42 @@ var TimelineBuilder = (function () {
      * @param {?} element
      * @param {?} startTime
      * @param {?=} _elementTimelineStylesLookup
+     * @param {?=} _globalTimelineMap
      */
-    function TimelineBuilder(element, startTime, _elementTimelineStylesLookup) {
+    function TimelineBuilder(element, startTime, _elementTimelineStylesLookup, _globalTimelineMap) {
         this.element = element;
         this.startTime = startTime;
         this._elementTimelineStylesLookup = _elementTimelineStylesLookup;
+        this._globalTimelineMap = _globalTimelineMap;
         this.duration = 0;
         this._previousKeyframe = {};
         this._currentKeyframe = {};
         this._keyframes = new Map();
         this._styleSummary = {};
+        this._pendingStyles = {};
         this._backFill = {};
         this._currentEmptyStepKeyframe = null;
+        this._allowEmptyAnimation = false;
         if (!this._elementTimelineStylesLookup) {
             this._elementTimelineStylesLookup = new Map();
         }
+        if (this._globalTimelineMap) {
+            // this is a special case for queries that solely assign styles
+            // without any animation arcs in between. When this occurs we want
+            // to ensure those styles are visually placed on screen, but we do
+            // not want to continue the timeline since there may be too many styles
+            // to build up for this new timeline. Therefore we just make sure that
+            // the styles are placed in the previous timeline and continue along as normal
+            var existingBuilder = this._globalTimelineMap.get(element);
+            if (existingBuilder && existingBuilder.containsOnlyPendingStyles()) {
+                existingBuilder.applyStylesToKeyframe();
+                existingBuilder._allowEmptyAnimation = true;
+            }
+        }
+        else {
+            this._globalTimelineMap = new Map();
+        }
+        this._globalTimelineMap.set(element, this);
         this._localTimelineStyles = Object.create(this._backFill, {});
         this._globalTimelineStyles = this._elementTimelineStylesLookup.get(element);
         if (!this._globalTimelineStyles) {
@@ -2078,7 +2085,22 @@ var TimelineBuilder = (function () {
     /**
      * @return {?}
      */
-    TimelineBuilder.prototype.containsAnimation = function () { return this._keyframes.size > 1; };
+    TimelineBuilder.prototype.containsAnimation = function () {
+        switch (this._keyframes.size) {
+            case 0:
+                return false;
+            case 1:
+                return this._allowEmptyAnimation;
+            default:
+                return true;
+        }
+    };
+    /**
+     * @return {?}
+     */
+    TimelineBuilder.prototype.containsOnlyPendingStyles = function () {
+        return this._keyframes.size === 1 && Object.keys(this._pendingStyles).length > 0;
+    };
     /**
      * @return {?}
      */
@@ -2110,7 +2132,8 @@ var TimelineBuilder = (function () {
      */
     TimelineBuilder.prototype.fork = function (element, currentTime) {
         if (currentTime === void 0) { currentTime = 0; }
-        return new TimelineBuilder(element, currentTime || this.currentTime, this._elementTimelineStylesLookup);
+        this.applyStylesToKeyframe();
+        return new TimelineBuilder(element, currentTime || this.currentTime, this._elementTimelineStylesLookup, this._globalTimelineMap);
     };
     /**
      * @return {?}
@@ -2129,7 +2152,7 @@ var TimelineBuilder = (function () {
      * @return {?}
      */
     TimelineBuilder.prototype.forwardFrame = function () {
-        this.duration++;
+        this.duration += ONE_FRAME_IN_MILLISECONDS;
         this._loadKeyframe();
     };
     /**
@@ -2137,6 +2160,7 @@ var TimelineBuilder = (function () {
      * @return {?}
      */
     TimelineBuilder.prototype.forwardTime = function (time) {
+        this.applyStylesToKeyframe();
         this.duration = time;
         this._loadKeyframe();
     };
@@ -2146,63 +2170,81 @@ var TimelineBuilder = (function () {
      * @return {?}
      */
     TimelineBuilder.prototype._updateStyle = function (prop, value) {
-        if (prop != 'easing') {
-            this._localTimelineStyles[prop] = value;
-            this._globalTimelineStyles[prop] = value;
-            this._styleSummary[prop] = { time: this.currentTime, value: value };
-        }
+        this._localTimelineStyles[prop] = value;
+        this._globalTimelineStyles[prop] = value;
+        this._styleSummary[prop] = { time: this.currentTime, value: value };
     };
     /**
      * @return {?}
      */
     TimelineBuilder.prototype.allowOnlyTimelineStyles = function () { return this._currentEmptyStepKeyframe !== this._currentKeyframe; };
     /**
-     * @param {?} input
      * @param {?} easing
-     * @param {?} treatAsEmptyStep
-     * @param {?} errors
-     * @param {?=} locals
      * @return {?}
      */
-    TimelineBuilder.prototype.setStyles = function (input, easing, treatAsEmptyStep, errors, locals) {
+    TimelineBuilder.prototype.applyEmptyStep = function (easing) {
         var _this = this;
         if (easing) {
             this._previousKeyframe['easing'] = easing;
         }
-        if (treatAsEmptyStep) {
-            // special case for animate(duration):
-            // all missing styles are filled with a `*` value then
-            // if any destination styles are filled in later on the same
-            // keyframe then they will override the overridden styles
-            // We use `_globalTimelineStyles` here because there may be
-            // styles in previous keyframes that are not present in this timeline
-            Object.keys(this._globalTimelineStyles).forEach(function (prop) {
-                _this._backFill[prop] = _this._globalTimelineStyles[prop] || _angular_animations.AUTO_STYLE;
-                _this._currentKeyframe[prop] = _angular_animations.AUTO_STYLE;
-            });
-            this._currentEmptyStepKeyframe = this._currentKeyframe;
+        // special case for animate(duration):
+        // all missing styles are filled with a `*` value then
+        // if any destination styles are filled in later on the same
+        // keyframe then they will override the overridden styles
+        // We use `_globalTimelineStyles` here because there may be
+        // styles in previous keyframes that are not present in this timeline
+        Object.keys(this._globalTimelineStyles).forEach(function (prop) {
+            _this._backFill[prop] = _this._globalTimelineStyles[prop] || _angular_animations.AUTO_STYLE;
+            _this._currentKeyframe[prop] = _angular_animations.AUTO_STYLE;
+        });
+        this._currentEmptyStepKeyframe = this._currentKeyframe;
+    };
+    /**
+     * @param {?} input
+     * @param {?} easing
+     * @param {?} errors
+     * @param {?=} locals
+     * @return {?}
+     */
+    TimelineBuilder.prototype.setStyles = function (input, easing, errors, locals) {
+        var _this = this;
+        if (easing) {
+            this._previousKeyframe['easing'] = easing;
         }
-        else {
-            var /** @type {?} */ styles_1 = flattenStyles(input, this._globalTimelineStyles);
-            Object.keys(styles_1).forEach(function (prop) {
-                var /** @type {?} */ val = styles_1[prop];
-                if (locals) {
-                    val = interpolateLocals(styles_1[prop], locals, errors);
-                }
-                _this._currentKeyframe[prop] = val;
-                if (!_this._localTimelineStyles[prop]) {
-                    _this._backFill[prop] = _this._globalTimelineStyles.hasOwnProperty(prop) ?
-                        _this._globalTimelineStyles[prop] :
-                        _angular_animations.AUTO_STYLE;
-                }
-                _this._updateStyle(prop, val);
-            });
-            Object.keys(this._localTimelineStyles).forEach(function (prop) {
-                if (!_this._currentKeyframe.hasOwnProperty(prop)) {
-                    _this._currentKeyframe[prop] = _this._localTimelineStyles[prop];
-                }
-            });
-        }
+        var /** @type {?} */ styles = flattenStyles(input, this._globalTimelineStyles);
+        Object.keys(styles).forEach(function (prop) {
+            var /** @type {?} */ val = styles[prop];
+            if (locals) {
+                val = interpolateLocals(styles[prop], locals, errors);
+            }
+            _this._pendingStyles[prop] = val;
+            if (!_this._localTimelineStyles.hasOwnProperty(prop)) {
+                _this._backFill[prop] = _this._globalTimelineStyles.hasOwnProperty(prop) ?
+                    _this._globalTimelineStyles[prop] :
+                    _angular_animations.AUTO_STYLE;
+            }
+            _this._updateStyle(prop, val);
+        });
+    };
+    /**
+     * @return {?}
+     */
+    TimelineBuilder.prototype.applyStylesToKeyframe = function () {
+        var _this = this;
+        var /** @type {?} */ styles = this._pendingStyles;
+        var /** @type {?} */ props = Object.keys(styles);
+        if (props.length == 0)
+            return;
+        this._pendingStyles = {};
+        props.forEach(function (prop) {
+            var /** @type {?} */ val = styles[prop];
+            _this._currentKeyframe[prop] = val;
+        });
+        Object.keys(this._localTimelineStyles).forEach(function (prop) {
+            if (!_this._currentKeyframe.hasOwnProperty(prop)) {
+                _this._currentKeyframe[prop] = _this._localTimelineStyles[prop];
+            }
+        });
     };
     /**
      * @return {?}
@@ -2245,8 +2287,10 @@ var TimelineBuilder = (function () {
      */
     TimelineBuilder.prototype.buildKeyframes = function () {
         var _this = this;
+        this.applyStylesToKeyframe();
         var /** @type {?} */ preStyleProps = new Set();
         var /** @type {?} */ postStyleProps = new Set();
+        var /** @type {?} */ isEmpty = this._allowEmptyAnimation && this.duration === 0;
         var /** @type {?} */ finalKeyframes = [];
         this._keyframes.forEach(function (keyframe, time) {
             var /** @type {?} */ finalKeyframe = copyStyles(keyframe, true);
@@ -2259,11 +2303,21 @@ var TimelineBuilder = (function () {
                     postStyleProps.add(prop);
                 }
             });
-            finalKeyframe['offset'] = time / _this.duration;
+            if (!isEmpty) {
+                finalKeyframe['offset'] = time / _this.duration;
+            }
             finalKeyframes.push(finalKeyframe);
         });
         var /** @type {?} */ preProps = preStyleProps.size ? iteratorToArray(preStyleProps.values()) : [];
         var /** @type {?} */ postProps = postStyleProps.size ? iteratorToArray(postStyleProps.values()) : [];
+        // special case for a 0-second animation (which is designed just to place styles onscreen)
+        if (isEmpty) {
+            var /** @type {?} */ kf0 = finalKeyframes[0];
+            var /** @type {?} */ kf1 = copyObj(kf0);
+            kf0['offset'] = 0;
+            kf1['offset'] = 1;
+            finalKeyframes = [kf0, kf1];
+        }
         return createTimelineInstruction(this.element, finalKeyframes, preProps, postProps, this.duration, this.startTime, this.easing, false);
     };
     return TimelineBuilder;

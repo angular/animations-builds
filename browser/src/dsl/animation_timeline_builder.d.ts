@@ -61,7 +61,6 @@ export declare class AnimationTimelineBuilderVisitor implements AstVisitor {
     visitTiming(ast: TimingAst, context: AnimationTimelineContext): AnimateTimings;
     visitAnimate(ast: AnimateAst, context: AnimationTimelineContext): void;
     visitStyle(ast: StyleAst, context: AnimationTimelineContext): void;
-    private _applyStyles(styles, easing, treatAsEmptyStep, context);
     visitKeyframes(ast: KeyframesAst, context: AnimationTimelineContext): void;
     visitQuery(ast: QueryAst, context: AnimationTimelineContext): void;
     visitStagger(ast: StaggerAst, context: AnimationTimelineContext): void;
@@ -70,6 +69,7 @@ export declare class TimelineBuilder {
     element: any;
     startTime: number;
     private _elementTimelineStylesLookup;
+    private _globalTimelineMap;
     duration: number;
     easing: string | null;
     private _previousKeyframe;
@@ -78,10 +78,13 @@ export declare class TimelineBuilder {
     private _styleSummary;
     private _localTimelineStyles;
     private _globalTimelineStyles;
+    private _pendingStyles;
     private _backFill;
     private _currentEmptyStepKeyframe;
-    constructor(element: any, startTime: number, _elementTimelineStylesLookup?: Map<any, ɵStyleData>);
+    private _allowEmptyAnimation;
+    constructor(element: any, startTime: number, _elementTimelineStylesLookup?: Map<any, ɵStyleData>, _globalTimelineMap?: Map<any, TimelineBuilder>);
     containsAnimation(): boolean;
+    containsOnlyPendingStyles(): boolean;
     getCurrentStyleProperties(): string[];
     readonly currentTime: number;
     delayNextStep(delay: number): void;
@@ -91,9 +94,11 @@ export declare class TimelineBuilder {
     forwardTime(time: number): void;
     private _updateStyle(prop, value);
     allowOnlyTimelineStyles(): boolean;
-    setStyles(input: (ɵStyleData | string)[], easing: string | null, treatAsEmptyStep: boolean, errors: any[], locals?: {
+    applyEmptyStep(easing: string | null): void;
+    setStyles(input: (ɵStyleData | string)[], easing: string | null, errors: any[], locals?: {
         [name: string]: any;
     }): void;
+    applyStylesToKeyframe(): void;
     snapshotCurrentStyles(): void;
     getFinalKeyframe(): ɵStyleData | undefined;
     readonly properties: string[];

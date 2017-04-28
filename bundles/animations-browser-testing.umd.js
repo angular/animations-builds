@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-rc.0-46b20be
+ * @license Angular v4.1.0-ed4eaf3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -15,7 +15,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-rc.0-46b20be
+ * @license Angular v4.1.0-ed4eaf3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -58,6 +58,7 @@ var MockAnimationPlayer = (function (_super) {
         _this.easing = easing;
         _this.previousPlayers = previousPlayers;
         _this.__finished = false;
+        _this.__started = false;
         _this.previousStyles = {};
         _this._onInitFns = [];
         _this.currentSnapshot = {};
@@ -86,6 +87,13 @@ var MockAnimationPlayer = (function (_super) {
         _super.prototype.destroy.call(this);
         this.__finished = true;
     };
+    /* @internal */
+    MockAnimationPlayer.prototype.triggerMicrotask = function () { };
+    MockAnimationPlayer.prototype.play = function () {
+        _super.prototype.play.call(this);
+        this.__started = true;
+    };
+    MockAnimationPlayer.prototype.hasStarted = function () { return this.__started; };
     MockAnimationPlayer.prototype.beforeDestroy = function () {
         var _this = this;
         var captures = {};

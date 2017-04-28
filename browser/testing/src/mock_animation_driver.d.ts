@@ -30,6 +30,7 @@ export declare class MockAnimationPlayer extends NoopAnimationPlayer {
     easing: string;
     previousPlayers: any[];
     private __finished;
+    private __started;
     previousStyles: {
         [key: string]: string | number;
     };
@@ -40,5 +41,7 @@ export declare class MockAnimationPlayer extends NoopAnimationPlayer {
     }[], duration: number, delay: number, easing: string, previousPlayers: any[]);
     finish(): void;
     destroy(): void;
+    play(): void;
+    hasStarted(): boolean;
     beforeDestroy(): void;
 }

@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-rc.0-46b20be
+ * @license Angular v4.1.0-ed4eaf3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -10,7 +10,7 @@
 }(this, (function (exports) { 'use strict';
 
 /**
- * @license Angular v4.1.0-rc.0-46b20be
+ * @license Angular v4.1.0-ed4eaf3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -739,12 +739,18 @@ var NoopAnimationPlayer = (function () {
      * @return {?}
      */
     NoopAnimationPlayer.prototype.play = function () {
-        var _this = this;
         if (!this.hasStarted()) {
-            scheduleMicroTask(function () { return _this._onFinish(); });
+            this.triggerMicrotask();
             this._onStart();
         }
         this._started = true;
+    };
+    /**
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.triggerMicrotask = function () {
+        var _this = this;
+        scheduleMicroTask(function () { return _this._onFinish(); });
     };
     /**
      * @return {?}

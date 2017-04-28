@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-rc.0-46b20be
+ * @license Angular v4.1.0-ed4eaf3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -39,6 +39,7 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         this.easing = easing;
         this.previousPlayers = previousPlayers;
         this.__finished = false;
+        this.__started = false;
         this.previousStyles = {};
         this._onInitFns = [];
         this.currentSnapshot = {};
@@ -66,6 +67,13 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         super.destroy();
         this.__finished = true;
     }
+    /* @internal */
+    triggerMicrotask() { }
+    play() {
+        super.play();
+        this.__started = true;
+    }
+    hasStarted() { return this.__started; }
     beforeDestroy() {
         const captures = {};
         Object.keys(this.previousStyles).forEach(prop => {
