@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-ed4eaf3
+ * @license Angular v4.1.0-a619991
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -15,7 +15,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-ed4eaf3
+ * @license Angular v4.1.0-a619991
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1655,7 +1655,7 @@ var AnimationTimelineContext = (function () {
      */
     AnimationTimelineContext.prototype.transformIntoNewTimeline = function (newTime) {
         this.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
-        this.currentTimeline = this.currentTimeline.fork(this.element, newTime || 0);
+        this.currentTimeline = this.currentTimeline.fork(this.element, newTime);
         this.timelines.push(this.currentTimeline);
         return this.currentTimeline;
     };
@@ -1831,12 +1831,16 @@ var AnimationTimelineBuilderVisitor = (function () {
                 context.delayNextStep(/** @type {?} */ (ast.locals['delay']));
             }
         }
-        ast.steps.forEach(function (s) { return s.visit(_this, context); });
-        // this means that some animation function within the sequence
-        // ended up creating a sub timeline (which means the current
-        // timeline cannot overlap with the contents of the sequence)
-        if (context.subContextCount > subContextCount) {
-            context.transformIntoNewTimeline();
+        if (ast.steps.length) {
+            ast.steps.forEach(function (s) { return s.visit(_this, context); });
+            // this is here just incase the inner steps only contain or end with a style() call
+            context.currentTimeline.applyStylesToKeyframe();
+            // this means that some animation function within the sequence
+            // ended up creating a sub timeline (which means the current
+            // timeline cannot overlap with the contents of the sequence)
+            if (context.subContextCount > subContextCount) {
+                context.transformIntoNewTimeline();
+            }
         }
         context.previousNode = ast;
     };
@@ -1985,6 +1989,10 @@ var AnimationTimelineBuilderVisitor = (function () {
                 sameElementTimeline = innerContext.currentTimeline;
             }
             ast.animation.visit(_this, innerContext);
+            // this is here just incase the inner steps only contain or end
+            // with a style() call (which is here to signal that this is a preparatory
+            // call to style an element before it is animated again)
+            innerContext.currentTimeline.applyStylesToKeyframe();
             var /** @type {?} */ endTime = innerContext.currentTimeline.currentTime;
             furthestTime = Math.max(furthestTime, endTime);
         });
@@ -2038,13 +2046,11 @@ var TimelineBuilder = (function () {
      * @param {?} element
      * @param {?} startTime
      * @param {?=} _elementTimelineStylesLookup
-     * @param {?=} _globalTimelineMap
      */
-    function TimelineBuilder(element, startTime, _elementTimelineStylesLookup, _globalTimelineMap) {
+    function TimelineBuilder(element, startTime, _elementTimelineStylesLookup) {
         this.element = element;
         this.startTime = startTime;
         this._elementTimelineStylesLookup = _elementTimelineStylesLookup;
-        this._globalTimelineMap = _globalTimelineMap;
         this.duration = 0;
         this._previousKeyframe = {};
         this._currentKeyframe = {};
@@ -2053,27 +2059,9 @@ var TimelineBuilder = (function () {
         this._pendingStyles = {};
         this._backFill = {};
         this._currentEmptyStepKeyframe = null;
-        this._allowEmptyAnimation = false;
         if (!this._elementTimelineStylesLookup) {
             this._elementTimelineStylesLookup = new Map();
         }
-        if (this._globalTimelineMap) {
-            // this is a special case for queries that solely assign styles
-            // without any animation arcs in between. When this occurs we want
-            // to ensure those styles are visually placed on screen, but we do
-            // not want to continue the timeline since there may be too many styles
-            // to build up for this new timeline. Therefore we just make sure that
-            // the styles are placed in the previous timeline and continue along as normal
-            var existingBuilder = this._globalTimelineMap.get(element);
-            if (existingBuilder && existingBuilder.containsOnlyPendingStyles()) {
-                existingBuilder.applyStylesToKeyframe();
-                existingBuilder._allowEmptyAnimation = true;
-            }
-        }
-        else {
-            this._globalTimelineMap = new Map();
-        }
-        this._globalTimelineMap.set(element, this);
         this._localTimelineStyles = Object.create(this._backFill, {});
         this._globalTimelineStyles = this._elementTimelineStylesLookup.get(element);
         if (!this._globalTimelineStyles) {
@@ -2090,16 +2078,10 @@ var TimelineBuilder = (function () {
             case 0:
                 return false;
             case 1:
-                return this._allowEmptyAnimation;
+                return this.getCurrentStyleProperties().length > 0;
             default:
                 return true;
         }
-    };
-    /**
-     * @return {?}
-     */
-    TimelineBuilder.prototype.containsOnlyPendingStyles = function () {
-        return this._keyframes.size === 1 && Object.keys(this._pendingStyles).length > 0;
     };
     /**
      * @return {?}
@@ -2131,9 +2113,8 @@ var TimelineBuilder = (function () {
      * @return {?}
      */
     TimelineBuilder.prototype.fork = function (element, currentTime) {
-        if (currentTime === void 0) { currentTime = 0; }
         this.applyStylesToKeyframe();
-        return new TimelineBuilder(element, currentTime || this.currentTime, this._elementTimelineStylesLookup, this._globalTimelineMap);
+        return new TimelineBuilder(element, currentTime || this.currentTime, this._elementTimelineStylesLookup);
     };
     /**
      * @return {?}
@@ -2249,7 +2230,14 @@ var TimelineBuilder = (function () {
     /**
      * @return {?}
      */
-    TimelineBuilder.prototype.snapshotCurrentStyles = function () { copyStyles(this._localTimelineStyles, false, this._currentKeyframe); };
+    TimelineBuilder.prototype.snapshotCurrentStyles = function () {
+        var _this = this;
+        Object.keys(this._localTimelineStyles).forEach(function (prop) {
+            var /** @type {?} */ val = _this._localTimelineStyles[prop];
+            _this._pendingStyles[prop] = val;
+            _this._updateStyle(prop, val);
+        });
+    };
     /**
      * @return {?}
      */
@@ -2290,7 +2278,7 @@ var TimelineBuilder = (function () {
         this.applyStylesToKeyframe();
         var /** @type {?} */ preStyleProps = new Set();
         var /** @type {?} */ postStyleProps = new Set();
-        var /** @type {?} */ isEmpty = this._allowEmptyAnimation && this.duration === 0;
+        var /** @type {?} */ isEmpty = this._keyframes.size === 1 && this.duration === 0;
         var /** @type {?} */ finalKeyframes = [];
         this._keyframes.forEach(function (keyframe, time) {
             var /** @type {?} */ finalKeyframe = copyStyles(keyframe, true);

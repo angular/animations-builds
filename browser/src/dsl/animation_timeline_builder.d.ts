@@ -69,7 +69,6 @@ export declare class TimelineBuilder {
     element: any;
     startTime: number;
     private _elementTimelineStylesLookup;
-    private _globalTimelineMap;
     duration: number;
     easing: string | null;
     private _previousKeyframe;
@@ -81,10 +80,8 @@ export declare class TimelineBuilder {
     private _pendingStyles;
     private _backFill;
     private _currentEmptyStepKeyframe;
-    private _allowEmptyAnimation;
-    constructor(element: any, startTime: number, _elementTimelineStylesLookup?: Map<any, ɵStyleData>, _globalTimelineMap?: Map<any, TimelineBuilder>);
+    constructor(element: any, startTime: number, _elementTimelineStylesLookup?: Map<any, ɵStyleData>);
     containsAnimation(): boolean;
-    containsOnlyPendingStyles(): boolean;
     getCurrentStyleProperties(): string[];
     readonly currentTime: number;
     delayNextStep(delay: number): void;
