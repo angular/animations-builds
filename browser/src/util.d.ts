@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AnimateTimings, AnimationMetadata, ɵStyleData } from '@angular/animations';
+import { AnimateTimings, AnimationMetadata, AnimationOptions, ɵStyleData } from '@angular/animations';
 export declare const ONE_SECOND = 1000;
 export declare const ENTER_CLASSNAME = "ng-enter";
 export declare const LEAVE_CLASSNAME = "ng-leave";
@@ -29,10 +29,9 @@ export declare function copyStyles(styles: ɵStyleData, readPrototype: boolean, 
 export declare function setStyles(element: any, styles: ɵStyleData): void;
 export declare function eraseStyles(element: any, styles: ɵStyleData): void;
 export declare function normalizeAnimationEntry(steps: AnimationMetadata | AnimationMetadata[]): AnimationMetadata;
-export declare function validateStyleLocals(value: string | number, locals: {
+export declare function validateStyleParams(value: string | number, options: AnimationOptions, errors: any[]): void;
+export declare function interpolateParams(value: string | number, params: {
     [name: string]: any;
-}, errors: any[]): void;
-export declare function interpolateLocals(value: string | number, locals: {
-    [varName: string]: string | number;
 }, errors: any[]): string | number;
 export declare function iteratorToArray(iterator: any): any[];
+export declare function mergeAnimationOptions(source: AnimationOptions, destination: AnimationOptions): AnimationOptions;

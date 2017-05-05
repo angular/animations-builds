@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-a619991
+ * @license Angular v4.2.0-beta.0-61c2f47
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -30,10 +30,10 @@ class Animation {
     /**
      * @abstract
      * @param {?} element
-     * @param {?=} locals
+     * @param {?=} options
      * @return {?}
      */
-    create(element, locals) { }
+    create(element, options) { }
 }
 
 /**
@@ -95,7 +95,7 @@ const AUTO_STYLE = '*';
  * @return {?}
  */
 function trigger(name, definitions) {
-    return { type: 7 /* Trigger */, name, definitions };
+    return { type: 7 /* Trigger */, name, definitions, options: {} };
 }
 /**
  * `animate` is an animation-specific function that is designed to be used inside of Angular's
@@ -179,11 +179,11 @@ function animate(timings, styles = null) {
  *
  * \@experimental Animation support is experimental.
  * @param {?} steps
- * @param {?=} locals
+ * @param {?=} options
  * @return {?}
  */
-function group(steps, locals = null) {
-    return { type: 3 /* Group */, steps, locals };
+function group(steps, options = null) {
+    return { type: 3 /* Group */, steps, options };
 }
 /**
  * `sequence` is an animation-specific function that is designed to be used inside of Angular's
@@ -219,11 +219,11 @@ function group(steps, locals = null) {
  *
  * \@experimental Animation support is experimental.
  * @param {?} steps
- * @param {?=} locals
+ * @param {?=} options
  * @return {?}
  */
-function sequence(steps, locals = null) {
-    return { type: 2 /* Sequence */, steps, locals };
+function sequence(steps, options = null) {
+    return { type: 2 /* Sequence */, steps, options };
 }
 /**
  * `style` is an animation-specific function that is designed to be used inside of Angular's
@@ -484,57 +484,47 @@ function keyframes(steps) {
  * \@experimental Animation support is experimental.
  * @param {?} stateChangeExpr
  * @param {?} steps
- * @param {?=} locals
+ * @param {?=} options
  * @return {?}
  */
-function transition(stateChangeExpr, steps, locals = null) {
-    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, locals };
+function transition(stateChangeExpr, steps, options = null) {
+    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, options };
 }
 /**
  * \@experimental Animation support is experimental.
  * @param {?} steps
- * @param {?=} locals
+ * @param {?=} options
  * @return {?}
  */
-function animation(steps, locals = null) {
-    return { type: 8 /* Reference */, animation: steps, locals };
+function animation(steps, options = null) {
+    return { type: 8 /* Reference */, animation: steps, options };
 }
 /**
  * \@experimental Animation support is experimental.
- * @param {?=} locals
+ * @param {?=} options
  * @return {?}
  */
-function animateChild(locals = null) {
-    return { type: 9 /* AnimateChild */, locals };
+function animateChild(options = null) {
+    return { type: 9 /* AnimateChild */, options };
 }
 /**
  * \@experimental Animation support is experimental.
  * @param {?} animation
- * @param {?=} locals
+ * @param {?=} options
  * @return {?}
  */
-function useAnimation(animation, locals = null) {
-    return { type: 10 /* AnimateRef */, animation, locals };
+function useAnimation(animation, options = null) {
+    return { type: 10 /* AnimateRef */, animation, options };
 }
 /**
  * \@experimental Animation support is experimental.
  * @param {?} selector
  * @param {?} animation
- * @param {?=} locals
+ * @param {?=} options
  * @return {?}
  */
-function query(selector, animation, locals = null) {
-    return { type: 11 /* Query */, multi: false, selector, animation, locals };
-}
-/**
- * \@experimental Animation support is experimental.
- * @param {?} selector
- * @param {?} animation
- * @param {?=} locals
- * @return {?}
- */
-function queryAll(selector, animation, locals = null) {
-    return { type: 11 /* Query */, multi: true, selector, animation, locals };
+function query(selector, animation, options = null) {
+    return { type: 11 /* Query */, selector, animation, options };
 }
 /**
  * \@experimental Animation support is experimental.
@@ -973,5 +963,5 @@ const ɵPRE_STYLE = '!';
  * Generated bundle index. Do not edit.
  */
 
-export { Animation, AnimationBuilder, AUTO_STYLE, animate, animateChild, animation, group, keyframes, query, queryAll, sequence, stagger, state, style, transition, trigger, useAnimation, AnimationPlayer, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
+export { Animation, AnimationBuilder, AUTO_STYLE, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, AnimationPlayer, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
 //# sourceMappingURL=animations.js.map

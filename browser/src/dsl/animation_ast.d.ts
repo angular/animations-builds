@@ -11,7 +11,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AnimateTimings, ɵStyleData } from '@angular/animations';
+import { AnimateTimings, AnimationOptions, ɵStyleData } from '@angular/animations';
 export interface AstVisitor {
     visitTrigger(ast: TriggerAst, context: any): any;
     visitState(ast: StateAst, context: any): any;
@@ -30,7 +30,8 @@ export interface AstVisitor {
 }
 export declare abstract class Ast {
     abstract visit(ast: AstVisitor, context: any): any;
-    locals: {
+    options: AnimationOptions;
+    readonly params: {
         [name: string]: any;
     } | null;
 }
@@ -102,11 +103,12 @@ export declare class AnimateRefAst extends Ast {
 }
 export declare class QueryAst extends Ast {
     selector: string;
-    multi: boolean;
+    limit: number;
+    optional: boolean;
     includeSelf: boolean;
     animation: Ast;
     originalSelector: string;
-    constructor(selector: string, multi: boolean, includeSelf: boolean, animation: Ast);
+    constructor(selector: string, limit: number, optional: boolean, includeSelf: boolean, animation: Ast);
     visit(visitor: AstVisitor, context: any): any;
 }
 export declare class StaggerAst extends Ast {

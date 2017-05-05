@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-a619991
+ * @license Angular v4.2.0-beta.0-61c2f47
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -12,10 +12,71 @@ import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+
+
+
+
+
+
+
+let _query = (element, selector, multi) => {
+    return [];
+};
+if (typeof Element == 'function') {
+    _query = (element, selector, multi) => {
+        let results = [];
+        if (multi) {
+            results.push(...element.querySelectorAll(selector));
+        }
+        else {
+            const elm = element.querySelector(selector);
+            if (elm) {
+                results.push(elm);
+            }
+        }
+        return results;
+    };
+}
+const invokeQuery = _query;
+let _contains = (elm1, elm2) => false;
+if (typeof Element == 'function') {
+    _contains = (elm1, elm2) => { return elm1.contains(elm2); };
+}
+const containsElement = _contains;
+let _matches = (element, selector) => false;
+if (typeof Element == 'function') {
+    if (Element.prototype.matches) {
+        _matches = (element, selector) => element.matches(selector);
+    }
+    else {
+        const proto = Element.prototype;
+        const fn = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
+            proto.oMatchesSelector || proto.webkitMatchesSelector;
+        if (fn) {
+            _matches = (element, selector) => fn.apply(element, [selector]);
+        }
+    }
+}
+const matchesElement = _matches;
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @experimental Animation support is experimental.
  */
 class MockAnimationDriver {
+    matchesElement(element, selector) {
+        return matchesElement(element, selector);
+    }
+    containsElement(elm1, elm2) { return containsElement(elm1, elm2); }
+    query(element, selector, multi) {
+        return invokeQuery(element, selector, multi);
+    }
     computeStyle(element, prop, defaultValue) {
         return defaultValue || '';
     }

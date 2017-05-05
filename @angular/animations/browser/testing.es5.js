@@ -4,11 +4,57 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-a619991
+ * @license Angular v4.2.0-beta.0-61c2f47
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
 import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var _query = function (element, selector, multi) {
+    return [];
+};
+if (typeof Element == 'function') {
+    _query = function (element, selector, multi) {
+        var results = [];
+        if (multi) {
+            results.push.apply(results, element.querySelectorAll(selector));
+        }
+        else {
+            var elm = element.querySelector(selector);
+            if (elm) {
+                results.push(elm);
+            }
+        }
+        return results;
+    };
+}
+var invokeQuery = _query;
+var _contains = function (elm1, elm2) { return false; };
+if (typeof Element == 'function') {
+    _contains = function (elm1, elm2) { return elm1.contains(elm2); };
+}
+var containsElement = _contains;
+var _matches = function (element, selector) { return false; };
+if (typeof Element == 'function') {
+    if (Element.prototype.matches) {
+        _matches = function (element, selector) { return element.matches(selector); };
+    }
+    else {
+        var proto = Element.prototype;
+        var fn_1 = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
+            proto.oMatchesSelector || proto.webkitMatchesSelector;
+        if (fn_1) {
+            _matches = function (element, selector) { return fn_1.apply(element, [selector]); };
+        }
+    }
+}
+var matchesElement = _matches;
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -22,6 +68,13 @@ import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
 var MockAnimationDriver = (function () {
     function MockAnimationDriver() {
     }
+    MockAnimationDriver.prototype.matchesElement = function (element, selector) {
+        return matchesElement(element, selector);
+    };
+    MockAnimationDriver.prototype.containsElement = function (elm1, elm2) { return containsElement(elm1, elm2); };
+    MockAnimationDriver.prototype.query = function (element, selector, multi) {
+        return invokeQuery(element, selector, multi);
+    };
     MockAnimationDriver.prototype.computeStyle = function (element, prop, defaultValue) {
         return defaultValue || '';
     };

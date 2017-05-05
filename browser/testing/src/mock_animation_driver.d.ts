@@ -12,6 +12,9 @@ import { AnimationDriver } from '../../src/render/animation_driver';
  */
 export declare class MockAnimationDriver implements AnimationDriver {
     static log: AnimationPlayer[];
+    matchesElement(element: any, selector: string): boolean;
+    containsElement(elm1: any, elm2: any): boolean;
+    query(element: any, selector: string, multi: boolean): any[];
     computeStyle(element: any, prop: string, defaultValue?: string): string;
     animate(element: any, keyframes: {
         [key: string]: string | number;

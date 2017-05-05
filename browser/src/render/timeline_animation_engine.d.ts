@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AnimationMetadata, AnimationPlayer } from '@angular/animations';
+import { AnimationMetadata, AnimationOptions, AnimationPlayer } from '@angular/animations';
 import { AnimationStyleNormalizer } from '../dsl/style_normalization/animation_style_normalizer';
 import { AnimationDriver } from './animation_driver';
 export declare class TimelineAnimationEngine {
@@ -17,9 +17,7 @@ export declare class TimelineAnimationEngine {
     constructor(_driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
     register(id: string, metadata: AnimationMetadata | AnimationMetadata[]): void;
     private _buildPlayer(i, preStyles, postStyles?);
-    create(id: string, element: any, locals?: {
-        [key: string]: string | number;
-    }): AnimationPlayer;
+    create(id: string, element: any, options?: AnimationOptions): AnimationPlayer;
     destroy(id: string): void;
     private _getPlayer(id);
     listen(id: string, element: string, eventName: string, callback: (event: any) => any): () => void;

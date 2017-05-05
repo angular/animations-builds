@@ -5,7 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ɵStyleData } from '@angular/animations';
+import { AnimationOptions, ɵStyleData } from '@angular/animations';
+import { AnimationDriver } from '../render/animation_driver';
 import { TransitionAst } from './animation_ast';
 import { AnimationTransitionInstruction } from './animation_transition_instruction';
 import { ElementInstructionMap } from './element_instruction_map';
@@ -17,7 +18,5 @@ export declare class AnimationTransitionFactory {
         [stateName: string]: ɵStyleData;
     });
     match(currentState: any, nextState: any): boolean;
-    build(element: any, currentState: any, nextState: any, locals?: {
-        [varName: string]: string | number;
-    }, subInstructions?: ElementInstructionMap): AnimationTransitionInstruction | undefined;
+    build(driver: AnimationDriver, element: any, currentState: any, nextState: any, options?: AnimationOptions, subInstructions?: ElementInstructionMap): AnimationTransitionInstruction | undefined;
 }

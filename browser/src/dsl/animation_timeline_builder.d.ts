@@ -5,50 +5,14 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AnimateTimings, ɵStyleData } from '@angular/animations';
+import { AnimateTimings, AnimationOptions, ɵStyleData } from '@angular/animations';
+import { AnimationDriver } from '../render/animation_driver';
 import { AnimateAst, AnimateChildAst, AnimateRefAst, Ast, AstVisitor, GroupAst, KeyframesAst, QueryAst, ReferenceAst, SequenceAst, StaggerAst, StateAst, StyleAst, TimingAst, TransitionAst, TriggerAst } from './animation_ast';
 import { AnimationTimelineInstruction } from './animation_timeline_instruction';
 import { ElementInstructionMap } from './element_instruction_map';
-export declare function buildAnimationTimelines(rootElement: any, ast: Ast, startingStyles: ɵStyleData, finalStyles: ɵStyleData, locals: {
-    [name: string]: any;
-}, subInstructions?: ElementInstructionMap, errors?: any[]): AnimationTimelineInstruction[];
-export declare type StyleAtTime = {
-    time: number;
-    value: string | number;
-};
-export declare class AnimationTimelineContext {
-    element: any;
-    subInstructions: ElementInstructionMap;
-    errors: any[];
-    timelines: TimelineBuilder[];
-    parentContext: AnimationTimelineContext | null;
-    currentTimeline: TimelineBuilder;
-    currentAnimateTimings: AnimateTimings | null;
-    previousNode: Ast;
-    subContextCount: number;
-    locals: {
-        [name: string]: any;
-    };
-    currentQueryIndex: number;
-    currentQueryTotal: number;
-    currentStaggerTime: number;
-    constructor(element: any, subInstructions: ElementInstructionMap, errors: any[], timelines: TimelineBuilder[], initialTimeline?: TimelineBuilder);
-    updateLocals(newLocals: {
-        [name: string]: any;
-    } | null, skipIfExists?: boolean): void;
-    private _copyLocals();
-    createSubContext(locals?: {
-        [name: string]: any;
-    } | null, element?: any, newTime?: number): AnimationTimelineContext;
-    transformIntoNewTimeline(newTime?: number): TimelineBuilder;
-    appendInstructionToTimeline(instruction: AnimationTimelineInstruction, timings: AnimateTimings): AnimateTimings;
-    incrementTime(time: number): void;
-    delayNextStep(delay: number): void;
-}
+export declare function buildAnimationTimelines(driver: AnimationDriver, rootElement: any, ast: Ast, startingStyles: ɵStyleData, finalStyles: ɵStyleData, options: AnimationOptions, subInstructions?: ElementInstructionMap, errors?: any[]): AnimationTimelineInstruction[];
 export declare class AnimationTimelineBuilderVisitor implements AstVisitor {
-    buildKeyframes(rootElement: any, ast: Ast, startingStyles: ɵStyleData, finalStyles: ɵStyleData, locals: {
-        [name: string]: any;
-    }, subInstructions?: ElementInstructionMap, errors?: any[]): AnimationTimelineInstruction[];
+    buildKeyframes(driver: AnimationDriver, rootElement: any, ast: Ast, startingStyles: ɵStyleData, finalStyles: ɵStyleData, options: AnimationOptions, subInstructions?: ElementInstructionMap, errors?: any[]): AnimationTimelineInstruction[];
     visitTrigger(ast: TriggerAst, context: AnimationTimelineContext): any;
     visitState(ast: StateAst, context: AnimationTimelineContext): any;
     visitTransition(ast: TransitionAst, context: AnimationTimelineContext): any;
@@ -64,6 +28,38 @@ export declare class AnimationTimelineBuilderVisitor implements AstVisitor {
     visitKeyframes(ast: KeyframesAst, context: AnimationTimelineContext): void;
     visitQuery(ast: QueryAst, context: AnimationTimelineContext): void;
     visitStagger(ast: StaggerAst, context: AnimationTimelineContext): void;
+}
+export declare type StyleAtTime = {
+    time: number;
+    value: string | number;
+};
+export declare class AnimationTimelineContext {
+    private _driver;
+    element: any;
+    subInstructions: ElementInstructionMap;
+    errors: any[];
+    timelines: TimelineBuilder[];
+    parentContext: AnimationTimelineContext | null;
+    currentTimeline: TimelineBuilder;
+    currentAnimateTimings: AnimateTimings | null;
+    previousNode: Ast;
+    subContextCount: number;
+    options: AnimationOptions;
+    currentQueryIndex: number;
+    currentQueryTotal: number;
+    currentStaggerTime: number;
+    constructor(_driver: AnimationDriver, element: any, subInstructions: ElementInstructionMap, errors: any[], timelines: TimelineBuilder[], initialTimeline?: TimelineBuilder);
+    readonly params: {
+        [name: string]: any;
+    } | undefined;
+    updateOptions(newOptions: AnimationOptions | null, skipIfExists?: boolean): void;
+    private _copyOptions();
+    createSubContext(options?: AnimationOptions | null, element?: any, newTime?: number): AnimationTimelineContext;
+    transformIntoNewTimeline(newTime?: number): TimelineBuilder;
+    appendInstructionToTimeline(instruction: AnimationTimelineInstruction, duration: number | null, delay: number | null): AnimateTimings;
+    incrementTime(time: number): void;
+    delayNextStep(delay: number): void;
+    invokeQuery(selector: string, originalSelector: string, limit: number, includeSelf: boolean, optional: boolean, errors: any[]): any[];
 }
 export declare class TimelineBuilder {
     element: any;
@@ -92,9 +88,7 @@ export declare class TimelineBuilder {
     private _updateStyle(prop, value);
     allowOnlyTimelineStyles(): boolean;
     applyEmptyStep(easing: string | null): void;
-    setStyles(input: (ɵStyleData | string)[], easing: string | null, errors: any[], locals?: {
-        [name: string]: any;
-    }): void;
+    setStyles(input: (ɵStyleData | string)[], easing: string | null, errors: any[], options?: AnimationOptions): void;
     applyStylesToKeyframe(): void;
     snapshotCurrentStyles(): void;
     getFinalKeyframe(): ɵStyleData | undefined;

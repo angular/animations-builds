@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-a619991
+ * @license Angular v4.2.0-beta.0-61c2f47
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -10,7 +10,7 @@
 }(this, (function (exports) { 'use strict';
 
 /**
- * @license Angular v4.1.0-a619991
+ * @license Angular v4.2.0-beta.0-61c2f47
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -46,10 +46,10 @@ var Animation = (function () {
     /**
      * @abstract
      * @param {?} element
-     * @param {?=} locals
+     * @param {?=} options
      * @return {?}
      */
-    Animation.prototype.create = function (element, locals) { };
+    Animation.prototype.create = function (element, options) { };
     return Animation;
 }());
 /**
@@ -111,7 +111,7 @@ var AUTO_STYLE = '*';
  * @return {?}
  */
 function trigger(name, definitions) {
-    return { type: 7 /* Trigger */, name: name, definitions: definitions };
+    return { type: 7 /* Trigger */, name: name, definitions: definitions, options: {} };
 }
 /**
  * `animate` is an animation-specific function that is designed to be used inside of Angular's
@@ -196,12 +196,12 @@ function animate(timings, styles) {
  *
  * \@experimental Animation support is experimental.
  * @param {?} steps
- * @param {?=} locals
+ * @param {?=} options
  * @return {?}
  */
-function group(steps, locals) {
-    if (locals === void 0) { locals = null; }
-    return { type: 3 /* Group */, steps: steps, locals: locals };
+function group(steps, options) {
+    if (options === void 0) { options = null; }
+    return { type: 3 /* Group */, steps: steps, options: options };
 }
 /**
  * `sequence` is an animation-specific function that is designed to be used inside of Angular's
@@ -237,12 +237,12 @@ function group(steps, locals) {
  *
  * \@experimental Animation support is experimental.
  * @param {?} steps
- * @param {?=} locals
+ * @param {?=} options
  * @return {?}
  */
-function sequence(steps, locals) {
-    if (locals === void 0) { locals = null; }
-    return { type: 2 /* Sequence */, steps: steps, locals: locals };
+function sequence(steps, options) {
+    if (options === void 0) { options = null; }
+    return { type: 2 /* Sequence */, steps: steps, options: options };
 }
 /**
  * `style` is an animation-specific function that is designed to be used inside of Angular's
@@ -503,63 +503,52 @@ function keyframes(steps) {
  * \@experimental Animation support is experimental.
  * @param {?} stateChangeExpr
  * @param {?} steps
- * @param {?=} locals
+ * @param {?=} options
  * @return {?}
  */
-function transition(stateChangeExpr, steps, locals) {
-    if (locals === void 0) { locals = null; }
-    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, locals: locals };
+function transition(stateChangeExpr, steps, options) {
+    if (options === void 0) { options = null; }
+    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, options: options };
 }
 /**
  * \@experimental Animation support is experimental.
  * @param {?} steps
- * @param {?=} locals
+ * @param {?=} options
  * @return {?}
  */
-function animation(steps, locals) {
-    if (locals === void 0) { locals = null; }
-    return { type: 8 /* Reference */, animation: steps, locals: locals };
+function animation(steps, options) {
+    if (options === void 0) { options = null; }
+    return { type: 8 /* Reference */, animation: steps, options: options };
 }
 /**
  * \@experimental Animation support is experimental.
- * @param {?=} locals
+ * @param {?=} options
  * @return {?}
  */
-function animateChild(locals) {
-    if (locals === void 0) { locals = null; }
-    return { type: 9 /* AnimateChild */, locals: locals };
+function animateChild(options) {
+    if (options === void 0) { options = null; }
+    return { type: 9 /* AnimateChild */, options: options };
 }
 /**
  * \@experimental Animation support is experimental.
  * @param {?} animation
- * @param {?=} locals
+ * @param {?=} options
  * @return {?}
  */
-function useAnimation(animation, locals) {
-    if (locals === void 0) { locals = null; }
-    return { type: 10 /* AnimateRef */, animation: animation, locals: locals };
+function useAnimation(animation, options) {
+    if (options === void 0) { options = null; }
+    return { type: 10 /* AnimateRef */, animation: animation, options: options };
 }
 /**
  * \@experimental Animation support is experimental.
  * @param {?} selector
  * @param {?} animation
- * @param {?=} locals
+ * @param {?=} options
  * @return {?}
  */
-function query(selector, animation, locals) {
-    if (locals === void 0) { locals = null; }
-    return { type: 11 /* Query */, multi: false, selector: selector, animation: animation, locals: locals };
-}
-/**
- * \@experimental Animation support is experimental.
- * @param {?} selector
- * @param {?} animation
- * @param {?=} locals
- * @return {?}
- */
-function queryAll(selector, animation, locals) {
-    if (locals === void 0) { locals = null; }
-    return { type: 11 /* Query */, multi: true, selector: selector, animation: animation, locals: locals };
+function query(selector, animation, options) {
+    if (options === void 0) { options = null; }
+    return { type: 11 /* Query */, selector: selector, animation: animation, options: options };
 }
 /**
  * \@experimental Animation support is experimental.
@@ -994,7 +983,6 @@ exports.animation = animation;
 exports.group = group;
 exports.keyframes = keyframes;
 exports.query = query;
-exports.queryAll = queryAll;
 exports.sequence = sequence;
 exports.stagger = stagger;
 exports.state = state;

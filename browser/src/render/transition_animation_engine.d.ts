@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AnimationPlayer } from '@angular/animations';
+import { AnimationOptions, AnimationPlayer } from '@angular/animations';
 import { AnimationTransitionFactory } from '../dsl/animation_transition_factory';
 import { AnimationTransitionInstruction } from '../dsl/animation_transition_instruction';
 import { AnimationTrigger } from '../dsl/animation_trigger';
@@ -22,13 +22,9 @@ export interface QueueInstruction {
 }
 export declare class StateValue {
     value: string;
-    data: {
-        [key: string]: any;
-    };
+    options: AnimationOptions;
     constructor(input: any);
-    absorbValues(values: {
-        [key: string]: any;
-    }): void;
+    absorbOptions(options: AnimationOptions): void;
 }
 export declare const VOID_VALUE = "void";
 export declare const DEFAULT_STATE_VALUE: StateValue;
@@ -62,7 +58,7 @@ export interface QueuedTransition {
     player: TransitionAnimationPlayer;
 }
 export declare class TransitionAnimationEngine {
-    private _driver;
+    driver: AnimationDriver;
     private _normalizer;
     players: TransitionAnimationPlayer[];
     queuedRemovals: Map<any, () => any>;
@@ -82,7 +78,7 @@ export declare class TransitionAnimationEngine {
     namespacesByHostElement: Map<any, AnimationTransitionNamespace>;
     onRemovalComplete: (element: any, context: any) => void;
     _onRemovalComplete(element: any, context: any): void;
-    constructor(_driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
+    constructor(driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
     readonly queuedPlayers: TransitionAnimationPlayer[];
     createNamespace(namespaceId: string, hostElement: any): AnimationTransitionNamespace;
     private _balanceNamespaceList(ns, hostElement);

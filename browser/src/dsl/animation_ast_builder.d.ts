@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationAnimateRefMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationQueryMetadata, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata } from '@angular/animations';
+import { AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationAnimateRefMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationOptions, AnimationQueryMetadata, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata } from '@angular/animations';
 import { AnimateAst, AnimateChildAst, AnimateRefAst, Ast, GroupAst, KeyframesAst, QueryAst, ReferenceAst, SequenceAst, StaggerAst, StateAst, StyleAst, TimingAst, TransitionAst, TriggerAst } from './animation_ast';
 import { AnimationDslVisitor } from './animation_dsl_visitor';
 export declare function buildAnimationAst(metadata: AnimationMetadata | AnimationMetadata[], errors: any[]): Ast;
@@ -45,8 +45,6 @@ export declare class AnimationAstBuilderContext {
             [propName: string]: StyleTimeTuple;
         };
     };
-    locals: {
-        [name: string]: any;
-    } | null;
+    options: AnimationOptions | null;
     constructor(errors: any[]);
 }
