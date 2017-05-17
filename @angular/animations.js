@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-beta.1-6416e79
+ * @license Angular v4.2.0-beta.1-712630c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -558,94 +558,6 @@ function scheduleMicroTask(cb) {
  */
 /**
  * \@experimental Animation support is experimental.
- * @abstract
- */
-class AnimationPlayer {
-    /**
-     * @abstract
-     * @param {?} fn
-     * @return {?}
-     */
-    onDone(fn) { }
-    /**
-     * @abstract
-     * @param {?} fn
-     * @return {?}
-     */
-    onStart(fn) { }
-    /**
-     * @abstract
-     * @param {?} fn
-     * @return {?}
-     */
-    onDestroy(fn) { }
-    /**
-     * @abstract
-     * @return {?}
-     */
-    init() { }
-    /**
-     * @abstract
-     * @return {?}
-     */
-    hasStarted() { }
-    /**
-     * @abstract
-     * @return {?}
-     */
-    play() { }
-    /**
-     * @abstract
-     * @return {?}
-     */
-    pause() { }
-    /**
-     * @abstract
-     * @return {?}
-     */
-    restart() { }
-    /**
-     * @abstract
-     * @return {?}
-     */
-    finish() { }
-    /**
-     * @abstract
-     * @return {?}
-     */
-    destroy() { }
-    /**
-     * @abstract
-     * @return {?}
-     */
-    reset() { }
-    /**
-     * @abstract
-     * @param {?} p
-     * @return {?}
-     */
-    setPosition(p) { }
-    /**
-     * @abstract
-     * @return {?}
-     */
-    getPosition() { }
-    /**
-     * @return {?}
-     */
-    get parentPlayer() { throw new Error('NOT IMPLEMENTED: Base Class'); }
-    /**
-     * @param {?} player
-     * @return {?}
-     */
-    set parentPlayer(player) { throw new Error('NOT IMPLEMENTED: Base Class'); }
-    /**
-     * @return {?}
-     */
-    get totalTime() { throw new Error('NOT IMPLEMENTED: Base Class'); }
-}
-/**
- * \@experimental Animation support is experimental.
  */
 class NoopAnimationPlayer {
     constructor() {
@@ -963,5 +875,5 @@ const ɵPRE_STYLE = '!';
  * Generated bundle index. Do not edit.
  */
 
-export { Animation, AnimationBuilder, AUTO_STYLE, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, AnimationPlayer, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
+export { Animation, AnimationBuilder, AUTO_STYLE, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
 //# sourceMappingURL=animations.js.map

@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-beta.1-6416e79
+ * @license Angular v4.2.0-beta.1-712630c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -10,7 +10,7 @@
 }(this, (function (exports) { 'use strict';
 
 /**
- * @license Angular v4.2.0-beta.1-6416e79
+ * @license Angular v4.2.0-beta.1-712630c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -580,105 +580,6 @@ function scheduleMicroTask(cb) {
  */
 /**
  * \@experimental Animation support is experimental.
- * @abstract
- */
-var AnimationPlayer = (function () {
-    function AnimationPlayer() {
-    }
-    /**
-     * @abstract
-     * @param {?} fn
-     * @return {?}
-     */
-    AnimationPlayer.prototype.onDone = function (fn) { };
-    /**
-     * @abstract
-     * @param {?} fn
-     * @return {?}
-     */
-    AnimationPlayer.prototype.onStart = function (fn) { };
-    /**
-     * @abstract
-     * @param {?} fn
-     * @return {?}
-     */
-    AnimationPlayer.prototype.onDestroy = function (fn) { };
-    /**
-     * @abstract
-     * @return {?}
-     */
-    AnimationPlayer.prototype.init = function () { };
-    /**
-     * @abstract
-     * @return {?}
-     */
-    AnimationPlayer.prototype.hasStarted = function () { };
-    /**
-     * @abstract
-     * @return {?}
-     */
-    AnimationPlayer.prototype.play = function () { };
-    /**
-     * @abstract
-     * @return {?}
-     */
-    AnimationPlayer.prototype.pause = function () { };
-    /**
-     * @abstract
-     * @return {?}
-     */
-    AnimationPlayer.prototype.restart = function () { };
-    /**
-     * @abstract
-     * @return {?}
-     */
-    AnimationPlayer.prototype.finish = function () { };
-    /**
-     * @abstract
-     * @return {?}
-     */
-    AnimationPlayer.prototype.destroy = function () { };
-    /**
-     * @abstract
-     * @return {?}
-     */
-    AnimationPlayer.prototype.reset = function () { };
-    /**
-     * @abstract
-     * @param {?} p
-     * @return {?}
-     */
-    AnimationPlayer.prototype.setPosition = function (p) { };
-    /**
-     * @abstract
-     * @return {?}
-     */
-    AnimationPlayer.prototype.getPosition = function () { };
-    Object.defineProperty(AnimationPlayer.prototype, "parentPlayer", {
-        /**
-         * @return {?}
-         */
-        get: function () { throw new Error('NOT IMPLEMENTED: Base Class'); },
-        /**
-         * @param {?} player
-         * @return {?}
-         */
-        set: function (player) { throw new Error('NOT IMPLEMENTED: Base Class'); },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(AnimationPlayer.prototype, "totalTime", {
-        /**
-         * @return {?}
-         */
-        get: function () { throw new Error('NOT IMPLEMENTED: Base Class'); },
-        enumerable: true,
-        configurable: true
-    });
-    return AnimationPlayer;
-}());
-/**
- * \@experimental Animation support is experimental.
  */
 var NoopAnimationPlayer = (function () {
     function NoopAnimationPlayer() {
@@ -990,7 +891,6 @@ exports.style = style;
 exports.transition = transition;
 exports.trigger = trigger;
 exports.useAnimation = useAnimation;
-exports.AnimationPlayer = AnimationPlayer;
 exports.NoopAnimationPlayer = NoopAnimationPlayer;
 exports.ɵAnimationGroupPlayer = AnimationGroupPlayer;
 exports.ɵPRE_STYLE = ɵPRE_STYLE;
