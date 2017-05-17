@@ -5,26 +5,25 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AnimationMetadata, AnimationTransitionMetadata, ɵStyleData } from '@angular/animations';
+import { ɵStyleData } from '@angular/animations';
+import { TriggerAst } from './animation_ast';
 import { AnimationTransitionFactory } from './animation_transition_factory';
-import { AnimationTransitionInstruction } from './animation_transition_instruction';
 /**
  * @experimental Animation support is experimental.
  */
-export declare function buildTrigger(name: string, definitions: AnimationMetadata[]): AnimationTrigger;
+export declare function buildTrigger(name: string, ast: TriggerAst): AnimationTrigger;
 /**
 * @experimental Animation support is experimental.
 */
 export declare class AnimationTrigger {
     name: string;
-    private _transitionAsts;
+    ast: TriggerAst;
     transitionFactories: AnimationTransitionFactory[];
+    fallbackTransition: AnimationTransitionFactory;
     states: {
         [stateName: string]: ɵStyleData;
     };
-    constructor(name: string, states: {
-        [stateName: string]: ɵStyleData;
-    }, _transitionAsts: AnimationTransitionMetadata[]);
-    createFallbackInstruction(currentState: any, nextState: any): AnimationTransitionInstruction;
-    matchTransition(currentState: any, nextState: any): AnimationTransitionInstruction | null;
+    constructor(name: string, ast: TriggerAst);
+    readonly containsQueries: boolean;
+    matchTransition(currentState: any, nextState: any): AnimationTransitionFactory | null;
 }

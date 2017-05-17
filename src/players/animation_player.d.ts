@@ -16,6 +16,8 @@ export declare abstract class AnimationPlayer {
     abstract setPosition(p: any): void;
     abstract getPosition(): number;
     parentPlayer: AnimationPlayer | null;
+    readonly totalTime: number;
+    beforeDestroy?: () => any;
 }
 /**
  * @experimental Animation support is experimental.
@@ -28,6 +30,7 @@ export declare class NoopAnimationPlayer implements AnimationPlayer {
     private _destroyed;
     private _finished;
     parentPlayer: AnimationPlayer | null;
+    totalTime: number;
     constructor();
     private _onFinish();
     onStart(fn: () => void): void;

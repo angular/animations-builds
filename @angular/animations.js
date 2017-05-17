@@ -1,8 +1,41 @@
 /**
- * @license Angular v4.2.0-beta.1-d761059
+ * @license Angular v4.2.0-beta.1-54a6e4f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * \@experimental Animation support is experimental.
+ * @abstract
+ */
+class AnimationBuilder {
+    /**
+     * @abstract
+     * @param {?} animation
+     * @return {?}
+     */
+    build(animation) { }
+}
+/**
+ * \@experimental Animation support is experimental.
+ * @abstract
+ */
+class Animation {
+    /**
+     * @abstract
+     * @param {?} element
+     * @param {?=} options
+     * @return {?}
+     */
+    create(element, options) { }
+}
+
 /**
  * \@experimental Animation support is experimental.
  */
@@ -62,7 +95,7 @@ const AUTO_STYLE = '*';
  * @return {?}
  */
 function trigger(name, definitions) {
-    return { name, definitions };
+    return { type: 7 /* Trigger */, name, definitions, options: {} };
 }
 /**
  * `animate` is an animation-specific function that is designed to be used inside of Angular's
@@ -113,7 +146,7 @@ function trigger(name, definitions) {
  * @return {?}
  */
 function animate(timings, styles = null) {
-    return { type: 4 /* Animate */, styles: styles, timings: timings };
+    return { type: 4 /* Animate */, styles, timings };
 }
 /**
  * `group` is an animation-specific function that is designed to be used inside of Angular's
@@ -146,10 +179,11 @@ function animate(timings, styles = null) {
  *
  * \@experimental Animation support is experimental.
  * @param {?} steps
+ * @param {?=} options
  * @return {?}
  */
-function group(steps) {
-    return { type: 3 /* Group */, steps: steps };
+function group(steps, options = null) {
+    return { type: 3 /* Group */, steps, options };
 }
 /**
  * `sequence` is an animation-specific function that is designed to be used inside of Angular's
@@ -185,10 +219,11 @@ function group(steps) {
  *
  * \@experimental Animation support is experimental.
  * @param {?} steps
+ * @param {?=} options
  * @return {?}
  */
-function sequence(steps) {
-    return { type: 2 /* Sequence */, steps: steps };
+function sequence(steps, options = null) {
+    return { type: 2 /* Sequence */, steps, options };
 }
 /**
  * `style` is an animation-specific function that is designed to be used inside of Angular's
@@ -235,7 +270,7 @@ function sequence(steps) {
  * @return {?}
  */
 function style(tokens) {
-    return { type: 6 /* Style */, styles: tokens };
+    return { type: 6 /* Style */, styles: tokens, offset: null };
 }
 /**
  * `state` is an animation-specific function that is designed to be used inside of Angular's
@@ -289,7 +324,7 @@ function style(tokens) {
  * @return {?}
  */
 function state(name, styles) {
-    return { type: 0 /* State */, name: name, styles: styles };
+    return { type: 0 /* State */, name, styles };
 }
 /**
  * `keyframes` is an animation-specific function that is designed to be used inside of Angular's
@@ -339,7 +374,7 @@ function state(name, styles) {
  * @return {?}
  */
 function keyframes(steps) {
-    return { type: 5 /* KeyframeSequence */, steps: steps };
+    return { type: 5 /* Keyframes */, steps };
 }
 /**
  * `transition` is an animation-specific function that is designed to be used inside of Angular's
@@ -449,10 +484,56 @@ function keyframes(steps) {
  * \@experimental Animation support is experimental.
  * @param {?} stateChangeExpr
  * @param {?} steps
+ * @param {?=} options
  * @return {?}
  */
-function transition(stateChangeExpr, steps) {
-    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps };
+function transition(stateChangeExpr, steps, options = null) {
+    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, options };
+}
+/**
+ * \@experimental Animation support is experimental.
+ * @param {?} steps
+ * @param {?=} options
+ * @return {?}
+ */
+function animation(steps, options = null) {
+    return { type: 8 /* Reference */, animation: steps, options };
+}
+/**
+ * \@experimental Animation support is experimental.
+ * @param {?=} options
+ * @return {?}
+ */
+function animateChild(options = null) {
+    return { type: 9 /* AnimateChild */, options };
+}
+/**
+ * \@experimental Animation support is experimental.
+ * @param {?} animation
+ * @param {?=} options
+ * @return {?}
+ */
+function useAnimation(animation, options = null) {
+    return { type: 10 /* AnimateRef */, animation, options };
+}
+/**
+ * \@experimental Animation support is experimental.
+ * @param {?} selector
+ * @param {?} animation
+ * @param {?=} options
+ * @return {?}
+ */
+function query(selector, animation, options = null) {
+    return { type: 11 /* Query */, selector, animation, options };
+}
+/**
+ * \@experimental Animation support is experimental.
+ * @param {?} timings
+ * @param {?} animation
+ * @return {?}
+ */
+function stagger(timings, animation) {
+    return { type: 12 /* Stagger */, timings, animation };
 }
 
 /**
@@ -558,6 +639,10 @@ class AnimationPlayer {
      * @return {?}
      */
     set parentPlayer(player) { throw new Error('NOT IMPLEMENTED: Base Class'); }
+    /**
+     * @return {?}
+     */
+    get totalTime() { throw new Error('NOT IMPLEMENTED: Base Class'); }
 }
 /**
  * \@experimental Animation support is experimental.
@@ -571,6 +656,7 @@ class NoopAnimationPlayer {
         this._destroyed = false;
         this._finished = false;
         this.parentPlayer = null;
+        this.totalTime = 0;
     }
     /**
      * @return {?}
@@ -610,11 +696,15 @@ class NoopAnimationPlayer {
      */
     play() {
         if (!this.hasStarted()) {
-            scheduleMicroTask(() => this._onFinish());
+            this.triggerMicrotask();
             this._onStart();
         }
         this._started = true;
     }
+    /**
+     * @return {?}
+     */
+    triggerMicrotask() { scheduleMicroTask(() => this._onFinish()); }
     /**
      * @return {?}
      */
@@ -683,7 +773,10 @@ class AnimationGroupPlayer {
         this._destroyed = false;
         this._onDestroyFns = [];
         this.parentPlayer = null;
-        let count = 0;
+        this.totalTime = 0;
+        let doneCount = 0;
+        let destroyCount = 0;
+        let startCount = 0;
         const total = this._players.length;
         if (total == 0) {
             scheduleMicroTask(() => this._onFinish());
@@ -692,12 +785,23 @@ class AnimationGroupPlayer {
             this._players.forEach(player => {
                 player.parentPlayer = this;
                 player.onDone(() => {
-                    if (++count >= total) {
+                    if (++doneCount >= total) {
                         this._onFinish();
+                    }
+                });
+                player.onDestroy(() => {
+                    if (++destroyCount >= total) {
+                        this._onDestroy();
+                    }
+                });
+                player.onStart(() => {
+                    if (++startCount >= total) {
+                        this._onStart();
                     }
                 });
             });
         }
+        this.totalTime = this._players.reduce((time, player) => Math.max(time, player.totalTime), 0);
     }
     /**
      * @return {?}
@@ -719,6 +823,16 @@ class AnimationGroupPlayer {
      */
     onStart(fn) { this._onStartFns.push(fn); }
     /**
+     * @return {?}
+     */
+    _onStart() {
+        if (!this.hasStarted()) {
+            this._onStartFns.forEach(fn => fn());
+            this._onStartFns = [];
+            this._started = true;
+        }
+    }
+    /**
      * @param {?} fn
      * @return {?}
      */
@@ -739,11 +853,7 @@ class AnimationGroupPlayer {
         if (!this.parentPlayer) {
             this.init();
         }
-        if (!this.hasStarted()) {
-            this._onStartFns.forEach(fn => fn());
-            this._onStartFns = [];
-            this._started = true;
-        }
+        this._onStart();
         this._players.forEach(player => player.play());
     }
     /**
@@ -764,11 +874,15 @@ class AnimationGroupPlayer {
     /**
      * @return {?}
      */
-    destroy() {
+    destroy() { this._onDestroy(); }
+    /**
+     * @return {?}
+     */
+    _onDestroy() {
         if (!this._destroyed) {
+            this._destroyed = true;
             this._onFinish();
             this._players.forEach(player => player.destroy());
-            this._destroyed = true;
             this._onDestroyFns.forEach(fn => fn());
             this._onDestroyFns = [];
         }
@@ -787,7 +901,11 @@ class AnimationGroupPlayer {
      * @return {?}
      */
     setPosition(p) {
-        this._players.forEach(player => { player.setPosition(p); });
+        const /** @type {?} */ timeAtPosition = p * this.totalTime;
+        this._players.forEach(player => {
+            const /** @type {?} */ position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
+            player.setPosition(position);
+        });
     }
     /**
      * @return {?}
@@ -813,6 +931,7 @@ class AnimationGroupPlayer {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+const ɵPRE_STYLE = '!';
 
 /**
  * @license
@@ -820,6 +939,11 @@ class AnimationGroupPlayer {
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @module
+ * @description
+ * Entry point for all animation APIs of the animation package.
  */
 
 /**
@@ -839,5 +963,5 @@ class AnimationGroupPlayer {
  * Generated bundle index. Do not edit.
  */
 
-export { AUTO_STYLE, animate, group, keyframes, sequence, state, style, transition, trigger, AnimationPlayer, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer };
+export { Animation, AnimationBuilder, AUTO_STYLE, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, AnimationPlayer, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
 //# sourceMappingURL=animations.js.map

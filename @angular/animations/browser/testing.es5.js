@@ -9,11 +9,54 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 /**
- * @license Angular v4.2.0-beta.1-d761059
+ * @license Angular v4.2.0-beta.1-54a6e4f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
 import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var _contains = function (elm1, elm2) { return false; };
+var _matches = function (element, selector) { return false; };
+var _query = function (element, selector, multi) {
+    return [];
+};
+if (typeof Element != 'undefined') {
+    // this is well supported in all browsers
+    _contains = function (elm1, elm2) { return elm1.contains(elm2); };
+    if (Element.prototype.matches) {
+        _matches = function (element, selector) { return element.matches(selector); };
+    }
+    else {
+        var proto = Element.prototype;
+        var fn_1 = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
+            proto.oMatchesSelector || proto.webkitMatchesSelector;
+        if (fn_1) {
+            _matches = function (element, selector) { return fn_1.apply(element, [selector]); };
+        }
+    }
+    _query = function (element, selector, multi) {
+        var results = [];
+        if (multi) {
+            results.push.apply(results, element.querySelectorAll(selector));
+        }
+        else {
+            var elm = element.querySelector(selector);
+            if (elm) {
+                results.push(elm);
+            }
+        }
+        return results;
+    };
+}
+var matchesElement = _matches;
+var containsElement = _contains;
+var invokeQuery = _query;
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -27,6 +70,16 @@ import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
 var MockAnimationDriver = (function () {
     function MockAnimationDriver() {
     }
+    MockAnimationDriver.prototype.matchesElement = function (element, selector) {
+        return matchesElement(element, selector);
+    };
+    MockAnimationDriver.prototype.containsElement = function (elm1, elm2) { return containsElement(elm1, elm2); };
+    MockAnimationDriver.prototype.query = function (element, selector, multi) {
+        return invokeQuery(element, selector, multi);
+    };
+    MockAnimationDriver.prototype.computeStyle = function (element, prop, defaultValue) {
+        return defaultValue || '';
+    };
     MockAnimationDriver.prototype.animate = function (element, keyframes, duration, delay, easing, previousPlayers) {
         if (previousPlayers === void 0) { previousPlayers = []; }
         var player = new MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers);
@@ -50,14 +103,17 @@ var MockAnimationPlayer = (function (_super) {
         _this.easing = easing;
         _this.previousPlayers = previousPlayers;
         _this.__finished = false;
+        _this.__started = false;
         _this.previousStyles = {};
         _this._onInitFns = [];
+        _this.currentSnapshot = {};
         previousPlayers.forEach(function (player) {
             if (player instanceof MockAnimationPlayer) {
-                var styles_1 = player._captureStyles();
-                Object.keys(styles_1).forEach(function (prop) { _this.previousStyles[prop] = styles_1[prop]; });
+                var styles_1 = player.currentSnapshot;
+                Object.keys(styles_1).forEach(function (prop) { return _this.previousStyles[prop] = styles_1[prop]; });
             }
         });
+        _this.totalTime = delay + duration;
         return _this;
     }
     /* @internal */
@@ -76,7 +132,14 @@ var MockAnimationPlayer = (function (_super) {
         _super.prototype.destroy.call(this);
         this.__finished = true;
     };
-    MockAnimationPlayer.prototype._captureStyles = function () {
+    /* @internal */
+    MockAnimationPlayer.prototype.triggerMicrotask = function () { };
+    MockAnimationPlayer.prototype.play = function () {
+        _super.prototype.play.call(this);
+        this.__started = true;
+    };
+    MockAnimationPlayer.prototype.hasStarted = function () { return this.__started; };
+    MockAnimationPlayer.prototype.beforeDestroy = function () {
         var _this = this;
         var captures = {};
         Object.keys(this.previousStyles).forEach(function (prop) {
@@ -94,7 +157,7 @@ var MockAnimationPlayer = (function (_super) {
                 });
             });
         }
-        return captures;
+        this.currentSnapshot = captures;
     };
     return MockAnimationPlayer;
 }(NoopAnimationPlayer));

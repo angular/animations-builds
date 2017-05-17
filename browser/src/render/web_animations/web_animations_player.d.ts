@@ -15,6 +15,7 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     options: {
         [key: string]: string | number;
     };
+    private previousPlayers;
     private _onDoneFns;
     private _onStartFns;
     private _onDestroyFns;
@@ -29,6 +30,9 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     time: number;
     parentPlayer: AnimationPlayer | null;
     previousStyles: {
+        [styleName: string]: string | number;
+    };
+    currentSnapshot: {
         [styleName: string]: string | number;
     };
     constructor(element: any, keyframes: {
@@ -52,5 +56,6 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     destroy(): void;
     setPosition(p: number): void;
     getPosition(): number;
-    private _captureStyles();
+    readonly totalTime: number;
+    beforeDestroy(): void;
 }
