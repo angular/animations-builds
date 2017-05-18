@@ -9,7 +9,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 /**
- * @license Angular v4.2.0-beta.1-86b7bd9
+ * @license Angular v4.2.0-beta.1-7d9f96a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1899,24 +1899,24 @@ var AnimationTimelineContext = (function () {
     AnimationTimelineContext.prototype.updateOptions = function (options, skipIfExists) {
         if (!options)
             return;
-        // NOTE: this will get patched up when other animation methods support duration overrides
         var /** @type {?} */ newOptions = (options);
+        var /** @type {?} */ optionsToUpdate = this.options;
+        // NOTE: this will get patched up when other animation methods support duration overrides
         if (newOptions.duration != null) {
-            ((this.options)).duration = resolveTimingValue(newOptions.duration);
+            ((optionsToUpdate)).duration = resolveTimingValue(newOptions.duration);
         }
         if (newOptions.delay != null) {
-            this.options.delay = resolveTimingValue(newOptions.delay);
+            optionsToUpdate.delay = resolveTimingValue(newOptions.delay);
         }
         var /** @type {?} */ newParams = newOptions.params;
         if (newParams) {
-            var /** @type {?} */ params_1 = this.options && ((this.options.params));
-            if (!params_1) {
-                params_1 = this.options.params = {};
+            var /** @type {?} */ paramsToUpdate_1 = ((optionsToUpdate.params));
+            if (!paramsToUpdate_1) {
+                paramsToUpdate_1 = this.options.params = {};
             }
-            Object.keys(params_1).forEach(function (name) {
-                var /** @type {?} */ value = params_1[name];
-                if (!skipIfExists || !newOptions.hasOwnProperty(name)) {
-                    params_1[name] = value;
+            Object.keys(newParams).forEach(function (name) {
+                if (!skipIfExists || !paramsToUpdate_1.hasOwnProperty(name)) {
+                    paramsToUpdate_1[name] = newParams[name];
                 }
             });
         }
@@ -1929,8 +1929,8 @@ var AnimationTimelineContext = (function () {
         if (this.options) {
             var /** @type {?} */ oldParams_1 = this.options.params;
             if (oldParams_1) {
-                var /** @type {?} */ params_2 = options['params'] = {};
-                Object.keys(this.options.params).forEach(function (name) { params_2[name] = oldParams_1[name]; });
+                var /** @type {?} */ params_1 = options['params'] = {};
+                Object.keys(this.options.params).forEach(function (name) { params_1[name] = oldParams_1[name]; });
             }
         }
         return options;

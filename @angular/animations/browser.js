@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-beta.1-86b7bd9
+ * @license Angular v4.2.0-beta.1-7d9f96a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1808,24 +1808,24 @@ class AnimationTimelineContext {
     updateOptions(options, skipIfExists) {
         if (!options)
             return;
-        // NOTE: this will get patched up when other animation methods support duration overrides
         const /** @type {?} */ newOptions = (options);
+        let /** @type {?} */ optionsToUpdate = this.options;
+        // NOTE: this will get patched up when other animation methods support duration overrides
         if (newOptions.duration != null) {
-            ((this.options)).duration = resolveTimingValue(newOptions.duration);
+            ((optionsToUpdate)).duration = resolveTimingValue(newOptions.duration);
         }
         if (newOptions.delay != null) {
-            this.options.delay = resolveTimingValue(newOptions.delay);
+            optionsToUpdate.delay = resolveTimingValue(newOptions.delay);
         }
         const /** @type {?} */ newParams = newOptions.params;
         if (newParams) {
-            let /** @type {?} */ params = this.options && ((this.options.params));
-            if (!params) {
-                params = this.options.params = {};
+            let /** @type {?} */ paramsToUpdate = ((optionsToUpdate.params));
+            if (!paramsToUpdate) {
+                paramsToUpdate = this.options.params = {};
             }
-            Object.keys(params).forEach(name => {
-                const /** @type {?} */ value = params[name];
-                if (!skipIfExists || !newOptions.hasOwnProperty(name)) {
-                    params[name] = value;
+            Object.keys(newParams).forEach(name => {
+                if (!skipIfExists || !paramsToUpdate.hasOwnProperty(name)) {
+                    paramsToUpdate[name] = newParams[name];
                 }
             });
         }
