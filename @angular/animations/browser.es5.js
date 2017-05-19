@@ -9,7 +9,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 /**
- * @license Angular v4.2.0-beta.1-eed67dd
+ * @license Angular v4.2.0-beta.1-6cb93c1
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -83,7 +83,12 @@ function listenOnPlayer(player, eventName, event, callback) {
     }
 }
 function copyAnimationEvent(e, phaseName, totalTime) {
-    return makeAnimationEvent(e.element, e.triggerName, e.fromState, e.toState, phaseName || e.phaseName, totalTime == undefined ? e.totalTime : totalTime);
+    var event = makeAnimationEvent(e.element, e.triggerName, e.fromState, e.toState, phaseName || e.phaseName, totalTime == undefined ? e.totalTime : totalTime);
+    var data = e['_data'];
+    if (data != null) {
+        event['_data'] = data;
+    }
+    return event;
 }
 function makeAnimationEvent(element, triggerName, fromState, toState, phaseName, totalTime) {
     if (phaseName === void 0) { phaseName = ''; }
@@ -3280,9 +3285,10 @@ var AnimationTransitionNamespace = (function () {
      */
     AnimationTransitionNamespace.prototype.insertNode = function (element, parent) { addClass(element, this._hostClassName); };
     /**
+     * @param {?} countId
      * @return {?}
      */
-    AnimationTransitionNamespace.prototype.drainQueuedTransitions = function () {
+    AnimationTransitionNamespace.prototype.drainQueuedTransitions = function (countId) {
         var _this = this;
         var /** @type {?} */ instructions = [];
         this._queue.forEach(function (entry) {
@@ -3295,6 +3301,7 @@ var AnimationTransitionNamespace = (function () {
                 listeners.forEach(function (listener) {
                     if (listener.name == entry.triggerName) {
                         var /** @type {?} */ baseEvent = makeAnimationEvent(element, entry.triggerName, entry.fromState.value, entry.toState.value);
+                        ((baseEvent))['_data'] = countId;
                         listenOnPlayer(entry.player, listener.phase, baseEvent, listener.callback);
                     }
                 });
@@ -3592,17 +3599,19 @@ var TransitionAnimationEngine = (function () {
         });
     };
     /**
+     * @param {?=} countId
      * @return {?}
      */
-    TransitionAnimationEngine.prototype.flush = function () {
+    TransitionAnimationEngine.prototype.flush = function (countId) {
         var _this = this;
+        if (countId === void 0) { countId = -1; }
         var /** @type {?} */ players = [];
         if (this.newHostElements.size) {
             this.newHostElements.forEach(function (ns, element) { _this._balanceNamespaceList(ns, element); });
             this.newHostElements.clear();
         }
         if (this._namespaceList.length && (this.totalQueuedPlayers || this.queuedRemovals.size)) {
-            players = this._flushAnimations();
+            players = this._flushAnimations(countId);
         }
         this.totalQueuedPlayers = 0;
         this.queuedRemovals.clear();
@@ -3624,9 +3633,10 @@ var TransitionAnimationEngine = (function () {
         }
     };
     /**
+     * @param {?} countId
      * @return {?}
      */
-    TransitionAnimationEngine.prototype._flushAnimations = function () {
+    TransitionAnimationEngine.prototype._flushAnimations = function (countId) {
         var _this = this;
         var /** @type {?} */ subTimelines = new ElementInstructionMap();
         var /** @type {?} */ skippedPlayers = [];
@@ -3643,7 +3653,7 @@ var TransitionAnimationEngine = (function () {
         var /** @type {?} */ bodyNode = getBodyNode();
         for (var /** @type {?} */ i = this._namespaceList.length - 1; i >= 0; i--) {
             var /** @type {?} */ ns = this._namespaceList[i];
-            ns.drainQueuedTransitions().forEach(function (entry) {
+            ns.drainQueuedTransitions(countId).forEach(function (entry) {
                 var /** @type {?} */ player = entry.player;
                 var /** @type {?} */ element = entry.element;
                 if (!bodyNode || !_this.driver.containsElement(bodyNode, element)) {
@@ -3700,7 +3710,7 @@ var TransitionAnimationEngine = (function () {
                 _this._beforeAnimationBuild(entry.player.namespaceId, entry.instruction, allPreviousPlayersMap);
             }
         });
-        allPreviousPlayersMap.forEach(function (players) { players.forEach(function (player) { return player.destroy(); }); });
+        allPreviousPlayersMap.forEach(function (players) { return players.forEach(function (player) { return player.destroy(); }); });
         var /** @type {?} */ leaveNodes = bodyNode && allPostStyleElements.size ?
             listToArray(this.driver.query(bodyNode, LEAVE_SELECTOR, true)) :
             [];
@@ -4443,9 +4453,13 @@ var AnimationEngine = (function () {
         return this._transitionEngine.listen(namespaceId, element, eventName, eventPhase, callback);
     };
     /**
+     * @param {?=} countId
      * @return {?}
      */
-    AnimationEngine.prototype.flush = function () { this._transitionEngine.flush(); };
+    AnimationEngine.prototype.flush = function (countId) {
+        if (countId === void 0) { countId = -1; }
+        this._transitionEngine.flush(countId);
+    };
     Object.defineProperty(AnimationEngine.prototype, "players", {
         /**
          * @return {?}

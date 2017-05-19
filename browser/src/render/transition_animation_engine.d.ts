@@ -48,7 +48,7 @@ export declare class AnimationTransitionNamespace {
     private _destroyInnerNodes(rootElement, context, animate?);
     removeNode(element: any, context: any, doNotRecurse?: boolean): void;
     insertNode(element: any, parent: any): void;
-    drainQueuedTransitions(): QueueInstruction[];
+    drainQueuedTransitions(countId: number): QueueInstruction[];
     destroy(context: any): void;
     elementContainsData(element: any): boolean;
 }
@@ -92,8 +92,8 @@ export declare class TransitionAnimationEngine {
     private _buildInstruction(entry, subTimelines);
     destroyInnerAnimations(containerElement: any): void;
     whenRenderingDone(): Promise<any>;
-    flush(): void;
-    private _flushAnimations();
+    flush(countId?: number): void;
+    private _flushAnimations(countId);
     elementContainsData(namespaceId: string, element: any): boolean;
     afterFlush(callback: () => any): void;
     afterFlushAnimationsDone(callback: () => any): void;

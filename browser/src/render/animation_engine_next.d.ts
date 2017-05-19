@@ -20,7 +20,7 @@ export declare class AnimationEngine {
     onRemove(namespaceId: string, element: any, context: any): void;
     setProperty(namespaceId: string, element: any, property: string, value: any): boolean;
     listen(namespaceId: string, element: any, eventName: string, eventPhase: string, callback: (event: any) => any): () => any;
-    flush(): void;
+    flush(countId?: number): void;
     readonly players: AnimationPlayer[];
     whenRenderingDone(): Promise<any>;
 }

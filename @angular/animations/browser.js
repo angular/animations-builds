@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-beta.1-eed67dd
+ * @license Angular v4.2.0-beta.1-6cb93c1
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -72,7 +72,12 @@ function listenOnPlayer(player, eventName, event, callback) {
     }
 }
 function copyAnimationEvent(e, phaseName, totalTime) {
-    return makeAnimationEvent(e.element, e.triggerName, e.fromState, e.toState, phaseName || e.phaseName, totalTime == undefined ? e.totalTime : totalTime);
+    const event = makeAnimationEvent(e.element, e.triggerName, e.fromState, e.toState, phaseName || e.phaseName, totalTime == undefined ? e.totalTime : totalTime);
+    const data = e['_data'];
+    if (data != null) {
+        event['_data'] = data;
+    }
+    return event;
 }
 function makeAnimationEvent(element, triggerName, fromState, toState, phaseName = '', totalTime = 0) {
     return { element, triggerName, fromState, toState, phaseName, totalTime };
@@ -3139,9 +3144,10 @@ class AnimationTransitionNamespace {
      */
     insertNode(element, parent) { addClass(element, this._hostClassName); }
     /**
+     * @param {?} countId
      * @return {?}
      */
-    drainQueuedTransitions() {
+    drainQueuedTransitions(countId) {
         const /** @type {?} */ instructions = [];
         this._queue.forEach(entry => {
             const /** @type {?} */ player = entry.player;
@@ -3153,6 +3159,7 @@ class AnimationTransitionNamespace {
                 listeners.forEach((listener) => {
                     if (listener.name == entry.triggerName) {
                         const /** @type {?} */ baseEvent = makeAnimationEvent(element, entry.triggerName, entry.fromState.value, entry.toState.value);
+                        ((baseEvent))['_data'] = countId;
                         listenOnPlayer(entry.player, listener.phase, baseEvent, listener.callback);
                     }
                 });
@@ -3442,16 +3449,17 @@ class TransitionAnimationEngine {
         });
     }
     /**
+     * @param {?=} countId
      * @return {?}
      */
-    flush() {
+    flush(countId = -1) {
         let /** @type {?} */ players = [];
         if (this.newHostElements.size) {
             this.newHostElements.forEach((ns, element) => { this._balanceNamespaceList(ns, element); });
             this.newHostElements.clear();
         }
         if (this._namespaceList.length && (this.totalQueuedPlayers || this.queuedRemovals.size)) {
-            players = this._flushAnimations();
+            players = this._flushAnimations(countId);
         }
         this.totalQueuedPlayers = 0;
         this.queuedRemovals.clear();
@@ -3473,9 +3481,10 @@ class TransitionAnimationEngine {
         }
     }
     /**
+     * @param {?} countId
      * @return {?}
      */
-    _flushAnimations() {
+    _flushAnimations(countId) {
         const /** @type {?} */ subTimelines = new ElementInstructionMap();
         const /** @type {?} */ skippedPlayers = [];
         const /** @type {?} */ skippedPlayersMap = new Map();
@@ -3491,7 +3500,7 @@ class TransitionAnimationEngine {
         const /** @type {?} */ bodyNode = getBodyNode();
         for (let /** @type {?} */ i = this._namespaceList.length - 1; i >= 0; i--) {
             const /** @type {?} */ ns = this._namespaceList[i];
-            ns.drainQueuedTransitions().forEach(entry => {
+            ns.drainQueuedTransitions(countId).forEach(entry => {
                 const /** @type {?} */ player = entry.player;
                 const /** @type {?} */ element = entry.element;
                 if (!bodyNode || !this.driver.containsElement(bodyNode, element)) {
@@ -3548,7 +3557,7 @@ class TransitionAnimationEngine {
                 this._beforeAnimationBuild(entry.player.namespaceId, entry.instruction, allPreviousPlayersMap);
             }
         });
-        allPreviousPlayersMap.forEach(players => { players.forEach(player => player.destroy()); });
+        allPreviousPlayersMap.forEach(players => players.forEach(player => player.destroy()));
         const /** @type {?} */ leaveNodes = bodyNode && allPostStyleElements.size ?
             listToArray(this.driver.query(bodyNode, LEAVE_SELECTOR, true)) :
             [];
@@ -4274,9 +4283,10 @@ class AnimationEngine {
         return this._transitionEngine.listen(namespaceId, element, eventName, eventPhase, callback);
     }
     /**
+     * @param {?=} countId
      * @return {?}
      */
-    flush() { this._transitionEngine.flush(); }
+    flush(countId = -1) { this._transitionEngine.flush(countId); }
     /**
      * @return {?}
      */
