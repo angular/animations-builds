@@ -1,4 +1,8 @@
 /**
+ * AnimationPlayer controls an animation sequence that was produced from a programmatic animation.
+ * (see {@link AnimationBuilder AnimationBuilder} for more information on how to create programmatic
+ * animations.)
+ *
  * @experimental Animation support is experimental.
  */
 export interface AnimationPlayer {

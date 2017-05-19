@@ -1,6 +1,6 @@
 {
   "name": "@angular/animations",
-  "version": "4.2.0-beta.1-5d4f543",
+  "version": "4.2.0-beta.1-b10029c",
   "description": "Angular - animations integration with web-animationss",
   "main": "./bundles/animations.umd.js",
   "module": "./@angular/animations.es5.js",
@@ -9,7 +9,7 @@
   "author": "angular",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/core": "4.2.0-beta.1-5d4f543"
+    "@angular/core": "4.2.0-beta.1-b10029c"
   },
   "repository": {
     "type": "git",
