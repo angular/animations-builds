@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-rc.0-08dfe91
+ * @license Angular v4.2.0-rc.0-e7d9fd8
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -321,7 +321,10 @@ function copyStyles(styles, readPrototype, destination = {}) {
  */
 function setStyles(element, styles) {
     if (element['style']) {
-        Object.keys(styles).forEach(prop => element.style[prop] = styles[prop]);
+        Object.keys(styles).forEach(prop => {
+            const /** @type {?} */ camelProp = dashCaseToCamelCase(prop);
+            element.style[camelProp] = styles[prop];
+        });
     }
 }
 /**
@@ -332,9 +335,8 @@ function setStyles(element, styles) {
 function eraseStyles(element, styles) {
     if (element['style']) {
         Object.keys(styles).forEach(prop => {
-            // IE requires '' instead of null
-            // see https://github.com/angular/angular/issues/7916
-            element.style[prop] = '';
+            const /** @type {?} */ camelProp = dashCaseToCamelCase(prop);
+            element.style[camelProp] = '';
         });
     }
 }
@@ -422,6 +424,14 @@ function mergeAnimationOptions(source, destination) {
         });
     }
     return destination;
+}
+const DASH_CASE_REGEXP = /-+([a-z0-9])/g;
+/**
+ * @param {?} input
+ * @return {?}
+ */
+function dashCaseToCamelCase(input) {
+    return input.replace(DASH_CASE_REGEXP, (...m) => m[1].toUpperCase());
 }
 
 /**
@@ -2410,14 +2420,6 @@ function makeBooleanMap(keys) {
     keys.forEach(key => map[key] = true);
     return map;
 }
-const DASH_CASE_REGEXP = /-+([a-z0-9])/g;
-/**
- * @param {?} input
- * @return {?}
- */
-function dashCaseToCamelCase(input) {
-    return input.replace(DASH_CASE_REGEXP, (...m) => m[1].toUpperCase());
-}
 
 /**
  * @license
@@ -3811,7 +3813,7 @@ class TransitionAnimationEngine {
         });
         allConsumedElements.forEach(element => addClass(element, NG_ANIMATING_CLASSNAME));
         const /** @type {?} */ player = optimizeGroupPlayer(allNewPlayers);
-        player.onDone(() => {
+        player.onDestroy(() => {
             allConsumedElements.forEach(element => removeClass(element, NG_ANIMATING_CLASSNAME));
             setStyles(rootElement, instruction.toStyles);
         });
@@ -4352,6 +4354,13 @@ class WebAnimationsPlayer {
      * @return {?}
      */
     init() {
+        this._buildPlayer();
+        this._preparePlayerBeforeStart();
+    }
+    /**
+     * @return {?}
+     */
+    _buildPlayer() {
         if (this._initialized)
             return;
         this._initialized = true;
@@ -4379,6 +4388,12 @@ class WebAnimationsPlayer {
         }
         this._player = this._triggerWebAnimation(this.element, keyframes, this.options);
         this._finalKeyframe = keyframes.length ? keyframes[keyframes.length - 1] : {};
+        this._player.addEventListener('finish', () => this._onFinish());
+    }
+    /**
+     * @return {?}
+     */
+    _preparePlayerBeforeStart() {
         // this is required so that the player doesn't start to animate right away
         if (this._delay) {
             this._resetDomPlayerState();
@@ -4386,7 +4401,6 @@ class WebAnimationsPlayer {
         else {
             this._player.pause();
         }
-        this._player.addEventListener('finish', () => this._onFinish());
     }
     /**
      * \@internal
@@ -4423,7 +4437,7 @@ class WebAnimationsPlayer {
      * @return {?}
      */
     play() {
-        this.init();
+        this._buildPlayer();
         if (!this.hasStarted()) {
             this._onStartFns.forEach(fn => fn());
             this._onStartFns = [];

@@ -42,6 +42,8 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     }, previousPlayers?: WebAnimationsPlayer[]);
     private _onFinish();
     init(): void;
+    private _buildPlayer();
+    private _preparePlayerBeforeStart();
     readonly domPlayer: DOMAnimation;
     onStart(fn: () => void): void;
     onDone(fn: () => void): void;

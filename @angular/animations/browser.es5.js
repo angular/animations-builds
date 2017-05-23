@@ -9,7 +9,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 /**
- * @license Angular v4.2.0-rc.0-08dfe91
+ * @license Angular v4.2.0-rc.0-e7d9fd8
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -341,7 +341,10 @@ function copyStyles(styles, readPrototype, destination) {
  */
 function setStyles(element, styles) {
     if (element['style']) {
-        Object.keys(styles).forEach(function (prop) { return element.style[prop] = styles[prop]; });
+        Object.keys(styles).forEach(function (prop) {
+            var /** @type {?} */ camelProp = dashCaseToCamelCase(prop);
+            element.style[camelProp] = styles[prop];
+        });
     }
 }
 /**
@@ -352,9 +355,8 @@ function setStyles(element, styles) {
 function eraseStyles(element, styles) {
     if (element['style']) {
         Object.keys(styles).forEach(function (prop) {
-            // IE requires '' instead of null
-            // see https://github.com/angular/angular/issues/7916
-            element.style[prop] = '';
+            var /** @type {?} */ camelProp = dashCaseToCamelCase(prop);
+            element.style[camelProp] = '';
         });
     }
 }
@@ -442,6 +444,20 @@ function mergeAnimationOptions(source, destination) {
         });
     }
     return destination;
+}
+var DASH_CASE_REGEXP = /-+([a-z0-9])/g;
+/**
+ * @param {?} input
+ * @return {?}
+ */
+function dashCaseToCamelCase(input) {
+    return input.replace(DASH_CASE_REGEXP, function () {
+        var m = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            m[_i] = arguments[_i];
+        }
+        return m[1].toUpperCase();
+    });
 }
 /**
  * @license
@@ -2532,20 +2548,6 @@ function makeBooleanMap(keys) {
     keys.forEach(function (key) { return map[key] = true; });
     return map;
 }
-var DASH_CASE_REGEXP = /-+([a-z0-9])/g;
-/**
- * @param {?} input
- * @return {?}
- */
-function dashCaseToCamelCase(input) {
-    return input.replace(DASH_CASE_REGEXP, function () {
-        var m = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            m[_i] = arguments[_i];
-        }
-        return m[1].toUpperCase();
-    });
-}
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -3966,7 +3968,7 @@ var TransitionAnimationEngine = (function () {
         });
         allConsumedElements.forEach(function (element) { return addClass(element, NG_ANIMATING_CLASSNAME); });
         var /** @type {?} */ player = optimizeGroupPlayer(allNewPlayers);
-        player.onDone(function () {
+        player.onDestroy(function () {
             allConsumedElements.forEach(function (element) { return removeClass(element, NG_ANIMATING_CLASSNAME); });
             setStyles(rootElement, instruction.toStyles);
         });
@@ -4531,6 +4533,13 @@ var WebAnimationsPlayer = (function () {
      * @return {?}
      */
     WebAnimationsPlayer.prototype.init = function () {
+        this._buildPlayer();
+        this._preparePlayerBeforeStart();
+    };
+    /**
+     * @return {?}
+     */
+    WebAnimationsPlayer.prototype._buildPlayer = function () {
         var _this = this;
         if (this._initialized)
             return;
@@ -4562,6 +4571,12 @@ var WebAnimationsPlayer = (function () {
         }
         this._player = this._triggerWebAnimation(this.element, keyframes, this.options);
         this._finalKeyframe = keyframes.length ? keyframes[keyframes.length - 1] : {};
+        this._player.addEventListener('finish', function () { return _this._onFinish(); });
+    };
+    /**
+     * @return {?}
+     */
+    WebAnimationsPlayer.prototype._preparePlayerBeforeStart = function () {
         // this is required so that the player doesn't start to animate right away
         if (this._delay) {
             this._resetDomPlayerState();
@@ -4569,7 +4584,6 @@ var WebAnimationsPlayer = (function () {
         else {
             this._player.pause();
         }
-        this._player.addEventListener('finish', function () { return _this._onFinish(); });
     };
     /**
      * \@internal
@@ -4610,7 +4624,7 @@ var WebAnimationsPlayer = (function () {
      * @return {?}
      */
     WebAnimationsPlayer.prototype.play = function () {
-        this.init();
+        this._buildPlayer();
         if (!this.hasStarted()) {
             this._onStartFns.forEach(function (fn) { return fn(); });
             this._onStartFns = [];
