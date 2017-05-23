@@ -1,15 +1,6 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+import * as tslib_1 from "tslib";
 /**
- * @license Angular v4.2.0-rc.0-1651a8f
+ * @license Angular v4.2.0-rc.0-fa809ec
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -498,7 +489,7 @@ var Ast = (function () {
     return Ast;
 }());
 var TriggerAst = (function (_super) {
-    __extends(TriggerAst, _super);
+    tslib_1.__extends(TriggerAst, _super);
     /**
      * @param {?} name
      * @param {?} states
@@ -522,7 +513,7 @@ var TriggerAst = (function (_super) {
     return TriggerAst;
 }(Ast));
 var StateAst = (function (_super) {
-    __extends(StateAst, _super);
+    tslib_1.__extends(StateAst, _super);
     /**
      * @param {?} name
      * @param {?} style
@@ -542,7 +533,7 @@ var StateAst = (function (_super) {
     return StateAst;
 }(Ast));
 var TransitionAst = (function (_super) {
-    __extends(TransitionAst, _super);
+    tslib_1.__extends(TransitionAst, _super);
     /**
      * @param {?} matchers
      * @param {?} animation
@@ -564,7 +555,7 @@ var TransitionAst = (function (_super) {
     return TransitionAst;
 }(Ast));
 var SequenceAst = (function (_super) {
-    __extends(SequenceAst, _super);
+    tslib_1.__extends(SequenceAst, _super);
     /**
      * @param {?} steps
      */
@@ -582,7 +573,7 @@ var SequenceAst = (function (_super) {
     return SequenceAst;
 }(Ast));
 var GroupAst = (function (_super) {
-    __extends(GroupAst, _super);
+    tslib_1.__extends(GroupAst, _super);
     /**
      * @param {?} steps
      */
@@ -600,7 +591,7 @@ var GroupAst = (function (_super) {
     return GroupAst;
 }(Ast));
 var AnimateAst = (function (_super) {
-    __extends(AnimateAst, _super);
+    tslib_1.__extends(AnimateAst, _super);
     /**
      * @param {?} timings
      * @param {?} style
@@ -620,7 +611,7 @@ var AnimateAst = (function (_super) {
     return AnimateAst;
 }(Ast));
 var StyleAst = (function (_super) {
-    __extends(StyleAst, _super);
+    tslib_1.__extends(StyleAst, _super);
     /**
      * @param {?} styles
      * @param {?} easing
@@ -643,7 +634,7 @@ var StyleAst = (function (_super) {
     return StyleAst;
 }(Ast));
 var KeyframesAst = (function (_super) {
-    __extends(KeyframesAst, _super);
+    tslib_1.__extends(KeyframesAst, _super);
     /**
      * @param {?} styles
      */
@@ -661,7 +652,7 @@ var KeyframesAst = (function (_super) {
     return KeyframesAst;
 }(Ast));
 var ReferenceAst = (function (_super) {
-    __extends(ReferenceAst, _super);
+    tslib_1.__extends(ReferenceAst, _super);
     /**
      * @param {?} animation
      */
@@ -679,7 +670,7 @@ var ReferenceAst = (function (_super) {
     return ReferenceAst;
 }(Ast));
 var AnimateChildAst = (function (_super) {
-    __extends(AnimateChildAst, _super);
+    tslib_1.__extends(AnimateChildAst, _super);
     function AnimateChildAst() {
         return _super.call(this) || this;
     }
@@ -692,7 +683,7 @@ var AnimateChildAst = (function (_super) {
     return AnimateChildAst;
 }(Ast));
 var AnimateRefAst = (function (_super) {
-    __extends(AnimateRefAst, _super);
+    tslib_1.__extends(AnimateRefAst, _super);
     /**
      * @param {?} animation
      */
@@ -710,7 +701,7 @@ var AnimateRefAst = (function (_super) {
     return AnimateRefAst;
 }(Ast));
 var QueryAst = (function (_super) {
-    __extends(QueryAst, _super);
+    tslib_1.__extends(QueryAst, _super);
     /**
      * @param {?} selector
      * @param {?} limit
@@ -736,7 +727,7 @@ var QueryAst = (function (_super) {
     return QueryAst;
 }(Ast));
 var StaggerAst = (function (_super) {
-    __extends(StaggerAst, _super);
+    tslib_1.__extends(StaggerAst, _super);
     /**
      * @param {?} timings
      * @param {?} animation
@@ -756,7 +747,7 @@ var StaggerAst = (function (_super) {
     return StaggerAst;
 }(Ast));
 var TimingAst = (function (_super) {
-    __extends(TimingAst, _super);
+    tslib_1.__extends(TimingAst, _super);
     /**
      * @param {?} duration
      * @param {?=} delay
@@ -780,7 +771,7 @@ var TimingAst = (function (_super) {
     return TimingAst;
 }(Ast));
 var DynamicTimingAst = (function (_super) {
-    __extends(DynamicTimingAst, _super);
+    tslib_1.__extends(DynamicTimingAst, _super);
     /**
      * @param {?} value
      */
@@ -2312,7 +2303,7 @@ var TimelineBuilder = (function () {
     return TimelineBuilder;
 }());
 var SubTimelineBuilder = (function (_super) {
-    __extends(SubTimelineBuilder, _super);
+    tslib_1.__extends(SubTimelineBuilder, _super);
     /**
      * @param {?} element
      * @param {?} keyframes
@@ -2500,7 +2491,7 @@ var NoopAnimationStyleNormalizer = (function () {
  * found in the LICENSE file at https://angular.io/license
  */
 var WebAnimationsStyleNormalizer = (function (_super) {
-    __extends(WebAnimationsStyleNormalizer, _super);
+    tslib_1.__extends(WebAnimationsStyleNormalizer, _super);
     function WebAnimationsStyleNormalizer() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
