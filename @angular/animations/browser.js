@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-rc.0-6949510
+ * @license Angular v4.2.0-rc.0-c0981b8
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2794,7 +2794,6 @@ class TimelineAnimationEngine {
  * found in the LICENSE file at https://angular.io/license
  */
 const EMPTY_PLAYER_ARRAY = [];
-const ANIMATE_EPOCH_ATTR = 'ng-animate-id';
 class StateValue {
     /**
      * @param {?} input
@@ -3021,7 +3020,7 @@ class AnimationTransitionNamespace {
      * @return {?}
      */
     _destroyInnerNodes(rootElement, context, animate = false) {
-        this._engine.driver.query(rootElement, NG_TRIGGER_SELECTOR, true).forEach(elm => {
+        listToArray(this._engine.driver.query(rootElement, NG_TRIGGER_SELECTOR, true)).forEach(elm => {
             if (animate && containsClass(elm, this._hostClassName)) {
                 const /** @type {?} */ innerNs = this._engine.namespacesByHostElement.get(elm);
                 // special case for a host element with animations on the same element
@@ -3043,7 +3042,8 @@ class AnimationTransitionNamespace {
      */
     removeNode(element, context, doNotRecurse) {
         const /** @type {?} */ engine = this._engine;
-        engine.markElementAsRemoved(element);
+        addClass(element, LEAVE_CLASSNAME);
+        engine.afterFlush(() => removeClass(element, LEAVE_CLASSNAME));
         if (!doNotRecurse && element.childElementCount) {
             this._destroyInnerNodes(element, context, true);
         }
@@ -3146,10 +3146,10 @@ class AnimationTransitionNamespace {
      */
     insertNode(element, parent) { addClass(element, this._hostClassName); }
     /**
-     * @param {?} microtaskId
+     * @param {?} countId
      * @return {?}
      */
-    drainQueuedTransitions(microtaskId) {
+    drainQueuedTransitions(countId) {
         const /** @type {?} */ instructions = [];
         this._queue.forEach(entry => {
             const /** @type {?} */ player = entry.player;
@@ -3161,7 +3161,7 @@ class AnimationTransitionNamespace {
                 listeners.forEach((listener) => {
                     if (listener.name == entry.triggerName) {
                         const /** @type {?} */ baseEvent = makeAnimationEvent(element, entry.triggerName, entry.fromState.value, entry.toState.value);
-                        ((baseEvent))['_data'] = microtaskId;
+                        ((baseEvent))['_data'] = countId;
                         listenOnPlayer(entry.player, listener.phase, baseEvent, listener.callback);
                     }
                 });
@@ -3220,13 +3220,13 @@ class TransitionAnimationEngine {
         this._normalizer = _normalizer;
         this.players = [];
         this.queuedRemovals = new Map();
+        this.newlyInserted = new Set();
         this.newHostElements = new Map();
         this.playersByElement = new Map();
         this.playersByQueriedElement = new Map();
         this.statesByElement = new Map();
         this.totalAnimations = 0;
         this.totalQueuedPlayers = 0;
-        this.currentEpochId = 0;
         this._namespaceLookup = {};
         this._namespaceList = [];
         this._flushFns = [];
@@ -3274,7 +3274,7 @@ class TransitionAnimationEngine {
             // animation renderer type. If this happens then we can still have
             // access to this item when we query for :enter nodes. If the parent
             // is a renderer then the set data-structure will normalize the entry
-            this.updateElementEpoch(hostElement);
+            this.newlyInserted.add(hostElement);
         }
         return this._namespaceLookup[namespaceId] = ns;
     }
@@ -3308,24 +3308,16 @@ class TransitionAnimationEngine {
     /**
      * @param {?} namespaceId
      * @param {?} hostElement
-     * @return {?}
-     */
-    register(namespaceId, hostElement) {
-        let /** @type {?} */ ns = this._namespaceLookup[namespaceId];
-        if (!ns) {
-            ns = this.createNamespace(namespaceId, hostElement);
-        }
-        return ns;
-    }
-    /**
-     * @param {?} namespaceId
      * @param {?} name
      * @param {?} trigger
      * @return {?}
      */
-    registerTrigger(namespaceId, name, trigger) {
+    register(namespaceId, hostElement, name, trigger) {
         let /** @type {?} */ ns = this._namespaceLookup[namespaceId];
-        if (ns && ns.register(name, trigger)) {
+        if (!ns) {
+            ns = this.createNamespace(namespaceId, hostElement);
+        }
+        if (ns.register(name, trigger)) {
             this.totalAnimations++;
         }
     }
@@ -3335,8 +3327,6 @@ class TransitionAnimationEngine {
      * @return {?}
      */
     destroy(namespaceId, context) {
-        if (!namespaceId)
-            return;
         const /** @type {?} */ ns = this._fetchNamespace(namespaceId);
         this.afterFlush(() => {
             this.namespacesByHostElement.delete(ns.hostElement);
@@ -3377,44 +3367,10 @@ class TransitionAnimationEngine {
     insertNode(namespaceId, element, parent, insertBefore) {
         if (!isElementNode(element))
             return;
-        // special case for when an element is removed and reinserted (move operation)
-        // when this occurs we do not want to use the element for deletion later
-        if (this.queuedRemovals.has(element)) {
-            this.markElementAsRemoved(element, true);
-            this.queuedRemovals.delete(element);
-        }
-        // in the event that the namespaceId is blank then the caller
-        // code does not contain any animation code in it, but it is
-        // just being called so that the node is marked as being inserted
-        if (namespaceId) {
-            this._fetchNamespace(namespaceId).insertNode(element, parent);
-        }
+        this._fetchNamespace(namespaceId).insertNode(element, parent);
         // only *directives and host elements are inserted before
         if (insertBefore) {
-            this.updateElementEpoch(element);
-        }
-    }
-    /**
-     * @param {?} element
-     * @param {?=} isRemoval
-     * @return {?}
-     */
-    updateElementEpoch(element, isRemoval) {
-        const /** @type {?} */ epoch = (isRemoval ? -1 : 1) * this.currentEpochId;
-        setAttribute(element, ANIMATE_EPOCH_ATTR, epoch);
-    }
-    /**
-     * @param {?} element
-     * @param {?=} unmark
-     * @return {?}
-     */
-    markElementAsRemoved(element, unmark) {
-        if (unmark) {
-            removeClass(element, LEAVE_CLASSNAME);
-        }
-        else {
-            addClass(element, LEAVE_CLASSNAME);
-            this.afterFlush(() => removeClass(element, LEAVE_CLASSNAME));
+            this.newlyInserted.add(element);
         }
     }
     /**
@@ -3425,18 +3381,12 @@ class TransitionAnimationEngine {
      * @return {?}
      */
     removeNode(namespaceId, element, context, doNotRecurse) {
-        if (namespaceId) {
-            const /** @type {?} */ ns = this._fetchNamespace(namespaceId);
-            if (!isElementNode(element) || !ns) {
-                this._onRemovalComplete(element, context);
-            }
-            else {
-                ns.removeNode(element, context, doNotRecurse);
-            }
+        const /** @type {?} */ ns = this._fetchNamespace(namespaceId);
+        if (!isElementNode(element) || !ns) {
+            this._onRemovalComplete(element, context);
         }
         else {
-            this.markElementAsRemoved(element);
-            this.queuedRemovals.set(element, () => this._onRemovalComplete(element, context));
+            ns.removeNode(element, context, doNotRecurse);
         }
     }
     /**
@@ -3466,7 +3416,7 @@ class TransitionAnimationEngine {
      * @return {?}
      */
     destroyInnerAnimations(containerElement) {
-        this.driver.query(containerElement, NG_TRIGGER_SELECTOR, true).forEach(element => {
+        listToArray(this.driver.query(containerElement, NG_TRIGGER_SELECTOR, true)).forEach(element => {
             const /** @type {?} */ players = this.playersByElement.get(element);
             if (players) {
                 players.forEach(player => {
@@ -3501,23 +3451,21 @@ class TransitionAnimationEngine {
         });
     }
     /**
-     * @param {?=} microtaskId
+     * @param {?=} countId
      * @return {?}
      */
-    flush(microtaskId = -1) {
+    flush(countId = -1) {
         let /** @type {?} */ players = [];
         if (this.newHostElements.size) {
-            this.newHostElements.forEach((ns, element) => this._balanceNamespaceList(ns, element));
+            this.newHostElements.forEach((ns, element) => { this._balanceNamespaceList(ns, element); });
             this.newHostElements.clear();
         }
         if (this._namespaceList.length && (this.totalQueuedPlayers || this.queuedRemovals.size)) {
-            players = this._flushAnimations(microtaskId);
-        }
-        else {
-            this.queuedRemovals.forEach(fn => fn());
+            players = this._flushAnimations(countId);
         }
         this.totalQueuedPlayers = 0;
         this.queuedRemovals.clear();
+        this.newlyInserted.clear();
         this._flushFns.forEach(fn => fn());
         this._flushFns = [];
         if (this._whenQuietFns.length) {
@@ -3533,13 +3481,12 @@ class TransitionAnimationEngine {
                 quietFns.forEach(fn => fn());
             }
         }
-        this.currentEpochId++;
     }
     /**
-     * @param {?} microtaskId
+     * @param {?} countId
      * @return {?}
      */
-    _flushAnimations(microtaskId) {
+    _flushAnimations(countId) {
         const /** @type {?} */ subTimelines = new ElementInstructionMap();
         const /** @type {?} */ skippedPlayers = [];
         const /** @type {?} */ skippedPlayersMap = new Map();
@@ -3550,12 +3497,12 @@ class TransitionAnimationEngine {
         // this must occur before the instructions are built below such that
         // the :enter queries match the elements (since the timeline queries
         // are fired during instruction building).
+        const /** @type {?} */ allEnterNodes = iteratorToArray(this.newlyInserted.values());
+        const /** @type {?} */ enterNodes = collectEnterElements(this.driver, allEnterNodes);
         const /** @type {?} */ bodyNode = getBodyNode();
-        const /** @type {?} */ allEnterNodes = bodyNode ? this.driver.query(bodyNode, makeEpochSelector(this.currentEpochId), true) : [];
-        const /** @type {?} */ enterNodes = allEnterNodes.length ? collectEnterElements(this.driver, allEnterNodes) : [];
         for (let /** @type {?} */ i = this._namespaceList.length - 1; i >= 0; i--) {
             const /** @type {?} */ ns = this._namespaceList[i];
-            ns.drainQueuedTransitions(microtaskId).forEach(entry => {
+            ns.drainQueuedTransitions(countId).forEach(entry => {
                 const /** @type {?} */ player = entry.player;
                 const /** @type {?} */ element = entry.element;
                 if (!bodyNode || !this.driver.containsElement(bodyNode, element)) {
@@ -3614,7 +3561,7 @@ class TransitionAnimationEngine {
         });
         allPreviousPlayersMap.forEach(players => players.forEach(player => player.destroy()));
         const /** @type {?} */ leaveNodes = bodyNode && allPostStyleElements.size ?
-            this.driver.query(bodyNode, LEAVE_SELECTOR, true) :
+            listToArray(this.driver.query(bodyNode, LEAVE_SELECTOR, true)) :
             [];
         // PRE STAGE: fill the ! styles
         const /** @type {?} */ preStylesMap = allPreStyleElements.size ?
@@ -3722,6 +3669,8 @@ class TransitionAnimationEngine {
     elementContainsData(namespaceId, element) {
         let /** @type {?} */ containsData = false;
         if (this.queuedRemovals.has(element))
+            containsData = true;
+        if (this.newlyInserted.has(element))
             containsData = true;
         if (this.playersByElement.has(element))
             containsData = true;
@@ -4155,6 +4104,15 @@ function cloakAndComputeStyles(driver, elements, elementPropsMap, defaultStyle) 
     return valuesMap;
 }
 /**
+ * @param {?} list
+ * @return {?}
+ */
+function listToArray(list) {
+    const /** @type {?} */ arr = [];
+    arr.push(...((list)));
+    return arr;
+}
+/**
  * @param {?} driver
  * @param {?} allEnterNodes
  * @return {?}
@@ -4215,20 +4173,6 @@ function removeClass(element, className) {
     }
 }
 /**
- * @param {?} element
- * @param {?} attr
- * @param {?} value
- * @return {?}
- */
-function setAttribute(element, attr, value) {
-    if (element.setAttribute) {
-        element.setAttribute(attr, value);
-    }
-    else {
-        element[attr] = value;
-    }
-}
-/**
  * @return {?}
  */
 function getBodyNode() {
@@ -4236,15 +4180,6 @@ function getBodyNode() {
         return document.body;
     }
     return null;
-}
-/**
- * @param {?} epochId
- * @param {?=} isRemoval
- * @return {?}
- */
-function makeEpochSelector(epochId, isRemoval) {
-    const /** @type {?} */ value = (isRemoval ? -1 : 1) * epochId;
-    return `[${ANIMATE_EPOCH_ATTR}="${value}"]`;
 }
 
 /**
@@ -4287,15 +4222,7 @@ class AnimationEngine {
             trigger = buildTrigger(name, ast);
             this._triggerCache[cacheKey] = trigger;
         }
-        this._transitionEngine.registerTrigger(namespaceId, name, trigger);
-    }
-    /**
-     * @param {?} namespaceId
-     * @param {?} hostElement
-     * @return {?}
-     */
-    register(namespaceId, hostElement) {
-        this._transitionEngine.register(namespaceId, hostElement);
+        this._transitionEngine.register(namespaceId, hostElement, name, trigger);
     }
     /**
      * @param {?} namespaceId
@@ -4358,10 +4285,10 @@ class AnimationEngine {
         return this._transitionEngine.listen(namespaceId, element, eventName, eventPhase, callback);
     }
     /**
-     * @param {?=} microtaskId
+     * @param {?=} countId
      * @return {?}
      */
-    flush(microtaskId = -1) { this._transitionEngine.flush(microtaskId); }
+    flush(countId = -1) { this._transitionEngine.flush(countId); }
     /**
      * @return {?}
      */

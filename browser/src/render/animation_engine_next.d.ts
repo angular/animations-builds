@@ -15,13 +15,12 @@ export declare class AnimationEngine {
     onRemovalComplete: (element: any, context: any) => void;
     constructor(driver: AnimationDriver, normalizer: AnimationStyleNormalizer);
     registerTrigger(componentId: string, namespaceId: string, hostElement: any, name: string, metadata: AnimationTriggerMetadata): void;
-    register(namespaceId: string, hostElement: any): void;
     destroy(namespaceId: string, context: any): void;
     onInsert(namespaceId: string, element: any, parent: any, insertBefore: boolean): void;
     onRemove(namespaceId: string, element: any, context: any): void;
     setProperty(namespaceId: string, element: any, property: string, value: any): boolean;
     listen(namespaceId: string, element: any, eventName: string, eventPhase: string, callback: (event: any) => any): () => any;
-    flush(microtaskId?: number): void;
+    flush(countId?: number): void;
     readonly players: AnimationPlayer[];
     whenRenderingDone(): Promise<any>;
 }
