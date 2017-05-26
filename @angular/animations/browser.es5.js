@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 /**
- * @license Angular v4.2.0-rc.0-2538094
+ * @license Angular v4.2.0-rc.0-3ab86bd
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2918,6 +2918,7 @@ var TimelineAnimationEngine = (function () {
  * found in the LICENSE file at https://angular.io/license
  */
 var EMPTY_PLAYER_ARRAY = [];
+var ANIMATE_EPOCH_ATTR = 'ng-animate-id';
 var StateValue = (function () {
     /**
      * @param {?} input
@@ -3151,7 +3152,7 @@ var AnimationTransitionNamespace = (function () {
     AnimationTransitionNamespace.prototype._destroyInnerNodes = function (rootElement, context, animate) {
         var _this = this;
         if (animate === void 0) { animate = false; }
-        listToArray(this._engine.driver.query(rootElement, NG_TRIGGER_SELECTOR, true)).forEach(function (elm) {
+        this._engine.driver.query(rootElement, NG_TRIGGER_SELECTOR, true).forEach(function (elm) {
             if (animate && containsClass(elm, _this._hostClassName)) {
                 var /** @type {?} */ innerNs = _this._engine.namespacesByHostElement.get(elm);
                 // special case for a host element with animations on the same element
@@ -3174,8 +3175,7 @@ var AnimationTransitionNamespace = (function () {
     AnimationTransitionNamespace.prototype.removeNode = function (element, context, doNotRecurse) {
         var _this = this;
         var /** @type {?} */ engine = this._engine;
-        addClass(element, LEAVE_CLASSNAME);
-        engine.afterFlush(function () { return removeClass(element, LEAVE_CLASSNAME); });
+        engine.markElementAsRemoved(element);
         if (!doNotRecurse && element.childElementCount) {
             this._destroyInnerNodes(element, context, true);
         }
@@ -3278,10 +3278,10 @@ var AnimationTransitionNamespace = (function () {
      */
     AnimationTransitionNamespace.prototype.insertNode = function (element, parent) { addClass(element, this._hostClassName); };
     /**
-     * @param {?} countId
+     * @param {?} microtaskId
      * @return {?}
      */
-    AnimationTransitionNamespace.prototype.drainQueuedTransitions = function (countId) {
+    AnimationTransitionNamespace.prototype.drainQueuedTransitions = function (microtaskId) {
         var _this = this;
         var /** @type {?} */ instructions = [];
         this._queue.forEach(function (entry) {
@@ -3294,7 +3294,7 @@ var AnimationTransitionNamespace = (function () {
                 listeners.forEach(function (listener) {
                     if (listener.name == entry.triggerName) {
                         var /** @type {?} */ baseEvent = makeAnimationEvent(element, entry.triggerName, entry.fromState.value, entry.toState.value);
-                        ((baseEvent))['_data'] = countId;
+                        ((baseEvent))['_data'] = microtaskId;
                         listenOnPlayer(entry.player, listener.phase, baseEvent, listener.callback);
                     }
                 });
@@ -3354,13 +3354,13 @@ var TransitionAnimationEngine = (function () {
         this._normalizer = _normalizer;
         this.players = [];
         this.queuedRemovals = new Map();
-        this.newlyInserted = new Set();
         this.newHostElements = new Map();
         this.playersByElement = new Map();
         this.playersByQueriedElement = new Map();
         this.statesByElement = new Map();
         this.totalAnimations = 0;
         this.totalQueuedPlayers = 0;
+        this.currentEpochId = 0;
         this._namespaceLookup = {};
         this._namespaceList = [];
         this._flushFns = [];
@@ -3412,7 +3412,7 @@ var TransitionAnimationEngine = (function () {
             // animation renderer type. If this happens then we can still have
             // access to this item when we query for :enter nodes. If the parent
             // is a renderer then the set data-structure will normalize the entry
-            this.newlyInserted.add(hostElement);
+            this.updateElementEpoch(hostElement);
         }
         return this._namespaceLookup[namespaceId] = ns;
     };
@@ -3446,16 +3446,24 @@ var TransitionAnimationEngine = (function () {
     /**
      * @param {?} namespaceId
      * @param {?} hostElement
-     * @param {?} name
-     * @param {?} trigger
      * @return {?}
      */
-    TransitionAnimationEngine.prototype.register = function (namespaceId, hostElement, name, trigger) {
+    TransitionAnimationEngine.prototype.register = function (namespaceId, hostElement) {
         var /** @type {?} */ ns = this._namespaceLookup[namespaceId];
         if (!ns) {
             ns = this.createNamespace(namespaceId, hostElement);
         }
-        if (ns.register(name, trigger)) {
+        return ns;
+    };
+    /**
+     * @param {?} namespaceId
+     * @param {?} name
+     * @param {?} trigger
+     * @return {?}
+     */
+    TransitionAnimationEngine.prototype.registerTrigger = function (namespaceId, name, trigger) {
+        var /** @type {?} */ ns = this._namespaceLookup[namespaceId];
+        if (ns && ns.register(name, trigger)) {
             this.totalAnimations++;
         }
     };
@@ -3466,6 +3474,8 @@ var TransitionAnimationEngine = (function () {
      */
     TransitionAnimationEngine.prototype.destroy = function (namespaceId, context) {
         var _this = this;
+        if (!namespaceId)
+            return;
         var /** @type {?} */ ns = this._fetchNamespace(namespaceId);
         this.afterFlush(function () {
             _this.namespacesByHostElement.delete(ns.hostElement);
@@ -3506,10 +3516,44 @@ var TransitionAnimationEngine = (function () {
     TransitionAnimationEngine.prototype.insertNode = function (namespaceId, element, parent, insertBefore) {
         if (!isElementNode(element))
             return;
-        this._fetchNamespace(namespaceId).insertNode(element, parent);
+        // special case for when an element is removed and reinserted (move operation)
+        // when this occurs we do not want to use the element for deletion later
+        if (this.queuedRemovals.has(element)) {
+            this.markElementAsRemoved(element, true);
+            this.queuedRemovals.delete(element);
+        }
+        // in the event that the namespaceId is blank then the caller
+        // code does not contain any animation code in it, but it is
+        // just being called so that the node is marked as being inserted
+        if (namespaceId) {
+            this._fetchNamespace(namespaceId).insertNode(element, parent);
+        }
         // only *directives and host elements are inserted before
         if (insertBefore) {
-            this.newlyInserted.add(element);
+            this.updateElementEpoch(element);
+        }
+    };
+    /**
+     * @param {?} element
+     * @param {?=} isRemoval
+     * @return {?}
+     */
+    TransitionAnimationEngine.prototype.updateElementEpoch = function (element, isRemoval) {
+        var /** @type {?} */ epoch = (isRemoval ? -1 : 1) * this.currentEpochId;
+        setAttribute(element, ANIMATE_EPOCH_ATTR, epoch);
+    };
+    /**
+     * @param {?} element
+     * @param {?=} unmark
+     * @return {?}
+     */
+    TransitionAnimationEngine.prototype.markElementAsRemoved = function (element, unmark) {
+        if (unmark) {
+            removeClass(element, LEAVE_CLASSNAME);
+        }
+        else {
+            addClass(element, LEAVE_CLASSNAME);
+            this.afterFlush(function () { return removeClass(element, LEAVE_CLASSNAME); });
         }
     };
     /**
@@ -3520,12 +3564,19 @@ var TransitionAnimationEngine = (function () {
      * @return {?}
      */
     TransitionAnimationEngine.prototype.removeNode = function (namespaceId, element, context, doNotRecurse) {
-        var /** @type {?} */ ns = this._fetchNamespace(namespaceId);
-        if (!isElementNode(element) || !ns) {
-            this._onRemovalComplete(element, context);
+        var _this = this;
+        if (namespaceId) {
+            var /** @type {?} */ ns = this._fetchNamespace(namespaceId);
+            if (!isElementNode(element) || !ns) {
+                this._onRemovalComplete(element, context);
+            }
+            else {
+                ns.removeNode(element, context, doNotRecurse);
+            }
         }
         else {
-            ns.removeNode(element, context, doNotRecurse);
+            this.markElementAsRemoved(element);
+            this.queuedRemovals.set(element, function () { return _this._onRemovalComplete(element, context); });
         }
     };
     /**
@@ -3556,7 +3607,7 @@ var TransitionAnimationEngine = (function () {
      */
     TransitionAnimationEngine.prototype.destroyInnerAnimations = function (containerElement) {
         var _this = this;
-        listToArray(this.driver.query(containerElement, NG_TRIGGER_SELECTOR, true)).forEach(function (element) {
+        this.driver.query(containerElement, NG_TRIGGER_SELECTOR, true).forEach(function (element) {
             var /** @type {?} */ players = _this.playersByElement.get(element);
             if (players) {
                 players.forEach(function (player) {
@@ -3592,23 +3643,25 @@ var TransitionAnimationEngine = (function () {
         });
     };
     /**
-     * @param {?=} countId
+     * @param {?=} microtaskId
      * @return {?}
      */
-    TransitionAnimationEngine.prototype.flush = function (countId) {
+    TransitionAnimationEngine.prototype.flush = function (microtaskId) {
         var _this = this;
-        if (countId === void 0) { countId = -1; }
+        if (microtaskId === void 0) { microtaskId = -1; }
         var /** @type {?} */ players = [];
         if (this.newHostElements.size) {
-            this.newHostElements.forEach(function (ns, element) { _this._balanceNamespaceList(ns, element); });
+            this.newHostElements.forEach(function (ns, element) { return _this._balanceNamespaceList(ns, element); });
             this.newHostElements.clear();
         }
         if (this._namespaceList.length && (this.totalQueuedPlayers || this.queuedRemovals.size)) {
-            players = this._flushAnimations(countId);
+            players = this._flushAnimations(microtaskId);
+        }
+        else {
+            this.queuedRemovals.forEach(function (fn) { return fn(); });
         }
         this.totalQueuedPlayers = 0;
         this.queuedRemovals.clear();
-        this.newlyInserted.clear();
         this._flushFns.forEach(function (fn) { return fn(); });
         this._flushFns = [];
         if (this._whenQuietFns.length) {
@@ -3624,12 +3677,13 @@ var TransitionAnimationEngine = (function () {
                 quietFns_1.forEach(function (fn) { return fn(); });
             }
         }
+        this.currentEpochId++;
     };
     /**
-     * @param {?} countId
+     * @param {?} microtaskId
      * @return {?}
      */
-    TransitionAnimationEngine.prototype._flushAnimations = function (countId) {
+    TransitionAnimationEngine.prototype._flushAnimations = function (microtaskId) {
         var _this = this;
         var /** @type {?} */ subTimelines = new ElementInstructionMap();
         var /** @type {?} */ skippedPlayers = [];
@@ -3641,12 +3695,12 @@ var TransitionAnimationEngine = (function () {
         // this must occur before the instructions are built below such that
         // the :enter queries match the elements (since the timeline queries
         // are fired during instruction building).
-        var /** @type {?} */ allEnterNodes = iteratorToArray(this.newlyInserted.values());
-        var /** @type {?} */ enterNodes = collectEnterElements(this.driver, allEnterNodes);
         var /** @type {?} */ bodyNode = getBodyNode();
+        var /** @type {?} */ allEnterNodes = bodyNode ? this.driver.query(bodyNode, makeEpochSelector(this.currentEpochId), true) : [];
+        var /** @type {?} */ enterNodes = allEnterNodes.length ? collectEnterElements(this.driver, allEnterNodes) : [];
         for (var /** @type {?} */ i = this._namespaceList.length - 1; i >= 0; i--) {
             var /** @type {?} */ ns = this._namespaceList[i];
-            ns.drainQueuedTransitions(countId).forEach(function (entry) {
+            ns.drainQueuedTransitions(microtaskId).forEach(function (entry) {
                 var /** @type {?} */ player = entry.player;
                 var /** @type {?} */ element = entry.element;
                 if (!bodyNode || !_this.driver.containsElement(bodyNode, element)) {
@@ -3705,7 +3759,7 @@ var TransitionAnimationEngine = (function () {
         });
         allPreviousPlayersMap.forEach(function (players) { return players.forEach(function (player) { return player.destroy(); }); });
         var /** @type {?} */ leaveNodes = bodyNode && allPostStyleElements.size ?
-            listToArray(this.driver.query(bodyNode, LEAVE_SELECTOR, true)) :
+            this.driver.query(bodyNode, LEAVE_SELECTOR, true) :
             [];
         // PRE STAGE: fill the ! styles
         var /** @type {?} */ preStylesMap = allPreStyleElements.size ?
@@ -3813,8 +3867,6 @@ var TransitionAnimationEngine = (function () {
     TransitionAnimationEngine.prototype.elementContainsData = function (namespaceId, element) {
         var /** @type {?} */ containsData = false;
         if (this.queuedRemovals.has(element))
-            containsData = true;
-        if (this.newlyInserted.has(element))
             containsData = true;
         if (this.playersByElement.has(element))
             containsData = true;
@@ -4265,15 +4317,6 @@ function cloakAndComputeStyles(driver, elements, elementPropsMap, defaultStyle) 
     return valuesMap;
 }
 /**
- * @param {?} list
- * @return {?}
- */
-function listToArray(list) {
-    var /** @type {?} */ arr = [];
-    arr.push.apply(arr, ((list)));
-    return arr;
-}
-/**
  * @param {?} driver
  * @param {?} allEnterNodes
  * @return {?}
@@ -4334,6 +4377,20 @@ function removeClass(element, className) {
     }
 }
 /**
+ * @param {?} element
+ * @param {?} attr
+ * @param {?} value
+ * @return {?}
+ */
+function setAttribute(element, attr, value) {
+    if (element.setAttribute) {
+        element.setAttribute(attr, value);
+    }
+    else {
+        element[attr] = value;
+    }
+}
+/**
  * @return {?}
  */
 function getBodyNode() {
@@ -4341,6 +4398,15 @@ function getBodyNode() {
         return document.body;
     }
     return null;
+}
+/**
+ * @param {?} epochId
+ * @param {?=} isRemoval
+ * @return {?}
+ */
+function makeEpochSelector(epochId, isRemoval) {
+    var /** @type {?} */ value = (isRemoval ? -1 : 1) * epochId;
+    return "[" + ANIMATE_EPOCH_ATTR + "=\"" + value + "\"]";
 }
 /**
  * @license
@@ -4383,7 +4449,15 @@ var AnimationEngine = (function () {
             trigger = buildTrigger(name, ast);
             this._triggerCache[cacheKey] = trigger;
         }
-        this._transitionEngine.register(namespaceId, hostElement, name, trigger);
+        this._transitionEngine.registerTrigger(namespaceId, name, trigger);
+    };
+    /**
+     * @param {?} namespaceId
+     * @param {?} hostElement
+     * @return {?}
+     */
+    AnimationEngine.prototype.register = function (namespaceId, hostElement) {
+        this._transitionEngine.register(namespaceId, hostElement);
     };
     /**
      * @param {?} namespaceId
@@ -4446,12 +4520,12 @@ var AnimationEngine = (function () {
         return this._transitionEngine.listen(namespaceId, element, eventName, eventPhase, callback);
     };
     /**
-     * @param {?=} countId
+     * @param {?=} microtaskId
      * @return {?}
      */
-    AnimationEngine.prototype.flush = function (countId) {
-        if (countId === void 0) { countId = -1; }
-        this._transitionEngine.flush(countId);
+    AnimationEngine.prototype.flush = function (microtaskId) {
+        if (microtaskId === void 0) { microtaskId = -1; }
+        this._transitionEngine.flush(microtaskId);
     };
     Object.defineProperty(AnimationEngine.prototype, "players", {
         /**

@@ -48,7 +48,7 @@ export declare class AnimationTransitionNamespace {
     private _destroyInnerNodes(rootElement, context, animate?);
     removeNode(element: any, context: any, doNotRecurse?: boolean): void;
     insertNode(element: any, parent: any): void;
-    drainQueuedTransitions(countId: number): QueueInstruction[];
+    drainQueuedTransitions(microtaskId: number): QueueInstruction[];
     destroy(context: any): void;
     elementContainsData(element: any): boolean;
 }
@@ -62,7 +62,6 @@ export declare class TransitionAnimationEngine {
     private _normalizer;
     players: TransitionAnimationPlayer[];
     queuedRemovals: Map<any, () => any>;
-    newlyInserted: Set<any>;
     newHostElements: Map<any, AnimationTransitionNamespace>;
     playersByElement: Map<any, TransitionAnimationPlayer[]>;
     playersByQueriedElement: Map<any, TransitionAnimationPlayer[]>;
@@ -71,6 +70,7 @@ export declare class TransitionAnimationEngine {
     }>;
     totalAnimations: number;
     totalQueuedPlayers: number;
+    currentEpochId: number;
     private _namespaceLookup;
     private _namespaceList;
     private _flushFns;
@@ -82,18 +82,21 @@ export declare class TransitionAnimationEngine {
     readonly queuedPlayers: TransitionAnimationPlayer[];
     createNamespace(namespaceId: string, hostElement: any): AnimationTransitionNamespace;
     private _balanceNamespaceList(ns, hostElement);
-    register(namespaceId: string, hostElement: any, name: string, trigger: AnimationTrigger): void;
+    register(namespaceId: string, hostElement: any): AnimationTransitionNamespace;
+    registerTrigger(namespaceId: string, name: string, trigger: AnimationTrigger): void;
     destroy(namespaceId: string, context: any): void;
     private _fetchNamespace(id);
     trigger(namespaceId: string, element: any, name: string, value: any): boolean;
     insertNode(namespaceId: string, element: any, parent: any, insertBefore: boolean): void;
+    updateElementEpoch(element: any, isRemoval?: boolean): void;
+    markElementAsRemoved(element: any, unmark?: boolean): void;
     removeNode(namespaceId: string, element: any, context: any, doNotRecurse?: boolean): void;
     listen(namespaceId: string, element: any, name: string, phase: string, callback: (event: any) => boolean): () => any;
     private _buildInstruction(entry, subTimelines);
     destroyInnerAnimations(containerElement: any): void;
     whenRenderingDone(): Promise<any>;
-    flush(countId?: number): void;
-    private _flushAnimations(countId);
+    flush(microtaskId?: number): void;
+    private _flushAnimations(microtaskId);
     elementContainsData(namespaceId: string, element: any): boolean;
     afterFlush(callback: () => any): void;
     afterFlushAnimationsDone(callback: () => any): void;
