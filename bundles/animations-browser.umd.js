@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-rc.1-c20f60b
+ * @license Angular v4.2.0-rc.1-665e707
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v4.2.0-rc.1-c20f60b
+ * @license Angular v4.2.0-rc.1-665e707
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3747,8 +3747,8 @@ var TransitionAnimationEngine = (function () {
                     return;
                 // if a unmatched transition is queued to go then it SHOULD NOT render
                 // an animation and cancel the previously running animations.
-                if (entry.isFallbackTransition && !instruction.isRemovalTransition) {
-                    eraseStyles(element, instruction.fromStyles);
+                if (entry.isFallbackTransition) {
+                    player.onStart(function () { return eraseStyles(element, instruction.fromStyles); });
                     player.onDestroy(function () { return setStyles(element, instruction.toStyles); });
                     skippedPlayers.push(player);
                     return;
@@ -3791,6 +3791,11 @@ var TransitionAnimationEngine = (function () {
                 sortedParentElements.unshift(element);
                 _this._beforeAnimationBuild(entry.player.namespaceId, entry.instruction, allPreviousPlayersMap);
             }
+        });
+        skippedPlayers.forEach(function (player) {
+            var /** @type {?} */ element = player.element;
+            var /** @type {?} */ previousPlayers = _this._getPreviousPlayers(element, false, player.namespaceId, player.triggerName, null);
+            previousPlayers.forEach(function (prevPlayer) { getOrSetAsInMap(allPreviousPlayersMap, element, []).push(prevPlayer); });
         });
         allPreviousPlayersMap.forEach(function (players) { return players.forEach(function (player) { return player.destroy(); }); });
         var /** @type {?} */ leaveNodes = bodyNode && allPostStyleElements.size ?
@@ -3923,13 +3928,13 @@ var TransitionAnimationEngine = (function () {
     TransitionAnimationEngine.prototype.afterFlushAnimationsDone = function (callback) { this._whenQuietFns.push(callback); };
     /**
      * @param {?} element
-     * @param {?} instruction
      * @param {?} isQueriedElement
      * @param {?=} namespaceId
      * @param {?=} triggerName
+     * @param {?=} toStateValue
      * @return {?}
      */
-    TransitionAnimationEngine.prototype._getPreviousPlayers = function (element, instruction, isQueriedElement, namespaceId, triggerName) {
+    TransitionAnimationEngine.prototype._getPreviousPlayers = function (element, isQueriedElement, namespaceId, triggerName, toStateValue) {
         var /** @type {?} */ players = [];
         if (isQueriedElement) {
             var /** @type {?} */ queriedElementPlayers = this.playersByQueriedElement.get(element);
@@ -3940,11 +3945,11 @@ var TransitionAnimationEngine = (function () {
         else {
             var /** @type {?} */ elementPlayers = this.playersByElement.get(element);
             if (elementPlayers) {
-                var /** @type {?} */ isRemovalAnimation_1 = instruction.toState == VOID_VALUE;
+                var /** @type {?} */ isRemovalAnimation_1 = !toStateValue || toStateValue == VOID_VALUE;
                 elementPlayers.forEach(function (player) {
                     if (player.queued)
                         return;
-                    if (!isRemovalAnimation_1 && player.triggerName != instruction.triggerName)
+                    if (!isRemovalAnimation_1 && player.triggerName != triggerName)
                         return;
                     players.push(player);
                 });
@@ -3982,7 +3987,7 @@ var TransitionAnimationEngine = (function () {
             var /** @type {?} */ element = timelineInstruction.element;
             var /** @type {?} */ isQueriedElement = element !== rootElement;
             var /** @type {?} */ players = getOrSetAsInMap(allPreviousPlayersMap, element, []);
-            var /** @type {?} */ previousPlayers = _this._getPreviousPlayers(element, instruction, isQueriedElement, targetNameSpaceId, targetTriggerName);
+            var /** @type {?} */ previousPlayers = _this._getPreviousPlayers(element, isQueriedElement, targetNameSpaceId, targetTriggerName, instruction.toState);
             previousPlayers.forEach(function (player) {
                 var /** @type {?} */ realPlayer = (player.getRealPlayer());
                 if (realPlayer.beforeDestroy) {

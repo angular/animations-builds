@@ -100,7 +100,7 @@ export declare class TransitionAnimationEngine {
     elementContainsData(namespaceId: string, element: any): boolean;
     afterFlush(callback: () => any): void;
     afterFlushAnimationsDone(callback: () => any): void;
-    private _getPreviousPlayers(element, instruction, isQueriedElement, namespaceId?, triggerName?);
+    private _getPreviousPlayers(element, isQueriedElement, namespaceId?, triggerName?, toStateValue?);
     private _beforeAnimationBuild(namespaceId, instruction, allPreviousPlayersMap);
     private _buildAnimation(namespaceId, instruction, allPreviousPlayersMap, skippedPlayersMap, preStylesMap, postStylesMap);
     private _buildPlayer(instruction, keyframes, previousPlayers);

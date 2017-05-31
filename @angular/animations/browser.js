@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-rc.1-c20f60b
+ * @license Angular v4.2.0-rc.1-665e707
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3567,8 +3567,8 @@ class TransitionAnimationEngine {
                     return;
                 // if a unmatched transition is queued to go then it SHOULD NOT render
                 // an animation and cancel the previously running animations.
-                if (entry.isFallbackTransition && !instruction.isRemovalTransition) {
-                    eraseStyles(element, instruction.fromStyles);
+                if (entry.isFallbackTransition) {
+                    player.onStart(() => eraseStyles(element, instruction.fromStyles));
                     player.onDestroy(() => setStyles(element, instruction.toStyles));
                     skippedPlayers.push(player);
                     return;
@@ -3611,6 +3611,11 @@ class TransitionAnimationEngine {
                 sortedParentElements.unshift(element);
                 this._beforeAnimationBuild(entry.player.namespaceId, entry.instruction, allPreviousPlayersMap);
             }
+        });
+        skippedPlayers.forEach(player => {
+            const /** @type {?} */ element = player.element;
+            const /** @type {?} */ previousPlayers = this._getPreviousPlayers(element, false, player.namespaceId, player.triggerName, null);
+            previousPlayers.forEach(prevPlayer => { getOrSetAsInMap(allPreviousPlayersMap, element, []).push(prevPlayer); });
         });
         allPreviousPlayersMap.forEach(players => players.forEach(player => player.destroy()));
         const /** @type {?} */ leaveNodes = bodyNode && allPostStyleElements.size ?
@@ -3743,13 +3748,13 @@ class TransitionAnimationEngine {
     afterFlushAnimationsDone(callback) { this._whenQuietFns.push(callback); }
     /**
      * @param {?} element
-     * @param {?} instruction
      * @param {?} isQueriedElement
      * @param {?=} namespaceId
      * @param {?=} triggerName
+     * @param {?=} toStateValue
      * @return {?}
      */
-    _getPreviousPlayers(element, instruction, isQueriedElement, namespaceId, triggerName) {
+    _getPreviousPlayers(element, isQueriedElement, namespaceId, triggerName, toStateValue) {
         let /** @type {?} */ players = [];
         if (isQueriedElement) {
             const /** @type {?} */ queriedElementPlayers = this.playersByQueriedElement.get(element);
@@ -3760,11 +3765,11 @@ class TransitionAnimationEngine {
         else {
             const /** @type {?} */ elementPlayers = this.playersByElement.get(element);
             if (elementPlayers) {
-                const /** @type {?} */ isRemovalAnimation = instruction.toState == VOID_VALUE;
+                const /** @type {?} */ isRemovalAnimation = !toStateValue || toStateValue == VOID_VALUE;
                 elementPlayers.forEach(player => {
                     if (player.queued)
                         return;
-                    if (!isRemovalAnimation && player.triggerName != instruction.triggerName)
+                    if (!isRemovalAnimation && player.triggerName != triggerName)
                         return;
                     players.push(player);
                 });
@@ -3801,7 +3806,7 @@ class TransitionAnimationEngine {
             const /** @type {?} */ element = timelineInstruction.element;
             const /** @type {?} */ isQueriedElement = element !== rootElement;
             const /** @type {?} */ players = getOrSetAsInMap(allPreviousPlayersMap, element, []);
-            const /** @type {?} */ previousPlayers = this._getPreviousPlayers(element, instruction, isQueriedElement, targetNameSpaceId, targetTriggerName);
+            const /** @type {?} */ previousPlayers = this._getPreviousPlayers(element, isQueriedElement, targetNameSpaceId, targetTriggerName, instruction.toState);
             previousPlayers.forEach(player => {
                 const /** @type {?} */ realPlayer = (player.getRealPlayer());
                 if (realPlayer.beforeDestroy) {
