@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 /**
- * @license Angular v4.2.0-rc.1-230255f
+ * @license Angular v4.2.0-rc.1-ad6a57e
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2918,7 +2918,6 @@ var TimelineAnimationEngine = (function () {
  * found in the LICENSE file at https://angular.io/license
  */
 var EMPTY_PLAYER_ARRAY = [];
-var ANIMATE_EPOCH_ATTR = 'ng-animate-id';
 var StateValue = (function () {
     /**
      * @param {?} input
@@ -3360,12 +3359,12 @@ var TransitionAnimationEngine = (function () {
         this.statesByElement = new Map();
         this.totalAnimations = 0;
         this.totalQueuedPlayers = 0;
-        this.currentEpochId = 0;
         this._namespaceLookup = {};
         this._namespaceList = [];
         this._flushFns = [];
         this._whenQuietFns = [];
         this.namespacesByHostElement = new Map();
+        this.collectedElements = [];
         this.onRemovalComplete = function (element, context) { };
     }
     /**
@@ -3538,10 +3537,7 @@ var TransitionAnimationEngine = (function () {
      * @param {?=} isRemoval
      * @return {?}
      */
-    TransitionAnimationEngine.prototype.updateElementEpoch = function (element, isRemoval) {
-        var /** @type {?} */ epoch = (isRemoval ? -1 : 1) * this.currentEpochId;
-        setAttribute(element, ANIMATE_EPOCH_ATTR, epoch);
-    };
+    TransitionAnimationEngine.prototype.updateElementEpoch = function (element, isRemoval) { this.collectedElements.push(element); };
     /**
      * @param {?} element
      * @param {?=} unmark
@@ -3661,6 +3657,7 @@ var TransitionAnimationEngine = (function () {
             this.queuedRemovals.forEach(function (fn) { return fn(); });
         }
         this.totalQueuedPlayers = 0;
+        this.collectedElements = [];
         this.queuedRemovals.clear();
         this._flushFns.forEach(function (fn) { return fn(); });
         this._flushFns = [];
@@ -3677,7 +3674,6 @@ var TransitionAnimationEngine = (function () {
                 quietFns_1.forEach(function (fn) { return fn(); });
             }
         }
-        this.currentEpochId++;
     };
     /**
      * @param {?} microtaskId
@@ -3696,7 +3692,7 @@ var TransitionAnimationEngine = (function () {
         // the :enter queries match the elements (since the timeline queries
         // are fired during instruction building).
         var /** @type {?} */ bodyNode = getBodyNode();
-        var /** @type {?} */ allEnterNodes = bodyNode ? this.driver.query(bodyNode, makeEpochSelector(this.currentEpochId), true) : [];
+        var /** @type {?} */ allEnterNodes = this.collectedElements;
         var /** @type {?} */ enterNodes = allEnterNodes.length ? collectEnterElements(this.driver, allEnterNodes) : [];
         for (var /** @type {?} */ i = this._namespaceList.length - 1; i >= 0; i--) {
             var /** @type {?} */ ns = this._namespaceList[i];
@@ -4382,20 +4378,6 @@ function removeClass(element, className) {
     }
 }
 /**
- * @param {?} element
- * @param {?} attr
- * @param {?} value
- * @return {?}
- */
-function setAttribute(element, attr, value) {
-    if (element.setAttribute) {
-        element.setAttribute(attr, value);
-    }
-    else {
-        element[attr] = value;
-    }
-}
-/**
  * @return {?}
  */
 function getBodyNode() {
@@ -4403,15 +4385,6 @@ function getBodyNode() {
         return document.body;
     }
     return null;
-}
-/**
- * @param {?} epochId
- * @param {?=} isRemoval
- * @return {?}
- */
-function makeEpochSelector(epochId, isRemoval) {
-    var /** @type {?} */ value = (isRemoval ? -1 : 1) * epochId;
-    return "[" + ANIMATE_EPOCH_ATTR + "=\"" + value + "\"]";
 }
 /**
  * @license

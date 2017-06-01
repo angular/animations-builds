@@ -70,12 +70,12 @@ export declare class TransitionAnimationEngine {
     }>;
     totalAnimations: number;
     totalQueuedPlayers: number;
-    currentEpochId: number;
     private _namespaceLookup;
     private _namespaceList;
     private _flushFns;
     private _whenQuietFns;
     namespacesByHostElement: Map<any, AnimationTransitionNamespace>;
+    collectedElements: any[];
     onRemovalComplete: (element: any, context: any) => void;
     _onRemovalComplete(element: any, context: any): void;
     constructor(driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);

@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-rc.1-230255f
+ * @license Angular v4.2.0-rc.1-ad6a57e
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2794,7 +2794,6 @@ class TimelineAnimationEngine {
  * found in the LICENSE file at https://angular.io/license
  */
 const EMPTY_PLAYER_ARRAY = [];
-const ANIMATE_EPOCH_ATTR = 'ng-animate-id';
 class StateValue {
     /**
      * @param {?} input
@@ -3226,12 +3225,12 @@ class TransitionAnimationEngine {
         this.statesByElement = new Map();
         this.totalAnimations = 0;
         this.totalQueuedPlayers = 0;
-        this.currentEpochId = 0;
         this._namespaceLookup = {};
         this._namespaceList = [];
         this._flushFns = [];
         this._whenQuietFns = [];
         this.namespacesByHostElement = new Map();
+        this.collectedElements = [];
         this.onRemovalComplete = (element, context) => { };
     }
     /**
@@ -3399,10 +3398,7 @@ class TransitionAnimationEngine {
      * @param {?=} isRemoval
      * @return {?}
      */
-    updateElementEpoch(element, isRemoval) {
-        const /** @type {?} */ epoch = (isRemoval ? -1 : 1) * this.currentEpochId;
-        setAttribute(element, ANIMATE_EPOCH_ATTR, epoch);
-    }
+    updateElementEpoch(element, isRemoval) { this.collectedElements.push(element); }
     /**
      * @param {?} element
      * @param {?=} unmark
@@ -3517,6 +3513,7 @@ class TransitionAnimationEngine {
             this.queuedRemovals.forEach(fn => fn());
         }
         this.totalQueuedPlayers = 0;
+        this.collectedElements = [];
         this.queuedRemovals.clear();
         this._flushFns.forEach(fn => fn());
         this._flushFns = [];
@@ -3533,7 +3530,6 @@ class TransitionAnimationEngine {
                 quietFns.forEach(fn => fn());
             }
         }
-        this.currentEpochId++;
     }
     /**
      * @param {?} microtaskId
@@ -3551,7 +3547,7 @@ class TransitionAnimationEngine {
         // the :enter queries match the elements (since the timeline queries
         // are fired during instruction building).
         const /** @type {?} */ bodyNode = getBodyNode();
-        const /** @type {?} */ allEnterNodes = bodyNode ? this.driver.query(bodyNode, makeEpochSelector(this.currentEpochId), true) : [];
+        const /** @type {?} */ allEnterNodes = this.collectedElements;
         const /** @type {?} */ enterNodes = allEnterNodes.length ? collectEnterElements(this.driver, allEnterNodes) : [];
         for (let /** @type {?} */ i = this._namespaceList.length - 1; i >= 0; i--) {
             const /** @type {?} */ ns = this._namespaceList[i];
@@ -4220,20 +4216,6 @@ function removeClass(element, className) {
     }
 }
 /**
- * @param {?} element
- * @param {?} attr
- * @param {?} value
- * @return {?}
- */
-function setAttribute(element, attr, value) {
-    if (element.setAttribute) {
-        element.setAttribute(attr, value);
-    }
-    else {
-        element[attr] = value;
-    }
-}
-/**
  * @return {?}
  */
 function getBodyNode() {
@@ -4241,15 +4223,6 @@ function getBodyNode() {
         return document.body;
     }
     return null;
-}
-/**
- * @param {?} epochId
- * @param {?=} isRemoval
- * @return {?}
- */
-function makeEpochSelector(epochId, isRemoval) {
-    const /** @type {?} */ value = (isRemoval ? -1 : 1) * epochId;
-    return `[${ANIMATE_EPOCH_ATTR}="${value}"]`;
 }
 
 /**
