@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-rc.1-598fdad
+ * @license Angular v4.2.0-rc.1-068133e
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3686,21 +3686,7 @@ class TransitionAnimationEngine {
                 optimizeGroupPlayer(players).onDone(fn);
             }
             else {
-                let /** @type {?} */ elementPlayers = null;
-                let /** @type {?} */ parent = element;
-                while (parent = parent.parentNode) {
-                    const /** @type {?} */ playersForThisElement = this.playersByElement.get(parent);
-                    if (playersForThisElement && playersForThisElement.length) {
-                        elementPlayers = playersForThisElement;
-                        break;
-                    }
-                }
-                if (elementPlayers) {
-                    optimizeGroupPlayer(elementPlayers).onDone(fn);
-                }
-                else {
-                    fn();
-                }
+                fn();
             }
         });
         rootPlayers.forEach(player => {

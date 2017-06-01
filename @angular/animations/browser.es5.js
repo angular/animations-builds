@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 /**
- * @license Angular v4.2.0-rc.1-598fdad
+ * @license Angular v4.2.0-rc.1-068133e
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3831,21 +3831,7 @@ var TransitionAnimationEngine = (function () {
                 optimizeGroupPlayer(players).onDone(fn);
             }
             else {
-                var /** @type {?} */ elementPlayers = null;
-                var /** @type {?} */ parent = element;
-                while (parent = parent.parentNode) {
-                    var /** @type {?} */ playersForThisElement = _this.playersByElement.get(parent);
-                    if (playersForThisElement && playersForThisElement.length) {
-                        elementPlayers = playersForThisElement;
-                        break;
-                    }
-                }
-                if (elementPlayers) {
-                    optimizeGroupPlayer(elementPlayers).onDone(fn);
-                }
-                else {
-                    fn();
-                }
+                fn();
             }
         });
         rootPlayers.forEach(function (player) {
