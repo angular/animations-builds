@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-rc.2-35f714e
+ * @license Angular v4.2.0-rc.2-b55adee
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2794,6 +2794,7 @@ class TimelineAnimationEngine {
  * found in the LICENSE file at https://angular.io/license
  */
 const EMPTY_PLAYER_ARRAY = [];
+const NOOP_FN = () => { };
 class StateValue {
     /**
      * @param {?} input
@@ -3230,7 +3231,7 @@ class TransitionAnimationEngine {
         this._flushFns = [];
         this._whenQuietFns = [];
         this.namespacesByHostElement = new Map();
-        this.collectedElements = [];
+        this.collectedEnterElements = [];
         this.onRemovalComplete = (element, context) => { };
     }
     /**
@@ -3273,7 +3274,7 @@ class TransitionAnimationEngine {
             // animation renderer type. If this happens then we can still have
             // access to this item when we query for :enter nodes. If the parent
             // is a renderer then the set data-structure will normalize the entry
-            this.updateElementEpoch(hostElement);
+            this.collectEnterElement(hostElement);
         }
         return this._namespaceLookup[namespaceId] = ns;
     }
@@ -3379,7 +3380,6 @@ class TransitionAnimationEngine {
         // special case for when an element is removed and reinserted (move operation)
         // when this occurs we do not want to use the element for deletion later
         if (this.queuedRemovals.has(element)) {
-            this.markElementAsRemoved(element, true);
             this.queuedRemovals.delete(element);
         }
         // in the event that the namespaceId is blank then the caller
@@ -3390,29 +3390,14 @@ class TransitionAnimationEngine {
         }
         // only *directives and host elements are inserted before
         if (insertBefore) {
-            this.updateElementEpoch(element);
+            this.collectEnterElement(element);
         }
     }
     /**
      * @param {?} element
-     * @param {?=} isRemoval
      * @return {?}
      */
-    updateElementEpoch(element, isRemoval) { this.collectedElements.push(element); }
-    /**
-     * @param {?} element
-     * @param {?=} unmark
-     * @return {?}
-     */
-    markElementAsRemoved(element, unmark) {
-        if (unmark) {
-            removeClass(element, LEAVE_CLASSNAME);
-        }
-        else {
-            addClass(element, LEAVE_CLASSNAME);
-            this.afterFlush(() => removeClass(element, LEAVE_CLASSNAME));
-        }
-    }
+    collectEnterElement(element) { this.collectedEnterElements.push(element); }
     /**
      * @param {?} namespaceId
      * @param {?} element
@@ -3431,10 +3416,14 @@ class TransitionAnimationEngine {
             }
         }
         else {
-            this.markElementAsRemoved(element);
             this.queuedRemovals.set(element, () => this._onRemovalComplete(element, context));
         }
     }
+    /**
+     * @param {?} element
+     * @return {?}
+     */
+    markElementAsRemoved(element) { this.queuedRemovals.set(element, NOOP_FN); }
     /**
      * @param {?} namespaceId
      * @param {?} element
@@ -3513,7 +3502,7 @@ class TransitionAnimationEngine {
             this.queuedRemovals.forEach(fn => fn());
         }
         this.totalQueuedPlayers = 0;
-        this.collectedElements = [];
+        this.collectedEnterElements.length = 0;
         this.queuedRemovals.clear();
         this._flushFns.forEach(fn => fn());
         this._flushFns = [];
@@ -3547,8 +3536,9 @@ class TransitionAnimationEngine {
         // the :enter queries match the elements (since the timeline queries
         // are fired during instruction building).
         const /** @type {?} */ bodyNode = getBodyNode();
-        const /** @type {?} */ allEnterNodes = this.collectedElements;
+        const /** @type {?} */ allEnterNodes = this.collectedEnterElements;
         const /** @type {?} */ enterNodes = allEnterNodes.length ? collectEnterElements(this.driver, allEnterNodes) : [];
+        this.queuedRemovals.forEach((fn, element) => addClass(element, LEAVE_CLASSNAME));
         for (let /** @type {?} */ i = this._namespaceList.length - 1; i >= 0; i--) {
             const /** @type {?} */ ns = this._namespaceList[i];
             ns.drainQueuedTransitions(microtaskId).forEach(entry => {

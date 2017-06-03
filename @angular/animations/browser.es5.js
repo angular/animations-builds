@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 /**
- * @license Angular v4.2.0-rc.2-35f714e
+ * @license Angular v4.2.0-rc.2-b55adee
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2918,6 +2918,7 @@ var TimelineAnimationEngine = (function () {
  * found in the LICENSE file at https://angular.io/license
  */
 var EMPTY_PLAYER_ARRAY = [];
+var NOOP_FN = function () { };
 var StateValue = (function () {
     /**
      * @param {?} input
@@ -3364,7 +3365,7 @@ var TransitionAnimationEngine = (function () {
         this._flushFns = [];
         this._whenQuietFns = [];
         this.namespacesByHostElement = new Map();
-        this.collectedElements = [];
+        this.collectedEnterElements = [];
         this.onRemovalComplete = function (element, context) { };
     }
     /**
@@ -3411,7 +3412,7 @@ var TransitionAnimationEngine = (function () {
             // animation renderer type. If this happens then we can still have
             // access to this item when we query for :enter nodes. If the parent
             // is a renderer then the set data-structure will normalize the entry
-            this.updateElementEpoch(hostElement);
+            this.collectEnterElement(hostElement);
         }
         return this._namespaceLookup[namespaceId] = ns;
     };
@@ -3518,7 +3519,6 @@ var TransitionAnimationEngine = (function () {
         // special case for when an element is removed and reinserted (move operation)
         // when this occurs we do not want to use the element for deletion later
         if (this.queuedRemovals.has(element)) {
-            this.markElementAsRemoved(element, true);
             this.queuedRemovals.delete(element);
         }
         // in the event that the namespaceId is blank then the caller
@@ -3529,29 +3529,14 @@ var TransitionAnimationEngine = (function () {
         }
         // only *directives and host elements are inserted before
         if (insertBefore) {
-            this.updateElementEpoch(element);
+            this.collectEnterElement(element);
         }
     };
     /**
      * @param {?} element
-     * @param {?=} isRemoval
      * @return {?}
      */
-    TransitionAnimationEngine.prototype.updateElementEpoch = function (element, isRemoval) { this.collectedElements.push(element); };
-    /**
-     * @param {?} element
-     * @param {?=} unmark
-     * @return {?}
-     */
-    TransitionAnimationEngine.prototype.markElementAsRemoved = function (element, unmark) {
-        if (unmark) {
-            removeClass(element, LEAVE_CLASSNAME);
-        }
-        else {
-            addClass(element, LEAVE_CLASSNAME);
-            this.afterFlush(function () { return removeClass(element, LEAVE_CLASSNAME); });
-        }
-    };
+    TransitionAnimationEngine.prototype.collectEnterElement = function (element) { this.collectedEnterElements.push(element); };
     /**
      * @param {?} namespaceId
      * @param {?} element
@@ -3571,10 +3556,14 @@ var TransitionAnimationEngine = (function () {
             }
         }
         else {
-            this.markElementAsRemoved(element);
             this.queuedRemovals.set(element, function () { return _this._onRemovalComplete(element, context); });
         }
     };
+    /**
+     * @param {?} element
+     * @return {?}
+     */
+    TransitionAnimationEngine.prototype.markElementAsRemoved = function (element) { this.queuedRemovals.set(element, NOOP_FN); };
     /**
      * @param {?} namespaceId
      * @param {?} element
@@ -3657,7 +3646,7 @@ var TransitionAnimationEngine = (function () {
             this.queuedRemovals.forEach(function (fn) { return fn(); });
         }
         this.totalQueuedPlayers = 0;
-        this.collectedElements = [];
+        this.collectedEnterElements.length = 0;
         this.queuedRemovals.clear();
         this._flushFns.forEach(function (fn) { return fn(); });
         this._flushFns = [];
@@ -3692,8 +3681,9 @@ var TransitionAnimationEngine = (function () {
         // the :enter queries match the elements (since the timeline queries
         // are fired during instruction building).
         var /** @type {?} */ bodyNode = getBodyNode();
-        var /** @type {?} */ allEnterNodes = this.collectedElements;
+        var /** @type {?} */ allEnterNodes = this.collectedEnterElements;
         var /** @type {?} */ enterNodes = allEnterNodes.length ? collectEnterElements(this.driver, allEnterNodes) : [];
+        this.queuedRemovals.forEach(function (fn, element) { return addClass(element, LEAVE_CLASSNAME); });
         for (var /** @type {?} */ i = this._namespaceList.length - 1; i >= 0; i--) {
             var /** @type {?} */ ns = this._namespaceList[i];
             ns.drainQueuedTransitions(microtaskId).forEach(function (entry) {

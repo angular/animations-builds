@@ -75,7 +75,7 @@ export declare class TransitionAnimationEngine {
     private _flushFns;
     private _whenQuietFns;
     namespacesByHostElement: Map<any, AnimationTransitionNamespace>;
-    collectedElements: any[];
+    collectedEnterElements: any[];
     onRemovalComplete: (element: any, context: any) => void;
     _onRemovalComplete(element: any, context: any): void;
     constructor(driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
@@ -88,9 +88,9 @@ export declare class TransitionAnimationEngine {
     private _fetchNamespace(id);
     trigger(namespaceId: string, element: any, name: string, value: any): boolean;
     insertNode(namespaceId: string, element: any, parent: any, insertBefore: boolean): void;
-    updateElementEpoch(element: any, isRemoval?: boolean): void;
-    markElementAsRemoved(element: any, unmark?: boolean): void;
+    collectEnterElement(element: any): void;
     removeNode(namespaceId: string, element: any, context: any, doNotRecurse?: boolean): void;
+    markElementAsRemoved(element: any): void;
     listen(namespaceId: string, element: any, name: string, phase: string, callback: (event: any) => boolean): () => any;
     private _buildInstruction(entry, subTimelines);
     destroyInnerAnimations(containerElement: any): void;
