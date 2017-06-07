@@ -20,6 +20,13 @@ export interface QueueInstruction {
     player: TransitionAnimationPlayer;
     isFallbackTransition: boolean;
 }
+export declare const REMOVAL_FLAG = "__ng_removed";
+export interface ElementAnimationState {
+    setForRemoval: any;
+    hasAnimation: boolean;
+    namespaceId: string;
+    removedBeforeQueried: boolean;
+}
 export declare class StateValue {
     value: string;
     options: AnimationOptions;
@@ -44,7 +51,7 @@ export declare class AnimationTransitionNamespace {
     private _getTrigger(name);
     trigger(element: any, triggerName: string, value: any, defaultToFallback?: boolean): TransitionAnimationPlayer | undefined;
     deregister(name: string): void;
-    private _onElementDestroy(element);
+    clearElementCache(element: any): void;
     private _destroyInnerNodes(rootElement, context, animate?);
     removeNode(element: any, context: any, doNotRecurse?: boolean): void;
     insertNode(element: any, parent: any): void;
@@ -61,7 +68,6 @@ export declare class TransitionAnimationEngine {
     driver: AnimationDriver;
     private _normalizer;
     players: TransitionAnimationPlayer[];
-    queuedRemovals: Map<any, () => any>;
     newHostElements: Map<any, AnimationTransitionNamespace>;
     playersByElement: Map<any, TransitionAnimationPlayer[]>;
     playersByQueriedElement: Map<any, TransitionAnimationPlayer[]>;
@@ -76,6 +82,7 @@ export declare class TransitionAnimationEngine {
     private _whenQuietFns;
     namespacesByHostElement: Map<any, AnimationTransitionNamespace>;
     collectedEnterElements: any[];
+    collectedLeaveElements: any[];
     onRemovalComplete: (element: any, context: any) => void;
     _onRemovalComplete(element: any, context: any): void;
     constructor(driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
@@ -90,11 +97,12 @@ export declare class TransitionAnimationEngine {
     insertNode(namespaceId: string, element: any, parent: any, insertBefore: boolean): void;
     collectEnterElement(element: any): void;
     removeNode(namespaceId: string, element: any, context: any, doNotRecurse?: boolean): void;
-    markElementAsRemoved(element: any): void;
+    markElementAsRemoved(namespaceId: string, element: any, hasAnimation?: boolean, context?: any): void;
     listen(namespaceId: string, element: any, name: string, phase: string, callback: (event: any) => boolean): () => any;
     private _buildInstruction(entry, subTimelines);
     destroyInnerAnimations(containerElement: any): void;
     whenRenderingDone(): Promise<any>;
+    processLeaveNode(element: any): void;
     flush(microtaskId?: number): void;
     private _flushAnimations(microtaskId);
     elementContainsData(namespaceId: string, element: any): boolean;
