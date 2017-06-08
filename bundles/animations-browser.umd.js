@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-rc.2-022835b
+ * @license Angular v4.2.0-rc.2-e9886d7
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v4.2.0-rc.2-022835b
+ * @license Angular v4.2.0-rc.2-e9886d7
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1680,28 +1680,29 @@ var AnimationTimelineBuilderVisitor = (function () {
     AnimationTimelineBuilderVisitor.prototype.visitSequence = function (ast, context) {
         var _this = this;
         var /** @type {?} */ subContextCount = context.subContextCount;
+        var /** @type {?} */ ctx = context;
         var /** @type {?} */ options = ast.options;
         if (options && (options.params || options.delay)) {
-            context.createSubContext(options);
-            context.transformIntoNewTimeline();
+            ctx = context.createSubContext(options);
+            ctx.transformIntoNewTimeline();
             if (options.delay != null) {
-                if (context.previousNode instanceof StyleAst) {
-                    context.currentTimeline.snapshotCurrentStyles();
-                    context.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
+                if (ctx.previousNode instanceof StyleAst) {
+                    ctx.currentTimeline.snapshotCurrentStyles();
+                    ctx.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
                 }
                 var /** @type {?} */ delay = resolveTimingValue(options.delay);
-                context.delayNextStep(delay);
+                ctx.delayNextStep(delay);
             }
         }
         if (ast.steps.length) {
-            ast.steps.forEach(function (s) { return s.visit(_this, context); });
+            ast.steps.forEach(function (s) { return s.visit(_this, ctx); });
             // this is here just incase the inner steps only contain or end with a style() call
-            context.currentTimeline.applyStylesToKeyframe();
+            ctx.currentTimeline.applyStylesToKeyframe();
             // this means that some animation function within the sequence
             // ended up creating a sub timeline (which means the current
             // timeline cannot overlap with the contents of the sequence)
-            if (context.subContextCount > subContextCount) {
-                context.transformIntoNewTimeline();
+            if (ctx.subContextCount > subContextCount) {
+                ctx.transformIntoNewTimeline();
             }
         }
         context.previousNode = ast;
@@ -1944,6 +1945,7 @@ var AnimationTimelineContext = (function () {
      * @return {?}
      */
     AnimationTimelineContext.prototype.updateOptions = function (options, skipIfExists) {
+        var _this = this;
         if (!options)
             return;
         var /** @type {?} */ newOptions = (options);
@@ -1963,7 +1965,7 @@ var AnimationTimelineContext = (function () {
             }
             Object.keys(newParams).forEach(function (name) {
                 if (!skipIfExists || !paramsToUpdate_1.hasOwnProperty(name)) {
-                    paramsToUpdate_1[name] = newParams[name];
+                    paramsToUpdate_1[name] = interpolateParams(newParams[name], paramsToUpdate_1, _this.errors);
                 }
             });
         }
