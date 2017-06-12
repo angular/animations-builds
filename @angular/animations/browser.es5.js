@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 /**
- * @license Angular v4.2.1-3d5f520
+ * @license Angular v4.2.1-185075d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3719,16 +3719,19 @@ var TransitionAnimationEngine = (function () {
         // the :enter queries match the elements (since the timeline queries
         // are fired during instruction building).
         var /** @type {?} */ bodyNode = getBodyNode();
-        var /** @type {?} */ allEnterNodes = this.collectedEnterElements;
-        var /** @type {?} */ enterNodes = allEnterNodes.length ? collectEnterElements(this.driver, allEnterNodes) : [];
-        var /** @type {?} */ leaveNodes = [];
+        var /** @type {?} */ allEnterNodes = this.collectedEnterElements.length ?
+            collectEnterElements(this.driver, this.collectedEnterElements) :
+            [];
+        var /** @type {?} */ allLeaveNodes = [];
+        var /** @type {?} */ leaveNodesWithoutAnimations = [];
         for (var /** @type {?} */ i = 0; i < this.collectedLeaveElements.length; i++) {
             var /** @type {?} */ element = this.collectedLeaveElements[i];
-            if (isElementNode(element)) {
-                var /** @type {?} */ details = (element[REMOVAL_FLAG]);
-                if (details && details.setForRemoval) {
-                    addClass(element, LEAVE_CLASSNAME);
-                    leaveNodes.push(element);
+            var /** @type {?} */ details = (element[REMOVAL_FLAG]);
+            if (details && details.setForRemoval) {
+                addClass(element, LEAVE_CLASSNAME);
+                allLeaveNodes.push(element);
+                if (!details.hasAnimation) {
+                    leaveNodesWithoutAnimations.push(element);
                 }
             }
         }
@@ -3782,6 +3785,15 @@ var TransitionAnimationEngine = (function () {
                 });
             });
         }
+        // these can only be detected here since we have a map of all the elements
+        // that have animations attached to them...
+        var /** @type {?} */ enterNodesWithoutAnimations = [];
+        for (var /** @type {?} */ i = 0; i < allEnterNodes.length; i++) {
+            var /** @type {?} */ element = allEnterNodes[i];
+            if (!subTimelines.has(element)) {
+                enterNodesWithoutAnimations.push(element);
+            }
+        }
         var /** @type {?} */ allPreviousPlayersMap = new Map();
         var /** @type {?} */ sortedParentElements = [];
         queuedInstructions.forEach(function (entry) {
@@ -3799,10 +3811,10 @@ var TransitionAnimationEngine = (function () {
         allPreviousPlayersMap.forEach(function (players) { return players.forEach(function (player) { return player.destroy(); }); });
         // PRE STAGE: fill the ! styles
         var /** @type {?} */ preStylesMap = allPreStyleElements.size ?
-            cloakAndComputeStyles(this.driver, enterNodes, allPreStyleElements, ɵPRE_STYLE) :
+            cloakAndComputeStyles(this.driver, enterNodesWithoutAnimations, allPreStyleElements, ɵPRE_STYLE) :
             new Map();
         // POST STAGE: fill the * styles
-        var /** @type {?} */ postStylesMap = cloakAndComputeStyles(this.driver, leaveNodes, allPostStyleElements, AUTO_STYLE);
+        var /** @type {?} */ postStylesMap = cloakAndComputeStyles(this.driver, leaveNodesWithoutAnimations, allPostStyleElements, AUTO_STYLE);
         var /** @type {?} */ rootPlayers = [];
         var /** @type {?} */ subPlayers = [];
         queuedInstructions.forEach(function (entry) {
@@ -3860,8 +3872,8 @@ var TransitionAnimationEngine = (function () {
         // run through all of the queued removals and see if they
         // were picked up by a query. If not then perform the removal
         // operation right away unless a parent animation is ongoing.
-        for (var /** @type {?} */ i = 0; i < leaveNodes.length; i++) {
-            var /** @type {?} */ element = leaveNodes[i];
+        for (var /** @type {?} */ i = 0; i < allLeaveNodes.length; i++) {
+            var /** @type {?} */ element = allLeaveNodes[i];
             var /** @type {?} */ players = queriedElements.get(element);
             if (players) {
                 removeNodesAfterAnimationDone(this, element, players);
@@ -3882,7 +3894,7 @@ var TransitionAnimationEngine = (function () {
             });
             player.play();
         });
-        enterNodes.forEach(function (element) { return removeClass(element, ENTER_CLASSNAME); });
+        allEnterNodes.forEach(function (element) { return removeClass(element, ENTER_CLASSNAME); });
         return rootPlayers;
     };
     /**
@@ -4254,7 +4266,7 @@ function normalizeTriggerValue(value) {
         case 'boolean':
             return value ? '1' : '0';
         default:
-            return value ? value.toString() : null;
+            return value != null ? value.toString() : null;
     }
 }
 /**
