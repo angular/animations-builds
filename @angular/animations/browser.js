@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.1-451257a
+ * @license Angular v4.2.1-ed73d4f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3574,16 +3574,19 @@ class TransitionAnimationEngine {
         // the :enter queries match the elements (since the timeline queries
         // are fired during instruction building).
         const /** @type {?} */ bodyNode = getBodyNode();
-        const /** @type {?} */ allEnterNodes = this.collectedEnterElements;
-        const /** @type {?} */ enterNodes = allEnterNodes.length ? collectEnterElements(this.driver, allEnterNodes) : [];
-        const /** @type {?} */ leaveNodes = [];
+        const /** @type {?} */ allEnterNodes = this.collectedEnterElements.length ?
+            collectEnterElements(this.driver, this.collectedEnterElements) :
+            [];
+        const /** @type {?} */ allLeaveNodes = [];
+        const /** @type {?} */ leaveNodesWithoutAnimations = [];
         for (let /** @type {?} */ i = 0; i < this.collectedLeaveElements.length; i++) {
             const /** @type {?} */ element = this.collectedLeaveElements[i];
-            if (isElementNode(element)) {
-                const /** @type {?} */ details = (element[REMOVAL_FLAG]);
-                if (details && details.setForRemoval) {
-                    addClass(element, LEAVE_CLASSNAME);
-                    leaveNodes.push(element);
+            const /** @type {?} */ details = (element[REMOVAL_FLAG]);
+            if (details && details.setForRemoval) {
+                addClass(element, LEAVE_CLASSNAME);
+                allLeaveNodes.push(element);
+                if (!details.hasAnimation) {
+                    leaveNodesWithoutAnimations.push(element);
                 }
             }
         }
@@ -3637,6 +3640,15 @@ class TransitionAnimationEngine {
                 });
             });
         }
+        // these can only be detected here since we have a map of all the elements
+        // that have animations attached to them...
+        const /** @type {?} */ enterNodesWithoutAnimations = [];
+        for (let /** @type {?} */ i = 0; i < allEnterNodes.length; i++) {
+            const /** @type {?} */ element = allEnterNodes[i];
+            if (!subTimelines.has(element)) {
+                enterNodesWithoutAnimations.push(element);
+            }
+        }
         const /** @type {?} */ allPreviousPlayersMap = new Map();
         let /** @type {?} */ sortedParentElements = [];
         queuedInstructions.forEach(entry => {
@@ -3654,10 +3666,10 @@ class TransitionAnimationEngine {
         allPreviousPlayersMap.forEach(players => players.forEach(player => player.destroy()));
         // PRE STAGE: fill the ! styles
         const /** @type {?} */ preStylesMap = allPreStyleElements.size ?
-            cloakAndComputeStyles(this.driver, enterNodes, allPreStyleElements, ɵPRE_STYLE) :
+            cloakAndComputeStyles(this.driver, enterNodesWithoutAnimations, allPreStyleElements, ɵPRE_STYLE) :
             new Map();
         // POST STAGE: fill the * styles
-        const /** @type {?} */ postStylesMap = cloakAndComputeStyles(this.driver, leaveNodes, allPostStyleElements, AUTO_STYLE);
+        const /** @type {?} */ postStylesMap = cloakAndComputeStyles(this.driver, leaveNodesWithoutAnimations, allPostStyleElements, AUTO_STYLE);
         const /** @type {?} */ rootPlayers = [];
         const /** @type {?} */ subPlayers = [];
         queuedInstructions.forEach(entry => {
@@ -3715,8 +3727,8 @@ class TransitionAnimationEngine {
         // run through all of the queued removals and see if they
         // were picked up by a query. If not then perform the removal
         // operation right away unless a parent animation is ongoing.
-        for (let /** @type {?} */ i = 0; i < leaveNodes.length; i++) {
-            const /** @type {?} */ element = leaveNodes[i];
+        for (let /** @type {?} */ i = 0; i < allLeaveNodes.length; i++) {
+            const /** @type {?} */ element = allLeaveNodes[i];
             const /** @type {?} */ players = queriedElements.get(element);
             if (players) {
                 removeNodesAfterAnimationDone(this, element, players);
@@ -3737,7 +3749,7 @@ class TransitionAnimationEngine {
             });
             player.play();
         });
-        enterNodes.forEach(element => removeClass(element, ENTER_CLASSNAME));
+        allEnterNodes.forEach(element => removeClass(element, ENTER_CLASSNAME));
         return rootPlayers;
     }
     /**
@@ -4131,27 +4143,51 @@ function filterNodeClasses(driver, rootElement, selector) {
         return rootElements;
     let /** @type {?} */ cursor = rootElement;
     let /** @type {?} */ nextCursor = {};
+    let /** @type {?} */ potentialCursorStack = [];
     do {
-        nextCursor = driver.query(cursor, selector, false)[0];
+        // 1. query from root
+        nextCursor = cursor ? driver.query(cursor, selector, false)[0] : null;
+        // this is used to avoid the extra matchesElement call when we
+        // know that the element does match based it on being queried
+        let /** @type {?} */ justQueried = !!nextCursor;
         if (!nextCursor) {
-            cursor = cursor.parentElement;
-            if (!cursor)
-                break;
-            nextCursor = cursor = cursor.nextElementSibling;
+            const /** @type {?} */ nextPotentialCursor = potentialCursorStack.pop();
+            if (nextPotentialCursor) {
+                // 1a)
+                nextCursor = nextPotentialCursor;
+            }
+            else {
+                cursor = cursor.parentElement;
+                // 1b)
+                if (!cursor)
+                    break;
+                // 1c)
+                nextCursor = cursor = cursor.nextElementSibling;
+                continue;
+            }
         }
-        else {
-            while (nextCursor && driver.matchesElement(nextCursor, selector)) {
-                rootElements.push(nextCursor);
-                nextCursor = nextCursor.nextElementSibling;
-                if (nextCursor) {
-                    cursor = nextCursor;
-                }
-                else {
-                    cursor = cursor.parentElement;
-                    if (!cursor)
-                        break;
-                    nextCursor = cursor = cursor.nextElementSibling;
-                }
+        // 2. visit the next node
+        while (nextCursor) {
+            const /** @type {?} */ matches = justQueried || driver.matchesElement(nextCursor, selector);
+            justQueried = false;
+            const /** @type {?} */ nextPotentialCursor = nextCursor.nextElementSibling;
+            // 2a)
+            if (!matches) {
+                potentialCursorStack.push(nextPotentialCursor);
+                cursor = nextCursor;
+                break;
+            }
+            // 2b)
+            rootElements.push(nextCursor);
+            nextCursor = nextPotentialCursor;
+            if (nextCursor) {
+                cursor = nextCursor;
+            }
+            else {
+                cursor = cursor.parentElement;
+                if (!cursor)
+                    break;
+                nextCursor = cursor = cursor.nextElementSibling;
             }
         }
     } while (nextCursor && nextCursor !== rootElement);
