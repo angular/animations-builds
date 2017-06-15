@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.2-96aa3bb
+ * @license Angular v4.2.2-b192dd5
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -434,12 +434,6 @@ function dashCaseToCamelCase(input) {
     return input.replace(DASH_CASE_REGEXP, (...m) => m[1].toUpperCase());
 }
 
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
