@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 /**
- * @license Angular v4.3.0-beta.0-f162657
+ * @license Angular v4.3.0-beta.0-34f3832
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1849,10 +1849,11 @@ var AnimationTimelineBuilderVisitor = (function () {
                 delay = parentContext.currentStaggerTime;
                 break;
         }
+        var /** @type {?} */ timeline = context.currentTimeline;
         if (delay) {
-            context.currentTimeline.delayNextStep(delay);
+            timeline.delayNextStep(delay);
         }
-        var /** @type {?} */ startingTime = context.currentTimeline.currentTime;
+        var /** @type {?} */ startingTime = timeline.currentTime;
         ast.animation.visit(this, context);
         context.previousNode = ast;
         // time = duration + delay
@@ -2091,11 +2092,19 @@ var TimelineBuilder = (function () {
      * @return {?}
      */
     TimelineBuilder.prototype.delayNextStep = function (delay) {
-        if (this.duration == 0) {
-            this.startTime += delay;
+        // in the event that a style() step is placed right before a stagger()
+        // and that style() step is the very first style() value in the animation
+        // then we need to make a copy of the keyframe [0, copy, 1] so that the delay
+        // properly applies the style() values to work with the stagger...
+        var /** @type {?} */ hasPreStyleStep = this._keyframes.size == 1 && Object.keys(this._pendingStyles).length;
+        if (this.duration || hasPreStyleStep) {
+            this.forwardTime(this.currentTime + delay);
+            if (hasPreStyleStep) {
+                this.snapshotCurrentStyles();
+            }
         }
         else {
-            this.forwardTime(this.currentTime + delay);
+            this.startTime += delay;
         }
     };
     /**
