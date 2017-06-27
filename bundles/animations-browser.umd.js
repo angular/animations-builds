@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-beta.0-34f3832
+ * @license Angular v4.3.0-beta.0-d699c35
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v4.3.0-beta.0-34f3832
+ * @license Angular v4.3.0-beta.0-d699c35
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3646,7 +3646,8 @@ var TransitionAnimationEngine = (function () {
      */
     TransitionAnimationEngine.prototype.destroyInnerAnimations = function (containerElement) {
         var _this = this;
-        this.driver.query(containerElement, NG_TRIGGER_SELECTOR, true).forEach(function (element) {
+        var /** @type {?} */ elements = this.driver.query(containerElement, NG_TRIGGER_SELECTOR, true);
+        elements.forEach(function (element) {
             var /** @type {?} */ players = _this.playersByElement.get(element);
             if (players) {
                 players.forEach(function (player) {
@@ -3666,6 +3667,17 @@ var TransitionAnimationEngine = (function () {
                 Object.keys(stateMap).forEach(function (triggerName) { return stateMap[triggerName] = DELETED_STATE_VALUE; });
             }
         });
+        if (this.playersByQueriedElement.size == 0)
+            return;
+        elements = this.driver.query(containerElement, NG_ANIMATING_SELECTOR, true);
+        if (elements.length) {
+            elements.forEach(function (element) {
+                var /** @type {?} */ players = _this.playersByQueriedElement.get(element);
+                if (players) {
+                    players.forEach(function (player) { return player.finish(); });
+                }
+            });
+        }
     };
     /**
      * @return {?}
@@ -3913,15 +3925,34 @@ var TransitionAnimationEngine = (function () {
         // operation right away unless a parent animation is ongoing.
         for (var /** @type {?} */ i = 0; i < allLeaveNodes.length; i++) {
             var /** @type {?} */ element = allLeaveNodes[i];
-            var /** @type {?} */ players = queriedElements.get(element);
-            if (players) {
+            var /** @type {?} */ details = (element[REMOVAL_FLAG]);
+            // this means the element has a removal animation that is being
+            // taken care of and therefore the inner elements will hang around
+            // until that animation is over (or the parent queried animation)
+            if (details && details.hasAnimation)
+                continue;
+            var /** @type {?} */ players = [];
+            // if this element is queried or if it contains queried children
+            // then we want for the element not to be removed from the page
+            // until the queried animations have finished
+            if (queriedElements.size) {
+                var /** @type {?} */ queriedPlayerResults = queriedElements.get(element);
+                if (queriedPlayerResults && queriedPlayerResults.length) {
+                    players.push.apply(players, queriedPlayerResults);
+                }
+                var /** @type {?} */ queriedInnerElements = this.driver.query(element, NG_ANIMATING_SELECTOR, true);
+                for (var /** @type {?} */ j = 0; j < queriedInnerElements.length; j++) {
+                    var /** @type {?} */ queriedPlayers = queriedElements.get(queriedInnerElements[j]);
+                    if (queriedPlayers && queriedPlayers.length) {
+                        players.push.apply(players, queriedPlayers);
+                    }
+                }
+            }
+            if (players.length) {
                 removeNodesAfterAnimationDone(this, element, players);
             }
             else {
-                var /** @type {?} */ details = (element[REMOVAL_FLAG]);
-                if (details && !details.hasAnimation) {
-                    this.processLeaveNode(element);
-                }
+                this.processLeaveNode(element);
             }
         }
         rootPlayers.forEach(function (player) {
@@ -4086,7 +4117,7 @@ var TransitionAnimationEngine = (function () {
         });
         allQueriedPlayers.forEach(function (player) {
             getOrSetAsInMap(_this.playersByQueriedElement, player.element, []).push(player);
-            player.onDone(function () { deleteOrUnsetInMap(_this.playersByQueriedElement, player.element, player); });
+            player.onDone(function () { return deleteOrUnsetInMap(_this.playersByQueriedElement, player.element, player); });
         });
         allConsumedElements.forEach(function (element) { return addClass(element, NG_ANIMATING_CLASSNAME); });
         var /** @type {?} */ player = optimizeGroupPlayer(allNewPlayers);

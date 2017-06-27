@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-beta.0-34f3832
+ * @license Angular v4.3.0-beta.0-d699c35
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3470,7 +3470,8 @@ class TransitionAnimationEngine {
      * @return {?}
      */
     destroyInnerAnimations(containerElement) {
-        this.driver.query(containerElement, NG_TRIGGER_SELECTOR, true).forEach(element => {
+        let /** @type {?} */ elements = this.driver.query(containerElement, NG_TRIGGER_SELECTOR, true);
+        elements.forEach(element => {
             const /** @type {?} */ players = this.playersByElement.get(element);
             if (players) {
                 players.forEach(player => {
@@ -3490,6 +3491,17 @@ class TransitionAnimationEngine {
                 Object.keys(stateMap).forEach(triggerName => stateMap[triggerName] = DELETED_STATE_VALUE);
             }
         });
+        if (this.playersByQueriedElement.size == 0)
+            return;
+        elements = this.driver.query(containerElement, NG_ANIMATING_SELECTOR, true);
+        if (elements.length) {
+            elements.forEach(element => {
+                const /** @type {?} */ players = this.playersByQueriedElement.get(element);
+                if (players) {
+                    players.forEach(player => player.finish());
+                }
+            });
+        }
     }
     /**
      * @return {?}
@@ -3733,15 +3745,34 @@ class TransitionAnimationEngine {
         // operation right away unless a parent animation is ongoing.
         for (let /** @type {?} */ i = 0; i < allLeaveNodes.length; i++) {
             const /** @type {?} */ element = allLeaveNodes[i];
-            const /** @type {?} */ players = queriedElements.get(element);
-            if (players) {
+            const /** @type {?} */ details = (element[REMOVAL_FLAG]);
+            // this means the element has a removal animation that is being
+            // taken care of and therefore the inner elements will hang around
+            // until that animation is over (or the parent queried animation)
+            if (details && details.hasAnimation)
+                continue;
+            let /** @type {?} */ players = [];
+            // if this element is queried or if it contains queried children
+            // then we want for the element not to be removed from the page
+            // until the queried animations have finished
+            if (queriedElements.size) {
+                let /** @type {?} */ queriedPlayerResults = queriedElements.get(element);
+                if (queriedPlayerResults && queriedPlayerResults.length) {
+                    players.push(...queriedPlayerResults);
+                }
+                let /** @type {?} */ queriedInnerElements = this.driver.query(element, NG_ANIMATING_SELECTOR, true);
+                for (let /** @type {?} */ j = 0; j < queriedInnerElements.length; j++) {
+                    let /** @type {?} */ queriedPlayers = queriedElements.get(queriedInnerElements[j]);
+                    if (queriedPlayers && queriedPlayers.length) {
+                        players.push(...queriedPlayers);
+                    }
+                }
+            }
+            if (players.length) {
                 removeNodesAfterAnimationDone(this, element, players);
             }
             else {
-                const /** @type {?} */ details = (element[REMOVAL_FLAG]);
-                if (details && !details.hasAnimation) {
-                    this.processLeaveNode(element);
-                }
+                this.processLeaveNode(element);
             }
         }
         rootPlayers.forEach(player => {
@@ -3904,7 +3935,7 @@ class TransitionAnimationEngine {
         });
         allQueriedPlayers.forEach(player => {
             getOrSetAsInMap(this.playersByQueriedElement, player.element, []).push(player);
-            player.onDone(() => { deleteOrUnsetInMap(this.playersByQueriedElement, player.element, player); });
+            player.onDone(() => deleteOrUnsetInMap(this.playersByQueriedElement, player.element, player));
         });
         allConsumedElements.forEach(element => addClass(element, NG_ANIMATING_CLASSNAME));
         const /** @type {?} */ player = optimizeGroupPlayer(allNewPlayers);
