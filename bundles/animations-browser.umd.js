@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-beta.0-6c1a8da
+ * @license Angular v4.3.0-beta.0-af14b1e
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v4.3.0-beta.0-6c1a8da
+ * @license Angular v4.3.0-beta.0-af14b1e
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3012,8 +3012,6 @@ var StateValue = (function () {
 var VOID_VALUE = 'void';
 var DEFAULT_STATE_VALUE = new StateValue(VOID_VALUE);
 var DELETED_STATE_VALUE = new StateValue('DELETED');
-var POTENTIAL_ENTER_CLASSNAME = ENTER_CLASSNAME + '-temp';
-var POTENTIAL_ENTER_SELECTOR = '.' + POTENTIAL_ENTER_CLASSNAME;
 var AnimationTransitionNamespace = (function () {
     /**
      * @param {?} id
@@ -3766,13 +3764,16 @@ var TransitionAnimationEngine = (function () {
         var /** @type {?} */ queriedElements = new Map();
         var /** @type {?} */ allPreStyleElements = new Map();
         var /** @type {?} */ allPostStyleElements = new Map();
+        var /** @type {?} */ bodyNode = getBodyNode();
+        var /** @type {?} */ allEnterNodes = this.collectedEnterElements.length ?
+            this.collectedEnterElements.filter(createIsRootFilterFn(this.collectedEnterElements)) :
+            [];
         // this must occur before the instructions are built below such that
         // the :enter queries match the elements (since the timeline queries
         // are fired during instruction building).
-        var /** @type {?} */ bodyNode = getBodyNode();
-        var /** @type {?} */ allEnterNodes = this.collectedEnterElements.length ?
-            collectEnterElements(this.driver, this.collectedEnterElements) :
-            [];
+        for (var /** @type {?} */ i = 0; i < allEnterNodes.length; i++) {
+            addClass(allEnterNodes[i], ENTER_CLASSNAME);
+        }
         var /** @type {?} */ allLeaveNodes = [];
         var /** @type {?} */ leaveNodesWithoutAnimations = [];
         for (var /** @type {?} */ i = 0; i < this.collectedLeaveElements.length; i++) {
@@ -4365,68 +4366,6 @@ function cloakElement(element, value) {
 }
 /**
  * @param {?} driver
- * @param {?} rootElement
- * @param {?} selector
- * @return {?}
- */
-function filterNodeClasses(driver, rootElement, selector) {
-    var /** @type {?} */ rootElements = [];
-    if (!rootElement)
-        return rootElements;
-    var /** @type {?} */ cursor = rootElement;
-    var /** @type {?} */ nextCursor = {};
-    var /** @type {?} */ potentialCursorStack = [];
-    do {
-        // 1. query from root
-        nextCursor = cursor ? driver.query(cursor, selector, false)[0] : null;
-        // this is used to avoid the extra matchesElement call when we
-        // know that the element does match based it on being queried
-        var /** @type {?} */ justQueried = !!nextCursor;
-        if (!nextCursor) {
-            var /** @type {?} */ nextPotentialCursor = potentialCursorStack.pop();
-            if (nextPotentialCursor) {
-                // 1a)
-                nextCursor = nextPotentialCursor;
-            }
-            else {
-                cursor = cursor.parentElement;
-                // 1b)
-                if (!cursor)
-                    break;
-                // 1c)
-                nextCursor = cursor = cursor.nextElementSibling;
-                continue;
-            }
-        }
-        // 2. visit the next node
-        while (nextCursor) {
-            var /** @type {?} */ matches = justQueried || driver.matchesElement(nextCursor, selector);
-            justQueried = false;
-            var /** @type {?} */ nextPotentialCursor = nextCursor.nextElementSibling;
-            // 2a)
-            if (!matches) {
-                potentialCursorStack.push(nextPotentialCursor);
-                cursor = nextCursor;
-                break;
-            }
-            // 2b)
-            rootElements.push(nextCursor);
-            nextCursor = nextPotentialCursor;
-            if (nextCursor) {
-                cursor = nextCursor;
-            }
-            else {
-                cursor = cursor.parentElement;
-                if (!cursor)
-                    break;
-                nextCursor = cursor = cursor.nextElementSibling;
-            }
-        }
-    } while (nextCursor && nextCursor !== rootElement);
-    return rootElements;
-}
-/**
- * @param {?} driver
  * @param {?} elements
  * @param {?} elementPropsMap
  * @param {?} defaultStyle
@@ -4451,16 +4390,27 @@ function cloakAndComputeStyles(driver, elements, elementPropsMap, defaultStyle) 
     return valuesMap;
 }
 /**
- * @param {?} driver
- * @param {?} allEnterNodes
+ * @param {?} nodes
  * @return {?}
  */
-function collectEnterElements(driver, allEnterNodes) {
-    allEnterNodes.forEach(function (element) { return addClass(element, POTENTIAL_ENTER_CLASSNAME); });
-    var /** @type {?} */ enterNodes = filterNodeClasses(driver, getBodyNode(), POTENTIAL_ENTER_SELECTOR);
-    enterNodes.forEach(function (element) { return addClass(element, ENTER_CLASSNAME); });
-    allEnterNodes.forEach(function (element) { return removeClass(element, POTENTIAL_ENTER_CLASSNAME); });
-    return enterNodes;
+function createIsRootFilterFn(nodes) {
+    var /** @type {?} */ nodeSet = new Set(nodes);
+    var /** @type {?} */ knownRootContainer = new Set();
+    var /** @type {?} */ isRoot;
+    isRoot = function (node) {
+        if (!node)
+            return true;
+        if (nodeSet.has(node.parentNode))
+            return false;
+        if (knownRootContainer.has(node.parentNode))
+            return true;
+        if (isRoot(node.parentNode)) {
+            knownRootContainer.add(node);
+            return true;
+        }
+        return false;
+    };
+    return isRoot;
 }
 var CLASSES_CACHE_KEY = '$$classes';
 /**
