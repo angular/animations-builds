@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.4-7728d7e
+ * @license Angular v4.2.4-f31b0d6
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -883,6 +883,7 @@ class AnimationAstBuilderVisitor {
      */
     _resetContextStyleTimingState(context) {
         context.currentQuerySelector = ROOT_SELECTOR;
+        context.collectedStyles = {};
         context.collectedStyles[ROOT_SELECTOR] = {};
         context.currentTime = 0;
     }
@@ -1765,10 +1766,11 @@ class AnimationTimelineBuilderVisitor {
                 delay = parentContext.currentStaggerTime;
                 break;
         }
+        const /** @type {?} */ timeline = context.currentTimeline;
         if (delay) {
-            context.currentTimeline.delayNextStep(delay);
+            timeline.delayNextStep(delay);
         }
-        const /** @type {?} */ startingTime = context.currentTimeline.currentTime;
+        const /** @type {?} */ startingTime = timeline.currentTime;
         ast.animation.visit(this, context);
         context.previousNode = ast;
         // time = duration + delay
@@ -1995,11 +1997,19 @@ class TimelineBuilder {
      * @return {?}
      */
     delayNextStep(delay) {
-        if (this.duration == 0) {
-            this.startTime += delay;
+        // in the event that a style() step is placed right before a stagger()
+        // and that style() step is the very first style() value in the animation
+        // then we need to make a copy of the keyframe [0, copy, 1] so that the delay
+        // properly applies the style() values to work with the stagger...
+        const /** @type {?} */ hasPreStyleStep = this._keyframes.size == 1 && Object.keys(this._pendingStyles).length;
+        if (this.duration || hasPreStyleStep) {
+            this.forwardTime(this.currentTime + delay);
+            if (hasPreStyleStep) {
+                this.snapshotCurrentStyles();
+            }
         }
         else {
-            this.forwardTime(this.currentTime + delay);
+            this.startTime += delay;
         }
     }
     /**
@@ -2841,8 +2851,6 @@ class StateValue {
 const VOID_VALUE = 'void';
 const DEFAULT_STATE_VALUE = new StateValue(VOID_VALUE);
 const DELETED_STATE_VALUE = new StateValue('DELETED');
-const POTENTIAL_ENTER_CLASSNAME = ENTER_CLASSNAME + '-temp';
-const POTENTIAL_ENTER_SELECTOR = '.' + POTENTIAL_ENTER_CLASSNAME;
 class AnimationTransitionNamespace {
     /**
      * @param {?} id
@@ -3460,7 +3468,8 @@ class TransitionAnimationEngine {
      * @return {?}
      */
     destroyInnerAnimations(containerElement) {
-        this.driver.query(containerElement, NG_TRIGGER_SELECTOR, true).forEach(element => {
+        let /** @type {?} */ elements = this.driver.query(containerElement, NG_TRIGGER_SELECTOR, true);
+        elements.forEach(element => {
             const /** @type {?} */ players = this.playersByElement.get(element);
             if (players) {
                 players.forEach(player => {
@@ -3480,6 +3489,17 @@ class TransitionAnimationEngine {
                 Object.keys(stateMap).forEach(triggerName => stateMap[triggerName] = DELETED_STATE_VALUE);
             }
         });
+        if (this.playersByQueriedElement.size == 0)
+            return;
+        elements = this.driver.query(containerElement, NG_ANIMATING_SELECTOR, true);
+        if (elements.length) {
+            elements.forEach(element => {
+                const /** @type {?} */ players = this.playersByQueriedElement.get(element);
+                if (players) {
+                    players.forEach(player => player.finish());
+                }
+            });
+        }
     }
     /**
      * @return {?}
@@ -3564,13 +3584,16 @@ class TransitionAnimationEngine {
         const /** @type {?} */ queriedElements = new Map();
         const /** @type {?} */ allPreStyleElements = new Map();
         const /** @type {?} */ allPostStyleElements = new Map();
+        const /** @type {?} */ bodyNode = getBodyNode();
+        const /** @type {?} */ allEnterNodes = this.collectedEnterElements.length ?
+            this.collectedEnterElements.filter(createIsRootFilterFn(this.collectedEnterElements)) :
+            [];
         // this must occur before the instructions are built below such that
         // the :enter queries match the elements (since the timeline queries
         // are fired during instruction building).
-        const /** @type {?} */ bodyNode = getBodyNode();
-        const /** @type {?} */ allEnterNodes = this.collectedEnterElements.length ?
-            collectEnterElements(this.driver, this.collectedEnterElements) :
-            [];
+        for (let /** @type {?} */ i = 0; i < allEnterNodes.length; i++) {
+            addClass(allEnterNodes[i], ENTER_CLASSNAME);
+        }
         const /** @type {?} */ allLeaveNodes = [];
         const /** @type {?} */ leaveNodesWithoutAnimations = [];
         for (let /** @type {?} */ i = 0; i < this.collectedLeaveElements.length; i++) {
@@ -3723,15 +3746,34 @@ class TransitionAnimationEngine {
         // operation right away unless a parent animation is ongoing.
         for (let /** @type {?} */ i = 0; i < allLeaveNodes.length; i++) {
             const /** @type {?} */ element = allLeaveNodes[i];
-            const /** @type {?} */ players = queriedElements.get(element);
-            if (players) {
+            const /** @type {?} */ details = (element[REMOVAL_FLAG]);
+            // this means the element has a removal animation that is being
+            // taken care of and therefore the inner elements will hang around
+            // until that animation is over (or the parent queried animation)
+            if (details && details.hasAnimation)
+                continue;
+            let /** @type {?} */ players = [];
+            // if this element is queried or if it contains queried children
+            // then we want for the element not to be removed from the page
+            // until the queried animations have finished
+            if (queriedElements.size) {
+                let /** @type {?} */ queriedPlayerResults = queriedElements.get(element);
+                if (queriedPlayerResults && queriedPlayerResults.length) {
+                    players.push(...queriedPlayerResults);
+                }
+                let /** @type {?} */ queriedInnerElements = this.driver.query(element, NG_ANIMATING_SELECTOR, true);
+                for (let /** @type {?} */ j = 0; j < queriedInnerElements.length; j++) {
+                    let /** @type {?} */ queriedPlayers = queriedElements.get(queriedInnerElements[j]);
+                    if (queriedPlayers && queriedPlayers.length) {
+                        players.push(...queriedPlayers);
+                    }
+                }
+            }
+            if (players.length) {
                 removeNodesAfterAnimationDone(this, element, players);
             }
             else {
-                const /** @type {?} */ details = (element[REMOVAL_FLAG]);
-                if (details && !details.hasAnimation) {
-                    this.processLeaveNode(element);
-                }
+                this.processLeaveNode(element);
             }
         }
         rootPlayers.forEach(player => {
@@ -3894,7 +3936,7 @@ class TransitionAnimationEngine {
         });
         allQueriedPlayers.forEach(player => {
             getOrSetAsInMap(this.playersByQueriedElement, player.element, []).push(player);
-            player.onDone(() => { deleteOrUnsetInMap(this.playersByQueriedElement, player.element, player); });
+            player.onDone(() => deleteOrUnsetInMap(this.playersByQueriedElement, player.element, player));
         });
         allConsumedElements.forEach(element => addClass(element, NG_ANIMATING_CLASSNAME));
         const /** @type {?} */ player = optimizeGroupPlayer(allNewPlayers);
@@ -4127,68 +4169,6 @@ function cloakElement(element, value) {
 }
 /**
  * @param {?} driver
- * @param {?} rootElement
- * @param {?} selector
- * @return {?}
- */
-function filterNodeClasses(driver, rootElement, selector) {
-    const /** @type {?} */ rootElements = [];
-    if (!rootElement)
-        return rootElements;
-    let /** @type {?} */ cursor = rootElement;
-    let /** @type {?} */ nextCursor = {};
-    let /** @type {?} */ potentialCursorStack = [];
-    do {
-        // 1. query from root
-        nextCursor = cursor ? driver.query(cursor, selector, false)[0] : null;
-        // this is used to avoid the extra matchesElement call when we
-        // know that the element does match based it on being queried
-        let /** @type {?} */ justQueried = !!nextCursor;
-        if (!nextCursor) {
-            const /** @type {?} */ nextPotentialCursor = potentialCursorStack.pop();
-            if (nextPotentialCursor) {
-                // 1a)
-                nextCursor = nextPotentialCursor;
-            }
-            else {
-                cursor = cursor.parentElement;
-                // 1b)
-                if (!cursor)
-                    break;
-                // 1c)
-                nextCursor = cursor = cursor.nextElementSibling;
-                continue;
-            }
-        }
-        // 2. visit the next node
-        while (nextCursor) {
-            const /** @type {?} */ matches = justQueried || driver.matchesElement(nextCursor, selector);
-            justQueried = false;
-            const /** @type {?} */ nextPotentialCursor = nextCursor.nextElementSibling;
-            // 2a)
-            if (!matches) {
-                potentialCursorStack.push(nextPotentialCursor);
-                cursor = nextCursor;
-                break;
-            }
-            // 2b)
-            rootElements.push(nextCursor);
-            nextCursor = nextPotentialCursor;
-            if (nextCursor) {
-                cursor = nextCursor;
-            }
-            else {
-                cursor = cursor.parentElement;
-                if (!cursor)
-                    break;
-                nextCursor = cursor = cursor.nextElementSibling;
-            }
-        }
-    } while (nextCursor && nextCursor !== rootElement);
-    return rootElements;
-}
-/**
- * @param {?} driver
  * @param {?} elements
  * @param {?} elementPropsMap
  * @param {?} defaultStyle
@@ -4213,16 +4193,27 @@ function cloakAndComputeStyles(driver, elements, elementPropsMap, defaultStyle) 
     return valuesMap;
 }
 /**
- * @param {?} driver
- * @param {?} allEnterNodes
+ * @param {?} nodes
  * @return {?}
  */
-function collectEnterElements(driver, allEnterNodes) {
-    allEnterNodes.forEach(element => addClass(element, POTENTIAL_ENTER_CLASSNAME));
-    const /** @type {?} */ enterNodes = filterNodeClasses(driver, getBodyNode(), POTENTIAL_ENTER_SELECTOR);
-    enterNodes.forEach(element => addClass(element, ENTER_CLASSNAME));
-    allEnterNodes.forEach(element => removeClass(element, POTENTIAL_ENTER_CLASSNAME));
-    return enterNodes;
+function createIsRootFilterFn(nodes) {
+    const /** @type {?} */ nodeSet = new Set(nodes);
+    const /** @type {?} */ knownRootContainer = new Set();
+    let /** @type {?} */ isRoot;
+    isRoot = node => {
+        if (!node)
+            return true;
+        if (nodeSet.has(node.parentNode))
+            return false;
+        if (knownRootContainer.has(node.parentNode))
+            return true;
+        if (isRoot(node.parentNode)) {
+            knownRootContainer.add(node);
+            return true;
+        }
+        return false;
+    };
+    return isRoot;
 }
 const CLASSES_CACHE_KEY = '$$classes';
 /**
