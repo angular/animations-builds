@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-beta.1-71ee0c5
+ * @license Angular v4.3.0-beta.1-105e920
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -63,6 +63,39 @@ const invokeQuery = _query;
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function allowPreviousPlayerStylesMerge(duration, delay) {
+    return duration === 0 || delay === 0;
+}
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @experimental Animation support is experimental.
  */
@@ -101,12 +134,14 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         this.previousStyles = {};
         this._onInitFns = [];
         this.currentSnapshot = {};
-        previousPlayers.forEach(player => {
-            if (player instanceof MockAnimationPlayer) {
-                const styles = player.currentSnapshot;
-                Object.keys(styles).forEach(prop => this.previousStyles[prop] = styles[prop]);
-            }
-        });
+        if (allowPreviousPlayerStylesMerge(duration, delay)) {
+            previousPlayers.forEach(player => {
+                if (player instanceof MockAnimationPlayer) {
+                    const styles = player.currentSnapshot;
+                    Object.keys(styles).forEach(prop => this.previousStyles[prop] = styles[prop]);
+                }
+            });
+        }
         this.totalTime = delay + duration;
     }
     /* @internal */

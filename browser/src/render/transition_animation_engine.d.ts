@@ -104,7 +104,7 @@ export declare class TransitionAnimationEngine {
     whenRenderingDone(): Promise<any>;
     processLeaveNode(element: any): void;
     flush(microtaskId?: number): void;
-    private _flushAnimations(microtaskId);
+    private _flushAnimations(cleanupFns, microtaskId);
     elementContainsData(namespaceId: string, element: any): boolean;
     afterFlush(callback: () => any): void;
     afterFlushAnimationsDone(callback: () => any): void;

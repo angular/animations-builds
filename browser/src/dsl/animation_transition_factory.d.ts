@@ -18,5 +18,5 @@ export declare class AnimationTransitionFactory {
         [stateName: string]: ɵStyleData;
     });
     match(currentState: any, nextState: any): boolean;
-    build(driver: AnimationDriver, element: any, currentState: any, nextState: any, options?: AnimationOptions, subInstructions?: ElementInstructionMap): AnimationTransitionInstruction | undefined;
+    build(driver: AnimationDriver, element: any, currentState: any, nextState: any, options?: AnimationOptions, subInstructions?: ElementInstructionMap): AnimationTransitionInstruction;
 }
