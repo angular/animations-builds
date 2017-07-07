@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-beta.1-c81ad9d
+ * @license Angular v4.3.0-beta.1-8e28382
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2729,6 +2729,10 @@ class TimelineAnimationEngine {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+const QUEUED_CLASSNAME = 'ng-animate-queued';
+const QUEUED_SELECTOR = '.ng-animate-queued';
+const DISABLED_CLASSNAME = 'ng-animate-disabled';
+const DISABLED_SELECTOR = '.ng-animate-disabled';
 const EMPTY_PLAYER_ARRAY = [];
 const NULL_REMOVAL_STATE = {
     namespaceId: '',
@@ -2895,6 +2899,15 @@ class AnimationTransitionNamespace {
         else if (fromState === DELETED_STATE_VALUE) {
             return player;
         }
+        const /** @type {?} */ isRemoval = toState.value === VOID_VALUE;
+        // normally this isn't reached by here, however, if an object expression
+        // is passed in then it may be a new object each time. Comparing the value
+        // is important since that will stay the same despite there being a new object.
+        // The removal arc here is special cased because the same element is triggered
+        // twice in the event that it contains animations on the outer/inner portions
+        // of the host container
+        if (!isRemoval && fromState.value === toState.value)
+            return;
         const /** @type {?} */ playersOnElement = getOrSetAsInMap(this._engine.playersByElement, element, []);
         playersOnElement.forEach(player => {
             // only remove the player if it is queued on the EXACT same trigger/namespace
@@ -2916,10 +2929,10 @@ class AnimationTransitionNamespace {
         this._engine.totalQueuedPlayers++;
         this._queue.push({ element, triggerName, transition, fromState, toState, player, isFallbackTransition });
         if (!isFallbackTransition) {
-            addClass(element, NG_ANIMATING_CLASSNAME);
+            addClass(element, QUEUED_CLASSNAME);
+            player.onStart(() => { removeClass(element, QUEUED_CLASSNAME); });
         }
         player.onDone(() => {
-            removeClass(element, NG_ANIMATING_CLASSNAME);
             let /** @type {?} */ index = this.players.indexOf(player);
             if (index >= 0) {
                 this.players.splice(index, 1);
@@ -3161,6 +3174,7 @@ class TransitionAnimationEngine {
         this.playersByElement = new Map();
         this.playersByQueriedElement = new Map();
         this.statesByElement = new Map();
+        this.disabledNodes = new Set();
         this.totalAnimations = 0;
         this.totalQueuedPlayers = 0;
         this._namespaceLookup = {};
@@ -3338,6 +3352,23 @@ class TransitionAnimationEngine {
      */
     collectEnterElement(element) { this.collectedEnterElements.push(element); }
     /**
+     * @param {?} element
+     * @param {?} value
+     * @return {?}
+     */
+    markElementAsDisabled(element, value) {
+        if (value) {
+            if (!this.disabledNodes.has(element)) {
+                this.disabledNodes.add(element);
+                addClass(element, DISABLED_CLASSNAME);
+            }
+        }
+        else if (this.disabledNodes.has(element)) {
+            this.disabledNodes.delete(element);
+            removeClass(element, DISABLED_CLASSNAME);
+        }
+    }
+    /**
      * @param {?} namespaceId
      * @param {?} element
      * @param {?} context
@@ -3463,6 +3494,12 @@ class TransitionAnimationEngine {
             }
             this._onRemovalComplete(element, details.setForRemoval);
         }
+        if (this.driver.matchesElement(element, DISABLED_SELECTOR)) {
+            this.markElementAsDisabled(element, false);
+        }
+        this.driver.query(element, DISABLED_SELECTOR, true).forEach(node => {
+            this.markElementAsDisabled(element, false);
+        });
     }
     /**
      * @param {?=} microtaskId
@@ -3524,6 +3561,13 @@ class TransitionAnimationEngine {
         const /** @type {?} */ queriedElements = new Map();
         const /** @type {?} */ allPreStyleElements = new Map();
         const /** @type {?} */ allPostStyleElements = new Map();
+        const /** @type {?} */ disabledElementsSet = new Set();
+        this.disabledNodes.forEach(node => {
+            const /** @type {?} */ nodesThatAreDisabled = this.driver.query(node, QUEUED_SELECTOR, true);
+            for (let /** @type {?} */ i = 0; i < nodesThatAreDisabled.length; i++) {
+                disabledElementsSet.add(nodesThatAreDisabled[i]);
+            }
+        });
         const /** @type {?} */ bodyNode = getBodyNode();
         const /** @type {?} */ allEnterNodes = this.collectedEnterElements.length ?
             this.collectedEnterElements.filter(createIsRootFilterFn(this.collectedEnterElements)) :
@@ -3655,6 +3699,10 @@ class TransitionAnimationEngine {
             // this means that it was never consumed by a parent animation which
             // means that it is independent and therefore should be set for animation
             if (subTimelines.has(element)) {
+                if (disabledElementsSet.has(element)) {
+                    skippedPlayers.push(player);
+                    return;
+                }
                 const /** @type {?} */ innerPlayer = this._buildAnimation(player.namespaceId, instruction, allPreviousPlayersMap, skippedPlayersMap, preStylesMap, postStylesMap);
                 player.setRealPlayer(innerPlayer);
                 let /** @type {?} */ parentHasPriority = null;
@@ -4323,15 +4371,21 @@ class AnimationEngine {
      * @param {?} value
      * @return {?}
      */
-    setProperty(namespaceId, element, property, value) {
-        // @@property
-        if (property.charAt(0) == '@') {
-            const [id, action] = parseTimelineCommand(property);
-            const /** @type {?} */ args = (value);
-            this._timelineEngine.command(id, element, action, args);
-            return false;
+    process(namespaceId, element, property, value) {
+        switch (property.charAt(0)) {
+            case '.':
+                if (property == '.disabled') {
+                    this._transitionEngine.markElementAsDisabled(element, !!value);
+                }
+                return false;
+            case '@':
+                const [id, action] = parseTimelineCommand(property);
+                const /** @type {?} */ args = (value);
+                this._timelineEngine.command(id, element, action, args);
+                return false;
+            default:
+                return this._transitionEngine.trigger(namespaceId, element, property, value);
         }
-        return this._transitionEngine.trigger(namespaceId, element, property, value);
     }
     /**
      * @param {?} namespaceId

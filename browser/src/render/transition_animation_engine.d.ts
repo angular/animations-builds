@@ -74,6 +74,7 @@ export declare class TransitionAnimationEngine {
     statesByElement: Map<any, {
         [triggerName: string]: StateValue;
     }>;
+    disabledNodes: Set<any>;
     totalAnimations: number;
     totalQueuedPlayers: number;
     private _namespaceLookup;
@@ -96,6 +97,7 @@ export declare class TransitionAnimationEngine {
     trigger(namespaceId: string, element: any, name: string, value: any): boolean;
     insertNode(namespaceId: string, element: any, parent: any, insertBefore: boolean): void;
     collectEnterElement(element: any): void;
+    markElementAsDisabled(element: any, value: boolean): void;
     removeNode(namespaceId: string, element: any, context: any, doNotRecurse?: boolean): void;
     markElementAsRemoved(namespaceId: string, element: any, hasAnimation?: boolean, context?: any): void;
     listen(namespaceId: string, element: any, name: string, phase: string, callback: (event: any) => boolean): () => any;

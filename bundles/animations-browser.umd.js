@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-beta.1-c81ad9d
+ * @license Angular v4.3.0-beta.1-8e28382
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v4.3.0-beta.1-c81ad9d
+ * @license Angular v4.3.0-beta.1-8e28382
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2889,6 +2889,10 @@ var TimelineAnimationEngine = (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+var QUEUED_CLASSNAME = 'ng-animate-queued';
+var QUEUED_SELECTOR = '.ng-animate-queued';
+var DISABLED_CLASSNAME = 'ng-animate-disabled';
+var DISABLED_SELECTOR = '.ng-animate-disabled';
 var EMPTY_PLAYER_ARRAY = [];
 var NULL_REMOVAL_STATE = {
     namespaceId: '',
@@ -3059,6 +3063,15 @@ var AnimationTransitionNamespace = (function () {
         else if (fromState === DELETED_STATE_VALUE) {
             return player;
         }
+        var /** @type {?} */ isRemoval = toState.value === VOID_VALUE;
+        // normally this isn't reached by here, however, if an object expression
+        // is passed in then it may be a new object each time. Comparing the value
+        // is important since that will stay the same despite there being a new object.
+        // The removal arc here is special cased because the same element is triggered
+        // twice in the event that it contains animations on the outer/inner portions
+        // of the host container
+        if (!isRemoval && fromState.value === toState.value)
+            return;
         var /** @type {?} */ playersOnElement = getOrSetAsInMap(this._engine.playersByElement, element, []);
         playersOnElement.forEach(function (player) {
             // only remove the player if it is queued on the EXACT same trigger/namespace
@@ -3080,10 +3093,10 @@ var AnimationTransitionNamespace = (function () {
         this._engine.totalQueuedPlayers++;
         this._queue.push({ element: element, triggerName: triggerName, transition: transition, fromState: fromState, toState: toState, player: player, isFallbackTransition: isFallbackTransition });
         if (!isFallbackTransition) {
-            addClass(element, NG_ANIMATING_CLASSNAME);
+            addClass(element, QUEUED_CLASSNAME);
+            player.onStart(function () { removeClass(element, QUEUED_CLASSNAME); });
         }
         player.onDone(function () {
-            removeClass(element, NG_ANIMATING_CLASSNAME);
             var /** @type {?} */ index = _this.players.indexOf(player);
             if (index >= 0) {
                 _this.players.splice(index, 1);
@@ -3331,6 +3344,7 @@ var TransitionAnimationEngine = (function () {
         this.playersByElement = new Map();
         this.playersByQueriedElement = new Map();
         this.statesByElement = new Map();
+        this.disabledNodes = new Set();
         this.totalAnimations = 0;
         this.totalQueuedPlayers = 0;
         this._namespaceLookup = {};
@@ -3513,6 +3527,23 @@ var TransitionAnimationEngine = (function () {
      */
     TransitionAnimationEngine.prototype.collectEnterElement = function (element) { this.collectedEnterElements.push(element); };
     /**
+     * @param {?} element
+     * @param {?} value
+     * @return {?}
+     */
+    TransitionAnimationEngine.prototype.markElementAsDisabled = function (element, value) {
+        if (value) {
+            if (!this.disabledNodes.has(element)) {
+                this.disabledNodes.add(element);
+                addClass(element, DISABLED_CLASSNAME);
+            }
+        }
+        else if (this.disabledNodes.has(element)) {
+            this.disabledNodes.delete(element);
+            removeClass(element, DISABLED_CLASSNAME);
+        }
+    };
+    /**
      * @param {?} namespaceId
      * @param {?} element
      * @param {?} context
@@ -3627,6 +3658,7 @@ var TransitionAnimationEngine = (function () {
      * @return {?}
      */
     TransitionAnimationEngine.prototype.processLeaveNode = function (element) {
+        var _this = this;
         var /** @type {?} */ details = (element[REMOVAL_FLAG]);
         if (details && details.setForRemoval) {
             // this will prevent it from removing it twice
@@ -3640,6 +3672,12 @@ var TransitionAnimationEngine = (function () {
             }
             this._onRemovalComplete(element, details.setForRemoval);
         }
+        if (this.driver.matchesElement(element, DISABLED_SELECTOR)) {
+            this.markElementAsDisabled(element, false);
+        }
+        this.driver.query(element, DISABLED_SELECTOR, true).forEach(function (node) {
+            _this.markElementAsDisabled(element, false);
+        });
     };
     /**
      * @param {?=} microtaskId
@@ -3704,6 +3742,13 @@ var TransitionAnimationEngine = (function () {
         var /** @type {?} */ queriedElements = new Map();
         var /** @type {?} */ allPreStyleElements = new Map();
         var /** @type {?} */ allPostStyleElements = new Map();
+        var /** @type {?} */ disabledElementsSet = new Set();
+        this.disabledNodes.forEach(function (node) {
+            var /** @type {?} */ nodesThatAreDisabled = _this.driver.query(node, QUEUED_SELECTOR, true);
+            for (var /** @type {?} */ i = 0; i < nodesThatAreDisabled.length; i++) {
+                disabledElementsSet.add(nodesThatAreDisabled[i]);
+            }
+        });
         var /** @type {?} */ bodyNode = getBodyNode();
         var /** @type {?} */ allEnterNodes = this.collectedEnterElements.length ?
             this.collectedEnterElements.filter(createIsRootFilterFn(this.collectedEnterElements)) :
@@ -3835,6 +3880,10 @@ var TransitionAnimationEngine = (function () {
             // this means that it was never consumed by a parent animation which
             // means that it is independent and therefore should be set for animation
             if (subTimelines.has(element)) {
+                if (disabledElementsSet.has(element)) {
+                    skippedPlayers.push(player);
+                    return;
+                }
                 var /** @type {?} */ innerPlayer = _this._buildAnimation(player.namespaceId, instruction, allPreviousPlayersMap, skippedPlayersMap, preStylesMap, postStylesMap);
                 player.setRealPlayer(innerPlayer);
                 var /** @type {?} */ parentHasPriority = null;
@@ -4520,15 +4569,21 @@ var AnimationEngine = (function () {
      * @param {?} value
      * @return {?}
      */
-    AnimationEngine.prototype.setProperty = function (namespaceId, element, property, value) {
-        // @@property
-        if (property.charAt(0) == '@') {
-            var _a = parseTimelineCommand(property), id = _a[0], action = _a[1];
-            var /** @type {?} */ args = (value);
-            this._timelineEngine.command(id, element, action, args);
-            return false;
+    AnimationEngine.prototype.process = function (namespaceId, element, property, value) {
+        switch (property.charAt(0)) {
+            case '.':
+                if (property == '.disabled') {
+                    this._transitionEngine.markElementAsDisabled(element, !!value);
+                }
+                return false;
+            case '@':
+                var _a = parseTimelineCommand(property), id = _a[0], action = _a[1];
+                var /** @type {?} */ args = (value);
+                this._timelineEngine.command(id, element, action, args);
+                return false;
+            default:
+                return this._transitionEngine.trigger(namespaceId, element, property, value);
         }
-        return this._transitionEngine.trigger(namespaceId, element, property, value);
     };
     /**
      * @param {?} namespaceId
