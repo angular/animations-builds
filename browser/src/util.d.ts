@@ -36,3 +36,4 @@ export declare function interpolateParams(value: string | number, params: {
 export declare function iteratorToArray(iterator: any): any[];
 export declare function mergeAnimationOptions(source: AnimationOptions, destination: AnimationOptions): AnimationOptions;
 export declare function dashCaseToCamelCase(input: string): string;
+export declare function allowPreviousPlayerStylesMerge(duration: number, delay: number): boolean;

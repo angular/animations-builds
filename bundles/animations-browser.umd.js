@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.5-670f2e5
+ * @license Angular v4.2.5-3e61bf7
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v4.2.5-670f2e5
+ * @license Angular v4.2.5-3e61bf7
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -233,23 +233,14 @@ var NG_TRIGGER_CLASSNAME = 'ng-trigger';
 var NG_TRIGGER_SELECTOR = '.ng-trigger';
 var NG_ANIMATING_CLASSNAME = 'ng-animating';
 var NG_ANIMATING_SELECTOR = '.ng-animating';
-/**
- * @param {?} value
- * @return {?}
- */
 function resolveTimingValue(value) {
     if (typeof value == 'number')
         return value;
-    var /** @type {?} */ matches = ((value)).match(/^(-?[\.\d]+)(m?s)/);
+    var matches = value.match(/^(-?[\.\d]+)(m?s)/);
     if (!matches || matches.length < 2)
         return 0;
     return _convertTimeValueToMS(parseFloat(matches[1]), matches[2]);
 }
-/**
- * @param {?} value
- * @param {?} unit
- * @return {?}
- */
 function _convertTimeValueToMS(value, unit) {
     switch (unit) {
         case 's':
@@ -258,49 +249,38 @@ function _convertTimeValueToMS(value, unit) {
             return value;
     }
 }
-/**
- * @param {?} timings
- * @param {?} errors
- * @param {?=} allowNegativeValues
- * @return {?}
- */
 function resolveTiming(timings, errors, allowNegativeValues) {
-    return timings.hasOwnProperty('duration') ? (timings) :
-        parseTimeExpression(/** @type {?} */ (timings), errors, allowNegativeValues);
+    return timings.hasOwnProperty('duration') ?
+        timings :
+        parseTimeExpression(timings, errors, allowNegativeValues);
 }
-/**
- * @param {?} exp
- * @param {?} errors
- * @param {?=} allowNegativeValues
- * @return {?}
- */
 function parseTimeExpression(exp, errors, allowNegativeValues) {
-    var /** @type {?} */ regex = /^(-?[\.\d]+)(m?s)(?:\s+(-?[\.\d]+)(m?s))?(?:\s+([-a-z]+(?:\(.+?\))?))?$/i;
-    var /** @type {?} */ duration;
-    var /** @type {?} */ delay = 0;
-    var /** @type {?} */ easing = '';
+    var regex = /^(-?[\.\d]+)(m?s)(?:\s+(-?[\.\d]+)(m?s))?(?:\s+([-a-z]+(?:\(.+?\))?))?$/i;
+    var duration;
+    var delay = 0;
+    var easing = '';
     if (typeof exp === 'string') {
-        var /** @type {?} */ matches = exp.match(regex);
+        var matches = exp.match(regex);
         if (matches === null) {
             errors.push("The provided timing value \"" + exp + "\" is invalid.");
             return { duration: 0, delay: 0, easing: '' };
         }
         duration = _convertTimeValueToMS(parseFloat(matches[1]), matches[2]);
-        var /** @type {?} */ delayMatch = matches[3];
+        var delayMatch = matches[3];
         if (delayMatch != null) {
             delay = _convertTimeValueToMS(Math.floor(parseFloat(delayMatch)), matches[4]);
         }
-        var /** @type {?} */ easingVal = matches[5];
+        var easingVal = matches[5];
         if (easingVal) {
             easing = easingVal;
         }
     }
     else {
-        duration = (exp);
+        duration = exp;
     }
     if (!allowNegativeValues) {
-        var /** @type {?} */ containsErrors = false;
-        var /** @type {?} */ startIndex = errors.length;
+        var containsErrors = false;
+        var startIndex = errors.length;
         if (duration < 0) {
             errors.push("Duration values below 0 are not allowed for this animation step.");
             containsErrors = true;
@@ -315,22 +295,13 @@ function parseTimeExpression(exp, errors, allowNegativeValues) {
     }
     return { duration: duration, delay: delay, easing: easing };
 }
-/**
- * @param {?} obj
- * @param {?=} destination
- * @return {?}
- */
 function copyObj(obj, destination) {
     if (destination === void 0) { destination = {}; }
     Object.keys(obj).forEach(function (prop) { destination[prop] = obj[prop]; });
     return destination;
 }
-/**
- * @param {?} styles
- * @return {?}
- */
 function normalizeStyles(styles) {
-    var /** @type {?} */ normalizedStyles = {};
+    var normalizedStyles = {};
     if (Array.isArray(styles)) {
         styles.forEach(function (data) { return copyStyles(data, false, normalizedStyles); });
     }
@@ -339,19 +310,13 @@ function normalizeStyles(styles) {
     }
     return normalizedStyles;
 }
-/**
- * @param {?} styles
- * @param {?} readPrototype
- * @param {?=} destination
- * @return {?}
- */
 function copyStyles(styles, readPrototype, destination) {
     if (destination === void 0) { destination = {}; }
     if (readPrototype) {
         // we make use of a for-in loop so that the
         // prototypically inherited properties are
         // revealed from the backFill map
-        for (var /** @type {?} */ prop in styles) {
+        for (var prop in styles) {
             destination[prop] = styles[prop];
         }
     }
@@ -360,55 +325,35 @@ function copyStyles(styles, readPrototype, destination) {
     }
     return destination;
 }
-/**
- * @param {?} element
- * @param {?} styles
- * @return {?}
- */
 function setStyles(element, styles) {
     if (element['style']) {
         Object.keys(styles).forEach(function (prop) {
-            var /** @type {?} */ camelProp = dashCaseToCamelCase(prop);
+            var camelProp = dashCaseToCamelCase(prop);
             element.style[camelProp] = styles[prop];
         });
     }
 }
-/**
- * @param {?} element
- * @param {?} styles
- * @return {?}
- */
 function eraseStyles(element, styles) {
     if (element['style']) {
         Object.keys(styles).forEach(function (prop) {
-            var /** @type {?} */ camelProp = dashCaseToCamelCase(prop);
+            var camelProp = dashCaseToCamelCase(prop);
             element.style[camelProp] = '';
         });
     }
 }
-/**
- * @param {?} steps
- * @return {?}
- */
 function normalizeAnimationEntry(steps) {
     if (Array.isArray(steps)) {
         if (steps.length == 1)
             return steps[0];
         return _angular_animations.sequence(steps);
     }
-    return (steps);
+    return steps;
 }
-/**
- * @param {?} value
- * @param {?} options
- * @param {?} errors
- * @return {?}
- */
 function validateStyleParams(value, options, errors) {
-    var /** @type {?} */ params = options.params || {};
+    var params = options.params || {};
     if (typeof value !== 'string')
         return;
-    var /** @type {?} */ matches = value.toString().match(PARAM_REGEX);
+    var matches = value.toString().match(PARAM_REGEX);
     if (matches) {
         matches.forEach(function (varName) {
             if (!params.hasOwnProperty(varName)) {
@@ -418,16 +363,10 @@ function validateStyleParams(value, options, errors) {
     }
 }
 var PARAM_REGEX = /\{\{\s*(.+?)\s*\}\}/g;
-/**
- * @param {?} value
- * @param {?} params
- * @param {?} errors
- * @return {?}
- */
 function interpolateParams(value, params, errors) {
-    var /** @type {?} */ original = value.toString();
-    var /** @type {?} */ str = original.replace(PARAM_REGEX, function (_, varName) {
-        var /** @type {?} */ localVal = params[varName];
+    var original = value.toString();
+    var str = original.replace(PARAM_REGEX, function (_, varName) {
+        var localVal = params[varName];
         // this means that the value was never overidden by the data passed in by the user
         if (!params.hasOwnProperty(varName)) {
             errors.push("Please provide a value for the animation param " + varName);
@@ -438,31 +377,22 @@ function interpolateParams(value, params, errors) {
     // we do this to assert that numeric values stay as they are
     return str == original ? value : str;
 }
-/**
- * @param {?} iterator
- * @return {?}
- */
 function iteratorToArray(iterator) {
-    var /** @type {?} */ arr = [];
-    var /** @type {?} */ item = iterator.next();
+    var arr = [];
+    var item = iterator.next();
     while (!item.done) {
         arr.push(item.value);
         item = iterator.next();
     }
     return arr;
 }
-/**
- * @param {?} source
- * @param {?} destination
- * @return {?}
- */
 function mergeAnimationOptions(source, destination) {
     if (source.params) {
-        var /** @type {?} */ p0_1 = source.params;
+        var p0_1 = source.params;
         if (!destination.params) {
             destination.params = {};
         }
-        var /** @type {?} */ p1_1 = destination.params;
+        var p1_1 = destination.params;
         Object.keys(p0_1).forEach(function (param) {
             if (!p1_1.hasOwnProperty(param)) {
                 p1_1[param] = p0_1[param];
@@ -472,10 +402,6 @@ function mergeAnimationOptions(source, destination) {
     return destination;
 }
 var DASH_CASE_REGEXP = /-+([a-z0-9])/g;
-/**
- * @param {?} input
- * @return {?}
- */
 function dashCaseToCamelCase(input) {
     return input.replace(DASH_CASE_REGEXP, function () {
         var m = [];
@@ -484,6 +410,9 @@ function dashCaseToCamelCase(input) {
         }
         return m[1].toUpperCase();
     });
+}
+function allowPreviousPlayerStylesMerge(duration, delay) {
+    return duration === 0 || delay === 0;
 }
 /**
  * @license
@@ -2599,9 +2528,10 @@ function makeBooleanMap(keys) {
  * @param {?} queriedElements
  * @param {?} preStyleProps
  * @param {?} postStyleProps
+ * @param {?=} errors
  * @return {?}
  */
-function createTransitionInstruction(element, triggerName, fromState, toState, isRemovalTransition, fromStyles, toStyles, timelines, queriedElements, preStyleProps, postStyleProps) {
+function createTransitionInstruction(element, triggerName, fromState, toState, isRemovalTransition, fromStyles, toStyles, timelines, queriedElements, preStyleProps, postStyleProps, errors) {
     return {
         type: 0 /* TransitionAnimation */,
         element: element,
@@ -2614,7 +2544,8 @@ function createTransitionInstruction(element, triggerName, fromState, toState, i
         timelines: timelines,
         queriedElements: queriedElements,
         preStyleProps: preStyleProps,
-        postStyleProps: postStyleProps
+        postStyleProps: postStyleProps,
+        errors: errors
     };
 }
 /**
@@ -2657,15 +2588,15 @@ var AnimationTransitionFactory = (function () {
         var /** @type {?} */ backupStateStyles = this._stateStyles['*'] || {};
         var /** @type {?} */ currentStateStyles = this._stateStyles[currentState] || backupStateStyles;
         var /** @type {?} */ nextStateStyles = this._stateStyles[nextState] || backupStateStyles;
+        var /** @type {?} */ queriedElements = new Set();
+        var /** @type {?} */ preStyleMap = new Map();
+        var /** @type {?} */ postStyleMap = new Map();
+        var /** @type {?} */ isRemoval = nextState === 'void';
         var /** @type {?} */ errors = [];
         var /** @type {?} */ timelines = buildAnimationTimelines(driver, element, this.ast.animation, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
         if (errors.length) {
-            var /** @type {?} */ errorMessage = "animation building failed:\n" + errors.join("\n");
-            throw new Error(errorMessage);
+            return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, [], [], preStyleMap, postStyleMap, errors);
         }
-        var /** @type {?} */ preStyleMap = new Map();
-        var /** @type {?} */ postStyleMap = new Map();
-        var /** @type {?} */ queriedElements = new Set();
         timelines.forEach(function (tl) {
             var /** @type {?} */ elm = tl.element;
             var /** @type {?} */ preProps = getOrSetAsInMap(preStyleMap, elm, {});
@@ -2677,7 +2608,7 @@ var AnimationTransitionFactory = (function () {
             }
         });
         var /** @type {?} */ queriedElementsList = iteratorToArray(queriedElements.values());
-        return createTransitionInstruction(element, this._triggerName, currentState, nextState, nextState === 'void', currentStateStyles, nextStateStyles, timelines, queriedElementsList, preStyleMap, postStyleMap);
+        return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, timelines, queriedElementsList, preStyleMap, postStyleMap);
     };
     return AnimationTransitionFactory;
 }());
@@ -2958,6 +2889,7 @@ var TimelineAnimationEngine = (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+var QUEUED_CLASSNAME = 'ng-animate-queued';
 var EMPTY_PLAYER_ARRAY = [];
 var NULL_REMOVAL_STATE = {
     namespaceId: '',
@@ -3128,6 +3060,15 @@ var AnimationTransitionNamespace = (function () {
         else if (fromState === DELETED_STATE_VALUE) {
             return player;
         }
+        var /** @type {?} */ isRemoval = toState.value === VOID_VALUE;
+        // normally this isn't reached by here, however, if an object expression
+        // is passed in then it may be a new object each time. Comparing the value
+        // is important since that will stay the same despite there being a new object.
+        // The removal arc here is special cased because the same element is triggered
+        // twice in the event that it contains animations on the outer/inner portions
+        // of the host container
+        if (!isRemoval && fromState.value === toState.value)
+            return;
         var /** @type {?} */ playersOnElement = getOrSetAsInMap(this._engine.playersByElement, element, []);
         playersOnElement.forEach(function (player) {
             // only remove the player if it is queued on the EXACT same trigger/namespace
@@ -3149,10 +3090,10 @@ var AnimationTransitionNamespace = (function () {
         this._engine.totalQueuedPlayers++;
         this._queue.push({ element: element, triggerName: triggerName, transition: transition, fromState: fromState, toState: toState, player: player, isFallbackTransition: isFallbackTransition });
         if (!isFallbackTransition) {
-            addClass(element, NG_ANIMATING_CLASSNAME);
+            addClass(element, QUEUED_CLASSNAME);
+            player.onStart(function () { removeClass(element, QUEUED_CLASSNAME); });
         }
         player.onDone(function () {
-            removeClass(element, NG_ANIMATING_CLASSNAME);
             var /** @type {?} */ index = _this.players.indexOf(player);
             if (index >= 0) {
                 _this.players.splice(index, 1);
@@ -3724,7 +3665,15 @@ var TransitionAnimationEngine = (function () {
         }
         if (this._namespaceList.length &&
             (this.totalQueuedPlayers || this.collectedLeaveElements.length)) {
-            players = this._flushAnimations(microtaskId);
+            var /** @type {?} */ cleanupFns = [];
+            try {
+                players = this._flushAnimations(cleanupFns, microtaskId);
+            }
+            finally {
+                for (var /** @type {?} */ i = 0; i < cleanupFns.length; i++) {
+                    cleanupFns[i]();
+                }
+            }
         }
         else {
             for (var /** @type {?} */ i = 0; i < this.collectedLeaveElements.length; i++) {
@@ -3752,10 +3701,11 @@ var TransitionAnimationEngine = (function () {
         }
     };
     /**
+     * @param {?} cleanupFns
      * @param {?} microtaskId
      * @return {?}
      */
-    TransitionAnimationEngine.prototype._flushAnimations = function (microtaskId) {
+    TransitionAnimationEngine.prototype._flushAnimations = function (cleanupFns, microtaskId) {
         var _this = this;
         var /** @type {?} */ subTimelines = new ElementInstructionMap();
         var /** @type {?} */ skippedPlayers = [];
@@ -3787,18 +3737,30 @@ var TransitionAnimationEngine = (function () {
                 }
             }
         }
+        cleanupFns.push(function () {
+            allEnterNodes.forEach(function (element) { return removeClass(element, ENTER_CLASSNAME); });
+            allLeaveNodes.forEach(function (element) {
+                removeClass(element, LEAVE_CLASSNAME);
+                _this.processLeaveNode(element);
+            });
+        });
+        var /** @type {?} */ allPlayers = [];
+        var /** @type {?} */ erroneousTransitions = [];
         for (var /** @type {?} */ i = this._namespaceList.length - 1; i >= 0; i--) {
             var /** @type {?} */ ns = this._namespaceList[i];
             ns.drainQueuedTransitions(microtaskId).forEach(function (entry) {
                 var /** @type {?} */ player = entry.player;
+                allPlayers.push(player);
                 var /** @type {?} */ element = entry.element;
                 if (!bodyNode || !_this.driver.containsElement(bodyNode, element)) {
                     player.destroy();
                     return;
                 }
-                var /** @type {?} */ instruction = _this._buildInstruction(entry, subTimelines);
-                if (!instruction)
+                var /** @type {?} */ instruction = ((_this._buildInstruction(entry, subTimelines)));
+                if (instruction.errors && instruction.errors.length) {
+                    erroneousTransitions.push(instruction);
                     return;
+                }
                 // if a unmatched transition is queued to go then it SHOULD NOT render
                 // an animation and cancel the previously running animations.
                 if (entry.isFallbackTransition) {
@@ -3836,6 +3798,15 @@ var TransitionAnimationEngine = (function () {
                     props.forEach(function (prop) { return setVal.add(prop); });
                 });
             });
+        }
+        if (erroneousTransitions.length) {
+            var /** @type {?} */ msg_1 = "Unable to process animations due to the following failed trigger transitions\n";
+            erroneousTransitions.forEach(function (instruction) {
+                msg_1 += "@" + instruction.triggerName + " has failed due to:\n"; /** @type {?} */
+                ((instruction.errors)).forEach(function (error) { msg_1 += "- " + error + "\n"; });
+            });
+            allPlayers.forEach(function (player) { return player.destroy(); });
+            throw new Error(msg_1);
         }
         // these can only be detected here since we have a map of all the elements
         // that have animations attached to them...
@@ -3927,6 +3898,7 @@ var TransitionAnimationEngine = (function () {
         for (var /** @type {?} */ i = 0; i < allLeaveNodes.length; i++) {
             var /** @type {?} */ element = allLeaveNodes[i];
             var /** @type {?} */ details = (element[REMOVAL_FLAG]);
+            removeClass(element, LEAVE_CLASSNAME);
             // this means the element has a removal animation that is being
             // taken care of and therefore the inner elements will hang around
             // until that animation is over (or the parent queried animation)
@@ -3956,6 +3928,8 @@ var TransitionAnimationEngine = (function () {
                 this.processLeaveNode(element);
             }
         }
+        // this is required so the cleanup method doesn't remove them
+        allLeaveNodes.length = 0;
         rootPlayers.forEach(function (player) {
             _this.players.push(player);
             player.onDone(function () {
@@ -3965,7 +3939,6 @@ var TransitionAnimationEngine = (function () {
             });
             player.play();
         });
-        allEnterNodes.forEach(function (element) { return removeClass(element, ENTER_CLASSNAME); });
         return rootPlayers;
     };
     /**
@@ -4087,19 +4060,13 @@ var TransitionAnimationEngine = (function () {
         var /** @type {?} */ allSubElements = new Set();
         var /** @type {?} */ allNewPlayers = instruction.timelines.map(function (timelineInstruction) {
             var /** @type {?} */ element = timelineInstruction.element;
+            allConsumedElements.add(element);
             // FIXME (matsko): make sure to-be-removed animations are removed properly
             var /** @type {?} */ details = element[REMOVAL_FLAG];
             if (details && details.removedBeforeQueried)
                 return new _angular_animations.NoopAnimationPlayer();
             var /** @type {?} */ isQueriedElement = element !== rootElement;
-            var /** @type {?} */ previousPlayers = EMPTY_PLAYER_ARRAY;
-            if (!allConsumedElements.has(element)) {
-                allConsumedElements.add(element);
-                var /** @type {?} */ _previousPlayers = allPreviousPlayersMap.get(element);
-                if (_previousPlayers) {
-                    previousPlayers = _previousPlayers.map(function (p) { return p.getRealPlayer(); });
-                }
-            }
+            var /** @type {?} */ previousPlayers = (allPreviousPlayersMap.get(element) || EMPTY_PLAYER_ARRAY).map(function (p) { return p.getRealPlayer(); });
             var /** @type {?} */ preStyles = preStylesMap.get(element);
             var /** @type {?} */ postStyles = postStylesMap.get(element);
             var /** @type {?} */ keyframes = normalizeKeyframes(_this.driver, _this._normalizer, element, timelineInstruction.keyframes, preStyles, postStyles);
@@ -4644,15 +4611,17 @@ var WebAnimationsPlayer = (function () {
         this._destroyed = false;
         this.time = 0;
         this.parentPlayer = null;
+        this.previousStyles = {};
         this.currentSnapshot = {};
         this._duration = options['duration'];
         this._delay = options['delay'] || 0;
         this.time = this._duration + this._delay;
-        this.previousStyles = {};
-        previousPlayers.forEach(function (player) {
-            var styles = player.currentSnapshot;
-            Object.keys(styles).forEach(function (prop) { return _this.previousStyles[prop] = styles[prop]; });
-        });
+        if (allowPreviousPlayerStylesMerge(this._duration, this._delay)) {
+            previousPlayers.forEach(function (player) {
+                var styles = player.currentSnapshot;
+                Object.keys(styles).forEach(function (prop) { return _this.previousStyles[prop] = styles[prop]; });
+            });
+        }
     }
     /**
      * @return {?}

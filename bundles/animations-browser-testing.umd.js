@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.5-670f2e5
+ * @license Angular v4.2.5-3e61bf7
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v4.2.5-670f2e5
+ * @license Angular v4.2.5-3e61bf7
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -90,6 +90,16 @@ var invokeQuery = _query;
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+function allowPreviousPlayerStylesMerge(duration, delay) {
+    return duration === 0 || delay === 0;
+}
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @experimental Animation support is experimental.
  */
@@ -133,12 +143,14 @@ var MockAnimationPlayer = (function (_super) {
         _this.previousStyles = {};
         _this._onInitFns = [];
         _this.currentSnapshot = {};
-        previousPlayers.forEach(function (player) {
-            if (player instanceof MockAnimationPlayer) {
-                var styles_1 = player.currentSnapshot;
-                Object.keys(styles_1).forEach(function (prop) { return _this.previousStyles[prop] = styles_1[prop]; });
-            }
-        });
+        if (allowPreviousPlayerStylesMerge(duration, delay)) {
+            previousPlayers.forEach(function (player) {
+                if (player instanceof MockAnimationPlayer) {
+                    var styles_1 = player.currentSnapshot;
+                    Object.keys(styles_1).forEach(function (prop) { return _this.previousStyles[prop] = styles_1[prop]; });
+                }
+            });
+        }
         _this.totalTime = delay + duration;
         return _this;
     }
