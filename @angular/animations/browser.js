@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-rc.0-01a2688
+ * @license Angular v4.3.0-rc.0-f7686d4
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4365,14 +4365,6 @@ class AnimationEngine {
         this._transitionEngine.removeNode(namespaceId, element, context);
     }
     /**
-     * @param {?} element
-     * @param {?} disable
-     * @return {?}
-     */
-    disableAnimations(element, disable) {
-        this._transitionEngine.markElementAsDisabled(element, disable);
-    }
-    /**
      * @param {?} namespaceId
      * @param {?} element
      * @param {?} property
@@ -4380,13 +4372,19 @@ class AnimationEngine {
      * @return {?}
      */
     process(namespaceId, element, property, value) {
-        if (property.charAt(0) == '@') {
-            const [id, action] = parseTimelineCommand(property);
-            const /** @type {?} */ args = (value);
-            this._timelineEngine.command(id, element, action, args);
-        }
-        else {
-            this._transitionEngine.trigger(namespaceId, element, property, value);
+        switch (property.charAt(0)) {
+            case '.':
+                if (property == '.disabled') {
+                    this._transitionEngine.markElementAsDisabled(element, !!value);
+                }
+                return false;
+            case '@':
+                const [id, action] = parseTimelineCommand(property);
+                const /** @type {?} */ args = (value);
+                this._timelineEngine.command(id, element, action, args);
+                return false;
+            default:
+                return this._transitionEngine.trigger(namespaceId, element, property, value);
         }
     }
     /**

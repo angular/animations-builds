@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 /**
- * @license Angular v4.3.0-rc.0-01a2688
+ * @license Angular v4.3.0-rc.0-f7686d4
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4528,14 +4528,6 @@ var AnimationEngine = (function () {
         this._transitionEngine.removeNode(namespaceId, element, context);
     };
     /**
-     * @param {?} element
-     * @param {?} disable
-     * @return {?}
-     */
-    AnimationEngine.prototype.disableAnimations = function (element, disable) {
-        this._transitionEngine.markElementAsDisabled(element, disable);
-    };
-    /**
      * @param {?} namespaceId
      * @param {?} element
      * @param {?} property
@@ -4543,13 +4535,19 @@ var AnimationEngine = (function () {
      * @return {?}
      */
     AnimationEngine.prototype.process = function (namespaceId, element, property, value) {
-        if (property.charAt(0) == '@') {
-            var _a = parseTimelineCommand(property), id = _a[0], action = _a[1];
-            var /** @type {?} */ args = (value);
-            this._timelineEngine.command(id, element, action, args);
-        }
-        else {
-            this._transitionEngine.trigger(namespaceId, element, property, value);
+        switch (property.charAt(0)) {
+            case '.':
+                if (property == '.disabled') {
+                    this._transitionEngine.markElementAsDisabled(element, !!value);
+                }
+                return false;
+            case '@':
+                var _a = parseTimelineCommand(property), id = _a[0], action = _a[1];
+                var /** @type {?} */ args = (value);
+                this._timelineEngine.command(id, element, action, args);
+                return false;
+            default:
+                return this._transitionEngine.trigger(namespaceId, element, property, value);
         }
     };
     /**
