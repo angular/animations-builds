@@ -19,7 +19,8 @@ export declare class AnimationEngine {
     destroy(namespaceId: string, context: any): void;
     onInsert(namespaceId: string, element: any, parent: any, insertBefore: boolean): void;
     onRemove(namespaceId: string, element: any, context: any): void;
-    process(namespaceId: string, element: any, property: string, value: any): boolean;
+    disableAnimations(element: any, disable: boolean): void;
+    process(namespaceId: string, element: any, property: string, value: any): void;
     listen(namespaceId: string, element: any, eventName: string, eventPhase: string, callback: (event: any) => any): () => any;
     flush(microtaskId?: number): void;
     readonly players: AnimationPlayer[];
