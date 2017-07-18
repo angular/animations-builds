@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-8076482
+ * @license Angular v4.3.0-d22f8f5
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v4.3.0-8076482
+ * @license Angular v4.3.0-d22f8f5
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -71,15 +71,20 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles, p
         Object.keys(kf).forEach(function (prop) {
             var normalizedProp = prop;
             var normalizedValue = kf[prop];
-            if (normalizedValue == _angular_animations.ɵPRE_STYLE) {
-                normalizedValue = preStyles[prop];
-            }
-            else if (normalizedValue == _angular_animations.AUTO_STYLE) {
-                normalizedValue = postStyles[prop];
-            }
-            else if (prop != 'offset') {
-                normalizedProp = normalizer.normalizePropertyName(prop, errors);
-                normalizedValue = normalizer.normalizeStyleValue(prop, normalizedProp, kf[prop], errors);
+            if (prop !== 'offset') {
+                normalizedProp = normalizer.normalizePropertyName(normalizedProp, errors);
+                switch (normalizedValue) {
+                    case _angular_animations.ɵPRE_STYLE:
+                        normalizedValue = preStyles[prop];
+                        break;
+                    case _angular_animations.AUTO_STYLE:
+                        normalizedValue = postStyles[prop];
+                        break;
+                    default:
+                        normalizedValue =
+                            normalizer.normalizeStyleValue(prop, normalizedProp, normalizedValue, errors);
+                        break;
+                }
             }
             normalizedKeyframe[normalizedProp] = normalizedValue;
         });
@@ -4105,7 +4110,7 @@ var TransitionAnimationEngine = (function () {
             if (details && details.removedBeforeQueried)
                 return new _angular_animations.NoopAnimationPlayer();
             var /** @type {?} */ isQueriedElement = element !== rootElement;
-            var /** @type {?} */ previousPlayers = (allPreviousPlayersMap.get(element) || EMPTY_PLAYER_ARRAY).map(function (p) { return p.getRealPlayer(); });
+            var /** @type {?} */ previousPlayers = flattenGroupPlayers((allPreviousPlayersMap.get(element) || EMPTY_PLAYER_ARRAY).map(function (p) { return p.getRealPlayer(); }));
             var /** @type {?} */ preStyles = preStylesMap.get(element);
             var /** @type {?} */ postStyles = postStylesMap.get(element);
             var /** @type {?} */ keyframes = normalizeKeyframes(_this.driver, _this._normalizer, element, timelineInstruction.keyframes, preStyles, postStyles);
@@ -4483,6 +4488,31 @@ function getBodyNode() {
  */
 function removeNodesAfterAnimationDone(engine, element, players) {
     optimizeGroupPlayer(players).onDone(function () { return engine.processLeaveNode(element); });
+}
+/**
+ * @param {?} players
+ * @return {?}
+ */
+function flattenGroupPlayers(players) {
+    var /** @type {?} */ finalPlayers = [];
+    _flattenGroupPlayersRecur(players, finalPlayers);
+    return finalPlayers;
+}
+/**
+ * @param {?} players
+ * @param {?} finalPlayers
+ * @return {?}
+ */
+function _flattenGroupPlayersRecur(players, finalPlayers) {
+    for (var /** @type {?} */ i = 0; i < players.length; i++) {
+        var /** @type {?} */ player = players[i];
+        if (player instanceof _angular_animations.ɵAnimationGroupPlayer) {
+            _flattenGroupPlayersRecur(player.players, finalPlayers);
+        }
+        else {
+            finalPlayers.push(/** @type {?} */ (player));
+        }
+    }
 }
 /**
  * @license
