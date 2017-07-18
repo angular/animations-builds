@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-5db6f38
+ * @license Angular v4.3.0-23146c9
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v4.3.0-5db6f38
+ * @license Angular v4.3.0-23146c9
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -71,20 +71,15 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles, p
         Object.keys(kf).forEach(function (prop) {
             var normalizedProp = prop;
             var normalizedValue = kf[prop];
-            if (prop !== 'offset') {
-                normalizedProp = normalizer.normalizePropertyName(normalizedProp, errors);
-                switch (normalizedValue) {
-                    case _angular_animations.ɵPRE_STYLE:
-                        normalizedValue = preStyles[prop];
-                        break;
-                    case _angular_animations.AUTO_STYLE:
-                        normalizedValue = postStyles[prop];
-                        break;
-                    default:
-                        normalizedValue =
-                            normalizer.normalizeStyleValue(prop, normalizedProp, normalizedValue, errors);
-                        break;
-                }
+            if (normalizedValue == _angular_animations.ɵPRE_STYLE) {
+                normalizedValue = preStyles[prop];
+            }
+            else if (normalizedValue == _angular_animations.AUTO_STYLE) {
+                normalizedValue = postStyles[prop];
+            }
+            else if (prop != 'offset') {
+                normalizedProp = normalizer.normalizePropertyName(prop, errors);
+                normalizedValue = normalizer.normalizeStyleValue(prop, normalizedProp, kf[prop], errors);
             }
             normalizedKeyframe[normalizedProp] = normalizedValue;
         });
