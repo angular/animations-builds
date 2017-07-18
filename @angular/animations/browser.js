@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-23146c9
+ * @license Angular v4.3.0-5344be5
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -34,15 +34,20 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles = 
         Object.keys(kf).forEach(prop => {
             let normalizedProp = prop;
             let normalizedValue = kf[prop];
-            if (normalizedValue == ɵPRE_STYLE) {
-                normalizedValue = preStyles[prop];
-            }
-            else if (normalizedValue == AUTO_STYLE) {
-                normalizedValue = postStyles[prop];
-            }
-            else if (prop != 'offset') {
-                normalizedProp = normalizer.normalizePropertyName(prop, errors);
-                normalizedValue = normalizer.normalizeStyleValue(prop, normalizedProp, kf[prop], errors);
+            if (prop !== 'offset') {
+                normalizedProp = normalizer.normalizePropertyName(normalizedProp, errors);
+                switch (normalizedValue) {
+                    case ɵPRE_STYLE:
+                        normalizedValue = preStyles[prop];
+                        break;
+                    case AUTO_STYLE:
+                        normalizedValue = postStyles[prop];
+                        break;
+                    default:
+                        normalizedValue =
+                            normalizer.normalizeStyleValue(prop, normalizedProp, normalizedValue, errors);
+                        break;
+                }
             }
             normalizedKeyframe[normalizedProp] = normalizedValue;
         });
@@ -4390,6 +4395,14 @@ class AnimationEngine {
         this._transitionEngine.removeNode(namespaceId, element, context);
     }
     /**
+     * @param {?} element
+     * @param {?} disable
+     * @return {?}
+     */
+    disableAnimations(element, disable) {
+        this._transitionEngine.markElementAsDisabled(element, disable);
+    }
+    /**
      * @param {?} namespaceId
      * @param {?} element
      * @param {?} property
@@ -4397,19 +4410,13 @@ class AnimationEngine {
      * @return {?}
      */
     process(namespaceId, element, property, value) {
-        switch (property.charAt(0)) {
-            case '.':
-                if (property == '.disabled') {
-                    this._transitionEngine.markElementAsDisabled(element, !!value);
-                }
-                return false;
-            case '@':
-                const [id, action] = parseTimelineCommand(property);
-                const /** @type {?} */ args = (value);
-                this._timelineEngine.command(id, element, action, args);
-                return false;
-            default:
-                return this._transitionEngine.trigger(namespaceId, element, property, value);
+        if (property.charAt(0) == '@') {
+            const [id, action] = parseTimelineCommand(property);
+            const /** @type {?} */ args = (value);
+            this._timelineEngine.command(id, element, action, args);
+        }
+        else {
+            this._transitionEngine.trigger(namespaceId, element, property, value);
         }
     }
     /**
