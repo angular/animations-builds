@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-5344be5
+ * @license Angular v5.0.0-beta.0-54ea5b6
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v4.3.0-5344be5
+ * @license Angular v5.0.0-beta.0-54ea5b6
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -829,7 +829,12 @@ function parseTransitionExpr(transitionValue, errors) {
  */
 function parseInnerTransitionStr(eventStr, expressions, errors) {
     if (eventStr[0] == ':') {
-        eventStr = parseAnimationAlias(eventStr, errors);
+        var /** @type {?} */ result = parseAnimationAlias(eventStr, errors);
+        if (typeof result == 'function') {
+            expressions.push(result);
+            return;
+        }
+        eventStr = (result);
     }
     var /** @type {?} */ match = eventStr.match(/^(\*|[-\w]+)\s*(<?[=-]>)\s*(\*|[-\w]+)$/);
     if (match == null || match.length < 4) {
@@ -856,6 +861,10 @@ function parseAnimationAlias(alias, errors) {
             return 'void => *';
         case ':leave':
             return '* => void';
+        case ':increment':
+            return function (fromState, toState) { return parseFloat(toState) > parseFloat(fromState); };
+        case ':decrement':
+            return function (fromState, toState) { return parseFloat(toState) < parseFloat(fromState); };
         default:
             errors.push("The transition alias value \"" + alias + "\" is not supported");
             return '* => *';
