@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.0-abee785
+ * @license Angular v5.0.0-beta.0-b7a6f52
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -369,13 +369,14 @@ function allowPreviousPlayerStylesMerge(duration, delay) {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 const EMPTY_ANIMATION_OPTIONS = {};
+/**
+ * @record
+ */
+
 /**
  * @abstract
  */
@@ -383,13 +384,6 @@ class Ast {
     constructor() {
         this.options = EMPTY_ANIMATION_OPTIONS;
     }
-    /**
-     * @abstract
-     * @param {?} ast
-     * @param {?} context
-     * @return {?}
-     */
-    visit(ast, context) { }
     /**
      * @return {?}
      */
@@ -649,12 +643,13 @@ class DynamicTimingAst extends TimingAst {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
+/**
+ * @record
+ */
+
 /**
  * @param {?} visitor
  * @param {?} node
@@ -695,13 +690,20 @@ function visitAnimationNode(visitor, node, context) {
 }
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const ANY_STATE = '*';
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */ const ANY_STATE = '*';
 /**
  * @param {?} transitionValue
  * @param {?} errors
@@ -787,6 +789,10 @@ function makeLambdaFromStates(lhs, rhs) {
     };
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -1279,12 +1285,13 @@ function normalizeAnimationOptions(options) {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
+/**
+ * @record
+ */
+
 /**
  * @param {?} element
  * @param {?} keyframes
@@ -1310,11 +1317,8 @@ function createTimelineInstruction(element, keyframes, preStyleProps, postStyleP
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 class ElementInstructionMap {
     constructor() {
@@ -1357,6 +1361,10 @@ class ElementInstructionMap {
     clear() { this._map.clear(); }
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -1907,7 +1915,7 @@ class TimelineBuilder {
             this._elementTimelineStylesLookup = new Map();
         }
         this._localTimelineStyles = Object.create(this._backFill, {});
-        this._globalTimelineStyles = this._elementTimelineStylesLookup.get(element);
+        this._globalTimelineStyles = ((this._elementTimelineStylesLookup.get(element)));
         if (!this._globalTimelineStyles) {
             this._globalTimelineStyles = this._localTimelineStyles;
             this._elementTimelineStylesLookup.set(element, this._localTimelineStyles);
@@ -2246,11 +2254,8 @@ function flattenStyles(input, allStyles) {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 class Animation {
     /**
@@ -2259,10 +2264,10 @@ class Animation {
      */
     constructor(_driver, input) {
         this._driver = _driver;
-        const errors = [];
-        const ast = buildAnimationAst(input, errors);
+        const /** @type {?} */ errors = [];
+        const /** @type {?} */ ast = buildAnimationAst(input, errors);
         if (errors.length) {
-            const errorMessage = `animation validation failed:\n${errors.join("\n")}`;
+            const /** @type {?} */ errorMessage = `animation validation failed:\n${errors.join("\n")}`;
             throw new Error(errorMessage);
         }
         this._animationAst = ast;
@@ -2318,6 +2323,10 @@ class NoopAnimationStyleNormalizer {
 }
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
@@ -2370,12 +2379,13 @@ function makeBooleanMap(keys) {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
+/**
+ * @record
+ */
+
 /**
  * @param {?} element
  * @param {?} triggerName
@@ -2410,11 +2420,8 @@ function createTransitionInstruction(element, triggerName, fromState, toState, i
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 class AnimationTransitionFactory {
     /**
@@ -2483,11 +2490,8 @@ function oneOrMoreTransitionsMatch(matchFns, currentState, nextState) {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * \@experimental Animation support is experimental.
@@ -2512,10 +2516,10 @@ class AnimationTrigger {
         this.transitionFactories = [];
         this.states = {};
         ast.states.forEach(ast => {
-            const obj = this.states[ast.name] = {};
+            const /** @type {?} */ obj = this.states[ast.name] = {};
             ast.style.styles.forEach(styleTuple => {
                 if (typeof styleTuple == 'object') {
-                    copyStyles(styleTuple, false, obj);
+                    copyStyles(/** @type {?} */ (styleTuple), false, obj);
                 }
             });
         });
@@ -2568,6 +2572,10 @@ function balanceProperties(obj, key1, key2) {
     }
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -2737,6 +2745,10 @@ class TimelineAnimationEngine {
 }
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
@@ -2760,19 +2772,27 @@ const NULL_REMOVED_QUERIED_STATE = {
     hasAnimation: false,
     removedBeforeQueried: true
 };
+/**
+ * @record
+ */
+
 const REMOVAL_FLAG = '__ng_removed';
+/**
+ * @record
+ */
+
 class StateValue {
     /**
      * @param {?} input
      */
     constructor(input) {
-        const isObj = input && input.hasOwnProperty('value');
-        const value = isObj ? input['value'] : input;
+        const /** @type {?} */ isObj = input && input.hasOwnProperty('value');
+        const /** @type {?} */ value = isObj ? input['value'] : input;
         this.value = normalizeTriggerValue(value);
         if (isObj) {
-            const options = copyObj(input);
+            const /** @type {?} */ options = copyObj(/** @type {?} */ (input));
             delete options['value'];
-            this.options = options;
+            this.options = (options);
         }
         else {
             this.options = {};
@@ -3175,6 +3195,10 @@ class AnimationTransitionNamespace {
         return containsData;
     }
 }
+/**
+ * @record
+ */
+
 class TransitionAnimationEngine {
     /**
      * @param {?} driver
@@ -4327,11 +4351,8 @@ function _flattenGroupPlayersRecur(players, finalPlayers) {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 class AnimationEngine {
     /**
@@ -4463,11 +4484,8 @@ class AnimationEngine {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 class WebAnimationsPlayer {
     /**
@@ -4492,12 +4510,12 @@ class WebAnimationsPlayer {
         this.parentPlayer = null;
         this.previousStyles = {};
         this.currentSnapshot = {};
-        this._duration = options['duration'];
-        this._delay = options['delay'] || 0;
+        this._duration = (options['duration']);
+        this._delay = (options['delay']) || 0;
         this.time = this._duration + this._delay;
         if (allowPreviousPlayerStylesMerge(this._duration, this._delay)) {
             previousPlayers.forEach(player => {
-                let styles = player.currentSnapshot;
+                let /** @type {?} */ styles = player.currentSnapshot;
                 Object.keys(styles).forEach(prop => this.previousStyles[prop] = styles[prop]);
             });
         }
@@ -4701,11 +4719,8 @@ function _computeStyle(element, prop) {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 class WebAnimationsDriver {
     /**
@@ -4769,6 +4784,10 @@ function supportsWebAnimations() {
 }
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
@@ -4776,6 +4795,10 @@ function supportsWebAnimations() {
  * found in the LICENSE file at https://angular.io/license
  */
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -4790,6 +4813,10 @@ function supportsWebAnimations() {
  */
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
@@ -4802,6 +4829,10 @@ function supportsWebAnimations() {
  * Entry point for all public APIs of the animation package.
  */
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Generated bundle index. Do not edit.
  */

@@ -1,14 +1,11 @@
 /**
- * @license Angular v5.0.0-beta.0-abee785
+ * @license Angular v5.0.0-beta.0-b7a6f52
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * AnimationBuilder is an injectable service that is available when the {\@link
@@ -51,12 +48,6 @@
  * @abstract
  */
 class AnimationBuilder {
-    /**
-     * @abstract
-     * @param {?} animation
-     * @return {?}
-     */
-    build(animation) { }
 }
 /**
  * An instance of `AnimationFactory` is returned from {\@link AnimationBuilder#build
@@ -66,19 +57,172 @@ class AnimationBuilder {
  * @abstract
  */
 class AnimationFactory {
-    /**
-     * @abstract
-     * @param {?} element
-     * @param {?=} options
-     * @return {?}
-     */
-    create(element, options) { }
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * An instance of this class is returned as an event parameter when an animation
+ * callback is captured for an animation either during the start or done phase.
+ *
+ * ```typescript
+ * \@Component({
+ *   host: {
+ *     '[\@myAnimationTrigger]': 'someExpression',
+ *     '(\@myAnimationTrigger.start)': 'captureStartEvent($event)',
+ *     '(\@myAnimationTrigger.done)': 'captureDoneEvent($event)',
+ *   },
+ *   animations: [
+ *     trigger("myAnimationTrigger", [
+ *        // ...
+ *     ])
+ *   ]
+ * })
+ * class MyComponent {
+ *   someExpression: any = false;
+ *   captureStartEvent(event: AnimationEvent) {
+ *     // the toState, fromState and totalTime data is accessible from the event variable
+ *   }
+ *
+ *   captureDoneEvent(event: AnimationEvent) {
+ *     // the toState, fromState and totalTime data is accessible from the event variable
+ *   }
+ * }
+ * ```
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */ function AnimationEvent() { }
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ * @record
+ */
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */ function ɵStyleData() { }
 /**
  * \@experimental Animation support is experimental.
  */
 const AUTO_STYLE = '*';
+/**
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+function AnimationMetadata() { }
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link trigger trigger animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+function AnimationTriggerMetadata() { }
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link state state animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+function AnimationStateMetadata() { }
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link transition transition animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+function AnimationTransitionMetadata() { }
+/**
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+function AnimationReferenceMetadata() { }
+/**
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+function AnimationQueryMetadata() { }
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link keyframes keyframes animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+function AnimationKeyframesSequenceMetadata() { }
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link style style animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+function AnimationStyleMetadata() { }
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link animate animate animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+function AnimationAnimateMetadata() { }
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link animateChild animateChild animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+function AnimationAnimateChildMetadata() { }
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link useAnimation useAnimation animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+function AnimationAnimateRefMetadata() { }
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link sequence sequence animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+function AnimationSequenceMetadata() { }
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link group group animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+function AnimationGroupMetadata() { }
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link stagger stagger animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+function AnimationStaggerMetadata() { }
 /**
  * `trigger` is an animation-specific function that is designed to be used inside of Angular's
  * animation DSL language. If this information is new, please navigate to the
@@ -1003,6 +1147,10 @@ function stagger(timings, animation) {
 }
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
@@ -1011,10 +1159,17 @@ function stagger(timings, animation) {
  * @param {?} cb
  * @return {?}
  */
-function scheduleMicroTask(cb) {
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */ function scheduleMicroTask(cb) {
     Promise.resolve(null).then(cb);
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -1022,6 +1177,15 @@ function scheduleMicroTask(cb) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/**
+ * AnimationPlayer controls an animation sequence that was produced from a programmatic animation.
+ * (see {\@link AnimationBuilder AnimationBuilder} for more information on how to create programmatic
+ * animations.)
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+function AnimationPlayer() { }
 /**
  * \@experimental Animation support is experimental.
  */
@@ -1132,6 +1296,10 @@ class NoopAnimationPlayer {
 }
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
@@ -1152,10 +1320,10 @@ class AnimationGroupPlayer {
         this._onDestroyFns = [];
         this.parentPlayer = null;
         this.totalTime = 0;
-        let doneCount = 0;
-        let destroyCount = 0;
-        let startCount = 0;
-        const total = this._players.length;
+        let /** @type {?} */ doneCount = 0;
+        let /** @type {?} */ destroyCount = 0;
+        let /** @type {?} */ startCount = 0;
+        const /** @type {?} */ total = this._players.length;
         if (total == 0) {
             scheduleMicroTask(() => this._onFinish());
         }
@@ -1313,6 +1481,10 @@ class AnimationGroupPlayer {
 }
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
@@ -1321,6 +1493,10 @@ class AnimationGroupPlayer {
  */
 const ɵPRE_STYLE = '!';
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -1335,6 +1511,10 @@ const ɵPRE_STYLE = '!';
  */
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
@@ -1348,8 +1528,12 @@ const ɵPRE_STYLE = '!';
  */
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * Generated bundle index. Do not edit.
  */
 
-export { AnimationBuilder, AnimationFactory, AUTO_STYLE, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
+export { AnimationBuilder, AnimationFactory, AnimationEvent, AUTO_STYLE, AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationAnimateRefMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationQueryMetadata, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, ɵStyleData, AnimationPlayer, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
 //# sourceMappingURL=animations.js.map

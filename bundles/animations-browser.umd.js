@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.0-abee785
+ * @license Angular v5.0.0-beta.0-b7a6f52
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v5.0.0-beta.0-abee785
+ * @license Angular v5.0.0-beta.0-b7a6f52
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -420,13 +420,13 @@ function allowPreviousPlayerStylesMerge(duration, delay) {
     return duration === 0 || delay === 0;
 }
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 var EMPTY_ANIMATION_OPTIONS = {};
+/**
+ * @record
+ */
 /**
  * @abstract
  */
@@ -434,13 +434,6 @@ var Ast = (function () {
     function Ast() {
         this.options = EMPTY_ANIMATION_OPTIONS;
     }
-    /**
-     * @abstract
-     * @param {?} ast
-     * @param {?} context
-     * @return {?}
-     */
-    Ast.prototype.visit = function (ast, context) { };
     Object.defineProperty(Ast.prototype, "params", {
         /**
          * @return {?}
@@ -752,11 +745,11 @@ var DynamicTimingAst = (function (_super) {
     return DynamicTimingAst;
 }(TimingAst));
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @record
  */
 /**
  * @param {?} visitor
@@ -797,13 +790,20 @@ function visitAnimationNode(visitor, node, context) {
     }
 }
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var ANY_STATE = '*';
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */ var ANY_STATE = '*';
 /**
  * @param {?} transitionValue
  * @param {?} errors
@@ -888,6 +888,10 @@ function makeLambdaFromStates(lhs, rhs) {
         return lhsMatch && rhsMatch;
     };
 }
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -1387,11 +1391,11 @@ function normalizeAnimationOptions(options) {
     return options;
 }
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @record
  */
 /**
  * @param {?} element
@@ -1419,11 +1423,8 @@ function createTimelineInstruction(element, keyframes, preStyleProps, postStyleP
     };
 }
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 var ElementInstructionMap = (function () {
     function ElementInstructionMap() {
@@ -1466,6 +1467,10 @@ var ElementInstructionMap = (function () {
     ElementInstructionMap.prototype.clear = function () { this._map.clear(); };
     return ElementInstructionMap;
 }());
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -2033,7 +2038,7 @@ var TimelineBuilder = (function () {
             this._elementTimelineStylesLookup = new Map();
         }
         this._localTimelineStyles = Object.create(this._backFill, {});
-        this._globalTimelineStyles = this._elementTimelineStylesLookup.get(element);
+        this._globalTimelineStyles = ((this._elementTimelineStylesLookup.get(element)));
         if (!this._globalTimelineStyles) {
             this._globalTimelineStyles = this._localTimelineStyles;
             this._elementTimelineStylesLookup.set(element, this._localTimelineStyles);
@@ -2391,11 +2396,8 @@ function flattenStyles(input, allStyles) {
     return styles;
 }
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 var Animation = (function () {
     /**
@@ -2404,10 +2406,10 @@ var Animation = (function () {
      */
     function Animation(_driver, input) {
         this._driver = _driver;
-        var errors = [];
-        var ast = buildAnimationAst(input, errors);
+        var /** @type {?} */ errors = [];
+        var /** @type {?} */ ast = buildAnimationAst(input, errors);
         if (errors.length) {
-            var errorMessage = "animation validation failed:\n" + errors.join("\n");
+            var /** @type {?} */ errorMessage = "animation validation failed:\n" + errors.join("\n");
             throw new Error(errorMessage);
         }
         this._animationAst = ast;
@@ -2468,6 +2470,10 @@ var NoopAnimationStyleNormalizer = (function () {
     return NoopAnimationStyleNormalizer;
 }());
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
@@ -2524,11 +2530,11 @@ function makeBooleanMap(keys) {
     return map;
 }
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @record
  */
 /**
  * @param {?} element
@@ -2563,11 +2569,8 @@ function createTransitionInstruction(element, triggerName, fromState, toState, i
     };
 }
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 var AnimationTransitionFactory = (function () {
     /**
@@ -2636,11 +2639,8 @@ function oneOrMoreTransitionsMatch(matchFns, currentState, nextState) {
     return matchFns.some(function (fn) { return fn(currentState, nextState); });
 }
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * \@experimental Animation support is experimental.
@@ -2666,10 +2666,10 @@ var AnimationTrigger = (function () {
         this.transitionFactories = [];
         this.states = {};
         ast.states.forEach(function (ast) {
-            var obj = _this.states[ast.name] = {};
+            var /** @type {?} */ obj = _this.states[ast.name] = {};
             ast.style.styles.forEach(function (styleTuple) {
                 if (typeof styleTuple == 'object') {
-                    copyStyles(styleTuple, false, obj);
+                    copyStyles(/** @type {?} */ (styleTuple), false, obj);
                 }
             });
         });
@@ -2726,6 +2726,10 @@ function balanceProperties(obj, key1, key2) {
         obj[key1] = obj[key2];
     }
 }
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -2897,6 +2901,10 @@ var TimelineAnimationEngine = (function () {
     return TimelineAnimationEngine;
 }());
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
@@ -2920,19 +2928,25 @@ var NULL_REMOVED_QUERIED_STATE = {
     hasAnimation: false,
     removedBeforeQueried: true
 };
+/**
+ * @record
+ */
 var REMOVAL_FLAG = '__ng_removed';
+/**
+ * @record
+ */
 var StateValue = (function () {
     /**
      * @param {?} input
      */
     function StateValue(input) {
-        var isObj = input && input.hasOwnProperty('value');
-        var value = isObj ? input['value'] : input;
+        var /** @type {?} */ isObj = input && input.hasOwnProperty('value');
+        var /** @type {?} */ value = isObj ? input['value'] : input;
         this.value = normalizeTriggerValue(value);
         if (isObj) {
-            var options = copyObj(input);
+            var /** @type {?} */ options = copyObj(/** @type {?} */ (input));
             delete options['value'];
-            this.options = options;
+            this.options = (options);
         }
         else {
             this.options = {};
@@ -3345,6 +3359,9 @@ var AnimationTransitionNamespace = (function () {
     };
     return AnimationTransitionNamespace;
 }());
+/**
+ * @record
+ */
 var TransitionAnimationEngine = (function () {
     /**
      * @param {?} driver
@@ -4524,11 +4541,8 @@ function _flattenGroupPlayersRecur(players, finalPlayers) {
     }
 }
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 var AnimationEngine = (function () {
     /**
@@ -4668,11 +4682,8 @@ var AnimationEngine = (function () {
     return AnimationEngine;
 }());
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 var WebAnimationsPlayer = (function () {
     /**
@@ -4699,12 +4710,12 @@ var WebAnimationsPlayer = (function () {
         this.parentPlayer = null;
         this.previousStyles = {};
         this.currentSnapshot = {};
-        this._duration = options['duration'];
-        this._delay = options['delay'] || 0;
+        this._duration = (options['duration']);
+        this._delay = (options['delay']) || 0;
         this.time = this._duration + this._delay;
         if (allowPreviousPlayerStylesMerge(this._duration, this._delay)) {
             previousPlayers.forEach(function (player) {
-                var styles = player.currentSnapshot;
+                var /** @type {?} */ styles = player.currentSnapshot;
                 Object.keys(styles).forEach(function (prop) { return _this.previousStyles[prop] = styles[prop]; });
             });
         }
@@ -4921,11 +4932,8 @@ function _computeStyle(element, prop) {
     return ((window.getComputedStyle(element)))[prop];
 }
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 var WebAnimationsDriver = (function () {
     function WebAnimationsDriver() {
