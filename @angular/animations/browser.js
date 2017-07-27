@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-4ce29f3
+ * @license Angular v4.3.1-bcea196
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -34,15 +34,20 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles = 
         Object.keys(kf).forEach(prop => {
             let normalizedProp = prop;
             let normalizedValue = kf[prop];
-            if (normalizedValue == ɵPRE_STYLE) {
-                normalizedValue = preStyles[prop];
-            }
-            else if (normalizedValue == AUTO_STYLE) {
-                normalizedValue = postStyles[prop];
-            }
-            else if (prop != 'offset') {
-                normalizedProp = normalizer.normalizePropertyName(prop, errors);
-                normalizedValue = normalizer.normalizeStyleValue(prop, normalizedProp, kf[prop], errors);
+            if (prop !== 'offset') {
+                normalizedProp = normalizer.normalizePropertyName(normalizedProp, errors);
+                switch (normalizedValue) {
+                    case ɵPRE_STYLE:
+                        normalizedValue = preStyles[prop];
+                        break;
+                    case AUTO_STYLE:
+                        normalizedValue = postStyles[prop];
+                        break;
+                    default:
+                        normalizedValue =
+                            normalizer.normalizeStyleValue(prop, normalizedProp, normalizedValue, errors);
+                        break;
+                }
             }
             normalizedKeyframe[normalizedProp] = normalizedValue;
         });
@@ -3922,7 +3927,7 @@ class TransitionAnimationEngine {
             if (details && details.removedBeforeQueried)
                 return new NoopAnimationPlayer();
             const /** @type {?} */ isQueriedElement = element !== rootElement;
-            const /** @type {?} */ previousPlayers = (allPreviousPlayersMap.get(element) || EMPTY_PLAYER_ARRAY).map(p => p.getRealPlayer());
+            const /** @type {?} */ previousPlayers = flattenGroupPlayers((allPreviousPlayersMap.get(element) || EMPTY_PLAYER_ARRAY).map(p => p.getRealPlayer()));
             const /** @type {?} */ preStyles = preStylesMap.get(element);
             const /** @type {?} */ postStyles = postStylesMap.get(element);
             const /** @type {?} */ keyframes = normalizeKeyframes(this.driver, this._normalizer, element, timelineInstruction.keyframes, preStyles, postStyles);
@@ -4286,6 +4291,31 @@ function getBodyNode() {
 function removeNodesAfterAnimationDone(engine, element, players) {
     optimizeGroupPlayer(players).onDone(() => engine.processLeaveNode(element));
 }
+/**
+ * @param {?} players
+ * @return {?}
+ */
+function flattenGroupPlayers(players) {
+    const /** @type {?} */ finalPlayers = [];
+    _flattenGroupPlayersRecur(players, finalPlayers);
+    return finalPlayers;
+}
+/**
+ * @param {?} players
+ * @param {?} finalPlayers
+ * @return {?}
+ */
+function _flattenGroupPlayersRecur(players, finalPlayers) {
+    for (let /** @type {?} */ i = 0; i < players.length; i++) {
+        const /** @type {?} */ player = players[i];
+        if (player instanceof ɵAnimationGroupPlayer) {
+            _flattenGroupPlayersRecur(player.players, finalPlayers);
+        }
+        else {
+            finalPlayers.push(/** @type {?} */ (player));
+        }
+    }
+}
 
 /**
  * @license
@@ -4365,6 +4395,14 @@ class AnimationEngine {
         this._transitionEngine.removeNode(namespaceId, element, context);
     }
     /**
+     * @param {?} element
+     * @param {?} disable
+     * @return {?}
+     */
+    disableAnimations(element, disable) {
+        this._transitionEngine.markElementAsDisabled(element, disable);
+    }
+    /**
      * @param {?} namespaceId
      * @param {?} element
      * @param {?} property
@@ -4372,19 +4410,13 @@ class AnimationEngine {
      * @return {?}
      */
     process(namespaceId, element, property, value) {
-        switch (property.charAt(0)) {
-            case '.':
-                if (property == '.disabled') {
-                    this._transitionEngine.markElementAsDisabled(element, !!value);
-                }
-                return false;
-            case '@':
-                const [id, action] = parseTimelineCommand(property);
-                const /** @type {?} */ args = (value);
-                this._timelineEngine.command(id, element, action, args);
-                return false;
-            default:
-                return this._transitionEngine.trigger(namespaceId, element, property, value);
+        if (property.charAt(0) == '@') {
+            const [id, action] = parseTimelineCommand(property);
+            const /** @type {?} */ args = (value);
+            this._timelineEngine.command(id, element, action, args);
+        }
+        else {
+            this._transitionEngine.trigger(namespaceId, element, property, value);
         }
     }
     /**

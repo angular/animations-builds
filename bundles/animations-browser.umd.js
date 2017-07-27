@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-4ce29f3
+ * @license Angular v4.3.1-bcea196
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v4.3.0-4ce29f3
+ * @license Angular v4.3.1-bcea196
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -71,15 +71,20 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles, p
         Object.keys(kf).forEach(function (prop) {
             var normalizedProp = prop;
             var normalizedValue = kf[prop];
-            if (normalizedValue == _angular_animations.ɵPRE_STYLE) {
-                normalizedValue = preStyles[prop];
-            }
-            else if (normalizedValue == _angular_animations.AUTO_STYLE) {
-                normalizedValue = postStyles[prop];
-            }
-            else if (prop != 'offset') {
-                normalizedProp = normalizer.normalizePropertyName(prop, errors);
-                normalizedValue = normalizer.normalizeStyleValue(prop, normalizedProp, kf[prop], errors);
+            if (prop !== 'offset') {
+                normalizedProp = normalizer.normalizePropertyName(normalizedProp, errors);
+                switch (normalizedValue) {
+                    case _angular_animations.ɵPRE_STYLE:
+                        normalizedValue = preStyles[prop];
+                        break;
+                    case _angular_animations.AUTO_STYLE:
+                        normalizedValue = postStyles[prop];
+                        break;
+                    default:
+                        normalizedValue =
+                            normalizer.normalizeStyleValue(prop, normalizedProp, normalizedValue, errors);
+                        break;
+                }
             }
             normalizedKeyframe[normalizedProp] = normalizedValue;
         });
@@ -4105,7 +4110,7 @@ var TransitionAnimationEngine = (function () {
             if (details && details.removedBeforeQueried)
                 return new _angular_animations.NoopAnimationPlayer();
             var /** @type {?} */ isQueriedElement = element !== rootElement;
-            var /** @type {?} */ previousPlayers = (allPreviousPlayersMap.get(element) || EMPTY_PLAYER_ARRAY).map(function (p) { return p.getRealPlayer(); });
+            var /** @type {?} */ previousPlayers = flattenGroupPlayers((allPreviousPlayersMap.get(element) || EMPTY_PLAYER_ARRAY).map(function (p) { return p.getRealPlayer(); }));
             var /** @type {?} */ preStyles = preStylesMap.get(element);
             var /** @type {?} */ postStyles = postStylesMap.get(element);
             var /** @type {?} */ keyframes = normalizeKeyframes(_this.driver, _this._normalizer, element, timelineInstruction.keyframes, preStyles, postStyles);
@@ -4485,6 +4490,31 @@ function removeNodesAfterAnimationDone(engine, element, players) {
     optimizeGroupPlayer(players).onDone(function () { return engine.processLeaveNode(element); });
 }
 /**
+ * @param {?} players
+ * @return {?}
+ */
+function flattenGroupPlayers(players) {
+    var /** @type {?} */ finalPlayers = [];
+    _flattenGroupPlayersRecur(players, finalPlayers);
+    return finalPlayers;
+}
+/**
+ * @param {?} players
+ * @param {?} finalPlayers
+ * @return {?}
+ */
+function _flattenGroupPlayersRecur(players, finalPlayers) {
+    for (var /** @type {?} */ i = 0; i < players.length; i++) {
+        var /** @type {?} */ player = players[i];
+        if (player instanceof _angular_animations.ɵAnimationGroupPlayer) {
+            _flattenGroupPlayersRecur(player.players, finalPlayers);
+        }
+        else {
+            finalPlayers.push(/** @type {?} */ (player));
+        }
+    }
+}
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
@@ -4563,6 +4593,14 @@ var AnimationEngine = (function () {
         this._transitionEngine.removeNode(namespaceId, element, context);
     };
     /**
+     * @param {?} element
+     * @param {?} disable
+     * @return {?}
+     */
+    AnimationEngine.prototype.disableAnimations = function (element, disable) {
+        this._transitionEngine.markElementAsDisabled(element, disable);
+    };
+    /**
      * @param {?} namespaceId
      * @param {?} element
      * @param {?} property
@@ -4570,19 +4608,13 @@ var AnimationEngine = (function () {
      * @return {?}
      */
     AnimationEngine.prototype.process = function (namespaceId, element, property, value) {
-        switch (property.charAt(0)) {
-            case '.':
-                if (property == '.disabled') {
-                    this._transitionEngine.markElementAsDisabled(element, !!value);
-                }
-                return false;
-            case '@':
-                var _a = parseTimelineCommand(property), id = _a[0], action = _a[1];
-                var /** @type {?} */ args = (value);
-                this._timelineEngine.command(id, element, action, args);
-                return false;
-            default:
-                return this._transitionEngine.trigger(namespaceId, element, property, value);
+        if (property.charAt(0) == '@') {
+            var _a = parseTimelineCommand(property), id = _a[0], action = _a[1];
+            var /** @type {?} */ args = (value);
+            this._timelineEngine.command(id, element, action, args);
+        }
+        else {
+            this._transitionEngine.trigger(namespaceId, element, property, value);
         }
     };
     /**

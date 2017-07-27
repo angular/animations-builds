@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-4ce29f3
+ * @license Angular v4.3.1-bcea196
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1243,6 +1243,16 @@ var AnimationGroupPlayer = (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.beforeDestroy = function () {
+        this.players.forEach(function (player) {
+            if (player.beforeDestroy) {
+                player.beforeDestroy();
+            }
+        });
+    };
     return AnimationGroupPlayer;
 }());
 /**

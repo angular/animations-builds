@@ -27,4 +27,5 @@ export declare class AnimationGroupPlayer implements AnimationPlayer {
     setPosition(p: number): void;
     getPosition(): number;
     readonly players: AnimationPlayer[];
+    beforeDestroy(): void;
 }
