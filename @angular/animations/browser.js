@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.1-e64b54b
+ * @license Angular v5.0.0-beta.1-9479a10
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3225,6 +3225,7 @@ class TransitionAnimationEngine {
         this.onRemovalComplete = (element, context) => { };
     }
     /**
+     * \@internal
      * @param {?} element
      * @param {?} context
      * @return {?}
@@ -4364,8 +4365,7 @@ class AnimationEngine {
         this.onRemovalComplete = (element, context) => { };
         this._transitionEngine = new TransitionAnimationEngine(driver, normalizer);
         this._timelineEngine = new TimelineAnimationEngine(driver, normalizer);
-        this._transitionEngine.onRemovalComplete =
-            (element, context) => { this.onRemovalComplete(element, context); };
+        this._transitionEngine.onRemovalComplete = (element, context) => this.onRemovalComplete(element, context);
     }
     /**
      * @param {?} componentId

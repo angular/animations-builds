@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 /**
- * @license Angular v5.0.0-beta.1-e64b54b
+ * @license Angular v5.0.0-beta.1-9479a10
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3353,6 +3353,7 @@ var TransitionAnimationEngine = (function () {
         this.onRemovalComplete = function (element, context) { };
     }
     /**
+     * \@internal
      * @param {?} element
      * @param {?} context
      * @return {?}
@@ -4520,8 +4521,7 @@ var AnimationEngine = (function () {
         this.onRemovalComplete = function (element, context) { };
         this._transitionEngine = new TransitionAnimationEngine(driver, normalizer);
         this._timelineEngine = new TimelineAnimationEngine(driver, normalizer);
-        this._transitionEngine.onRemovalComplete =
-            function (element, context) { _this.onRemovalComplete(element, context); };
+        this._transitionEngine.onRemovalComplete = function (element, context) { return _this.onRemovalComplete(element, context); };
     }
     /**
      * @param {?} componentId

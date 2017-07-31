@@ -85,7 +85,6 @@ export declare class TransitionAnimationEngine {
     collectedEnterElements: any[];
     collectedLeaveElements: any[];
     onRemovalComplete: (element: any, context: any) => void;
-    _onRemovalComplete(element: any, context: any): void;
     constructor(driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
     readonly queuedPlayers: TransitionAnimationPlayer[];
     createNamespace(namespaceId: string, hostElement: any): AnimationTransitionNamespace;
