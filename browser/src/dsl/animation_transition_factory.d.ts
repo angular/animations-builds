@@ -7,7 +7,7 @@
  */
 import { AnimationOptions, ɵStyleData } from '@angular/animations';
 import { AnimationDriver } from '../render/animation_driver';
-import { TransitionAst } from './animation_ast';
+import { StyleAst, TransitionAst } from './animation_ast';
 import { AnimationTransitionInstruction } from './animation_transition_instruction';
 import { ElementInstructionMap } from './element_instruction_map';
 export declare class AnimationTransitionFactory {
@@ -15,8 +15,21 @@ export declare class AnimationTransitionFactory {
     ast: TransitionAst;
     private _stateStyles;
     constructor(_triggerName: string, ast: TransitionAst, _stateStyles: {
-        [stateName: string]: ɵStyleData;
+        [stateName: string]: AnimationStateStyles;
     });
     match(currentState: any, nextState: any): boolean;
-    build(driver: AnimationDriver, element: any, currentState: any, nextState: any, options?: AnimationOptions, subInstructions?: ElementInstructionMap): AnimationTransitionInstruction;
+    buildStyles(stateName: string, params: {
+        [key: string]: any;
+    }, errors: any[]): ɵStyleData;
+    build(driver: AnimationDriver, element: any, currentState: any, nextState: any, currentOptions?: AnimationOptions, nextOptions?: AnimationOptions, subInstructions?: ElementInstructionMap): AnimationTransitionInstruction;
+}
+export declare class AnimationStateStyles {
+    private styles;
+    private defaultParams;
+    constructor(styles: StyleAst, defaultParams: {
+        [key: string]: any;
+    });
+    buildStyles(params: {
+        [key: string]: any;
+    }, errors: string[]): ɵStyleData;
 }

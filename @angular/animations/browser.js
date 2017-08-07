@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.3-3212f8c
+ * @license Angular v4.3.3-e0660b1
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -186,6 +186,8 @@ AnimationDriver.NOOP = new NoopAnimationDriver();
  * found in the LICENSE file at https://angular.io/license
  */
 const ONE_SECOND = 1000;
+const SUBSTITUTION_EXPR_START = '{{';
+const SUBSTITUTION_EXPR_END = '}}';
 const ENTER_CLASSNAME = 'ng-enter';
 const LEAVE_CLASSNAME = 'ng-leave';
 const ENTER_SELECTOR = '.ng-enter';
@@ -310,10 +312,8 @@ function normalizeAnimationEntry(steps) {
 }
 function validateStyleParams(value, options, errors) {
     const params = options.params || {};
-    if (typeof value !== 'string')
-        return;
-    const matches = value.toString().match(PARAM_REGEX);
-    if (matches) {
+    const matches = extractStyleParams(value);
+    if (matches.length) {
         matches.forEach(varName => {
             if (!params.hasOwnProperty(varName)) {
                 errors.push(`Unable to resolve the local animation param ${varName} in the given list of values`);
@@ -321,7 +321,19 @@ function validateStyleParams(value, options, errors) {
         });
     }
 }
-const PARAM_REGEX = /\{\{\s*(.+?)\s*\}\}/g;
+const PARAM_REGEX = new RegExp(`${SUBSTITUTION_EXPR_START}\\s*(.+?)\\s*${SUBSTITUTION_EXPR_END}`, 'g');
+function extractStyleParams(value) {
+    let params = [];
+    if (typeof value === 'string') {
+        const val = value.toString();
+        let match;
+        while (match = PARAM_REGEX.exec(val)) {
+            params.push(match[1]);
+        }
+        PARAM_REGEX.lastIndex = 0;
+    }
+    return params;
+}
 function interpolateParams(value, params, errors) {
     const original = value.toString();
     const str = original.replace(PARAM_REGEX, (_, varName) => {
@@ -345,21 +357,7 @@ function iteratorToArray(iterator) {
     }
     return arr;
 }
-function mergeAnimationOptions(source, destination) {
-    if (source.params) {
-        const p0 = source.params;
-        if (!destination.params) {
-            destination.params = {};
-        }
-        const p1 = destination.params;
-        Object.keys(p0).forEach(param => {
-            if (!p1.hasOwnProperty(param)) {
-                p1[param] = p0[param];
-            }
-        });
-    }
-    return destination;
-}
+
 const DASH_CASE_REGEXP = /-+([a-z0-9])/g;
 function dashCaseToCamelCase(input) {
     return input.replace(DASH_CASE_REGEXP, (...m) => m[1].toUpperCase());
@@ -511,6 +509,7 @@ class StyleAst extends Ast {
         this.easing = easing;
         this.offset = offset;
         this.isEmptyStep = false;
+        this.containsDynamicStyles = false;
     }
     /**
      * @param {?} visitor
@@ -864,7 +863,33 @@ class AnimationAstBuilderVisitor {
      * @return {?}
      */
     visitState(metadata, context) {
-        return new StateAst(metadata.name, this.visitStyle(metadata.styles, context));
+        const /** @type {?} */ styleAst = this.visitStyle(metadata.styles, context);
+        const /** @type {?} */ astParams = (metadata.options && metadata.options.params) || null;
+        if (styleAst.containsDynamicStyles) {
+            const /** @type {?} */ missingSubs = new Set();
+            const /** @type {?} */ params = astParams || {};
+            styleAst.styles.forEach(value => {
+                if (isObject(value)) {
+                    const /** @type {?} */ stylesObj = (value);
+                    Object.keys(stylesObj).forEach(prop => {
+                        extractStyleParams(stylesObj[prop]).forEach(sub => {
+                            if (!params.hasOwnProperty(sub)) {
+                                missingSubs.add(sub);
+                            }
+                        });
+                    });
+                }
+            });
+            if (missingSubs.size) {
+                const /** @type {?} */ missingSubsArr = iteratorToArray(missingSubs.values());
+                context.errors.push(`state("${metadata.name}", ...) must define default values for all the following style substitutions: ${missingSubsArr.join(', ')}`);
+            }
+        }
+        const /** @type {?} */ stateAst = new StateAst(metadata.name, styleAst);
+        if (astParams) {
+            stateAst.options = { params: astParams };
+        }
+        return stateAst;
     }
     /**
      * @param {?} metadata
@@ -978,6 +1003,7 @@ class AnimationAstBuilderVisitor {
         else {
             styles.push(metadata.styles);
         }
+        let /** @type {?} */ containsDynamicStyles = false;
         let /** @type {?} */ collectedEasing = null;
         styles.forEach(styleData => {
             if (isObject(styleData)) {
@@ -987,9 +1013,20 @@ class AnimationAstBuilderVisitor {
                     collectedEasing = (easing);
                     delete styleMap['easing'];
                 }
+                if (!containsDynamicStyles) {
+                    for (let /** @type {?} */ prop in styleMap) {
+                        const /** @type {?} */ value = styleMap[prop];
+                        if (value.toString().indexOf(SUBSTITUTION_EXPR_START) >= 0) {
+                            containsDynamicStyles = true;
+                            break;
+                        }
+                    }
+                }
             }
         });
-        return new StyleAst(styles, collectedEasing, metadata.offset);
+        const /** @type {?} */ ast = new StyleAst(styles, collectedEasing, metadata.offset);
+        ast.containsDynamicStyles = containsDynamicStyles;
+        return ast;
     }
     /**
      * @param {?} ast
@@ -2407,6 +2444,7 @@ function createTransitionInstruction(element, triggerName, fromState, toState, i
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+const EMPTY_OBJECT = {};
 class AnimationTransitionFactory {
     /**
      * @param {?} _triggerName
@@ -2427,24 +2465,39 @@ class AnimationTransitionFactory {
         return oneOrMoreTransitionsMatch(this.ast.matchers, currentState, nextState);
     }
     /**
+     * @param {?} stateName
+     * @param {?} params
+     * @param {?} errors
+     * @return {?}
+     */
+    buildStyles(stateName, params, errors) {
+        const /** @type {?} */ backupStateStyler = this._stateStyles['*'];
+        const /** @type {?} */ stateStyler = this._stateStyles[stateName];
+        const /** @type {?} */ backupStyles = backupStateStyler ? backupStateStyler.buildStyles(params, errors) : {};
+        return stateStyler ? stateStyler.buildStyles(params, errors) : backupStyles;
+    }
+    /**
      * @param {?} driver
      * @param {?} element
      * @param {?} currentState
      * @param {?} nextState
-     * @param {?=} options
+     * @param {?=} currentOptions
+     * @param {?=} nextOptions
      * @param {?=} subInstructions
      * @return {?}
      */
-    build(driver, element, currentState, nextState, options, subInstructions) {
-        const /** @type {?} */ animationOptions = mergeAnimationOptions(this.ast.options || {}, options || {});
-        const /** @type {?} */ backupStateStyles = this._stateStyles['*'] || {};
-        const /** @type {?} */ currentStateStyles = this._stateStyles[currentState] || backupStateStyles;
-        const /** @type {?} */ nextStateStyles = this._stateStyles[nextState] || backupStateStyles;
+    build(driver, element, currentState, nextState, currentOptions, nextOptions, subInstructions) {
+        const /** @type {?} */ errors = [];
+        const /** @type {?} */ transitionAnimationParams = this.ast.options && this.ast.options.params || EMPTY_OBJECT;
+        const /** @type {?} */ currentAnimationParams = currentOptions && currentOptions.params || EMPTY_OBJECT;
+        const /** @type {?} */ currentStateStyles = this.buildStyles(currentState, currentAnimationParams, errors);
+        const /** @type {?} */ nextAnimationParams = nextOptions && nextOptions.params || EMPTY_OBJECT;
+        const /** @type {?} */ nextStateStyles = this.buildStyles(nextState, nextAnimationParams, errors);
         const /** @type {?} */ queriedElements = new Set();
         const /** @type {?} */ preStyleMap = new Map();
         const /** @type {?} */ postStyleMap = new Map();
         const /** @type {?} */ isRemoval = nextState === 'void';
-        const /** @type {?} */ errors = [];
+        const /** @type {?} */ animationOptions = { params: Object.assign({}, transitionAnimationParams, nextAnimationParams) };
         const /** @type {?} */ timelines = buildAnimationTimelines(driver, element, this.ast.animation, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
         if (errors.length) {
             return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, [], [], preStyleMap, postStyleMap, errors);
@@ -2471,6 +2524,44 @@ class AnimationTransitionFactory {
  */
 function oneOrMoreTransitionsMatch(matchFns, currentState, nextState) {
     return matchFns.some(fn => fn(currentState, nextState));
+}
+class AnimationStateStyles {
+    /**
+     * @param {?} styles
+     * @param {?} defaultParams
+     */
+    constructor(styles, defaultParams) {
+        this.styles = styles;
+        this.defaultParams = defaultParams;
+    }
+    /**
+     * @param {?} params
+     * @param {?} errors
+     * @return {?}
+     */
+    buildStyles(params, errors) {
+        const /** @type {?} */ finalStyles = {};
+        const /** @type {?} */ combinedParams = copyObj(this.defaultParams);
+        Object.keys(params).forEach(key => {
+            const /** @type {?} */ value = params[key];
+            if (value != null) {
+                combinedParams[key] = value;
+            }
+        });
+        this.styles.styles.forEach(value => {
+            if (typeof value !== 'string') {
+                const /** @type {?} */ styleObj = (value);
+                Object.keys(styleObj).forEach(prop => {
+                    let /** @type {?} */ val = styleObj[prop];
+                    if (val.length > 1) {
+                        val = interpolateParams(val, combinedParams, errors);
+                    }
+                    finalStyles[prop] = val;
+                });
+            }
+        });
+        return finalStyles;
+    }
 }
 
 /**
@@ -2503,12 +2594,8 @@ class AnimationTrigger {
         this.transitionFactories = [];
         this.states = {};
         ast.states.forEach(ast => {
-            const obj = this.states[ast.name] = {};
-            ast.style.styles.forEach(styleTuple => {
-                if (typeof styleTuple == 'object') {
-                    copyStyles(styleTuple, false, obj);
-                }
-            });
+            const defaultParams = (ast.options && ast.options.params) || {};
+            this.states[ast.name] = new AnimationStateStyles(ast.style, defaultParams);
         });
         balanceProperties(this.states, 'true', '1');
         balanceProperties(this.states, 'false', '0');
@@ -2529,6 +2616,15 @@ class AnimationTrigger {
     matchTransition(currentState, nextState) {
         const /** @type {?} */ entry = this.transitionFactories.find(f => f.match(currentState, nextState));
         return entry || null;
+    }
+    /**
+     * @param {?} currentState
+     * @param {?} params
+     * @param {?} errors
+     * @return {?}
+     */
+    matchStyles(currentState, params, errors) {
+        return this.fallbackTransition.buildStyles(currentState, params, errors);
     }
 }
 /**
@@ -2754,6 +2850,10 @@ const NULL_REMOVED_QUERIED_STATE = {
 const REMOVAL_FLAG = '__ng_removed';
 class StateValue {
     /**
+     * @return {?}
+     */
+    get params() { return (this.options.params); }
+    /**
      * @param {?} input
      */
     constructor(input) {
@@ -2911,8 +3011,25 @@ class AnimationTransitionNamespace {
         // The removal arc here is special cased because the same element is triggered
         // twice in the event that it contains animations on the outer/inner portions
         // of the host container
-        if (!isRemoval && fromState.value === toState.value)
+        if (!isRemoval && fromState.value === toState.value) {
+            // this means that despite the value not changing, some inner params
+            // have changed which means that the animation final styles need to be applied
+            if (!objEquals(fromState.params, toState.params)) {
+                const /** @type {?} */ errors = [];
+                const /** @type {?} */ fromStyles = trigger.matchStyles(fromState.value, fromState.params, errors);
+                const /** @type {?} */ toStyles = trigger.matchStyles(toState.value, toState.params, errors);
+                if (errors.length) {
+                    this._engine.reportError(errors);
+                }
+                else {
+                    this._engine.afterFlush(() => {
+                        eraseStyles(element, fromStyles);
+                        setStyles(element, toStyles);
+                    });
+                }
+            }
             return;
+        }
         const /** @type {?} */ playersOnElement = getOrSetAsInMap(this._engine.playersByElement, element, []);
         playersOnElement.forEach(player => {
             // only remove the player if it is queued on the EXACT same trigger/namespace
@@ -3428,7 +3545,7 @@ class TransitionAnimationEngine {
      * @return {?}
      */
     _buildInstruction(entry, subTimelines) {
-        return entry.transition.build(this.driver, entry.element, entry.fromState.value, entry.toState.value, entry.toState.options, subTimelines);
+        return entry.transition.build(this.driver, entry.element, entry.fromState.value, entry.toState.value, entry.fromState.options, entry.toState.options, subTimelines);
     }
     /**
      * @param {?} containerElement
@@ -3554,6 +3671,13 @@ class TransitionAnimationEngine {
         }
     }
     /**
+     * @param {?} errors
+     * @return {?}
+     */
+    reportError(errors) {
+        throw new Error(`Unable to process animations due to the following failed trigger transitions\n ${errors.join("\n")}`);
+    }
+    /**
      * @param {?} cleanupFns
      * @param {?} microtaskId
      * @return {?}
@@ -3659,13 +3783,13 @@ class TransitionAnimationEngine {
             });
         }
         if (erroneousTransitions.length) {
-            let /** @type {?} */ msg = `Unable to process animations due to the following failed trigger transitions\n`;
+            const /** @type {?} */ errors = [];
             erroneousTransitions.forEach(instruction => {
-                msg += `@${instruction.triggerName} has failed due to:\n`; /** @type {?} */
-                ((instruction.errors)).forEach(error => { msg += `- ${error}\n`; });
+                errors.push(`@${instruction.triggerName} has failed due to:\n`); /** @type {?} */
+                ((instruction.errors)).forEach(error => errors.push(`- ${error}\n`));
             });
             allPlayers.forEach(player => player.destroy());
-            throw new Error(msg);
+            this.reportError(errors);
         }
         // these can only be detected here since we have a map of all the elements
         // that have animations attached to them...
@@ -3927,7 +4051,16 @@ class TransitionAnimationEngine {
             if (details && details.removedBeforeQueried)
                 return new NoopAnimationPlayer();
             const /** @type {?} */ isQueriedElement = element !== rootElement;
-            const /** @type {?} */ previousPlayers = flattenGroupPlayers((allPreviousPlayersMap.get(element) || EMPTY_PLAYER_ARRAY).map(p => p.getRealPlayer()));
+            const /** @type {?} */ previousPlayers = flattenGroupPlayers((allPreviousPlayersMap.get(element) || EMPTY_PLAYER_ARRAY)
+                .map(p => p.getRealPlayer()))
+                .filter(p => {
+                // the `element` is not apart of the AnimationPlayer definition, but
+                // Mock/WebAnimations
+                // use the element within their implementation. This will be added in Angular5 to
+                // AnimationPlayer
+                const /** @type {?} */ pp = (p);
+                return pp.element ? pp.element === element : false;
+            });
             const /** @type {?} */ preStyles = preStylesMap.get(element);
             const /** @type {?} */ postStyles = postStylesMap.get(element);
             const /** @type {?} */ keyframes = normalizeKeyframes(this.driver, this._normalizer, element, timelineInstruction.keyframes, preStyles, postStyles);
@@ -4315,6 +4448,23 @@ function _flattenGroupPlayersRecur(players, finalPlayers) {
             finalPlayers.push(/** @type {?} */ (player));
         }
     }
+}
+/**
+ * @param {?} a
+ * @param {?} b
+ * @return {?}
+ */
+function objEquals(a, b) {
+    const /** @type {?} */ k1 = Object.keys(a);
+    const /** @type {?} */ k2 = Object.keys(b);
+    if (k1.length != k2.length)
+        return false;
+    for (let /** @type {?} */ i = 0; i < k1.length; i++) {
+        const /** @type {?} */ prop = k1[i];
+        if (!b.hasOwnProperty(prop) || a[prop] !== b[prop])
+            return false;
+    }
+    return true;
 }
 
 /**

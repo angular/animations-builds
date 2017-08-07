@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.3-3212f8c
+ * @license Angular v4.3.3-e0660b1
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -417,10 +417,11 @@ function style(tokens) {
  * \@experimental Animation support is experimental.
  * @param {?} name
  * @param {?} styles
+ * @param {?=} options
  * @return {?}
  */
-function state(name, styles) {
-    return { type: 0 /* State */, name, styles };
+function state(name, styles, options) {
+    return { type: 0 /* State */, name, styles, options };
 }
 /**
  * `keyframes` is an animation-specific function that is designed to be used inside of Angular's

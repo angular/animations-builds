@@ -7,7 +7,7 @@
  */
 import { ɵStyleData } from '@angular/animations';
 import { TriggerAst } from './animation_ast';
-import { AnimationTransitionFactory } from './animation_transition_factory';
+import { AnimationStateStyles, AnimationTransitionFactory } from './animation_transition_factory';
 /**
  * @experimental Animation support is experimental.
  */
@@ -21,9 +21,12 @@ export declare class AnimationTrigger {
     transitionFactories: AnimationTransitionFactory[];
     fallbackTransition: AnimationTransitionFactory;
     states: {
-        [stateName: string]: ɵStyleData;
+        [stateName: string]: AnimationStateStyles;
     };
     constructor(name: string, ast: TriggerAst);
     readonly containsQueries: boolean;
     matchTransition(currentState: any, nextState: any): AnimationTransitionFactory | null;
+    matchStyles(currentState: any, params: {
+        [key: string]: any;
+    }, errors: any[]): ɵStyleData;
 }

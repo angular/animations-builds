@@ -30,6 +30,9 @@ export interface ElementAnimationState {
 export declare class StateValue {
     value: string;
     options: AnimationOptions;
+    readonly params: {
+        [key: string]: any;
+    };
     constructor(input: any);
     absorbOptions(options: AnimationOptions): void;
 }
@@ -106,6 +109,7 @@ export declare class TransitionAnimationEngine {
     whenRenderingDone(): Promise<any>;
     processLeaveNode(element: any): void;
     flush(microtaskId?: number): void;
+    reportError(errors: string[]): void;
     private _flushAnimations(cleanupFns, microtaskId);
     elementContainsData(namespaceId: string, element: any): boolean;
     afterFlush(callback: () => any): void;
