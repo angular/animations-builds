@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.2-c0c03dc
+ * @license Angular v5.0.0-beta.2-05472cb
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v5.0.0-beta.2-c0c03dc
+ * @license Angular v5.0.0-beta.2-05472cb
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -230,6 +230,8 @@ AnimationDriver.NOOP = new NoopAnimationDriver();
  * found in the LICENSE file at https://angular.io/license
  */
 var ONE_SECOND = 1000;
+var SUBSTITUTION_EXPR_START = '{{';
+var SUBSTITUTION_EXPR_END = '}}';
 var ENTER_CLASSNAME = 'ng-enter';
 var LEAVE_CLASSNAME = 'ng-leave';
 var ENTER_SELECTOR = '.ng-enter';
@@ -356,10 +358,8 @@ function normalizeAnimationEntry(steps) {
 }
 function validateStyleParams(value, options, errors) {
     var params = options.params || {};
-    if (typeof value !== 'string')
-        return;
-    var matches = value.toString().match(PARAM_REGEX);
-    if (matches) {
+    var matches = extractStyleParams(value);
+    if (matches.length) {
         matches.forEach(function (varName) {
             if (!params.hasOwnProperty(varName)) {
                 errors.push("Unable to resolve the local animation param " + varName + " in the given list of values");
@@ -367,7 +367,19 @@ function validateStyleParams(value, options, errors) {
         });
     }
 }
-var PARAM_REGEX = /\{\{\s*(.+?)\s*\}\}/g;
+var PARAM_REGEX = new RegExp(SUBSTITUTION_EXPR_START + "\\s*(.+?)\\s*" + SUBSTITUTION_EXPR_END, 'g');
+function extractStyleParams(value) {
+    var params = [];
+    if (typeof value === 'string') {
+        var val = value.toString();
+        var match = void 0;
+        while (match = PARAM_REGEX.exec(val)) {
+            params.push(match[1]);
+        }
+        PARAM_REGEX.lastIndex = 0;
+    }
+    return params;
+}
 function interpolateParams(value, params, errors) {
     var original = value.toString();
     var str = original.replace(PARAM_REGEX, function (_, varName) {
@@ -390,21 +402,6 @@ function iteratorToArray(iterator) {
         item = iterator.next();
     }
     return arr;
-}
-function mergeAnimationOptions(source, destination) {
-    if (source.params) {
-        var p0_1 = source.params;
-        if (!destination.params) {
-            destination.params = {};
-        }
-        var p1_1 = destination.params;
-        Object.keys(p0_1).forEach(function (param) {
-            if (!p1_1.hasOwnProperty(param)) {
-                p1_1[param] = p0_1[param];
-            }
-        });
-    }
-    return destination;
 }
 var DASH_CASE_REGEXP = /-+([a-z0-9])/g;
 function dashCaseToCamelCase(input) {
@@ -579,6 +576,7 @@ var StyleAst = (function (_super) {
         _this.easing = easing;
         _this.offset = offset;
         _this.isEmptyStep = false;
+        _this.containsDynamicStyles = false;
         return _this;
     }
     /**
@@ -981,7 +979,33 @@ var AnimationAstBuilderVisitor = (function () {
      * @return {?}
      */
     AnimationAstBuilderVisitor.prototype.visitState = function (metadata, context) {
-        return new StateAst(metadata.name, this.visitStyle(metadata.styles, context));
+        var /** @type {?} */ styleAst = this.visitStyle(metadata.styles, context);
+        var /** @type {?} */ astParams = (metadata.options && metadata.options.params) || null;
+        if (styleAst.containsDynamicStyles) {
+            var /** @type {?} */ missingSubs_1 = new Set();
+            var /** @type {?} */ params_1 = astParams || {};
+            styleAst.styles.forEach(function (value) {
+                if (isObject(value)) {
+                    var /** @type {?} */ stylesObj_1 = (value);
+                    Object.keys(stylesObj_1).forEach(function (prop) {
+                        extractStyleParams(stylesObj_1[prop]).forEach(function (sub) {
+                            if (!params_1.hasOwnProperty(sub)) {
+                                missingSubs_1.add(sub);
+                            }
+                        });
+                    });
+                }
+            });
+            if (missingSubs_1.size) {
+                var /** @type {?} */ missingSubsArr = iteratorToArray(missingSubs_1.values());
+                context.errors.push("state(\"" + metadata.name + "\", ...) must define default values for all the following style substitutions: " + missingSubsArr.join(', '));
+            }
+        }
+        var /** @type {?} */ stateAst = new StateAst(metadata.name, styleAst);
+        if (astParams) {
+            stateAst.options = { params: astParams };
+        }
+        return stateAst;
     };
     /**
      * @param {?} metadata
@@ -1097,6 +1121,7 @@ var AnimationAstBuilderVisitor = (function () {
         else {
             styles.push(metadata.styles);
         }
+        var /** @type {?} */ containsDynamicStyles = false;
         var /** @type {?} */ collectedEasing = null;
         styles.forEach(function (styleData) {
             if (isObject(styleData)) {
@@ -1106,9 +1131,20 @@ var AnimationAstBuilderVisitor = (function () {
                     collectedEasing = (easing);
                     delete styleMap['easing'];
                 }
+                if (!containsDynamicStyles) {
+                    for (var /** @type {?} */ prop in styleMap) {
+                        var /** @type {?} */ value = styleMap[prop];
+                        if (value.toString().indexOf(SUBSTITUTION_EXPR_START) >= 0) {
+                            containsDynamicStyles = true;
+                            break;
+                        }
+                    }
+                }
             }
         });
-        return new StyleAst(styles, collectedEasing, metadata.offset);
+        var /** @type {?} */ ast = new StyleAst(styles, collectedEasing, metadata.offset);
+        ast.containsDynamicStyles = containsDynamicStyles;
+        return ast;
     };
     /**
      * @param {?} ast
@@ -1922,8 +1958,8 @@ var AnimationTimelineContext = (function () {
         if (this.options) {
             var /** @type {?} */ oldParams_1 = this.options.params;
             if (oldParams_1) {
-                var /** @type {?} */ params_1 = options['params'] = {};
-                Object.keys(this.options.params).forEach(function (name) { params_1[name] = oldParams_1[name]; });
+                var /** @type {?} */ params_2 = options['params'] = {};
+                Object.keys(this.options.params).forEach(function (name) { params_2[name] = oldParams_1[name]; });
             }
         }
         return options;
@@ -2572,6 +2608,7 @@ function createTransitionInstruction(element, triggerName, fromState, toState, i
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+var EMPTY_OBJECT = {};
 var AnimationTransitionFactory = (function () {
     /**
      * @param {?} _triggerName
@@ -2592,24 +2629,39 @@ var AnimationTransitionFactory = (function () {
         return oneOrMoreTransitionsMatch(this.ast.matchers, currentState, nextState);
     };
     /**
+     * @param {?} stateName
+     * @param {?} params
+     * @param {?} errors
+     * @return {?}
+     */
+    AnimationTransitionFactory.prototype.buildStyles = function (stateName, params, errors) {
+        var /** @type {?} */ backupStateStyler = this._stateStyles['*'];
+        var /** @type {?} */ stateStyler = this._stateStyles[stateName];
+        var /** @type {?} */ backupStyles = backupStateStyler ? backupStateStyler.buildStyles(params, errors) : {};
+        return stateStyler ? stateStyler.buildStyles(params, errors) : backupStyles;
+    };
+    /**
      * @param {?} driver
      * @param {?} element
      * @param {?} currentState
      * @param {?} nextState
-     * @param {?=} options
+     * @param {?=} currentOptions
+     * @param {?=} nextOptions
      * @param {?=} subInstructions
      * @return {?}
      */
-    AnimationTransitionFactory.prototype.build = function (driver, element, currentState, nextState, options, subInstructions) {
-        var /** @type {?} */ animationOptions = mergeAnimationOptions(this.ast.options || {}, options || {});
-        var /** @type {?} */ backupStateStyles = this._stateStyles['*'] || {};
-        var /** @type {?} */ currentStateStyles = this._stateStyles[currentState] || backupStateStyles;
-        var /** @type {?} */ nextStateStyles = this._stateStyles[nextState] || backupStateStyles;
+    AnimationTransitionFactory.prototype.build = function (driver, element, currentState, nextState, currentOptions, nextOptions, subInstructions) {
+        var /** @type {?} */ errors = [];
+        var /** @type {?} */ transitionAnimationParams = this.ast.options && this.ast.options.params || EMPTY_OBJECT;
+        var /** @type {?} */ currentAnimationParams = currentOptions && currentOptions.params || EMPTY_OBJECT;
+        var /** @type {?} */ currentStateStyles = this.buildStyles(currentState, currentAnimationParams, errors);
+        var /** @type {?} */ nextAnimationParams = nextOptions && nextOptions.params || EMPTY_OBJECT;
+        var /** @type {?} */ nextStateStyles = this.buildStyles(nextState, nextAnimationParams, errors);
         var /** @type {?} */ queriedElements = new Set();
         var /** @type {?} */ preStyleMap = new Map();
         var /** @type {?} */ postStyleMap = new Map();
         var /** @type {?} */ isRemoval = nextState === 'void';
-        var /** @type {?} */ errors = [];
+        var /** @type {?} */ animationOptions = { params: Object.assign({}, transitionAnimationParams, nextAnimationParams) };
         var /** @type {?} */ timelines = buildAnimationTimelines(driver, element, this.ast.animation, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
         if (errors.length) {
             return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, [], [], preStyleMap, postStyleMap, errors);
@@ -2638,6 +2690,45 @@ var AnimationTransitionFactory = (function () {
 function oneOrMoreTransitionsMatch(matchFns, currentState, nextState) {
     return matchFns.some(function (fn) { return fn(currentState, nextState); });
 }
+var AnimationStateStyles = (function () {
+    /**
+     * @param {?} styles
+     * @param {?} defaultParams
+     */
+    function AnimationStateStyles(styles, defaultParams) {
+        this.styles = styles;
+        this.defaultParams = defaultParams;
+    }
+    /**
+     * @param {?} params
+     * @param {?} errors
+     * @return {?}
+     */
+    AnimationStateStyles.prototype.buildStyles = function (params, errors) {
+        var /** @type {?} */ finalStyles = {};
+        var /** @type {?} */ combinedParams = copyObj(this.defaultParams);
+        Object.keys(params).forEach(function (key) {
+            var /** @type {?} */ value = params[key];
+            if (value != null) {
+                combinedParams[key] = value;
+            }
+        });
+        this.styles.styles.forEach(function (value) {
+            if (typeof value !== 'string') {
+                var /** @type {?} */ styleObj_1 = (value);
+                Object.keys(styleObj_1).forEach(function (prop) {
+                    var /** @type {?} */ val = styleObj_1[prop];
+                    if (val.length > 1) {
+                        val = interpolateParams(val, combinedParams, errors);
+                    }
+                    finalStyles[prop] = val;
+                });
+            }
+        });
+        return finalStyles;
+    };
+    return AnimationStateStyles;
+}());
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -2666,12 +2757,8 @@ var AnimationTrigger = (function () {
         this.transitionFactories = [];
         this.states = {};
         ast.states.forEach(function (ast) {
-            var /** @type {?} */ obj = _this.states[ast.name] = {};
-            ast.style.styles.forEach(function (styleTuple) {
-                if (typeof styleTuple == 'object') {
-                    copyStyles(/** @type {?} */ (styleTuple), false, obj);
-                }
-            });
+            var /** @type {?} */ defaultParams = (ast.options && ast.options.params) || {};
+            _this.states[ast.name] = new AnimationStateStyles(ast.style, defaultParams);
         });
         balanceProperties(this.states, 'true', '1');
         balanceProperties(this.states, 'false', '0');
@@ -2696,6 +2783,15 @@ var AnimationTrigger = (function () {
     AnimationTrigger.prototype.matchTransition = function (currentState, nextState) {
         var /** @type {?} */ entry = this.transitionFactories.find(function (f) { return f.match(currentState, nextState); });
         return entry || null;
+    };
+    /**
+     * @param {?} currentState
+     * @param {?} params
+     * @param {?} errors
+     * @return {?}
+     */
+    AnimationTrigger.prototype.matchStyles = function (currentState, params, errors) {
+        return this.fallbackTransition.buildStyles(currentState, params, errors);
     };
     return AnimationTrigger;
 }());
@@ -2955,6 +3051,14 @@ var StateValue = (function () {
             this.options.params = {};
         }
     }
+    Object.defineProperty(StateValue.prototype, "params", {
+        /**
+         * @return {?}
+         */
+        get: function () { return (this.options.params); },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * @param {?} options
      * @return {?}
@@ -3098,8 +3202,25 @@ var AnimationTransitionNamespace = (function () {
         // The removal arc here is special cased because the same element is triggered
         // twice in the event that it contains animations on the outer/inner portions
         // of the host container
-        if (!isRemoval && fromState.value === toState.value)
+        if (!isRemoval && fromState.value === toState.value) {
+            // this means that despite the value not changing, some inner params
+            // have changed which means that the animation final styles need to be applied
+            if (!objEquals(fromState.params, toState.params)) {
+                var /** @type {?} */ errors = [];
+                var /** @type {?} */ fromStyles_1 = trigger.matchStyles(fromState.value, fromState.params, errors);
+                var /** @type {?} */ toStyles_1 = trigger.matchStyles(toState.value, toState.params, errors);
+                if (errors.length) {
+                    this._engine.reportError(errors);
+                }
+                else {
+                    this._engine.afterFlush(function () {
+                        eraseStyles(element, fromStyles_1);
+                        setStyles(element, toStyles_1);
+                    });
+                }
+            }
             return;
+        }
         var /** @type {?} */ playersOnElement = getOrSetAsInMap(this._engine.playersByElement, element, []);
         playersOnElement.forEach(function (player) {
             // only remove the player if it is queued on the EXACT same trigger/namespace
@@ -3630,7 +3751,7 @@ var TransitionAnimationEngine = (function () {
      * @return {?}
      */
     TransitionAnimationEngine.prototype._buildInstruction = function (entry, subTimelines) {
-        return entry.transition.build(this.driver, entry.element, entry.fromState.value, entry.toState.value, entry.toState.options, subTimelines);
+        return entry.transition.build(this.driver, entry.element, entry.fromState.value, entry.toState.value, entry.fromState.options, entry.toState.options, subTimelines);
     };
     /**
      * @param {?} containerElement
@@ -3761,6 +3882,13 @@ var TransitionAnimationEngine = (function () {
         }
     };
     /**
+     * @param {?} errors
+     * @return {?}
+     */
+    TransitionAnimationEngine.prototype.reportError = function (errors) {
+        throw new Error("Unable to process animations due to the following failed trigger transitions\n " + errors.join("\n"));
+    };
+    /**
      * @param {?} cleanupFns
      * @param {?} microtaskId
      * @return {?}
@@ -3867,13 +3995,13 @@ var TransitionAnimationEngine = (function () {
             });
         }
         if (erroneousTransitions.length) {
-            var /** @type {?} */ msg_1 = "Unable to process animations due to the following failed trigger transitions\n";
+            var /** @type {?} */ errors_1 = [];
             erroneousTransitions.forEach(function (instruction) {
-                msg_1 += "@" + instruction.triggerName + " has failed due to:\n"; /** @type {?} */
-                ((instruction.errors)).forEach(function (error) { msg_1 += "- " + error + "\n"; });
+                errors_1.push("@" + instruction.triggerName + " has failed due to:\n"); /** @type {?} */
+                ((instruction.errors)).forEach(function (error) { return errors_1.push("- " + error + "\n"); });
             });
             allPlayers.forEach(function (player) { return player.destroy(); });
-            throw new Error(msg_1);
+            this.reportError(errors_1);
         }
         // these can only be detected here since we have a map of all the elements
         // that have animations attached to them...
@@ -4549,6 +4677,23 @@ function _flattenGroupPlayersRecur(players, finalPlayers) {
             finalPlayers.push(/** @type {?} */ (player));
         }
     }
+}
+/**
+ * @param {?} a
+ * @param {?} b
+ * @return {?}
+ */
+function objEquals(a, b) {
+    var /** @type {?} */ k1 = Object.keys(a);
+    var /** @type {?} */ k2 = Object.keys(b);
+    if (k1.length != k2.length)
+        return false;
+    for (var /** @type {?} */ i = 0; i < k1.length; i++) {
+        var /** @type {?} */ prop = k1[i];
+        if (!b.hasOwnProperty(prop) || a[prop] !== b[prop])
+            return false;
+    }
+    return true;
 }
 /**
  * @fileoverview added by tsickle

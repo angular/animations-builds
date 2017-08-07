@@ -73,6 +73,7 @@ export declare class StyleAst extends Ast {
     easing: string | null;
     offset: number | null;
     isEmptyStep: boolean;
+    containsDynamicStyles: boolean;
     constructor(styles: (ɵStyleData | string)[], easing: string | null, offset: number | null);
     visit(visitor: AstVisitor, context: any): any;
 }
