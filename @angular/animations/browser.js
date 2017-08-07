@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.2-f9f8924
+ * @license Angular v5.0.0-beta.2-c0c03dc
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3961,7 +3961,16 @@ class TransitionAnimationEngine {
             if (details && details.removedBeforeQueried)
                 return new NoopAnimationPlayer();
             const /** @type {?} */ isQueriedElement = element !== rootElement;
-            const /** @type {?} */ previousPlayers = flattenGroupPlayers((allPreviousPlayersMap.get(element) || EMPTY_PLAYER_ARRAY).map(p => p.getRealPlayer()));
+            const /** @type {?} */ previousPlayers = flattenGroupPlayers((allPreviousPlayersMap.get(element) || EMPTY_PLAYER_ARRAY)
+                .map(p => p.getRealPlayer()))
+                .filter(p => {
+                // the `element` is not apart of the AnimationPlayer definition, but
+                // Mock/WebAnimations
+                // use the element within their implementation. This will be added in Angular5 to
+                // AnimationPlayer
+                const /** @type {?} */ pp = (p);
+                return pp.element ? pp.element === element : false;
+            });
             const /** @type {?} */ preStyles = preStylesMap.get(element);
             const /** @type {?} */ postStyles = postStylesMap.get(element);
             const /** @type {?} */ keyframes = normalizeKeyframes(this.driver, this._normalizer, element, timelineInstruction.keyframes, preStyles, postStyles);
