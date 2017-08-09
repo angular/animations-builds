@@ -1,6 +1,6 @@
 {
   "name": "@angular/animations",
-  "version": "4.3.3-71f5e78",
+  "version": "4.3.3-3efc88f",
   "description": "Angular - animations integration with web-animationss",
   "main": "./bundles/animations.umd.js",
   "module": "./@angular/animations.es5.js",
@@ -12,7 +12,7 @@
     "tslib": "^1.7.1"
   },
   "peerDependencies": {
-    "@angular/core": "4.3.3-71f5e78"
+    "@angular/core": "4.3.3-3efc88f"
   },
   "repository": {
     "type": "git",
