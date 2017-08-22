@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.4-ec56760
+ * @license Angular v5.0.0-beta.4-409688f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v5.0.0-beta.4-ec56760
+ * @license Angular v5.0.0-beta.4-409688f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -181,6 +181,19 @@ if (typeof Element != 'undefined') {
         return results;
     };
 }
+var _CACHED_BODY = null;
+function validateStyleProperty(prop) {
+    if (!_CACHED_BODY) {
+        _CACHED_BODY = getBodyNode() || {};
+    }
+    return _CACHED_BODY.style ? prop in _CACHED_BODY.style : true;
+}
+function getBodyNode() {
+    if (typeof document != 'undefined') {
+        return document.body;
+    }
+    return null;
+}
 var matchesElement = _matches;
 var containsElement = _contains;
 var invokeQuery = _query;
@@ -197,6 +210,7 @@ var invokeQuery = _query;
 var NoopAnimationDriver = (function () {
     function NoopAnimationDriver() {
     }
+    NoopAnimationDriver.prototype.validateStyleProperty = function (prop) { return validateStyleProperty(prop); };
     NoopAnimationDriver.prototype.matchesElement = function (element, selector) {
         return matchesElement(element, selector);
     };
@@ -900,12 +914,13 @@ function makeLambdaFromStates(lhs, rhs) {
 var SELF_TOKEN = ':self';
 var SELF_TOKEN_REGEX = new RegExp("s*" + SELF_TOKEN + "s*,?", 'g');
 /**
+ * @param {?} driver
  * @param {?} metadata
  * @param {?} errors
  * @return {?}
  */
-function buildAnimationAst(metadata, errors) {
-    return new AnimationAstBuilderVisitor().build(metadata, errors);
+function buildAnimationAst(driver, metadata, errors) {
+    return new AnimationAstBuilderVisitor(driver).build(metadata, errors);
 }
 var LEAVE_TOKEN = ':leave';
 var LEAVE_TOKEN_REGEX = new RegExp(LEAVE_TOKEN, 'g');
@@ -913,7 +928,11 @@ var ENTER_TOKEN = ':enter';
 var ENTER_TOKEN_REGEX = new RegExp(ENTER_TOKEN, 'g');
 var ROOT_SELECTOR = '';
 var AnimationAstBuilderVisitor = (function () {
-    function AnimationAstBuilderVisitor() {
+    /**
+     * @param {?} _driver
+     */
+    function AnimationAstBuilderVisitor(_driver) {
+        this._driver = _driver;
     }
     /**
      * @param {?} metadata
@@ -1152,6 +1171,7 @@ var AnimationAstBuilderVisitor = (function () {
      * @return {?}
      */
     AnimationAstBuilderVisitor.prototype._validateStyleAst = function (ast, context) {
+        var _this = this;
         var /** @type {?} */ timings = context.currentAnimateTimings;
         var /** @type {?} */ endTime = context.currentTime;
         var /** @type {?} */ startTime = context.currentTime;
@@ -1162,6 +1182,10 @@ var AnimationAstBuilderVisitor = (function () {
             if (typeof tuple == 'string')
                 return;
             Object.keys(tuple).forEach(function (prop) {
+                if (!_this._driver.validateStyleProperty(prop)) {
+                    context.errors.push("The provided animation property \"" + prop + "\" is not a supported CSS property for animations");
+                    return;
+                }
                 var /** @type {?} */ collectedStyles = context.collectedStyles[((context.currentQuerySelector))];
                 var /** @type {?} */ collectedEntry = collectedStyles[prop];
                 var /** @type {?} */ updateCollectedStyle = true;
@@ -1908,7 +1932,7 @@ var AnimationTimelineContext = (function () {
         this.currentQueryIndex = 0;
         this.currentQueryTotal = 0;
         this.currentStaggerTime = 0;
-        this.currentTimeline = initialTimeline || new TimelineBuilder(element, 0);
+        this.currentTimeline = initialTimeline || new TimelineBuilder(this._driver, element, 0);
         timelines.push(this.currentTimeline);
     }
     Object.defineProperty(AnimationTimelineContext.prototype, "params", {
@@ -2006,7 +2030,7 @@ var AnimationTimelineContext = (function () {
             delay: this.currentTimeline.currentTime + (delay != null ? delay : 0) + instruction.delay,
             easing: ''
         };
-        var /** @type {?} */ builder = new SubTimelineBuilder(instruction.element, instruction.keyframes, instruction.preStyleProps, instruction.postStyleProps, updatedTimings, instruction.stretchStartingKeyframe);
+        var /** @type {?} */ builder = new SubTimelineBuilder(this._driver, instruction.element, instruction.keyframes, instruction.preStyleProps, instruction.postStyleProps, updatedTimings, instruction.stretchStartingKeyframe);
         this.timelines.push(builder);
         return updatedTimings;
     };
@@ -2054,11 +2078,13 @@ var AnimationTimelineContext = (function () {
 }());
 var TimelineBuilder = (function () {
     /**
+     * @param {?} _driver
      * @param {?} element
      * @param {?} startTime
      * @param {?=} _elementTimelineStylesLookup
      */
-    function TimelineBuilder(element, startTime, _elementTimelineStylesLookup) {
+    function TimelineBuilder(_driver, element, startTime, _elementTimelineStylesLookup) {
+        this._driver = _driver;
         this.element = element;
         this.startTime = startTime;
         this._elementTimelineStylesLookup = _elementTimelineStylesLookup;
@@ -2133,7 +2159,7 @@ var TimelineBuilder = (function () {
      */
     TimelineBuilder.prototype.fork = function (element, currentTime) {
         this.applyStylesToKeyframe();
-        return new TimelineBuilder(element, currentTime || this.currentTime, this._elementTimelineStylesLookup);
+        return new TimelineBuilder(this._driver, element, currentTime || this.currentTime, this._elementTimelineStylesLookup);
     };
     /**
      * @return {?}
@@ -2330,6 +2356,7 @@ var TimelineBuilder = (function () {
 var SubTimelineBuilder = (function (_super) {
     __extends(SubTimelineBuilder, _super);
     /**
+     * @param {?} driver
      * @param {?} element
      * @param {?} keyframes
      * @param {?} preStyleProps
@@ -2337,9 +2364,9 @@ var SubTimelineBuilder = (function (_super) {
      * @param {?} timings
      * @param {?=} _stretchStartingKeyframe
      */
-    function SubTimelineBuilder(element, keyframes, preStyleProps, postStyleProps, timings, _stretchStartingKeyframe) {
+    function SubTimelineBuilder(driver, element, keyframes, preStyleProps, postStyleProps, timings, _stretchStartingKeyframe) {
         if (_stretchStartingKeyframe === void 0) { _stretchStartingKeyframe = false; }
-        var _this = _super.call(this, element, timings.delay) || this;
+        var _this = _super.call(this, driver, element, timings.delay) || this;
         _this.element = element;
         _this.keyframes = keyframes;
         _this.preStyleProps = preStyleProps;
@@ -2443,7 +2470,7 @@ var Animation = (function () {
     function Animation(_driver, input) {
         this._driver = _driver;
         var /** @type {?} */ errors = [];
-        var /** @type {?} */ ast = buildAnimationAst(input, errors);
+        var /** @type {?} */ ast = buildAnimationAst(_driver, input, errors);
         if (errors.length) {
             var /** @type {?} */ errorMessage = "animation validation failed:\n" + errors.join("\n");
             throw new Error(errorMessage);
@@ -2853,7 +2880,7 @@ var TimelineAnimationEngine = (function () {
      */
     TimelineAnimationEngine.prototype.register = function (id, metadata) {
         var /** @type {?} */ errors = [];
-        var /** @type {?} */ ast = buildAnimationAst(metadata, errors);
+        var /** @type {?} */ ast = buildAnimationAst(this._driver, metadata, errors);
         if (errors.length) {
             throw new Error("Unable to build the animation due to the following errors: " + errors.join("\n"));
         }
@@ -4672,15 +4699,6 @@ function removeClass(element, className) {
     }
 }
 /**
- * @return {?}
- */
-function getBodyNode() {
-    if (typeof document != 'undefined') {
-        return document.body;
-    }
-    return null;
-}
-/**
  * @param {?} engine
  * @param {?} element
  * @param {?} players
@@ -4757,15 +4775,16 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
  */
 var AnimationEngine = (function () {
     /**
-     * @param {?} driver
+     * @param {?} _driver
      * @param {?} normalizer
      */
-    function AnimationEngine(driver, normalizer) {
+    function AnimationEngine(_driver, normalizer) {
         var _this = this;
+        this._driver = _driver;
         this._triggerCache = {};
         this.onRemovalComplete = function (element, context) { };
-        this._transitionEngine = new TransitionAnimationEngine(driver, normalizer);
-        this._timelineEngine = new TimelineAnimationEngine(driver, normalizer);
+        this._transitionEngine = new TransitionAnimationEngine(_driver, normalizer);
+        this._timelineEngine = new TimelineAnimationEngine(_driver, normalizer);
         this._transitionEngine.onRemovalComplete = function (element, context) { return _this.onRemovalComplete(element, context); };
     }
     /**
@@ -4781,7 +4800,7 @@ var AnimationEngine = (function () {
         var /** @type {?} */ trigger = this._triggerCache[cacheKey];
         if (!trigger) {
             var /** @type {?} */ errors = [];
-            var /** @type {?} */ ast = (buildAnimationAst(/** @type {?} */ (metadata), errors));
+            var /** @type {?} */ ast = (buildAnimationAst(this._driver, /** @type {?} */ (metadata), errors));
             if (errors.length) {
                 throw new Error("The animation trigger \"" + name + "\" has failed to build due to the following errors:\n - " + errors.join("\n - "));
             }
@@ -5148,6 +5167,11 @@ function _computeStyle(element, prop) {
 var WebAnimationsDriver = (function () {
     function WebAnimationsDriver() {
     }
+    /**
+     * @param {?} prop
+     * @return {?}
+     */
+    WebAnimationsDriver.prototype.validateStyleProperty = function (prop) { return validateStyleProperty(prop); };
     /**
      * @param {?} element
      * @param {?} selector

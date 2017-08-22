@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.4-ec56760
+ * @license Angular v5.0.0-beta.4-409688f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -142,6 +142,19 @@ if (typeof Element != 'undefined') {
         return results;
     };
 }
+let _CACHED_BODY = null;
+function validateStyleProperty(prop) {
+    if (!_CACHED_BODY) {
+        _CACHED_BODY = getBodyNode() || {};
+    }
+    return _CACHED_BODY.style ? prop in _CACHED_BODY.style : true;
+}
+function getBodyNode() {
+    if (typeof document != 'undefined') {
+        return document.body;
+    }
+    return null;
+}
 const matchesElement = _matches;
 const containsElement = _contains;
 const invokeQuery = _query;
@@ -157,6 +170,7 @@ const invokeQuery = _query;
  * @experimental
  */
 class NoopAnimationDriver {
+    validateStyleProperty(prop) { return validateStyleProperty(prop); }
     matchesElement(element, selector) {
         return matchesElement(element, selector);
     }
@@ -802,12 +816,13 @@ function makeLambdaFromStates(lhs, rhs) {
 const SELF_TOKEN = ':self';
 const SELF_TOKEN_REGEX = new RegExp(`\s*${SELF_TOKEN}\s*,?`, 'g');
 /**
+ * @param {?} driver
  * @param {?} metadata
  * @param {?} errors
  * @return {?}
  */
-function buildAnimationAst(metadata, errors) {
-    return new AnimationAstBuilderVisitor().build(metadata, errors);
+function buildAnimationAst(driver, metadata, errors) {
+    return new AnimationAstBuilderVisitor(driver).build(metadata, errors);
 }
 const LEAVE_TOKEN = ':leave';
 const LEAVE_TOKEN_REGEX = new RegExp(LEAVE_TOKEN, 'g');
@@ -815,6 +830,12 @@ const ENTER_TOKEN = ':enter';
 const ENTER_TOKEN_REGEX = new RegExp(ENTER_TOKEN, 'g');
 const ROOT_SELECTOR = '';
 class AnimationAstBuilderVisitor {
+    /**
+     * @param {?} _driver
+     */
+    constructor(_driver) {
+        this._driver = _driver;
+    }
     /**
      * @param {?} metadata
      * @param {?} errors
@@ -1059,6 +1080,10 @@ class AnimationAstBuilderVisitor {
             if (typeof tuple == 'string')
                 return;
             Object.keys(tuple).forEach(prop => {
+                if (!this._driver.validateStyleProperty(prop)) {
+                    context.errors.push(`The provided animation property "${prop}" is not a supported CSS property for animations`);
+                    return;
+                }
                 const /** @type {?} */ collectedStyles = context.collectedStyles[((context.currentQuerySelector))];
                 const /** @type {?} */ collectedEntry = collectedStyles[prop];
                 let /** @type {?} */ updateCollectedStyle = true;
@@ -1793,7 +1818,7 @@ class AnimationTimelineContext {
         this.currentQueryIndex = 0;
         this.currentQueryTotal = 0;
         this.currentStaggerTime = 0;
-        this.currentTimeline = initialTimeline || new TimelineBuilder(element, 0);
+        this.currentTimeline = initialTimeline || new TimelineBuilder(this._driver, element, 0);
         timelines.push(this.currentTimeline);
     }
     /**
@@ -1885,7 +1910,7 @@ class AnimationTimelineContext {
             delay: this.currentTimeline.currentTime + (delay != null ? delay : 0) + instruction.delay,
             easing: ''
         };
-        const /** @type {?} */ builder = new SubTimelineBuilder(instruction.element, instruction.keyframes, instruction.preStyleProps, instruction.postStyleProps, updatedTimings, instruction.stretchStartingKeyframe);
+        const /** @type {?} */ builder = new SubTimelineBuilder(this._driver, instruction.element, instruction.keyframes, instruction.preStyleProps, instruction.postStyleProps, updatedTimings, instruction.stretchStartingKeyframe);
         this.timelines.push(builder);
         return updatedTimings;
     }
@@ -1932,11 +1957,13 @@ class AnimationTimelineContext {
 }
 class TimelineBuilder {
     /**
+     * @param {?} _driver
      * @param {?} element
      * @param {?} startTime
      * @param {?=} _elementTimelineStylesLookup
      */
-    constructor(element, startTime, _elementTimelineStylesLookup) {
+    constructor(_driver, element, startTime, _elementTimelineStylesLookup) {
+        this._driver = _driver;
         this.element = element;
         this.startTime = startTime;
         this._elementTimelineStylesLookup = _elementTimelineStylesLookup;
@@ -2007,7 +2034,7 @@ class TimelineBuilder {
      */
     fork(element, currentTime) {
         this.applyStylesToKeyframe();
-        return new TimelineBuilder(element, currentTime || this.currentTime, this._elementTimelineStylesLookup);
+        return new TimelineBuilder(this._driver, element, currentTime || this.currentTime, this._elementTimelineStylesLookup);
     }
     /**
      * @return {?}
@@ -2192,6 +2219,7 @@ class TimelineBuilder {
 }
 class SubTimelineBuilder extends TimelineBuilder {
     /**
+     * @param {?} driver
      * @param {?} element
      * @param {?} keyframes
      * @param {?} preStyleProps
@@ -2199,8 +2227,8 @@ class SubTimelineBuilder extends TimelineBuilder {
      * @param {?} timings
      * @param {?=} _stretchStartingKeyframe
      */
-    constructor(element, keyframes, preStyleProps, postStyleProps, timings, _stretchStartingKeyframe = false) {
-        super(element, timings.delay);
+    constructor(driver, element, keyframes, preStyleProps, postStyleProps, timings, _stretchStartingKeyframe = false) {
+        super(driver, element, timings.delay);
         this.element = element;
         this.keyframes = keyframes;
         this.preStyleProps = preStyleProps;
@@ -2302,7 +2330,7 @@ class Animation {
     constructor(_driver, input) {
         this._driver = _driver;
         const /** @type {?} */ errors = [];
-        const /** @type {?} */ ast = buildAnimationAst(input, errors);
+        const /** @type {?} */ ast = buildAnimationAst(_driver, input, errors);
         if (errors.length) {
             const /** @type {?} */ errorMessage = `animation validation failed:\n${errors.join("\n")}`;
             throw new Error(errorMessage);
@@ -2699,7 +2727,7 @@ class TimelineAnimationEngine {
      */
     register(id, metadata) {
         const /** @type {?} */ errors = [];
-        const /** @type {?} */ ast = buildAnimationAst(metadata, errors);
+        const /** @type {?} */ ast = buildAnimationAst(this._driver, metadata, errors);
         if (errors.length) {
             throw new Error(`Unable to build the animation due to the following errors: ${errors.join("\n")}`);
         }
@@ -4477,15 +4505,6 @@ function removeClass(element, className) {
     }
 }
 /**
- * @return {?}
- */
-function getBodyNode() {
-    if (typeof document != 'undefined') {
-        return document.body;
-    }
-    return null;
-}
-/**
  * @param {?} engine
  * @param {?} element
  * @param {?} players
@@ -4563,14 +4582,15 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
  */
 class AnimationEngine {
     /**
-     * @param {?} driver
+     * @param {?} _driver
      * @param {?} normalizer
      */
-    constructor(driver, normalizer) {
+    constructor(_driver, normalizer) {
+        this._driver = _driver;
         this._triggerCache = {};
         this.onRemovalComplete = (element, context) => { };
-        this._transitionEngine = new TransitionAnimationEngine(driver, normalizer);
-        this._timelineEngine = new TimelineAnimationEngine(driver, normalizer);
+        this._transitionEngine = new TransitionAnimationEngine(_driver, normalizer);
+        this._timelineEngine = new TimelineAnimationEngine(_driver, normalizer);
         this._transitionEngine.onRemovalComplete = (element, context) => this.onRemovalComplete(element, context);
     }
     /**
@@ -4586,7 +4606,7 @@ class AnimationEngine {
         let /** @type {?} */ trigger = this._triggerCache[cacheKey];
         if (!trigger) {
             const /** @type {?} */ errors = [];
-            const /** @type {?} */ ast = (buildAnimationAst(/** @type {?} */ (metadata), errors));
+            const /** @type {?} */ ast = (buildAnimationAst(this._driver, /** @type {?} */ (metadata), errors));
             if (errors.length) {
                 throw new Error(`The animation trigger "${name}" has failed to build due to the following errors:\n - ${errors.join("\n - ")}`);
             }
@@ -4929,6 +4949,11 @@ function _computeStyle(element, prop) {
  * @suppress {checkTypes} checked by tsc
  */
 class WebAnimationsDriver {
+    /**
+     * @param {?} prop
+     * @return {?}
+     */
+    validateStyleProperty(prop) { return validateStyleProperty(prop); }
     /**
      * @param {?} element
      * @param {?} selector
