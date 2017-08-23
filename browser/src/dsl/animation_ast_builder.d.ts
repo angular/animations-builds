@@ -6,10 +6,13 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationAnimateRefMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationOptions, AnimationQueryMetadata, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata } from '@angular/animations';
+import { AnimationDriver } from '../render/animation_driver';
 import { AnimateAst, AnimateChildAst, AnimateRefAst, Ast, GroupAst, KeyframesAst, QueryAst, ReferenceAst, SequenceAst, StaggerAst, StateAst, StyleAst, TimingAst, TransitionAst, TriggerAst } from './animation_ast';
 import { AnimationDslVisitor } from './animation_dsl_visitor';
-export declare function buildAnimationAst(metadata: AnimationMetadata | AnimationMetadata[], errors: any[]): Ast;
+export declare function buildAnimationAst(driver: AnimationDriver, metadata: AnimationMetadata | AnimationMetadata[], errors: any[]): Ast;
 export declare class AnimationAstBuilderVisitor implements AnimationDslVisitor {
+    private _driver;
+    constructor(_driver: AnimationDriver);
     build(metadata: AnimationMetadata | AnimationMetadata[], errors: any[]): Ast;
     private _resetContextStyleTimingState(context);
     visitTrigger(metadata: AnimationTriggerMetadata, context: AnimationAstBuilderContext): TriggerAst;

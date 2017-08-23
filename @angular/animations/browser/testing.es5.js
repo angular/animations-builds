@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 /**
- * @license Angular v5.0.0-beta.4-ec56760
+ * @license Angular v5.0.0-beta.4-f2f5286
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -45,6 +45,19 @@ if (typeof Element != 'undefined') {
         return results;
     };
 }
+var _CACHED_BODY = null;
+function validateStyleProperty(prop) {
+    if (!_CACHED_BODY) {
+        _CACHED_BODY = getBodyNode() || {};
+    }
+    return _CACHED_BODY.style ? prop in _CACHED_BODY.style : true;
+}
+function getBodyNode() {
+    if (typeof document != 'undefined') {
+        return document.body;
+    }
+    return null;
+}
 var matchesElement = _matches;
 var containsElement = _contains;
 var invokeQuery = _query;
@@ -71,6 +84,7 @@ function allowPreviousPlayerStylesMerge(duration, delay) {
 var MockAnimationDriver = (function () {
     function MockAnimationDriver() {
     }
+    MockAnimationDriver.prototype.validateStyleProperty = function (prop) { return validateStyleProperty(prop); };
     MockAnimationDriver.prototype.matchesElement = function (element, selector) {
         return matchesElement(element, selector);
     };

@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.4-ec56760
+ * @license Angular v5.0.0-beta.4-f2f5286
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -52,6 +52,19 @@ if (typeof Element != 'undefined') {
         return results;
     };
 }
+let _CACHED_BODY = null;
+function validateStyleProperty(prop) {
+    if (!_CACHED_BODY) {
+        _CACHED_BODY = getBodyNode() || {};
+    }
+    return _CACHED_BODY.style ? prop in _CACHED_BODY.style : true;
+}
+function getBodyNode() {
+    if (typeof document != 'undefined') {
+        return document.body;
+    }
+    return null;
+}
 const matchesElement = _matches;
 const containsElement = _contains;
 const invokeQuery = _query;
@@ -103,6 +116,7 @@ function allowPreviousPlayerStylesMerge(duration, delay) {
  * @experimental Animation support is experimental.
  */
 class MockAnimationDriver {
+    validateStyleProperty(prop) { return validateStyleProperty(prop); }
     matchesElement(element, selector) {
         return matchesElement(element, selector);
     }
