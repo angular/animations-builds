@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.5-fd701b0
+ * @license Angular v5.0.0-beta.5-56238fe
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3971,7 +3971,7 @@ class TransitionAnimationEngine {
             addClass(allEnterNodes[i], ENTER_CLASSNAME);
         }
         const /** @type {?} */ allLeaveNodes = [];
-        const /** @type {?} */ leaveNodesWithoutAnimations = [];
+        const /** @type {?} */ leaveNodesWithoutAnimations = new Set();
         for (let /** @type {?} */ i = 0; i < this.collectedLeaveElements.length; i++) {
             const /** @type {?} */ element = this.collectedLeaveElements[i];
             const /** @type {?} */ details = (element[REMOVAL_FLAG]);
@@ -3979,7 +3979,7 @@ class TransitionAnimationEngine {
                 addClass(element, LEAVE_CLASSNAME);
                 allLeaveNodes.push(element);
                 if (!details.hasAnimation) {
-                    leaveNodesWithoutAnimations.push(element);
+                    leaveNodesWithoutAnimations.add(element);
                 }
             }
         }
@@ -4055,12 +4055,14 @@ class TransitionAnimationEngine {
             this.reportError(errors);
         }
         // these can only be detected here since we have a map of all the elements
-        // that have animations attached to them...
-        const /** @type {?} */ enterNodesWithoutAnimations = [];
+        // that have animations attached to them... We use a set here in the event
+        // multiple enter captures on the same element were caught in different
+        // renderer namespaces (e.g. when a @trigger was on a host binding that had *ngIf)
+        const /** @type {?} */ enterNodesWithoutAnimations = new Set();
         for (let /** @type {?} */ i = 0; i < allEnterNodes.length; i++) {
             const /** @type {?} */ element = allEnterNodes[i];
             if (!subTimelines.has(element)) {
-                enterNodesWithoutAnimations.push(element);
+                enterNodesWithoutAnimations.add(element);
             }
         }
         const /** @type {?} */ allPreviousPlayersMap = new Map();
@@ -4614,7 +4616,8 @@ function cloakElement(element, value) {
  * @return {?}
  */
 function cloakAndComputeStyles(driver, elements, elementPropsMap, defaultStyle) {
-    const /** @type {?} */ cloakVals = elements.map(element => cloakElement(element));
+    const /** @type {?} */ cloakVals = [];
+    elements.forEach(element => cloakVals.push(cloakElement(element)));
     const /** @type {?} */ valuesMap = new Map();
     const /** @type {?} */ failedElements = [];
     elementPropsMap.forEach((props, element) => {
@@ -4630,7 +4633,10 @@ function cloakAndComputeStyles(driver, elements, elementPropsMap, defaultStyle) 
         });
         valuesMap.set(element, styles);
     });
-    elements.forEach((element, i) => cloakElement(element, cloakVals[i]));
+    // we use a index variable here since Set.forEach(a, i) does not return
+    // an index value for the closure (but instead just the value)
+    let /** @type {?} */ i = 0;
+    elements.forEach(element => cloakElement(element, cloakVals[i++]));
     return [valuesMap, failedElements];
 }
 /**
