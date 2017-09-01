@@ -1,16 +1,25 @@
-import * as tslib_1 from "tslib";
 /**
- * @license Angular v5.0.0-beta.5-ee04217
+ * @license Angular v5.0.0-beta.5-fd701b0
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
 import { AUTO_STYLE, NoopAnimationPlayer, sequence, style, ɵAnimationGroupPlayer, ɵPRE_STYLE } from '@angular/animations';
+import { __assign, __extends } from 'tslib';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @param {?} players
+ * @return {?}
  */
 function optimizeGroupPlayer(players) {
     switch (players.length) {
@@ -22,20 +31,29 @@ function optimizeGroupPlayer(players) {
             return new ɵAnimationGroupPlayer(players);
     }
 }
+/**
+ * @param {?} driver
+ * @param {?} normalizer
+ * @param {?} element
+ * @param {?} keyframes
+ * @param {?=} preStyles
+ * @param {?=} postStyles
+ * @return {?}
+ */
 function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles, postStyles) {
     if (preStyles === void 0) { preStyles = {}; }
     if (postStyles === void 0) { postStyles = {}; }
-    var errors = [];
-    var normalizedKeyframes = [];
-    var previousOffset = -1;
-    var previousKeyframe = null;
+    var /** @type {?} */ errors = [];
+    var /** @type {?} */ normalizedKeyframes = [];
+    var /** @type {?} */ previousOffset = -1;
+    var /** @type {?} */ previousKeyframe = null;
     keyframes.forEach(function (kf) {
-        var offset = kf['offset'];
-        var isSameOffset = offset == previousOffset;
-        var normalizedKeyframe = (isSameOffset && previousKeyframe) || {};
+        var /** @type {?} */ offset = (kf['offset']);
+        var /** @type {?} */ isSameOffset = offset == previousOffset;
+        var /** @type {?} */ normalizedKeyframe = (isSameOffset && previousKeyframe) || {};
         Object.keys(kf).forEach(function (prop) {
-            var normalizedProp = prop;
-            var normalizedValue = kf[prop];
+            var /** @type {?} */ normalizedProp = prop;
+            var /** @type {?} */ normalizedValue = kf[prop];
             if (prop !== 'offset') {
                 normalizedProp = normalizer.normalizePropertyName(normalizedProp, errors);
                 switch (normalizedValue) {
@@ -60,11 +78,18 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles, p
         previousOffset = offset;
     });
     if (errors.length) {
-        var LINE_START = '\n - ';
+        var /** @type {?} */ LINE_START = '\n - ';
         throw new Error("Unable to animate due to the following errors:" + LINE_START + errors.join(LINE_START));
     }
     return normalizedKeyframes;
 }
+/**
+ * @param {?} player
+ * @param {?} eventName
+ * @param {?} event
+ * @param {?} callback
+ * @return {?}
+ */
 function listenOnPlayer(player, eventName, event, callback) {
     switch (eventName) {
         case 'start':
@@ -78,21 +103,42 @@ function listenOnPlayer(player, eventName, event, callback) {
             break;
     }
 }
+/**
+ * @param {?} e
+ * @param {?=} phaseName
+ * @param {?=} totalTime
+ * @return {?}
+ */
 function copyAnimationEvent(e, phaseName, totalTime) {
-    var event = makeAnimationEvent(e.element, e.triggerName, e.fromState, e.toState, phaseName || e.phaseName, totalTime == undefined ? e.totalTime : totalTime);
-    var data = e['_data'];
+    var /** @type {?} */ event = makeAnimationEvent(e.element, e.triggerName, e.fromState, e.toState, phaseName || e.phaseName, totalTime == undefined ? e.totalTime : totalTime);
+    var /** @type {?} */ data = ((e))['_data'];
     if (data != null) {
-        event['_data'] = data;
+        ((event))['_data'] = data;
     }
     return event;
 }
+/**
+ * @param {?} element
+ * @param {?} triggerName
+ * @param {?} fromState
+ * @param {?} toState
+ * @param {?=} phaseName
+ * @param {?=} totalTime
+ * @return {?}
+ */
 function makeAnimationEvent(element, triggerName, fromState, toState, phaseName, totalTime) {
     if (phaseName === void 0) { phaseName = ''; }
     if (totalTime === void 0) { totalTime = 0; }
     return { element: element, triggerName: triggerName, fromState: fromState, toState: toState, phaseName: phaseName, totalTime: totalTime };
 }
+/**
+ * @param {?} map
+ * @param {?} key
+ * @param {?} defaultValue
+ * @return {?}
+ */
 function getOrSetAsInMap(map, key, defaultValue) {
-    var value;
+    var /** @type {?} */ value;
     if (map instanceof Map) {
         value = map.get(key);
         if (!value) {
@@ -107,38 +153,44 @@ function getOrSetAsInMap(map, key, defaultValue) {
     }
     return value;
 }
+/**
+ * @param {?} command
+ * @return {?}
+ */
 function parseTimelineCommand(command) {
-    var separatorPos = command.indexOf(':');
-    var id = command.substring(1, separatorPos);
-    var action = command.substr(separatorPos + 1);
+    var /** @type {?} */ separatorPos = command.indexOf(':');
+    var /** @type {?} */ id = command.substring(1, separatorPos);
+    var /** @type {?} */ action = command.substr(separatorPos + 1);
     return [id, action];
 }
 var _contains = function (elm1, elm2) { return false; };
-var _matches = function (element, selector) { return false; };
+var _matches = function (element, selector) {
+    return false;
+};
 var _query = function (element, selector, multi) {
     return [];
 };
 if (typeof Element != 'undefined') {
     // this is well supported in all browsers
-    _contains = function (elm1, elm2) { return elm1.contains(elm2); };
+    _contains = function (elm1, elm2) { return (elm1.contains(elm2)); };
     if (Element.prototype.matches) {
         _matches = function (element, selector) { return element.matches(selector); };
     }
     else {
-        var proto = Element.prototype;
-        var fn_1 = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
+        var /** @type {?} */ proto = (Element.prototype);
+        var /** @type {?} */ fn_1 = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
             proto.oMatchesSelector || proto.webkitMatchesSelector;
         if (fn_1) {
             _matches = function (element, selector) { return fn_1.apply(element, [selector]); };
         }
     }
     _query = function (element, selector, multi) {
-        var results = [];
+        var /** @type {?} */ results = [];
         if (multi) {
             results.push.apply(results, element.querySelectorAll(selector));
         }
         else {
-            var elm = element.querySelector(selector);
+            var /** @type {?} */ elm = element.querySelector(selector);
             if (elm) {
                 results.push(elm);
             }
@@ -147,12 +199,19 @@ if (typeof Element != 'undefined') {
     };
 }
 var _CACHED_BODY = null;
+/**
+ * @param {?} prop
+ * @return {?}
+ */
 function validateStyleProperty(prop) {
     if (!_CACHED_BODY) {
         _CACHED_BODY = getBodyNode() || {};
     }
-    return _CACHED_BODY.style ? prop in _CACHED_BODY.style : true;
+    return ((_CACHED_BODY)).style ? prop in ((_CACHED_BODY)).style : true;
 }
+/**
+ * @return {?}
+ */
 function getBodyNode() {
     if (typeof document != 'undefined') {
         return document.body;
@@ -162,6 +221,11 @@ function getBodyNode() {
 var matchesElement = _matches;
 var containsElement = _contains;
 var invokeQuery = _query;
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -170,22 +234,57 @@ var invokeQuery = _query;
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * @experimental
+ * \@experimental
  */
 var NoopAnimationDriver = (function () {
     function NoopAnimationDriver() {
     }
+    /**
+     * @param {?} prop
+     * @return {?}
+     */
     NoopAnimationDriver.prototype.validateStyleProperty = function (prop) { return validateStyleProperty(prop); };
+    /**
+     * @param {?} element
+     * @param {?} selector
+     * @return {?}
+     */
     NoopAnimationDriver.prototype.matchesElement = function (element, selector) {
         return matchesElement(element, selector);
     };
+    /**
+     * @param {?} elm1
+     * @param {?} elm2
+     * @return {?}
+     */
     NoopAnimationDriver.prototype.containsElement = function (elm1, elm2) { return containsElement(elm1, elm2); };
+    /**
+     * @param {?} element
+     * @param {?} selector
+     * @param {?} multi
+     * @return {?}
+     */
     NoopAnimationDriver.prototype.query = function (element, selector, multi) {
         return invokeQuery(element, selector, multi);
     };
+    /**
+     * @param {?} element
+     * @param {?} prop
+     * @param {?=} defaultValue
+     * @return {?}
+     */
     NoopAnimationDriver.prototype.computeStyle = function (element, prop, defaultValue) {
         return defaultValue || '';
     };
+    /**
+     * @param {?} element
+     * @param {?} keyframes
+     * @param {?} duration
+     * @param {?} delay
+     * @param {?} easing
+     * @param {?=} previousPlayers
+     * @return {?}
+     */
     NoopAnimationDriver.prototype.animate = function (element, keyframes, duration, delay, easing, previousPlayers) {
         if (previousPlayers === void 0) { previousPlayers = []; }
         return new NoopAnimationPlayer();
@@ -193,7 +292,8 @@ var NoopAnimationDriver = (function () {
     return NoopAnimationDriver;
 }());
 /**
- * @experimental
+ * \@experimental
+ * @abstract
  */
 var AnimationDriver = (function () {
     function AnimationDriver() {
@@ -201,6 +301,11 @@ var AnimationDriver = (function () {
     return AnimationDriver;
 }());
 AnimationDriver.NOOP = new NoopAnimationDriver();
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -219,14 +324,23 @@ var NG_TRIGGER_CLASSNAME = 'ng-trigger';
 var NG_TRIGGER_SELECTOR = '.ng-trigger';
 var NG_ANIMATING_CLASSNAME = 'ng-animating';
 var NG_ANIMATING_SELECTOR = '.ng-animating';
+/**
+ * @param {?} value
+ * @return {?}
+ */
 function resolveTimingValue(value) {
     if (typeof value == 'number')
         return value;
-    var matches = value.match(/^(-?[\.\d]+)(m?s)/);
+    var /** @type {?} */ matches = ((value)).match(/^(-?[\.\d]+)(m?s)/);
     if (!matches || matches.length < 2)
         return 0;
     return _convertTimeValueToMS(parseFloat(matches[1]), matches[2]);
 }
+/**
+ * @param {?} value
+ * @param {?} unit
+ * @return {?}
+ */
 function _convertTimeValueToMS(value, unit) {
     switch (unit) {
         case 's':
@@ -235,38 +349,49 @@ function _convertTimeValueToMS(value, unit) {
             return value;
     }
 }
+/**
+ * @param {?} timings
+ * @param {?} errors
+ * @param {?=} allowNegativeValues
+ * @return {?}
+ */
 function resolveTiming(timings, errors, allowNegativeValues) {
-    return timings.hasOwnProperty('duration') ?
-        timings :
-        parseTimeExpression(timings, errors, allowNegativeValues);
+    return timings.hasOwnProperty('duration') ? (timings) :
+        parseTimeExpression(/** @type {?} */ (timings), errors, allowNegativeValues);
 }
+/**
+ * @param {?} exp
+ * @param {?} errors
+ * @param {?=} allowNegativeValues
+ * @return {?}
+ */
 function parseTimeExpression(exp, errors, allowNegativeValues) {
-    var regex = /^(-?[\.\d]+)(m?s)(?:\s+(-?[\.\d]+)(m?s))?(?:\s+([-a-z]+(?:\(.+?\))?))?$/i;
-    var duration;
-    var delay = 0;
-    var easing = '';
+    var /** @type {?} */ regex = /^(-?[\.\d]+)(m?s)(?:\s+(-?[\.\d]+)(m?s))?(?:\s+([-a-z]+(?:\(.+?\))?))?$/i;
+    var /** @type {?} */ duration;
+    var /** @type {?} */ delay = 0;
+    var /** @type {?} */ easing = '';
     if (typeof exp === 'string') {
-        var matches = exp.match(regex);
+        var /** @type {?} */ matches = exp.match(regex);
         if (matches === null) {
             errors.push("The provided timing value \"" + exp + "\" is invalid.");
             return { duration: 0, delay: 0, easing: '' };
         }
         duration = _convertTimeValueToMS(parseFloat(matches[1]), matches[2]);
-        var delayMatch = matches[3];
+        var /** @type {?} */ delayMatch = matches[3];
         if (delayMatch != null) {
             delay = _convertTimeValueToMS(Math.floor(parseFloat(delayMatch)), matches[4]);
         }
-        var easingVal = matches[5];
+        var /** @type {?} */ easingVal = matches[5];
         if (easingVal) {
             easing = easingVal;
         }
     }
     else {
-        duration = exp;
+        duration = (exp);
     }
     if (!allowNegativeValues) {
-        var containsErrors = false;
-        var startIndex = errors.length;
+        var /** @type {?} */ containsErrors = false;
+        var /** @type {?} */ startIndex = errors.length;
         if (duration < 0) {
             errors.push("Duration values below 0 are not allowed for this animation step.");
             containsErrors = true;
@@ -281,13 +406,22 @@ function parseTimeExpression(exp, errors, allowNegativeValues) {
     }
     return { duration: duration, delay: delay, easing: easing };
 }
+/**
+ * @param {?} obj
+ * @param {?=} destination
+ * @return {?}
+ */
 function copyObj(obj, destination) {
     if (destination === void 0) { destination = {}; }
     Object.keys(obj).forEach(function (prop) { destination[prop] = obj[prop]; });
     return destination;
 }
+/**
+ * @param {?} styles
+ * @return {?}
+ */
 function normalizeStyles(styles) {
-    var normalizedStyles = {};
+    var /** @type {?} */ normalizedStyles = {};
     if (Array.isArray(styles)) {
         styles.forEach(function (data) { return copyStyles(data, false, normalizedStyles); });
     }
@@ -296,13 +430,19 @@ function normalizeStyles(styles) {
     }
     return normalizedStyles;
 }
+/**
+ * @param {?} styles
+ * @param {?} readPrototype
+ * @param {?=} destination
+ * @return {?}
+ */
 function copyStyles(styles, readPrototype, destination) {
     if (destination === void 0) { destination = {}; }
     if (readPrototype) {
         // we make use of a for-in loop so that the
         // prototypically inherited properties are
         // revealed from the backFill map
-        for (var prop in styles) {
+        for (var /** @type {?} */ prop in styles) {
             destination[prop] = styles[prop];
         }
     }
@@ -311,33 +451,53 @@ function copyStyles(styles, readPrototype, destination) {
     }
     return destination;
 }
+/**
+ * @param {?} element
+ * @param {?} styles
+ * @return {?}
+ */
 function setStyles(element, styles) {
     if (element['style']) {
         Object.keys(styles).forEach(function (prop) {
-            var camelProp = dashCaseToCamelCase(prop);
+            var /** @type {?} */ camelProp = dashCaseToCamelCase(prop);
             element.style[camelProp] = styles[prop];
         });
     }
 }
+/**
+ * @param {?} element
+ * @param {?} styles
+ * @return {?}
+ */
 function eraseStyles(element, styles) {
     if (element['style']) {
         Object.keys(styles).forEach(function (prop) {
-            var camelProp = dashCaseToCamelCase(prop);
+            var /** @type {?} */ camelProp = dashCaseToCamelCase(prop);
             element.style[camelProp] = '';
         });
     }
 }
+/**
+ * @param {?} steps
+ * @return {?}
+ */
 function normalizeAnimationEntry(steps) {
     if (Array.isArray(steps)) {
         if (steps.length == 1)
             return steps[0];
         return sequence(steps);
     }
-    return steps;
+    return (steps);
 }
+/**
+ * @param {?} value
+ * @param {?} options
+ * @param {?} errors
+ * @return {?}
+ */
 function validateStyleParams(value, options, errors) {
-    var params = options.params || {};
-    var matches = extractStyleParams(value);
+    var /** @type {?} */ params = options.params || {};
+    var /** @type {?} */ matches = extractStyleParams(value);
     if (matches.length) {
         matches.forEach(function (varName) {
             if (!params.hasOwnProperty(varName)) {
@@ -347,22 +507,32 @@ function validateStyleParams(value, options, errors) {
     }
 }
 var PARAM_REGEX = new RegExp(SUBSTITUTION_EXPR_START + "\\s*(.+?)\\s*" + SUBSTITUTION_EXPR_END, 'g');
+/**
+ * @param {?} value
+ * @return {?}
+ */
 function extractStyleParams(value) {
-    var params = [];
+    var /** @type {?} */ params = [];
     if (typeof value === 'string') {
-        var val = value.toString();
-        var match = void 0;
+        var /** @type {?} */ val = value.toString();
+        var /** @type {?} */ match = void 0;
         while (match = PARAM_REGEX.exec(val)) {
-            params.push(match[1]);
+            params.push(/** @type {?} */ (match[1]));
         }
         PARAM_REGEX.lastIndex = 0;
     }
     return params;
 }
+/**
+ * @param {?} value
+ * @param {?} params
+ * @param {?} errors
+ * @return {?}
+ */
 function interpolateParams(value, params, errors) {
-    var original = value.toString();
-    var str = original.replace(PARAM_REGEX, function (_, varName) {
-        var localVal = params[varName];
+    var /** @type {?} */ original = value.toString();
+    var /** @type {?} */ str = original.replace(PARAM_REGEX, function (_, varName) {
+        var /** @type {?} */ localVal = params[varName];
         // this means that the value was never overidden by the data passed in by the user
         if (!params.hasOwnProperty(varName)) {
             errors.push("Please provide a value for the animation param " + varName);
@@ -373,16 +543,30 @@ function interpolateParams(value, params, errors) {
     // we do this to assert that numeric values stay as they are
     return str == original ? value : str;
 }
+/**
+ * @param {?} iterator
+ * @return {?}
+ */
 function iteratorToArray(iterator) {
-    var arr = [];
-    var item = iterator.next();
+    var /** @type {?} */ arr = [];
+    var /** @type {?} */ item = iterator.next();
     while (!item.done) {
         arr.push(item.value);
         item = iterator.next();
     }
     return arr;
 }
+/**
+ * @param {?} source
+ * @param {?} destination
+ * @return {?}
+ */
+
 var DASH_CASE_REGEXP = /-+([a-z0-9])/g;
+/**
+ * @param {?} input
+ * @return {?}
+ */
 function dashCaseToCamelCase(input) {
     return input.replace(DASH_CASE_REGEXP, function () {
         var m = [];
@@ -392,9 +576,15 @@ function dashCaseToCamelCase(input) {
         return m[1].toUpperCase();
     });
 }
+/**
+ * @param {?} duration
+ * @param {?} delay
+ * @return {?}
+ */
 function allowPreviousPlayerStylesMerge(duration, delay) {
     return duration === 0 || delay === 0;
 }
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -403,6 +593,7 @@ var EMPTY_ANIMATION_OPTIONS = {};
 /**
  * @record
  */
+
 /**
  * @abstract
  */
@@ -421,7 +612,7 @@ var Ast = (function () {
     return Ast;
 }());
 var TriggerAst = (function (_super) {
-    tslib_1.__extends(TriggerAst, _super);
+    __extends(TriggerAst, _super);
     /**
      * @param {?} name
      * @param {?} states
@@ -445,7 +636,7 @@ var TriggerAst = (function (_super) {
     return TriggerAst;
 }(Ast));
 var StateAst = (function (_super) {
-    tslib_1.__extends(StateAst, _super);
+    __extends(StateAst, _super);
     /**
      * @param {?} name
      * @param {?} style
@@ -465,7 +656,7 @@ var StateAst = (function (_super) {
     return StateAst;
 }(Ast));
 var TransitionAst = (function (_super) {
-    tslib_1.__extends(TransitionAst, _super);
+    __extends(TransitionAst, _super);
     /**
      * @param {?} matchers
      * @param {?} animation
@@ -487,7 +678,7 @@ var TransitionAst = (function (_super) {
     return TransitionAst;
 }(Ast));
 var SequenceAst = (function (_super) {
-    tslib_1.__extends(SequenceAst, _super);
+    __extends(SequenceAst, _super);
     /**
      * @param {?} steps
      */
@@ -505,7 +696,7 @@ var SequenceAst = (function (_super) {
     return SequenceAst;
 }(Ast));
 var GroupAst = (function (_super) {
-    tslib_1.__extends(GroupAst, _super);
+    __extends(GroupAst, _super);
     /**
      * @param {?} steps
      */
@@ -523,7 +714,7 @@ var GroupAst = (function (_super) {
     return GroupAst;
 }(Ast));
 var AnimateAst = (function (_super) {
-    tslib_1.__extends(AnimateAst, _super);
+    __extends(AnimateAst, _super);
     /**
      * @param {?} timings
      * @param {?} style
@@ -543,7 +734,7 @@ var AnimateAst = (function (_super) {
     return AnimateAst;
 }(Ast));
 var StyleAst = (function (_super) {
-    tslib_1.__extends(StyleAst, _super);
+    __extends(StyleAst, _super);
     /**
      * @param {?} styles
      * @param {?} easing
@@ -567,7 +758,7 @@ var StyleAst = (function (_super) {
     return StyleAst;
 }(Ast));
 var KeyframesAst = (function (_super) {
-    tslib_1.__extends(KeyframesAst, _super);
+    __extends(KeyframesAst, _super);
     /**
      * @param {?} styles
      */
@@ -585,7 +776,7 @@ var KeyframesAst = (function (_super) {
     return KeyframesAst;
 }(Ast));
 var ReferenceAst = (function (_super) {
-    tslib_1.__extends(ReferenceAst, _super);
+    __extends(ReferenceAst, _super);
     /**
      * @param {?} animation
      */
@@ -603,7 +794,7 @@ var ReferenceAst = (function (_super) {
     return ReferenceAst;
 }(Ast));
 var AnimateChildAst = (function (_super) {
-    tslib_1.__extends(AnimateChildAst, _super);
+    __extends(AnimateChildAst, _super);
     function AnimateChildAst() {
         return _super.call(this) || this;
     }
@@ -616,7 +807,7 @@ var AnimateChildAst = (function (_super) {
     return AnimateChildAst;
 }(Ast));
 var AnimateRefAst = (function (_super) {
-    tslib_1.__extends(AnimateRefAst, _super);
+    __extends(AnimateRefAst, _super);
     /**
      * @param {?} animation
      */
@@ -634,7 +825,7 @@ var AnimateRefAst = (function (_super) {
     return AnimateRefAst;
 }(Ast));
 var QueryAst = (function (_super) {
-    tslib_1.__extends(QueryAst, _super);
+    __extends(QueryAst, _super);
     /**
      * @param {?} selector
      * @param {?} limit
@@ -660,7 +851,7 @@ var QueryAst = (function (_super) {
     return QueryAst;
 }(Ast));
 var StaggerAst = (function (_super) {
-    tslib_1.__extends(StaggerAst, _super);
+    __extends(StaggerAst, _super);
     /**
      * @param {?} timings
      * @param {?} animation
@@ -680,7 +871,7 @@ var StaggerAst = (function (_super) {
     return StaggerAst;
 }(Ast));
 var TimingAst = (function (_super) {
-    tslib_1.__extends(TimingAst, _super);
+    __extends(TimingAst, _super);
     /**
      * @param {?} duration
      * @param {?=} delay
@@ -704,7 +895,7 @@ var TimingAst = (function (_super) {
     return TimingAst;
 }(Ast));
 var DynamicTimingAst = (function (_super) {
-    tslib_1.__extends(DynamicTimingAst, _super);
+    __extends(DynamicTimingAst, _super);
     /**
      * @param {?} value
      */
@@ -721,6 +912,7 @@ var DynamicTimingAst = (function (_super) {
     DynamicTimingAst.prototype.visit = function (visitor, context) { return visitor.visitTiming(this, context); };
     return DynamicTimingAst;
 }(TimingAst));
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -728,6 +920,7 @@ var DynamicTimingAst = (function (_super) {
 /**
  * @record
  */
+
 /**
  * @param {?} visitor
  * @param {?} node
@@ -766,6 +959,7 @@ function visitAnimationNode(visitor, node, context) {
             throw new Error("Unable to resolve animation metadata node #" + node.type);
     }
 }
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -865,6 +1059,7 @@ function makeLambdaFromStates(lhs, rhs) {
         return lhsMatch && rhsMatch;
     };
 }
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -934,12 +1129,12 @@ var AnimationAstBuilderVisitor = (function () {
             _this._resetContextStyleTimingState(context);
             if (def.type == 0 /* State */) {
                 var /** @type {?} */ stateDef_1 = (def);
-                var /** @type {?} */ name = stateDef_1.name;
-                name.split(/\s*,\s*/).forEach(function (n) {
+                var /** @type {?} */ name_1 = stateDef_1.name;
+                name_1.split(/\s*,\s*/).forEach(function (n) {
                     stateDef_1.name = n;
                     states.push(_this.visitState(stateDef_1, context));
                 });
-                stateDef_1.name = name;
+                stateDef_1.name = name_1;
             }
             else if (def.type == 1 /* Transition */) {
                 var /** @type {?} */ transition = _this.visitTransition(/** @type {?} */ (def), context);
@@ -1415,6 +1610,17 @@ function normalizeAnimationOptions(options) {
     }
     return options;
 }
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/** @enum {number} */
+var AnimationTransitionInstructionType = { TransitionAnimation: 0, TimelineAnimation: 1, };
+/**
+ * @record
+ */
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -1422,6 +1628,7 @@ function normalizeAnimationOptions(options) {
 /**
  * @record
  */
+
 /**
  * @param {?} element
  * @param {?} keyframes
@@ -1437,7 +1644,7 @@ function createTimelineInstruction(element, keyframes, preStyleProps, postStyleP
     if (easing === void 0) { easing = null; }
     if (subTimeline === void 0) { subTimeline = false; }
     return {
-        type: 1 /* TimelineAnimation */,
+        type: AnimationTransitionInstructionType.TimelineAnimation,
         element: element,
         keyframes: keyframes,
         preStyleProps: preStyleProps,
@@ -1447,6 +1654,7 @@ function createTimelineInstruction(element, keyframes, preStyleProps, postStyleP
         totalTime: duration + delay, easing: easing, subTimeline: subTimeline
     };
 }
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -1492,6 +1700,7 @@ var ElementInstructionMap = (function () {
     ElementInstructionMap.prototype.clear = function () { this._map.clear(); };
     return ElementInstructionMap;
 }());
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -1947,8 +2156,8 @@ var AnimationTimelineContext = (function () {
         if (this.options) {
             var /** @type {?} */ oldParams_1 = this.options.params;
             if (oldParams_1) {
-                var /** @type {?} */ params_2 = options['params'] = {};
-                Object.keys(this.options.params).forEach(function (name) { params_2[name] = oldParams_1[name]; });
+                var /** @type {?} */ params_1 = options['params'] = {};
+                Object.keys(this.options.params).forEach(function (name) { params_1[name] = oldParams_1[name]; });
             }
         }
         return options;
@@ -2319,7 +2528,7 @@ var TimelineBuilder = (function () {
     return TimelineBuilder;
 }());
 var SubTimelineBuilder = (function (_super) {
-    tslib_1.__extends(SubTimelineBuilder, _super);
+    __extends(SubTimelineBuilder, _super);
     /**
      * @param {?} driver
      * @param {?} element
@@ -2423,6 +2632,7 @@ function flattenStyles(input, allStyles) {
     });
     return styles;
 }
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -2464,39 +2674,45 @@ var Animation = (function () {
     };
     return Animation;
 }());
+
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 /**
- * @experimental Animation support is experimental.
+ * \@experimental Animation support is experimental.
+ * @abstract
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */ var AnimationStyleNormalizer = (function () {
+var AnimationStyleNormalizer = (function () {
     function AnimationStyleNormalizer() {
     }
     return AnimationStyleNormalizer;
 }());
 /**
- * @experimental Animation support is experimental.
+ * \@experimental Animation support is experimental.
  */
 var NoopAnimationStyleNormalizer = (function () {
     function NoopAnimationStyleNormalizer() {
     }
+    /**
+     * @param {?} propertyName
+     * @param {?} errors
+     * @return {?}
+     */
     NoopAnimationStyleNormalizer.prototype.normalizePropertyName = function (propertyName, errors) { return propertyName; };
+    /**
+     * @param {?} userProvidedProperty
+     * @param {?} normalizedProperty
+     * @param {?} value
+     * @param {?} errors
+     * @return {?}
+     */
     NoopAnimationStyleNormalizer.prototype.normalizeStyleValue = function (userProvidedProperty, normalizedProperty, value, errors) {
-        return value;
+        return (value);
     };
     return NoopAnimationStyleNormalizer;
 }());
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -2509,7 +2725,7 @@ var NoopAnimationStyleNormalizer = (function () {
  * found in the LICENSE file at https://angular.io/license
  */
 var WebAnimationsStyleNormalizer = (function (_super) {
-    tslib_1.__extends(WebAnimationsStyleNormalizer, _super);
+    __extends(WebAnimationsStyleNormalizer, _super);
     function WebAnimationsStyleNormalizer() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
@@ -2557,6 +2773,7 @@ function makeBooleanMap(keys) {
     keys.forEach(function (key) { return map[key] = true; });
     return map;
 }
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -2564,6 +2781,7 @@ function makeBooleanMap(keys) {
 /**
  * @record
  */
+
 /**
  * @param {?} element
  * @param {?} triggerName
@@ -2581,7 +2799,7 @@ function makeBooleanMap(keys) {
  */
 function createTransitionInstruction(element, triggerName, fromState, toState, isRemovalTransition, fromStyles, toStyles, timelines, queriedElements, preStyleProps, postStyleProps, errors) {
     return {
-        type: 0 /* TransitionAnimation */,
+        type: AnimationTransitionInstructionType.TransitionAnimation,
         element: element,
         triggerName: triggerName,
         isRemovalTransition: isRemovalTransition,
@@ -2596,6 +2814,7 @@ function createTransitionInstruction(element, triggerName, fromState, toState, i
         errors: errors
     };
 }
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -2653,7 +2872,7 @@ var AnimationTransitionFactory = (function () {
         var /** @type {?} */ preStyleMap = new Map();
         var /** @type {?} */ postStyleMap = new Map();
         var /** @type {?} */ isRemoval = nextState === 'void';
-        var /** @type {?} */ animationOptions = { params: Object.assign({}, transitionAnimationParams, nextAnimationParams) };
+        var /** @type {?} */ animationOptions = { params: __assign({}, transitionAnimationParams, nextAnimationParams) };
         var /** @type {?} */ timelines = buildAnimationTimelines(driver, element, this.ast.animation, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
         if (errors.length) {
             return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, [], [], preStyleMap, postStyleMap, errors);
@@ -2721,6 +2940,7 @@ var AnimationStateStyles = (function () {
     };
     return AnimationStateStyles;
 }());
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -2814,6 +3034,7 @@ function balanceProperties(obj, key1, key2) {
         obj[key1] = obj[key2];
     }
 }
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -2988,6 +3209,7 @@ var TimelineAnimationEngine = (function () {
     };
     return TimelineAnimationEngine;
 }());
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -3019,10 +3241,12 @@ var NULL_REMOVED_QUERIED_STATE = {
 /**
  * @record
  */
+
 var REMOVAL_FLAG = '__ng_removed';
 /**
  * @record
  */
+
 var StateValue = (function () {
     /**
      * @param {?} input
@@ -3058,10 +3282,10 @@ var StateValue = (function () {
     StateValue.prototype.absorbOptions = function (options) {
         var /** @type {?} */ newParams = options.params;
         if (newParams) {
-            var /** @type {?} */ oldParams_2 = ((this.options.params));
+            var /** @type {?} */ oldParams_1 = ((this.options.params));
             Object.keys(newParams).forEach(function (prop) {
-                if (oldParams_2[prop] == null) {
-                    oldParams_2[prop] = newParams[prop];
+                if (oldParams_1[prop] == null) {
+                    oldParams_1[prop] = newParams[prop];
                 }
             });
         }
@@ -3346,9 +3570,9 @@ var AnimationTransitionNamespace = (function () {
                 containsPotentialParentTransition = true;
             }
             else {
-                var /** @type {?} */ parent = element;
-                while (parent = parent.parentNode) {
-                    var /** @type {?} */ triggers = engine.statesByElement.get(parent);
+                var /** @type {?} */ parent_1 = element;
+                while (parent_1 = parent_1.parentNode) {
+                    var /** @type {?} */ triggers = engine.statesByElement.get(parent_1);
                     if (triggers) {
                         containsPotentialParentTransition = true;
                         break;
@@ -3475,6 +3699,7 @@ var AnimationTransitionNamespace = (function () {
 /**
  * @record
  */
+
 var TransitionAnimationEngine = (function () {
     /**
      * @param {?} driver
@@ -4046,7 +4271,7 @@ var TransitionAnimationEngine = (function () {
         replaceNodes.forEach(function (node) {
             var /** @type {?} */ post = postStylesMap.get(node);
             var /** @type {?} */ pre = preStylesMap.get(node);
-            postStylesMap.set(node, /** @type {?} */ (Object.assign({}, post, pre)));
+            postStylesMap.set(node, /** @type {?} */ (__assign({}, post, pre)));
         });
         var /** @type {?} */ rootPlayers = [];
         var /** @type {?} */ subPlayers = [];
@@ -4063,11 +4288,11 @@ var TransitionAnimationEngine = (function () {
                 player.setRealPlayer(innerPlayer);
                 var /** @type {?} */ parentHasPriority = null;
                 for (var /** @type {?} */ i = 0; i < sortedParentElements.length; i++) {
-                    var /** @type {?} */ parent = sortedParentElements[i];
-                    if (parent === element)
+                    var /** @type {?} */ parent_2 = sortedParentElements[i];
+                    if (parent_2 === element)
                         break;
-                    if (_this.driver.containsElement(parent, element)) {
-                        parentHasPriority = parent;
+                    if (_this.driver.containsElement(parent_2, element)) {
+                        parentHasPriority = parent_2;
                         break;
                     }
                 }
@@ -4726,7 +4951,7 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
         return false;
     var /** @type {?} */ preEntry = allPreStyleElements.get(element);
     if (preEntry) {
-        postEntry.forEach(function (data) { return ((preEntry)).add(data); });
+        postEntry.forEach(function (data) { /** @type {?} */ return ((preEntry)).add(data); });
     }
     else {
         allPreStyleElements.set(element, postEntry);
@@ -4734,6 +4959,7 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
     allPostStyleElements.delete(element);
     return true;
 }
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -4750,7 +4976,9 @@ var AnimationEngine = (function () {
         this.onRemovalComplete = function (element, context) { };
         this._transitionEngine = new TransitionAnimationEngine(_driver, normalizer);
         this._timelineEngine = new TimelineAnimationEngine(_driver, normalizer);
-        this._transitionEngine.onRemovalComplete = function (element, context) { return _this.onRemovalComplete(element, context); };
+        this._transitionEngine.onRemovalComplete = function (element, context) {
+            return _this.onRemovalComplete(element, context);
+        };
     }
     /**
      * @param {?} componentId
@@ -4875,6 +5103,7 @@ var AnimationEngine = (function () {
     AnimationEngine.prototype.whenRenderingDone = function () { return this._transitionEngine.whenRenderingDone(); };
     return AnimationEngine;
 }());
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -5125,6 +5354,7 @@ var WebAnimationsPlayer = (function () {
 function _computeStyle(element, prop) {
     return ((window.getComputedStyle(element)))[prop];
 }
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -5198,6 +5428,7 @@ var WebAnimationsDriver = (function () {
 function supportsWebAnimations() {
     return typeof Element !== 'undefined' && typeof ((Element)).prototype['animate'] === 'function';
 }
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -5209,6 +5440,7 @@ function supportsWebAnimations() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -5225,6 +5457,7 @@ function supportsWebAnimations() {
  * @description
  * Entry point for all animation APIs of the animation browser package.
  */
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -5239,8 +5472,9 @@ function supportsWebAnimations() {
 /**
  * @module
  * @description
- * Entry point for all public APIs of the animation package.
+ * Entry point for all public APIs of this package.
  */
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -5248,5 +5482,6 @@ function supportsWebAnimations() {
 /**
  * Generated bundle index. Do not edit.
  */
+
 export { AnimationDriver, Animation as ɵAnimation, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, NoopAnimationDriver as ɵNoopAnimationDriver, AnimationEngine as ɵAnimationEngine, WebAnimationsDriver as ɵWebAnimationsDriver, supportsWebAnimations as ɵsupportsWebAnimations, WebAnimationsPlayer as ɵWebAnimationsPlayer };
-//# sourceMappingURL=browser.es5.js.map
+//# sourceMappingURL=index.js.map

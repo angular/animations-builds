@@ -1,16 +1,24 @@
 /**
- * @license Angular v5.0.0-beta.5-ee04217
+ * @license Angular v5.0.0-beta.5-fd701b0
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
 import { AUTO_STYLE, NoopAnimationPlayer, sequence, style, ɵAnimationGroupPlayer, ɵPRE_STYLE } from '@angular/animations';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @param {?} players
+ * @return {?}
  */
 function optimizeGroupPlayer(players) {
     switch (players.length) {
@@ -22,18 +30,27 @@ function optimizeGroupPlayer(players) {
             return new ɵAnimationGroupPlayer(players);
     }
 }
+/**
+ * @param {?} driver
+ * @param {?} normalizer
+ * @param {?} element
+ * @param {?} keyframes
+ * @param {?=} preStyles
+ * @param {?=} postStyles
+ * @return {?}
+ */
 function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles = {}, postStyles = {}) {
-    const errors = [];
-    const normalizedKeyframes = [];
-    let previousOffset = -1;
-    let previousKeyframe = null;
+    const /** @type {?} */ errors = [];
+    const /** @type {?} */ normalizedKeyframes = [];
+    let /** @type {?} */ previousOffset = -1;
+    let /** @type {?} */ previousKeyframe = null;
     keyframes.forEach(kf => {
-        const offset = kf['offset'];
-        const isSameOffset = offset == previousOffset;
-        const normalizedKeyframe = (isSameOffset && previousKeyframe) || {};
+        const /** @type {?} */ offset = (kf['offset']);
+        const /** @type {?} */ isSameOffset = offset == previousOffset;
+        const /** @type {?} */ normalizedKeyframe = (isSameOffset && previousKeyframe) || {};
         Object.keys(kf).forEach(prop => {
-            let normalizedProp = prop;
-            let normalizedValue = kf[prop];
+            let /** @type {?} */ normalizedProp = prop;
+            let /** @type {?} */ normalizedValue = kf[prop];
             if (prop !== 'offset') {
                 normalizedProp = normalizer.normalizePropertyName(normalizedProp, errors);
                 switch (normalizedValue) {
@@ -58,11 +75,18 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles = 
         previousOffset = offset;
     });
     if (errors.length) {
-        const LINE_START = '\n - ';
+        const /** @type {?} */ LINE_START = '\n - ';
         throw new Error(`Unable to animate due to the following errors:${LINE_START}${errors.join(LINE_START)}`);
     }
     return normalizedKeyframes;
 }
+/**
+ * @param {?} player
+ * @param {?} eventName
+ * @param {?} event
+ * @param {?} callback
+ * @return {?}
+ */
 function listenOnPlayer(player, eventName, event, callback) {
     switch (eventName) {
         case 'start':
@@ -76,19 +100,40 @@ function listenOnPlayer(player, eventName, event, callback) {
             break;
     }
 }
+/**
+ * @param {?} e
+ * @param {?=} phaseName
+ * @param {?=} totalTime
+ * @return {?}
+ */
 function copyAnimationEvent(e, phaseName, totalTime) {
-    const event = makeAnimationEvent(e.element, e.triggerName, e.fromState, e.toState, phaseName || e.phaseName, totalTime == undefined ? e.totalTime : totalTime);
-    const data = e['_data'];
+    const /** @type {?} */ event = makeAnimationEvent(e.element, e.triggerName, e.fromState, e.toState, phaseName || e.phaseName, totalTime == undefined ? e.totalTime : totalTime);
+    const /** @type {?} */ data = ((e))['_data'];
     if (data != null) {
-        event['_data'] = data;
+        ((event))['_data'] = data;
     }
     return event;
 }
+/**
+ * @param {?} element
+ * @param {?} triggerName
+ * @param {?} fromState
+ * @param {?} toState
+ * @param {?=} phaseName
+ * @param {?=} totalTime
+ * @return {?}
+ */
 function makeAnimationEvent(element, triggerName, fromState, toState, phaseName = '', totalTime = 0) {
     return { element, triggerName, fromState, toState, phaseName, totalTime };
 }
+/**
+ * @param {?} map
+ * @param {?} key
+ * @param {?} defaultValue
+ * @return {?}
+ */
 function getOrSetAsInMap(map, key, defaultValue) {
-    let value;
+    let /** @type {?} */ value;
     if (map instanceof Map) {
         value = map.get(key);
         if (!value) {
@@ -103,10 +148,14 @@ function getOrSetAsInMap(map, key, defaultValue) {
     }
     return value;
 }
+/**
+ * @param {?} command
+ * @return {?}
+ */
 function parseTimelineCommand(command) {
-    const separatorPos = command.indexOf(':');
-    const id = command.substring(1, separatorPos);
-    const action = command.substr(separatorPos + 1);
+    const /** @type {?} */ separatorPos = command.indexOf(':');
+    const /** @type {?} */ id = command.substring(1, separatorPos);
+    const /** @type {?} */ action = command.substr(separatorPos + 1);
     return [id, action];
 }
 let _contains = (elm1, elm2) => false;
@@ -116,25 +165,25 @@ let _query = (element, selector, multi) => {
 };
 if (typeof Element != 'undefined') {
     // this is well supported in all browsers
-    _contains = (elm1, elm2) => { return elm1.contains(elm2); };
+    _contains = (elm1, elm2) => { return (elm1.contains(elm2)); };
     if (Element.prototype.matches) {
         _matches = (element, selector) => element.matches(selector);
     }
     else {
-        const proto = Element.prototype;
-        const fn = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
+        const /** @type {?} */ proto = (Element.prototype);
+        const /** @type {?} */ fn = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
             proto.oMatchesSelector || proto.webkitMatchesSelector;
         if (fn) {
             _matches = (element, selector) => fn.apply(element, [selector]);
         }
     }
     _query = (element, selector, multi) => {
-        let results = [];
+        let /** @type {?} */ results = [];
         if (multi) {
             results.push(...element.querySelectorAll(selector));
         }
         else {
-            const elm = element.querySelector(selector);
+            const /** @type {?} */ elm = element.querySelector(selector);
             if (elm) {
                 results.push(elm);
             }
@@ -143,12 +192,19 @@ if (typeof Element != 'undefined') {
     };
 }
 let _CACHED_BODY = null;
+/**
+ * @param {?} prop
+ * @return {?}
+ */
 function validateStyleProperty(prop) {
     if (!_CACHED_BODY) {
         _CACHED_BODY = getBodyNode() || {};
     }
-    return _CACHED_BODY.style ? prop in _CACHED_BODY.style : true;
+    return ((_CACHED_BODY)).style ? prop in ((_CACHED_BODY)).style : true;
 }
+/**
+ * @return {?}
+ */
 function getBodyNode() {
     if (typeof document != 'undefined') {
         return document.body;
@@ -160,6 +216,10 @@ const containsElement = _contains;
 const invokeQuery = _query;
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
@@ -167,31 +227,71 @@ const invokeQuery = _query;
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * @experimental
+ * \@experimental
  */
 class NoopAnimationDriver {
+    /**
+     * @param {?} prop
+     * @return {?}
+     */
     validateStyleProperty(prop) { return validateStyleProperty(prop); }
+    /**
+     * @param {?} element
+     * @param {?} selector
+     * @return {?}
+     */
     matchesElement(element, selector) {
         return matchesElement(element, selector);
     }
+    /**
+     * @param {?} elm1
+     * @param {?} elm2
+     * @return {?}
+     */
     containsElement(elm1, elm2) { return containsElement(elm1, elm2); }
+    /**
+     * @param {?} element
+     * @param {?} selector
+     * @param {?} multi
+     * @return {?}
+     */
     query(element, selector, multi) {
         return invokeQuery(element, selector, multi);
     }
+    /**
+     * @param {?} element
+     * @param {?} prop
+     * @param {?=} defaultValue
+     * @return {?}
+     */
     computeStyle(element, prop, defaultValue) {
         return defaultValue || '';
     }
+    /**
+     * @param {?} element
+     * @param {?} keyframes
+     * @param {?} duration
+     * @param {?} delay
+     * @param {?} easing
+     * @param {?=} previousPlayers
+     * @return {?}
+     */
     animate(element, keyframes, duration, delay, easing, previousPlayers = []) {
         return new NoopAnimationPlayer();
     }
 }
 /**
- * @experimental
+ * \@experimental
+ * @abstract
  */
 class AnimationDriver {
 }
 AnimationDriver.NOOP = new NoopAnimationDriver();
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -210,14 +310,23 @@ const NG_TRIGGER_CLASSNAME = 'ng-trigger';
 const NG_TRIGGER_SELECTOR = '.ng-trigger';
 const NG_ANIMATING_CLASSNAME = 'ng-animating';
 const NG_ANIMATING_SELECTOR = '.ng-animating';
+/**
+ * @param {?} value
+ * @return {?}
+ */
 function resolveTimingValue(value) {
     if (typeof value == 'number')
         return value;
-    const matches = value.match(/^(-?[\.\d]+)(m?s)/);
+    const /** @type {?} */ matches = ((value)).match(/^(-?[\.\d]+)(m?s)/);
     if (!matches || matches.length < 2)
         return 0;
     return _convertTimeValueToMS(parseFloat(matches[1]), matches[2]);
 }
+/**
+ * @param {?} value
+ * @param {?} unit
+ * @return {?}
+ */
 function _convertTimeValueToMS(value, unit) {
     switch (unit) {
         case 's':
@@ -226,38 +335,49 @@ function _convertTimeValueToMS(value, unit) {
             return value;
     }
 }
+/**
+ * @param {?} timings
+ * @param {?} errors
+ * @param {?=} allowNegativeValues
+ * @return {?}
+ */
 function resolveTiming(timings, errors, allowNegativeValues) {
-    return timings.hasOwnProperty('duration') ?
-        timings :
-        parseTimeExpression(timings, errors, allowNegativeValues);
+    return timings.hasOwnProperty('duration') ? (timings) :
+        parseTimeExpression(/** @type {?} */ (timings), errors, allowNegativeValues);
 }
+/**
+ * @param {?} exp
+ * @param {?} errors
+ * @param {?=} allowNegativeValues
+ * @return {?}
+ */
 function parseTimeExpression(exp, errors, allowNegativeValues) {
-    const regex = /^(-?[\.\d]+)(m?s)(?:\s+(-?[\.\d]+)(m?s))?(?:\s+([-a-z]+(?:\(.+?\))?))?$/i;
-    let duration;
-    let delay = 0;
-    let easing = '';
+    const /** @type {?} */ regex = /^(-?[\.\d]+)(m?s)(?:\s+(-?[\.\d]+)(m?s))?(?:\s+([-a-z]+(?:\(.+?\))?))?$/i;
+    let /** @type {?} */ duration;
+    let /** @type {?} */ delay = 0;
+    let /** @type {?} */ easing = '';
     if (typeof exp === 'string') {
-        const matches = exp.match(regex);
+        const /** @type {?} */ matches = exp.match(regex);
         if (matches === null) {
             errors.push(`The provided timing value "${exp}" is invalid.`);
             return { duration: 0, delay: 0, easing: '' };
         }
         duration = _convertTimeValueToMS(parseFloat(matches[1]), matches[2]);
-        const delayMatch = matches[3];
+        const /** @type {?} */ delayMatch = matches[3];
         if (delayMatch != null) {
             delay = _convertTimeValueToMS(Math.floor(parseFloat(delayMatch)), matches[4]);
         }
-        const easingVal = matches[5];
+        const /** @type {?} */ easingVal = matches[5];
         if (easingVal) {
             easing = easingVal;
         }
     }
     else {
-        duration = exp;
+        duration = (exp);
     }
     if (!allowNegativeValues) {
-        let containsErrors = false;
-        let startIndex = errors.length;
+        let /** @type {?} */ containsErrors = false;
+        let /** @type {?} */ startIndex = errors.length;
         if (duration < 0) {
             errors.push(`Duration values below 0 are not allowed for this animation step.`);
             containsErrors = true;
@@ -272,12 +392,21 @@ function parseTimeExpression(exp, errors, allowNegativeValues) {
     }
     return { duration, delay, easing };
 }
+/**
+ * @param {?} obj
+ * @param {?=} destination
+ * @return {?}
+ */
 function copyObj(obj, destination = {}) {
     Object.keys(obj).forEach(prop => { destination[prop] = obj[prop]; });
     return destination;
 }
+/**
+ * @param {?} styles
+ * @return {?}
+ */
 function normalizeStyles(styles) {
-    const normalizedStyles = {};
+    const /** @type {?} */ normalizedStyles = {};
     if (Array.isArray(styles)) {
         styles.forEach(data => copyStyles(data, false, normalizedStyles));
     }
@@ -286,12 +415,18 @@ function normalizeStyles(styles) {
     }
     return normalizedStyles;
 }
+/**
+ * @param {?} styles
+ * @param {?} readPrototype
+ * @param {?=} destination
+ * @return {?}
+ */
 function copyStyles(styles, readPrototype, destination = {}) {
     if (readPrototype) {
         // we make use of a for-in loop so that the
         // prototypically inherited properties are
         // revealed from the backFill map
-        for (let prop in styles) {
+        for (let /** @type {?} */ prop in styles) {
             destination[prop] = styles[prop];
         }
     }
@@ -300,33 +435,53 @@ function copyStyles(styles, readPrototype, destination = {}) {
     }
     return destination;
 }
+/**
+ * @param {?} element
+ * @param {?} styles
+ * @return {?}
+ */
 function setStyles(element, styles) {
     if (element['style']) {
         Object.keys(styles).forEach(prop => {
-            const camelProp = dashCaseToCamelCase(prop);
+            const /** @type {?} */ camelProp = dashCaseToCamelCase(prop);
             element.style[camelProp] = styles[prop];
         });
     }
 }
+/**
+ * @param {?} element
+ * @param {?} styles
+ * @return {?}
+ */
 function eraseStyles(element, styles) {
     if (element['style']) {
         Object.keys(styles).forEach(prop => {
-            const camelProp = dashCaseToCamelCase(prop);
+            const /** @type {?} */ camelProp = dashCaseToCamelCase(prop);
             element.style[camelProp] = '';
         });
     }
 }
+/**
+ * @param {?} steps
+ * @return {?}
+ */
 function normalizeAnimationEntry(steps) {
     if (Array.isArray(steps)) {
         if (steps.length == 1)
             return steps[0];
         return sequence(steps);
     }
-    return steps;
+    return (steps);
 }
+/**
+ * @param {?} value
+ * @param {?} options
+ * @param {?} errors
+ * @return {?}
+ */
 function validateStyleParams(value, options, errors) {
-    const params = options.params || {};
-    const matches = extractStyleParams(value);
+    const /** @type {?} */ params = options.params || {};
+    const /** @type {?} */ matches = extractStyleParams(value);
     if (matches.length) {
         matches.forEach(varName => {
             if (!params.hasOwnProperty(varName)) {
@@ -336,22 +491,32 @@ function validateStyleParams(value, options, errors) {
     }
 }
 const PARAM_REGEX = new RegExp(`${SUBSTITUTION_EXPR_START}\\s*(.+?)\\s*${SUBSTITUTION_EXPR_END}`, 'g');
+/**
+ * @param {?} value
+ * @return {?}
+ */
 function extractStyleParams(value) {
-    let params = [];
+    let /** @type {?} */ params = [];
     if (typeof value === 'string') {
-        const val = value.toString();
-        let match;
+        const /** @type {?} */ val = value.toString();
+        let /** @type {?} */ match;
         while (match = PARAM_REGEX.exec(val)) {
-            params.push(match[1]);
+            params.push(/** @type {?} */ (match[1]));
         }
         PARAM_REGEX.lastIndex = 0;
     }
     return params;
 }
+/**
+ * @param {?} value
+ * @param {?} params
+ * @param {?} errors
+ * @return {?}
+ */
 function interpolateParams(value, params, errors) {
-    const original = value.toString();
-    const str = original.replace(PARAM_REGEX, (_, varName) => {
-        let localVal = params[varName];
+    const /** @type {?} */ original = value.toString();
+    const /** @type {?} */ str = original.replace(PARAM_REGEX, (_, varName) => {
+        let /** @type {?} */ localVal = params[varName];
         // this means that the value was never overidden by the data passed in by the user
         if (!params.hasOwnProperty(varName)) {
             errors.push(`Please provide a value for the animation param ${varName}`);
@@ -362,20 +527,38 @@ function interpolateParams(value, params, errors) {
     // we do this to assert that numeric values stay as they are
     return str == original ? value : str;
 }
+/**
+ * @param {?} iterator
+ * @return {?}
+ */
 function iteratorToArray(iterator) {
-    const arr = [];
-    let item = iterator.next();
+    const /** @type {?} */ arr = [];
+    let /** @type {?} */ item = iterator.next();
     while (!item.done) {
         arr.push(item.value);
         item = iterator.next();
     }
     return arr;
 }
+/**
+ * @param {?} source
+ * @param {?} destination
+ * @return {?}
+ */
 
 const DASH_CASE_REGEXP = /-+([a-z0-9])/g;
+/**
+ * @param {?} input
+ * @return {?}
+ */
 function dashCaseToCamelCase(input) {
     return input.replace(DASH_CASE_REGEXP, (...m) => m[1].toUpperCase());
 }
+/**
+ * @param {?} duration
+ * @param {?} delay
+ * @return {?}
+ */
 function allowPreviousPlayerStylesMerge(duration, delay) {
     return duration === 0 || delay === 0;
 }
@@ -1350,6 +1533,16 @@ function normalizeAnimationOptions(options) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+/** @enum {number} */
+const AnimationTransitionInstructionType = { TransitionAnimation: 0, TimelineAnimation: 1, };
+/**
+ * @record
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @record
  */
@@ -1367,7 +1560,7 @@ function normalizeAnimationOptions(options) {
  */
 function createTimelineInstruction(element, keyframes, preStyleProps, postStyleProps, duration, delay, easing = null, subTimeline = false) {
     return {
-        type: 1 /* TimelineAnimation */,
+        type: AnimationTransitionInstructionType.TimelineAnimation,
         element,
         keyframes,
         preStyleProps,
@@ -2360,30 +2553,37 @@ class Animation {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 /**
- * @experimental Animation support is experimental.
+ * \@experimental Animation support is experimental.
+ * @abstract
  */
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */ class AnimationStyleNormalizer {
 }
 /**
- * @experimental Animation support is experimental.
+ * \@experimental Animation support is experimental.
  */
 class NoopAnimationStyleNormalizer {
+    /**
+     * @param {?} propertyName
+     * @param {?} errors
+     * @return {?}
+     */
     normalizePropertyName(propertyName, errors) { return propertyName; }
+    /**
+     * @param {?} userProvidedProperty
+     * @param {?} normalizedProperty
+     * @param {?} value
+     * @param {?} errors
+     * @return {?}
+     */
     normalizeStyleValue(userProvidedProperty, normalizedProperty, value, errors) {
-        return value;
+        return (value);
     }
 }
 
@@ -2468,7 +2668,7 @@ function makeBooleanMap(keys) {
  */
 function createTransitionInstruction(element, triggerName, fromState, toState, isRemovalTransition, fromStyles, toStyles, timelines, queriedElements, preStyleProps, postStyleProps, errors) {
     return {
-        type: 0 /* TransitionAnimation */,
+        type: AnimationTransitionInstructionType.TransitionAnimation,
         element,
         triggerName,
         isRemovalTransition,
@@ -5057,7 +5257,7 @@ function supportsWebAnimations() {
 /**
  * @module
  * @description
- * Entry point for all public APIs of the animation package.
+ * Entry point for all public APIs of this package.
  */
 
 /**
@@ -5069,4 +5269,4 @@ function supportsWebAnimations() {
  */
 
 export { AnimationDriver, Animation as ɵAnimation, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, NoopAnimationDriver as ɵNoopAnimationDriver, AnimationEngine as ɵAnimationEngine, WebAnimationsDriver as ɵWebAnimationsDriver, supportsWebAnimations as ɵsupportsWebAnimations, WebAnimationsPlayer as ɵWebAnimationsPlayer };
-//# sourceMappingURL=browser.js.map
+//# sourceMappingURL=index.js.map

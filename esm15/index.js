@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.5-ee04217
+ * @license Angular v5.0.0-beta.5-fd701b0
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -116,6 +116,22 @@ class AnimationFactory {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */ function ɵStyleData() { }
+/** @enum {number} */
+const AnimationMetadataType = {
+    State: 0,
+    Transition: 1,
+    Sequence: 2,
+    Group: 3,
+    Animate: 4,
+    Keyframes: 5,
+    Style: 6,
+    Trigger: 7,
+    Reference: 8,
+    AnimateChild: 9,
+    AnimateRef: 10,
+    Query: 11,
+    Stagger: 12,
+};
 /**
  * \@experimental Animation support is experimental.
  */
@@ -336,7 +352,7 @@ function AnimationStaggerMetadata() { }
  * @return {?}
  */
 function trigger(name, definitions) {
-    return { type: 7 /* Trigger */, name, definitions, options: {} };
+    return { type: AnimationMetadataType.Trigger, name, definitions, options: {} };
 }
 /**
  * `animate` is an animation-specific function that is designed to be used inside of Angular's
@@ -387,7 +403,7 @@ function trigger(name, definitions) {
  * @return {?}
  */
 function animate(timings, styles = null) {
-    return { type: 4 /* Animate */, styles, timings };
+    return { type: AnimationMetadataType.Animate, styles, timings };
 }
 /**
  * `group` is an animation-specific function that is designed to be used inside of Angular's
@@ -424,7 +440,7 @@ function animate(timings, styles = null) {
  * @return {?}
  */
 function group(steps, options = null) {
-    return { type: 3 /* Group */, steps, options };
+    return { type: AnimationMetadataType.Group, steps, options };
 }
 /**
  * `sequence` is an animation-specific function that is designed to be used inside of Angular's
@@ -464,7 +480,7 @@ function group(steps, options = null) {
  * @return {?}
  */
 function sequence(steps, options = null) {
-    return { type: 2 /* Sequence */, steps, options };
+    return { type: AnimationMetadataType.Sequence, steps, options };
 }
 /**
  * `style` is an animation-specific function that is designed to be used inside of Angular's
@@ -511,7 +527,7 @@ function sequence(steps, options = null) {
  * @return {?}
  */
 function style(tokens) {
-    return { type: 6 /* Style */, styles: tokens, offset: null };
+    return { type: AnimationMetadataType.Style, styles: tokens, offset: null };
 }
 /**
  * `state` is an animation-specific function that is designed to be used inside of Angular's
@@ -566,7 +582,7 @@ function style(tokens) {
  * @return {?}
  */
 function state(name, styles, options) {
-    return { type: 0 /* State */, name, styles, options };
+    return { type: AnimationMetadataType.State, name, styles, options };
 }
 /**
  * `keyframes` is an animation-specific function that is designed to be used inside of Angular's
@@ -616,7 +632,7 @@ function state(name, styles, options) {
  * @return {?}
  */
 function keyframes(steps) {
-    return { type: 5 /* Keyframes */, steps };
+    return { type: AnimationMetadataType.Keyframes, steps };
 }
 /**
  * `transition` is an animation-specific function that is designed to be used inside of Angular's
@@ -806,7 +822,7 @@ function keyframes(steps) {
  * @return {?}
  */
 function transition(stateChangeExpr, steps, options = null) {
-    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, options };
+    return { type: AnimationMetadataType.Transition, expr: stateChangeExpr, animation: steps, options };
 }
 /**
  * `animation` is an animation-specific function that is designed to be used inside of Angular's
@@ -847,7 +863,7 @@ function transition(stateChangeExpr, steps, options = null) {
  * @return {?}
  */
 function animation(steps, options = null) {
-    return { type: 8 /* Reference */, animation: steps, options };
+    return { type: AnimationMetadataType.Reference, animation: steps, options };
 }
 /**
  * `animateChild` is an animation-specific function that is designed to be used inside of Angular's
@@ -949,7 +965,7 @@ function animation(steps, options = null) {
  * @return {?}
  */
 function animateChild(options = null) {
-    return { type: 9 /* AnimateChild */, options };
+    return { type: AnimationMetadataType.AnimateChild, options };
 }
 /**
  * `useAnimation` is an animation-specific function that is designed to be used inside of Angular's
@@ -962,7 +978,7 @@ function animateChild(options = null) {
  * @return {?}
  */
 function useAnimation(animation, options = null) {
-    return { type: 10 /* AnimateRef */, animation, options };
+    return { type: AnimationMetadataType.AnimateRef, animation, options };
 }
 /**
  * `query` is an animation-specific function that is designed to be used inside of Angular's
@@ -1061,7 +1077,7 @@ function useAnimation(animation, options = null) {
  * @return {?}
  */
 function query(selector, animation, options = null) {
-    return { type: 11 /* Query */, selector, animation, options };
+    return { type: AnimationMetadataType.Query, selector, animation, options };
 }
 /**
  * `stagger` is an animation-specific function that is designed to be used inside of Angular's
@@ -1145,7 +1161,7 @@ function query(selector, animation, options = null) {
  * @return {?}
  */
 function stagger(timings, animation) {
-    return { type: 12 /* Stagger */, timings, animation };
+    return { type: AnimationMetadataType.Stagger, timings, animation };
 }
 
 /**
@@ -1526,7 +1542,7 @@ const ɵPRE_STYLE = '!';
 /**
  * @module
  * @description
- * Entry point for all public APIs of the animation package.
+ * Entry point for all public APIs of this package.
  */
 
 /**
@@ -1537,5 +1553,5 @@ const ɵPRE_STYLE = '!';
  * Generated bundle index. Do not edit.
  */
 
-export { AnimationBuilder, AnimationFactory, AnimationEvent, AUTO_STYLE, AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationAnimateRefMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationQueryMetadata, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, ɵStyleData, AnimationPlayer, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
-//# sourceMappingURL=animations.js.map
+export { AnimationBuilder, AnimationFactory, AnimationEvent, AUTO_STYLE, AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationAnimateRefMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationMetadataType, AnimationQueryMetadata, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, ɵStyleData, AnimationPlayer, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
+//# sourceMappingURL=index.js.map
