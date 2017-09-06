@@ -28,13 +28,12 @@ export interface ElementAnimationState {
     removedBeforeQueried: boolean;
 }
 export declare class StateValue {
-    namespaceId: string;
     value: string;
     options: AnimationOptions;
     readonly params: {
         [key: string]: any;
     };
-    constructor(input: any, namespaceId?: string);
+    constructor(input: any);
     absorbOptions(options: AnimationOptions): void;
 }
 export declare const VOID_VALUE = "void";
@@ -97,7 +96,6 @@ export declare class TransitionAnimationEngine {
     registerTrigger(namespaceId: string, name: string, trigger: AnimationTrigger): void;
     destroy(namespaceId: string, context: any): void;
     private _fetchNamespace(id);
-    fetchNamespacesByElement(element: any): Set<AnimationTransitionNamespace>;
     trigger(namespaceId: string, element: any, name: string, value: any): boolean;
     insertNode(namespaceId: string, element: any, parent: any, insertBefore: boolean): void;
     collectEnterElement(element: any): void;

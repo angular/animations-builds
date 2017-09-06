@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.6-66f0ab0
+ * @license Angular v5.0.0-beta.6-15945c8
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3107,11 +3107,13 @@ const REMOVAL_FLAG = '__ng_removed';
 
 class StateValue {
     /**
-     * @param {?} input
-     * @param {?=} namespaceId
+     * @return {?}
      */
-    constructor(input, namespaceId = '') {
-        this.namespaceId = namespaceId;
+    get params() { return (this.options.params); }
+    /**
+     * @param {?} input
+     */
+    constructor(input) {
         const /** @type {?} */ isObj = input && input.hasOwnProperty('value');
         const /** @type {?} */ value = isObj ? input['value'] : input;
         this.value = normalizeTriggerValue(value);
@@ -3127,10 +3129,6 @@ class StateValue {
             this.options.params = {};
         }
     }
-    /**
-     * @return {?}
-     */
-    get params() { return (this.options.params); }
     /**
      * @param {?} options
      * @return {?}
@@ -3251,7 +3249,7 @@ class AnimationTransitionNamespace {
             this._engine.statesByElement.set(element, triggersWithStates = {});
         }
         let /** @type {?} */ fromState = triggersWithStates[triggerName];
-        const /** @type {?} */ toState = new StateValue(value, this.id);
+        const /** @type {?} */ toState = new StateValue(value);
         const /** @type {?} */ isObj = value && value.hasOwnProperty('value');
         if (!isObj && fromState) {
             toState.absorbOptions(fromState.options);
@@ -3361,13 +3359,14 @@ class AnimationTransitionNamespace {
      * @return {?}
      */
     _destroyInnerNodes(rootElement, context, animate = false) {
-        // emulate a leave animation for all inner nodes within this node.
-        // If there are no animations found for any of the nodes then clear the cache
-        // for the element.
         this._engine.driver.query(rootElement, NG_TRIGGER_SELECTOR, true).forEach(elm => {
-            const /** @type {?} */ namespaces = this._engine.fetchNamespacesByElement(elm);
-            if (namespaces.size) {
-                namespaces.forEach(ns => ns.removeNode(elm, context, true));
+            if (animate && containsClass(elm, this._hostClassName)) {
+                const /** @type {?} */ innerNs = this._engine.namespacesByHostElement.get(elm);
+                // special case for a host element with animations on the same element
+                if (innerNs) {
+                    innerNs.removeNode(elm, context, true);
+                }
+                this.removeNode(elm, context, true);
             }
             else {
                 this.clearElementCache(elm);
@@ -3690,32 +3689,6 @@ class TransitionAnimationEngine {
      * @return {?}
      */
     _fetchNamespace(id) { return this._namespaceLookup[id]; }
-    /**
-     * @param {?} element
-     * @return {?}
-     */
-    fetchNamespacesByElement(element) {
-        // normally there should only be one namespace per element, however
-        // if @triggers are placed on both the component element and then
-        // its host element (within the component code) then there will be
-        // two namespaces returned. We use a set here to simply the dedupe
-        // of namespaces incase there are multiple triggers both the elm and host
-        const /** @type {?} */ namespaces = new Set();
-        const /** @type {?} */ elementStates = this.statesByElement.get(element);
-        if (elementStates) {
-            const /** @type {?} */ keys = Object.keys(elementStates);
-            for (let /** @type {?} */ i = 0; i < keys.length; i++) {
-                const /** @type {?} */ nsId = elementStates[keys[i]].namespaceId;
-                if (nsId) {
-                    const /** @type {?} */ ns = this._fetchNamespace(nsId);
-                    if (ns) {
-                        namespaces.add(ns);
-                    }
-                }
-            }
-        }
-        return namespaces;
-    }
     /**
      * @param {?} namespaceId
      * @param {?} element
@@ -4690,6 +4663,20 @@ function createIsRootFilterFn(nodes) {
     return isRoot;
 }
 const CLASSES_CACHE_KEY = '$$classes';
+/**
+ * @param {?} element
+ * @param {?} className
+ * @return {?}
+ */
+function containsClass(element, className) {
+    if (element.classList) {
+        return element.classList.contains(className);
+    }
+    else {
+        const /** @type {?} */ classes = element[CLASSES_CACHE_KEY];
+        return classes && classes[className];
+    }
+}
 /**
  * @param {?} element
  * @param {?} className
