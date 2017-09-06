@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.6-fa6b802
+ * @license Angular v5.0.0-beta.6-66f0ab0
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.0.0-beta.6-fa6b802
+ * @license Angular v5.0.0-beta.6-66f0ab0
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3292,8 +3292,11 @@ var REMOVAL_FLAG = '__ng_removed';
 var StateValue = (function () {
     /**
      * @param {?} input
+     * @param {?=} namespaceId
      */
-    function StateValue(input) {
+    function StateValue(input, namespaceId) {
+        if (namespaceId === void 0) { namespaceId = ''; }
+        this.namespaceId = namespaceId;
         var /** @type {?} */ isObj = input && input.hasOwnProperty('value');
         var /** @type {?} */ value = isObj ? input['value'] : input;
         this.value = normalizeTriggerValue(value);
@@ -3441,7 +3444,7 @@ var AnimationTransitionNamespace = (function () {
             this._engine.statesByElement.set(element, triggersWithStates = {});
         }
         var /** @type {?} */ fromState = triggersWithStates[triggerName];
-        var /** @type {?} */ toState = new StateValue(value);
+        var /** @type {?} */ toState = new StateValue(value, this.id);
         var /** @type {?} */ isObj = value && value.hasOwnProperty('value');
         if (!isObj && fromState) {
             toState.absorbOptions(fromState.options);
@@ -3554,14 +3557,13 @@ var AnimationTransitionNamespace = (function () {
     AnimationTransitionNamespace.prototype._destroyInnerNodes = function (rootElement, context, animate) {
         var _this = this;
         if (animate === void 0) { animate = false; }
+        // emulate a leave animation for all inner nodes within this node.
+        // If there are no animations found for any of the nodes then clear the cache
+        // for the element.
         this._engine.driver.query(rootElement, NG_TRIGGER_SELECTOR, true).forEach(function (elm) {
-            if (animate && containsClass(elm, _this._hostClassName)) {
-                var /** @type {?} */ innerNs = _this._engine.namespacesByHostElement.get(elm);
-                // special case for a host element with animations on the same element
-                if (innerNs) {
-                    innerNs.removeNode(elm, context, true);
-                }
-                _this.removeNode(elm, context, true);
+            var /** @type {?} */ namespaces = _this._engine.fetchNamespacesByElement(elm);
+            if (namespaces.size) {
+                namespaces.forEach(function (ns) { return ns.removeNode(elm, context, true); });
             }
             else {
                 _this.clearElementCache(elm);
@@ -3892,6 +3894,32 @@ var TransitionAnimationEngine = (function () {
      * @return {?}
      */
     TransitionAnimationEngine.prototype._fetchNamespace = function (id) { return this._namespaceLookup[id]; };
+    /**
+     * @param {?} element
+     * @return {?}
+     */
+    TransitionAnimationEngine.prototype.fetchNamespacesByElement = function (element) {
+        // normally there should only be one namespace per element, however
+        // if @triggers are placed on both the component element and then
+        // its host element (within the component code) then there will be
+        // two namespaces returned. We use a set here to simply the dedupe
+        // of namespaces incase there are multiple triggers both the elm and host
+        var /** @type {?} */ namespaces = new Set();
+        var /** @type {?} */ elementStates = this.statesByElement.get(element);
+        if (elementStates) {
+            var /** @type {?} */ keys = Object.keys(elementStates);
+            for (var /** @type {?} */ i = 0; i < keys.length; i++) {
+                var /** @type {?} */ nsId = elementStates[keys[i]].namespaceId;
+                if (nsId) {
+                    var /** @type {?} */ ns = this._fetchNamespace(nsId);
+                    if (ns) {
+                        namespaces.add(ns);
+                    }
+                }
+            }
+        }
+        return namespaces;
+    };
     /**
      * @param {?} namespaceId
      * @param {?} element
@@ -4889,20 +4917,6 @@ function createIsRootFilterFn(nodes) {
     return isRoot;
 }
 var CLASSES_CACHE_KEY = '$$classes';
-/**
- * @param {?} element
- * @param {?} className
- * @return {?}
- */
-function containsClass(element, className) {
-    if (element.classList) {
-        return element.classList.contains(className);
-    }
-    else {
-        var /** @type {?} */ classes = element[CLASSES_CACHE_KEY];
-        return classes && classes[className];
-    }
-}
 /**
  * @param {?} element
  * @param {?} className
