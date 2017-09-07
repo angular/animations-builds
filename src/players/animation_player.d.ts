@@ -1,21 +1,27 @@
 /**
+ * AnimationPlayer controls an animation sequence that was produced from a programmatic animation.
+ * (see {@link AnimationBuilder AnimationBuilder} for more information on how to create programmatic
+ * animations.)
+ *
  * @experimental Animation support is experimental.
  */
-export declare abstract class AnimationPlayer {
-    abstract onDone(fn: () => void): void;
-    abstract onStart(fn: () => void): void;
-    abstract onDestroy(fn: () => void): void;
-    abstract init(): void;
-    abstract hasStarted(): boolean;
-    abstract play(): void;
-    abstract pause(): void;
-    abstract restart(): void;
-    abstract finish(): void;
-    abstract destroy(): void;
-    abstract reset(): void;
-    abstract setPosition(p: any): void;
-    abstract getPosition(): number;
-    parentPlayer: AnimationPlayer;
+export interface AnimationPlayer {
+    onDone(fn: () => void): void;
+    onStart(fn: () => void): void;
+    onDestroy(fn: () => void): void;
+    init(): void;
+    hasStarted(): boolean;
+    play(): void;
+    pause(): void;
+    restart(): void;
+    finish(): void;
+    destroy(): void;
+    reset(): void;
+    setPosition(p: any): void;
+    getPosition(): number;
+    parentPlayer: AnimationPlayer | null;
+    readonly totalTime: number;
+    beforeDestroy?: () => any;
 }
 /**
  * @experimental Animation support is experimental.
@@ -27,7 +33,8 @@ export declare class NoopAnimationPlayer implements AnimationPlayer {
     private _started;
     private _destroyed;
     private _finished;
-    parentPlayer: AnimationPlayer;
+    parentPlayer: AnimationPlayer | null;
+    totalTime: number;
     constructor();
     private _onFinish();
     onStart(fn: () => void): void;
