@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.6-112e777
+ * @license Angular v5.0.0-beta.6-ca5aeba
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -64,47 +64,6 @@ class AnimationFactory {
  * @suppress {checkTypes} checked by tsc
  */
 /**
- * An instance of this class is returned as an event parameter when an animation
- * callback is captured for an animation either during the start or done phase.
- *
- * ```typescript
- * \@Component({
- *   host: {
- *     '[\@myAnimationTrigger]': 'someExpression',
- *     '(\@myAnimationTrigger.start)': 'captureStartEvent($event)',
- *     '(\@myAnimationTrigger.done)': 'captureDoneEvent($event)',
- *   },
- *   animations: [
- *     trigger("myAnimationTrigger", [
- *        // ...
- *     ])
- *   ]
- * })
- * class MyComponent {
- *   someExpression: any = false;
- *   captureStartEvent(event: AnimationEvent) {
- *     // the toState, fromState and totalTime data is accessible from the event variable
- *   }
- *
- *   captureDoneEvent(event: AnimationEvent) {
- *     // the toState, fromState and totalTime data is accessible from the event variable
- *   }
- * }
- * ```
- *
- * \@experimental Animation support is experimental.
- * @record
- */
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */ function AnimationEvent() { }
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
@@ -112,26 +71,7 @@ class AnimationFactory {
  * found in the LICENSE file at https://angular.io/license
  * @record
  */
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */ function ɵStyleData() { }
-/** @enum {number} */
-const AnimationMetadataType = {
-    State: 0,
-    Transition: 1,
-    Sequence: 2,
-    Group: 3,
-    Animate: 4,
-    Keyframes: 5,
-    Style: 6,
-    Trigger: 7,
-    Reference: 8,
-    AnimateChild: 9,
-    AnimateRef: 10,
-    Query: 11,
-    Stagger: 12,
-};
+
 /**
  * \@experimental Animation support is experimental.
  */
@@ -140,7 +80,7 @@ const AUTO_STYLE = '*';
  * \@experimental Animation support is experimental.
  * @record
  */
-function AnimationMetadata() { }
+
 /**
  * Metadata representing the entry of animations. Instances of this interface are provided via the
  * animation DSL when the {\@link trigger trigger animation function} is called.
@@ -148,7 +88,7 @@ function AnimationMetadata() { }
  * \@experimental Animation support is experimental.
  * @record
  */
-function AnimationTriggerMetadata() { }
+
 /**
  * Metadata representing the entry of animations. Instances of this interface are provided via the
  * animation DSL when the {\@link state state animation function} is called.
@@ -156,7 +96,7 @@ function AnimationTriggerMetadata() { }
  * \@experimental Animation support is experimental.
  * @record
  */
-function AnimationStateMetadata() { }
+
 /**
  * Metadata representing the entry of animations. Instances of this interface are provided via the
  * animation DSL when the {\@link transition transition animation function} is called.
@@ -164,17 +104,17 @@ function AnimationStateMetadata() { }
  * \@experimental Animation support is experimental.
  * @record
  */
-function AnimationTransitionMetadata() { }
+
 /**
  * \@experimental Animation support is experimental.
  * @record
  */
-function AnimationReferenceMetadata() { }
+
 /**
  * \@experimental Animation support is experimental.
  * @record
  */
-function AnimationQueryMetadata() { }
+
 /**
  * Metadata representing the entry of animations. Instances of this interface are provided via the
  * animation DSL when the {\@link keyframes keyframes animation function} is called.
@@ -182,7 +122,7 @@ function AnimationQueryMetadata() { }
  * \@experimental Animation support is experimental.
  * @record
  */
-function AnimationKeyframesSequenceMetadata() { }
+
 /**
  * Metadata representing the entry of animations. Instances of this interface are provided via the
  * animation DSL when the {\@link style style animation function} is called.
@@ -190,7 +130,7 @@ function AnimationKeyframesSequenceMetadata() { }
  * \@experimental Animation support is experimental.
  * @record
  */
-function AnimationStyleMetadata() { }
+
 /**
  * Metadata representing the entry of animations. Instances of this interface are provided via the
  * animation DSL when the {\@link animate animate animation function} is called.
@@ -198,7 +138,7 @@ function AnimationStyleMetadata() { }
  * \@experimental Animation support is experimental.
  * @record
  */
-function AnimationAnimateMetadata() { }
+
 /**
  * Metadata representing the entry of animations. Instances of this interface are provided via the
  * animation DSL when the {\@link animateChild animateChild animation function} is called.
@@ -206,7 +146,7 @@ function AnimationAnimateMetadata() { }
  * \@experimental Animation support is experimental.
  * @record
  */
-function AnimationAnimateChildMetadata() { }
+
 /**
  * Metadata representing the entry of animations. Instances of this interface are provided via the
  * animation DSL when the {\@link useAnimation useAnimation animation function} is called.
@@ -214,7 +154,7 @@ function AnimationAnimateChildMetadata() { }
  * \@experimental Animation support is experimental.
  * @record
  */
-function AnimationAnimateRefMetadata() { }
+
 /**
  * Metadata representing the entry of animations. Instances of this interface are provided via the
  * animation DSL when the {\@link sequence sequence animation function} is called.
@@ -222,7 +162,7 @@ function AnimationAnimateRefMetadata() { }
  * \@experimental Animation support is experimental.
  * @record
  */
-function AnimationSequenceMetadata() { }
+
 /**
  * Metadata representing the entry of animations. Instances of this interface are provided via the
  * animation DSL when the {\@link group group animation function} is called.
@@ -230,7 +170,7 @@ function AnimationSequenceMetadata() { }
  * \@experimental Animation support is experimental.
  * @record
  */
-function AnimationGroupMetadata() { }
+
 /**
  * Metadata representing the entry of animations. Instances of this interface are provided via the
  * animation DSL when the {\@link stagger stagger animation function} is called.
@@ -238,7 +178,7 @@ function AnimationGroupMetadata() { }
  * \@experimental Animation support is experimental.
  * @record
  */
-function AnimationStaggerMetadata() { }
+
 /**
  * `trigger` is an animation-specific function that is designed to be used inside of Angular's
  * animation DSL language. If this information is new, please navigate to the
@@ -352,7 +292,7 @@ function AnimationStaggerMetadata() { }
  * @return {?}
  */
 function trigger(name, definitions) {
-    return { type: AnimationMetadataType.Trigger, name, definitions, options: {} };
+    return { type: 7 /* Trigger */, name, definitions, options: {} };
 }
 /**
  * `animate` is an animation-specific function that is designed to be used inside of Angular's
@@ -403,7 +343,7 @@ function trigger(name, definitions) {
  * @return {?}
  */
 function animate(timings, styles = null) {
-    return { type: AnimationMetadataType.Animate, styles, timings };
+    return { type: 4 /* Animate */, styles, timings };
 }
 /**
  * `group` is an animation-specific function that is designed to be used inside of Angular's
@@ -440,7 +380,7 @@ function animate(timings, styles = null) {
  * @return {?}
  */
 function group(steps, options = null) {
-    return { type: AnimationMetadataType.Group, steps, options };
+    return { type: 3 /* Group */, steps, options };
 }
 /**
  * `sequence` is an animation-specific function that is designed to be used inside of Angular's
@@ -480,7 +420,7 @@ function group(steps, options = null) {
  * @return {?}
  */
 function sequence(steps, options = null) {
-    return { type: AnimationMetadataType.Sequence, steps, options };
+    return { type: 2 /* Sequence */, steps, options };
 }
 /**
  * `style` is an animation-specific function that is designed to be used inside of Angular's
@@ -527,7 +467,7 @@ function sequence(steps, options = null) {
  * @return {?}
  */
 function style(tokens) {
-    return { type: AnimationMetadataType.Style, styles: tokens, offset: null };
+    return { type: 6 /* Style */, styles: tokens, offset: null };
 }
 /**
  * `state` is an animation-specific function that is designed to be used inside of Angular's
@@ -582,7 +522,7 @@ function style(tokens) {
  * @return {?}
  */
 function state(name, styles, options) {
-    return { type: AnimationMetadataType.State, name, styles, options };
+    return { type: 0 /* State */, name, styles, options };
 }
 /**
  * `keyframes` is an animation-specific function that is designed to be used inside of Angular's
@@ -632,7 +572,7 @@ function state(name, styles, options) {
  * @return {?}
  */
 function keyframes(steps) {
-    return { type: AnimationMetadataType.Keyframes, steps };
+    return { type: 5 /* Keyframes */, steps };
 }
 /**
  * `transition` is an animation-specific function that is designed to be used inside of Angular's
@@ -822,7 +762,7 @@ function keyframes(steps) {
  * @return {?}
  */
 function transition(stateChangeExpr, steps, options = null) {
-    return { type: AnimationMetadataType.Transition, expr: stateChangeExpr, animation: steps, options };
+    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, options };
 }
 /**
  * `animation` is an animation-specific function that is designed to be used inside of Angular's
@@ -863,7 +803,7 @@ function transition(stateChangeExpr, steps, options = null) {
  * @return {?}
  */
 function animation(steps, options = null) {
-    return { type: AnimationMetadataType.Reference, animation: steps, options };
+    return { type: 8 /* Reference */, animation: steps, options };
 }
 /**
  * `animateChild` is an animation-specific function that is designed to be used inside of Angular's
@@ -965,7 +905,7 @@ function animation(steps, options = null) {
  * @return {?}
  */
 function animateChild(options = null) {
-    return { type: AnimationMetadataType.AnimateChild, options };
+    return { type: 9 /* AnimateChild */, options };
 }
 /**
  * `useAnimation` is an animation-specific function that is designed to be used inside of Angular's
@@ -978,7 +918,7 @@ function animateChild(options = null) {
  * @return {?}
  */
 function useAnimation(animation, options = null) {
-    return { type: AnimationMetadataType.AnimateRef, animation, options };
+    return { type: 10 /* AnimateRef */, animation, options };
 }
 /**
  * `query` is an animation-specific function that is designed to be used inside of Angular's
@@ -1077,7 +1017,7 @@ function useAnimation(animation, options = null) {
  * @return {?}
  */
 function query(selector, animation, options = null) {
-    return { type: AnimationMetadataType.Query, selector, animation, options };
+    return { type: 11 /* Query */, selector, animation, options };
 }
 /**
  * `stagger` is an animation-specific function that is designed to be used inside of Angular's
@@ -1161,7 +1101,7 @@ function query(selector, animation, options = null) {
  * @return {?}
  */
 function stagger(timings, animation) {
-    return { type: AnimationMetadataType.Stagger, timings, animation };
+    return { type: 12 /* Stagger */, timings, animation };
 }
 
 /**
@@ -1177,10 +1117,7 @@ function stagger(timings, animation) {
  * @param {?} cb
  * @return {?}
  */
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */ function scheduleMicroTask(cb) {
+function scheduleMicroTask(cb) {
     Promise.resolve(null).then(cb);
 }
 
@@ -1203,7 +1140,7 @@ function stagger(timings, animation) {
  * \@experimental Animation support is experimental.
  * @record
  */
-function AnimationPlayer() { }
+
 /**
  * \@experimental Animation support is experimental.
  */
@@ -1553,5 +1490,5 @@ const ɵPRE_STYLE = '!';
  * Generated bundle index. Do not edit.
  */
 
-export { AnimationBuilder, AnimationFactory, AnimationEvent, AUTO_STYLE, AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationAnimateRefMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationMetadataType, AnimationQueryMetadata, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, ɵStyleData, AnimationPlayer, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
+export { AnimationBuilder, AnimationFactory, AUTO_STYLE, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
 //# sourceMappingURL=index.js.map

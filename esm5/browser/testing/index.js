@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.6-112e777
+ * @license Angular v5.0.0-beta.6-ca5aeba
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -78,12 +78,12 @@ var _query = function (element, selector, multi) {
 };
 if (typeof Element != 'undefined') {
     // this is well supported in all browsers
-    _contains = function (elm1, elm2) { return (elm1.contains(elm2)); };
+    _contains = function (elm1, elm2) { return /** @type {?} */ (elm1.contains(elm2)); };
     if (Element.prototype.matches) {
         _matches = function (element, selector) { return element.matches(selector); };
     }
     else {
-        var /** @type {?} */ proto = (Element.prototype);
+        var /** @type {?} */ proto = /** @type {?} */ (Element.prototype);
         var /** @type {?} */ fn_1 = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
             proto.oMatchesSelector || proto.webkitMatchesSelector;
         if (fn_1) {
@@ -113,7 +113,7 @@ function validateStyleProperty(prop) {
     if (!_CACHED_BODY) {
         _CACHED_BODY = getBodyNode() || {};
     }
-    return ((_CACHED_BODY)).style ? prop in ((_CACHED_BODY)).style : true;
+    return /** @type {?} */ ((_CACHED_BODY)).style ? prop in /** @type {?} */ ((_CACHED_BODY)).style : true;
 }
 /**
  * @return {?}
@@ -262,13 +262,22 @@ var MockAnimationDriver = (function () {
      * @param {?} prop
      * @return {?}
      */
-    MockAnimationDriver.prototype.validateStyleProperty = function (prop) { return validateStyleProperty(prop); };
+    MockAnimationDriver.prototype.validateStyleProperty = /**
+     * @param {?} prop
+     * @return {?}
+     */
+    function (prop) { return validateStyleProperty(prop); };
     /**
      * @param {?} element
      * @param {?} selector
      * @return {?}
      */
-    MockAnimationDriver.prototype.matchesElement = function (element, selector) {
+    MockAnimationDriver.prototype.matchesElement = /**
+     * @param {?} element
+     * @param {?} selector
+     * @return {?}
+     */
+    function (element, selector) {
         return matchesElement(element, selector);
     };
     /**
@@ -276,14 +285,25 @@ var MockAnimationDriver = (function () {
      * @param {?} elm2
      * @return {?}
      */
-    MockAnimationDriver.prototype.containsElement = function (elm1, elm2) { return containsElement(elm1, elm2); };
+    MockAnimationDriver.prototype.containsElement = /**
+     * @param {?} elm1
+     * @param {?} elm2
+     * @return {?}
+     */
+    function (elm1, elm2) { return containsElement(elm1, elm2); };
     /**
      * @param {?} element
      * @param {?} selector
      * @param {?} multi
      * @return {?}
      */
-    MockAnimationDriver.prototype.query = function (element, selector, multi) {
+    MockAnimationDriver.prototype.query = /**
+     * @param {?} element
+     * @param {?} selector
+     * @param {?} multi
+     * @return {?}
+     */
+    function (element, selector, multi) {
         return invokeQuery(element, selector, multi);
     };
     /**
@@ -292,7 +312,13 @@ var MockAnimationDriver = (function () {
      * @param {?=} defaultValue
      * @return {?}
      */
-    MockAnimationDriver.prototype.computeStyle = function (element, prop, defaultValue) {
+    MockAnimationDriver.prototype.computeStyle = /**
+     * @param {?} element
+     * @param {?} prop
+     * @param {?=} defaultValue
+     * @return {?}
+     */
+    function (element, prop, defaultValue) {
         return defaultValue || '';
     };
     /**
@@ -304,28 +330,29 @@ var MockAnimationDriver = (function () {
      * @param {?=} previousPlayers
      * @return {?}
      */
-    MockAnimationDriver.prototype.animate = function (element, keyframes, duration, delay, easing, previousPlayers) {
-        if (previousPlayers === void 0) { previousPlayers = []; }
-        var /** @type {?} */ player = new MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers);
-        MockAnimationDriver.log.push(/** @type {?} */ (player));
-        return player;
-    };
-    return MockAnimationDriver;
-}());
-MockAnimationDriver.log = [];
-/**
- * \@experimental Animation support is experimental.
- */
-var MockAnimationPlayer = (function (_super) {
-    __extends(MockAnimationPlayer, _super);
-    /**
+    MockAnimationDriver.prototype.animate = /**
      * @param {?} element
      * @param {?} keyframes
      * @param {?} duration
      * @param {?} delay
      * @param {?} easing
-     * @param {?} previousPlayers
+     * @param {?=} previousPlayers
+     * @return {?}
      */
+    function (element, keyframes, duration, delay, easing, previousPlayers) {
+        if (previousPlayers === void 0) { previousPlayers = []; }
+        var /** @type {?} */ player = new MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers);
+        MockAnimationDriver.log.push(/** @type {?} */ (player));
+        return player;
+    };
+    MockAnimationDriver.log = [];
+    return MockAnimationDriver;
+}());
+/**
+ * \@experimental Animation support is experimental.
+ */
+var MockAnimationPlayer = (function (_super) {
+    __extends(MockAnimationPlayer, _super);
     function MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers) {
         var _this = _super.call(this) || this;
         _this.element = element;
@@ -350,15 +377,24 @@ var MockAnimationPlayer = (function (_super) {
         _this.totalTime = delay + duration;
         return _this;
     }
+    /* @internal */
     /**
      * @param {?} fn
      * @return {?}
      */
-    MockAnimationPlayer.prototype.onInit = function (fn) { this._onInitFns.push(fn); };
+    MockAnimationPlayer.prototype.onInit = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onInitFns.push(fn); };
+    /* @internal */
     /**
      * @return {?}
      */
-    MockAnimationPlayer.prototype.init = function () {
+    MockAnimationPlayer.prototype.init = /**
+     * @return {?}
+     */
+    function () {
         _super.prototype.init.call(this);
         this._onInitFns.forEach(function (fn) { return fn(); });
         this._onInitFns = [];
@@ -366,36 +402,55 @@ var MockAnimationPlayer = (function (_super) {
     /**
      * @return {?}
      */
-    MockAnimationPlayer.prototype.finish = function () {
+    MockAnimationPlayer.prototype.finish = /**
+     * @return {?}
+     */
+    function () {
         _super.prototype.finish.call(this);
         this.__finished = true;
     };
     /**
      * @return {?}
      */
-    MockAnimationPlayer.prototype.destroy = function () {
+    MockAnimationPlayer.prototype.destroy = /**
+     * @return {?}
+     */
+    function () {
         _super.prototype.destroy.call(this);
         this.__finished = true;
     };
+    /* @internal */
     /**
      * @return {?}
      */
-    MockAnimationPlayer.prototype.triggerMicrotask = function () { };
+    MockAnimationPlayer.prototype.triggerMicrotask = /**
+     * @return {?}
+     */
+    function () { };
     /**
      * @return {?}
      */
-    MockAnimationPlayer.prototype.play = function () {
+    MockAnimationPlayer.prototype.play = /**
+     * @return {?}
+     */
+    function () {
         _super.prototype.play.call(this);
         this.__started = true;
     };
     /**
      * @return {?}
      */
-    MockAnimationPlayer.prototype.hasStarted = function () { return this.__started; };
+    MockAnimationPlayer.prototype.hasStarted = /**
+     * @return {?}
+     */
+    function () { return this.__started; };
     /**
      * @return {?}
      */
-    MockAnimationPlayer.prototype.beforeDestroy = function () {
+    MockAnimationPlayer.prototype.beforeDestroy = /**
+     * @return {?}
+     */
+    function () {
         var _this = this;
         var /** @type {?} */ captures = {};
         Object.keys(this.previousStyles).forEach(function (prop) {

@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.6-112e777
+ * @license Angular v5.0.0-beta.6-ca5aeba
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -45,7 +45,7 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles = 
     let /** @type {?} */ previousOffset = -1;
     let /** @type {?} */ previousKeyframe = null;
     keyframes.forEach(kf => {
-        const /** @type {?} */ offset = (kf['offset']);
+        const /** @type {?} */ offset = /** @type {?} */ (kf['offset']);
         const /** @type {?} */ isSameOffset = offset == previousOffset;
         const /** @type {?} */ normalizedKeyframe = (isSameOffset && previousKeyframe) || {};
         Object.keys(kf).forEach(prop => {
@@ -108,9 +108,9 @@ function listenOnPlayer(player, eventName, event, callback) {
  */
 function copyAnimationEvent(e, phaseName, totalTime) {
     const /** @type {?} */ event = makeAnimationEvent(e.element, e.triggerName, e.fromState, e.toState, phaseName || e.phaseName, totalTime == undefined ? e.totalTime : totalTime);
-    const /** @type {?} */ data = ((e))['_data'];
+    const /** @type {?} */ data = (/** @type {?} */ (e))['_data'];
     if (data != null) {
-        ((event))['_data'] = data;
+        (/** @type {?} */ (event))['_data'] = data;
     }
     return event;
 }
@@ -165,12 +165,12 @@ let _query = (element, selector, multi) => {
 };
 if (typeof Element != 'undefined') {
     // this is well supported in all browsers
-    _contains = (elm1, elm2) => { return (elm1.contains(elm2)); };
+    _contains = (elm1, elm2) => { return /** @type {?} */ (elm1.contains(elm2)); };
     if (Element.prototype.matches) {
         _matches = (element, selector) => element.matches(selector);
     }
     else {
-        const /** @type {?} */ proto = (Element.prototype);
+        const /** @type {?} */ proto = /** @type {?} */ (Element.prototype);
         const /** @type {?} */ fn = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
             proto.oMatchesSelector || proto.webkitMatchesSelector;
         if (fn) {
@@ -200,7 +200,7 @@ function validateStyleProperty(prop) {
     if (!_CACHED_BODY) {
         _CACHED_BODY = getBodyNode() || {};
     }
-    return ((_CACHED_BODY)).style ? prop in ((_CACHED_BODY)).style : true;
+    return /** @type {?} */ ((_CACHED_BODY)).style ? prop in /** @type {?} */ ((_CACHED_BODY)).style : true;
 }
 /**
  * @return {?}
@@ -317,7 +317,7 @@ const NG_ANIMATING_SELECTOR = '.ng-animating';
 function resolveTimingValue(value) {
     if (typeof value == 'number')
         return value;
-    const /** @type {?} */ matches = ((value)).match(/^(-?[\.\d]+)(m?s)/);
+    const /** @type {?} */ matches = (/** @type {?} */ (value)).match(/^(-?[\.\d]+)(m?s)/);
     if (!matches || matches.length < 2)
         return 0;
     return _convertTimeValueToMS(parseFloat(matches[1]), matches[2]);
@@ -332,6 +332,7 @@ function _convertTimeValueToMS(value, unit) {
         case 's':
             return value * ONE_SECOND;
         default:
+            // ms or something else
             return value;
     }
 }
@@ -342,7 +343,7 @@ function _convertTimeValueToMS(value, unit) {
  * @return {?}
  */
 function resolveTiming(timings, errors, allowNegativeValues) {
-    return timings.hasOwnProperty('duration') ? (timings) :
+    return timings.hasOwnProperty('duration') ? /** @type {?} */ (timings) :
         parseTimeExpression(/** @type {?} */ (timings), errors, allowNegativeValues);
 }
 /**
@@ -373,7 +374,7 @@ function parseTimeExpression(exp, errors, allowNegativeValues) {
         }
     }
     else {
-        duration = (exp);
+        duration = /** @type {?} */ (exp);
     }
     if (!allowNegativeValues) {
         let /** @type {?} */ containsErrors = false;
@@ -471,7 +472,7 @@ function normalizeAnimationEntry(steps) {
             return steps[0];
         return sequence(steps);
     }
-    return (steps);
+    return /** @type {?} */ (steps);
 }
 /**
  * @param {?} value
@@ -896,10 +897,7 @@ function visitAnimationNode(visitor, node, context) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */ const ANY_STATE = '*';
+const ANY_STATE = '*';
 /**
  * @param {?} transitionValue
  * @param {?} errors
@@ -908,7 +906,7 @@ function visitAnimationNode(visitor, node, context) {
 function parseTransitionExpr(transitionValue, errors) {
     const /** @type {?} */ expressions = [];
     if (typeof transitionValue == 'string') {
-        ((transitionValue))
+        (/** @type {?} */ (transitionValue))
             .split(/\s*,\s*/)
             .forEach(str => parseInnerTransitionStr(str, expressions, errors));
     }
@@ -930,7 +928,7 @@ function parseInnerTransitionStr(eventStr, expressions, errors) {
             expressions.push(result);
             return;
         }
-        eventStr = (result);
+        eventStr = /** @type {?} */ (result);
     }
     const /** @type {?} */ match = eventStr.match(/^(\*|[-\w]+)\s*(<?[=-]>)\s*(\*|[-\w]+)$/);
     if (match == null || match.length < 4) {
@@ -1027,7 +1025,7 @@ class AnimationAstBuilderVisitor {
     build(metadata, errors) {
         const /** @type {?} */ context = new AnimationAstBuilderContext(errors);
         this._resetContextStyleTimingState(context);
-        return (visitAnimationNode(this, normalizeAnimationEntry(metadata), context));
+        return /** @type {?} */ (visitAnimationNode(this, normalizeAnimationEntry(metadata), context));
     }
     /**
      * @param {?} context
@@ -1052,7 +1050,7 @@ class AnimationAstBuilderVisitor {
         metadata.definitions.forEach(def => {
             this._resetContextStyleTimingState(context);
             if (def.type == 0 /* State */) {
-                const /** @type {?} */ stateDef = (def);
+                const /** @type {?} */ stateDef = /** @type {?} */ (def);
                 const /** @type {?} */ name = stateDef.name;
                 name.split(/\s*,\s*/).forEach(n => {
                     stateDef.name = n;
@@ -1089,7 +1087,7 @@ class AnimationAstBuilderVisitor {
             const /** @type {?} */ params = astParams || {};
             styleAst.styles.forEach(value => {
                 if (isObject(value)) {
-                    const /** @type {?} */ stylesObj = (value);
+                    const /** @type {?} */ stylesObj = /** @type {?} */ (value);
                     Object.keys(stylesObj).forEach(prop => {
                         extractStyleParams(stylesObj[prop]).forEach(sub => {
                             if (!params.hasOwnProperty(sub)) {
@@ -1169,7 +1167,7 @@ class AnimationAstBuilderVisitor {
             styles = this.visitKeyframes(/** @type {?} */ (styleMetadata), context);
         }
         else {
-            let /** @type {?} */ styleMetadata = (metadata.styles);
+            let /** @type {?} */ styleMetadata = /** @type {?} */ (metadata.styles);
             let /** @type {?} */ isEmpty = false;
             if (!styleMetadata) {
                 isEmpty = true;
@@ -1205,7 +1203,7 @@ class AnimationAstBuilderVisitor {
     _makeStyleAst(metadata, context) {
         const /** @type {?} */ styles = [];
         if (Array.isArray(metadata.styles)) {
-            ((metadata.styles)).forEach(styleTuple => {
+            (/** @type {?} */ (metadata.styles)).forEach(styleTuple => {
                 if (typeof styleTuple == 'string') {
                     if (styleTuple == AUTO_STYLE) {
                         styles.push(/** @type {?} */ (styleTuple));
@@ -1226,10 +1224,10 @@ class AnimationAstBuilderVisitor {
         let /** @type {?} */ collectedEasing = null;
         styles.forEach(styleData => {
             if (isObject(styleData)) {
-                const /** @type {?} */ styleMap = (styleData);
+                const /** @type {?} */ styleMap = /** @type {?} */ (styleData);
                 const /** @type {?} */ easing = styleMap['easing'];
                 if (easing) {
-                    collectedEasing = (easing);
+                    collectedEasing = /** @type {?} */ (easing);
                     delete styleMap['easing'];
                 }
                 if (!containsDynamicStyles) {
@@ -1267,7 +1265,7 @@ class AnimationAstBuilderVisitor {
                     context.errors.push(`The provided animation property "${prop}" is not a supported CSS property for animations`);
                     return;
                 }
-                const /** @type {?} */ collectedStyles = context.collectedStyles[((context.currentQuerySelector))];
+                const /** @type {?} */ collectedStyles = context.collectedStyles[/** @type {?} */ ((context.currentQuerySelector))];
                 const /** @type {?} */ collectedEntry = collectedStyles[prop];
                 let /** @type {?} */ updateCollectedStyle = true;
                 if (collectedEntry) {
@@ -1336,7 +1334,7 @@ class AnimationAstBuilderVisitor {
         }
         const /** @type {?} */ limit = length - 1;
         const /** @type {?} */ currentTime = context.currentTime;
-        const /** @type {?} */ currentAnimateTimings = ((context.currentAnimateTimings));
+        const /** @type {?} */ currentAnimateTimings = /** @type {?} */ ((context.currentAnimateTimings));
         const /** @type {?} */ animateDuration = currentAnimateTimings.duration;
         keyframes.forEach((kf, i) => {
             const /** @type {?} */ offset = generatedOffset > 0 ? (i == limit ? 1 : (generatedOffset * i)) : offsets[i];
@@ -1387,8 +1385,8 @@ class AnimationAstBuilderVisitor {
      * @return {?}
      */
     visitQuery(metadata, context) {
-        const /** @type {?} */ parentSelector = ((context.currentQuerySelector));
-        const /** @type {?} */ options = ((metadata.options || {}));
+        const /** @type {?} */ parentSelector = /** @type {?} */ ((context.currentQuerySelector));
+        const /** @type {?} */ options = /** @type {?} */ ((metadata.options || {}));
         context.queryCount++;
         context.currentQuery = metadata;
         const [selector, includeSelf] = normalizeSelector(metadata.selector);
@@ -1470,14 +1468,14 @@ function consumeOffset(styles) {
     if (Array.isArray(styles)) {
         styles.forEach(styleTuple => {
             if (isObject(styleTuple) && styleTuple.hasOwnProperty('offset')) {
-                const /** @type {?} */ obj = (styleTuple);
+                const /** @type {?} */ obj = /** @type {?} */ (styleTuple);
                 offset = parseFloat(/** @type {?} */ (obj['offset']));
                 delete obj['offset'];
             }
         });
     }
     else if (isObject(styles) && styles.hasOwnProperty('offset')) {
-        const /** @type {?} */ obj = (styles);
+        const /** @type {?} */ obj = /** @type {?} */ (styles);
         offset = parseFloat(/** @type {?} */ (obj['offset']));
         delete obj['offset'];
     }
@@ -1498,13 +1496,13 @@ function isObject(value) {
 function constructTimingAst(value, errors) {
     let /** @type {?} */ timings = null;
     if (value.hasOwnProperty('duration')) {
-        timings = (value);
+        timings = /** @type {?} */ (value);
     }
     else if (typeof value == 'number') {
         const /** @type {?} */ duration = resolveTiming(/** @type {?} */ (value), errors).duration;
         return new TimingAst(/** @type {?} */ (value), 0, '');
     }
-    const /** @type {?} */ strValue = (value);
+    const /** @type {?} */ strValue = /** @type {?} */ (value);
     const /** @type {?} */ isDynamic = strValue.split(/\s+/).some(v => v.charAt(0) == '{' && v.charAt(1) == '{');
     if (isDynamic) {
         return new DynamicTimingAst(strValue);
@@ -1520,7 +1518,7 @@ function normalizeAnimationOptions(options) {
     if (options) {
         options = copyObj(options);
         if (options['params']) {
-            options['params'] = ((normalizeParams(options['params'])));
+            options['params'] = /** @type {?} */ ((normalizeParams(options['params'])));
         }
     }
     else {
@@ -1528,16 +1526,6 @@ function normalizeAnimationOptions(options) {
     }
     return options;
 }
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/** @enum {number} */
-const AnimationTransitionInstructionType = { TransitionAnimation: 0, TimelineAnimation: 1, };
-/**
- * @record
- */
 
 /**
  * @fileoverview added by tsickle
@@ -1560,7 +1548,7 @@ const AnimationTransitionInstructionType = { TransitionAnimation: 0, TimelineAni
  */
 function createTimelineInstruction(element, keyframes, preStyleProps, postStyleProps, duration, delay, easing = null, subTimeline = false) {
     return {
-        type: AnimationTransitionInstructionType.TimelineAnimation,
+        type: 1 /* TimelineAnimation */,
         element,
         keyframes,
         preStyleProps,
@@ -1864,7 +1852,7 @@ class AnimationTimelineBuilderVisitor {
      */
     visitStyle(ast, context) {
         const /** @type {?} */ timeline = context.currentTimeline;
-        const /** @type {?} */ timings = ((context.currentAnimateTimings));
+        const /** @type {?} */ timings = /** @type {?} */ ((context.currentAnimateTimings));
         // this is a special case for when a style() call
         // directly follows  an animate() call (but not inside of an animate() call)
         if (!timings && timeline.getCurrentStyleProperties().length) {
@@ -1885,8 +1873,8 @@ class AnimationTimelineBuilderVisitor {
      * @return {?}
      */
     visitKeyframes(ast, context) {
-        const /** @type {?} */ currentAnimateTimings = ((context.currentAnimateTimings));
-        const /** @type {?} */ startTime = (((context.currentTimeline))).duration;
+        const /** @type {?} */ currentAnimateTimings = /** @type {?} */ ((context.currentAnimateTimings));
+        const /** @type {?} */ startTime = (/** @type {?} */ ((context.currentTimeline))).duration;
         const /** @type {?} */ duration = currentAnimateTimings.duration;
         const /** @type {?} */ innerContext = context.createSubContext();
         const /** @type {?} */ innerTimeline = innerContext.currentTimeline;
@@ -1914,7 +1902,7 @@ class AnimationTimelineBuilderVisitor {
         // in the event that the first step before this is a style step we need
         // to ensure the styles are applied before the children are animated
         const /** @type {?} */ startTime = context.currentTimeline.currentTime;
-        const /** @type {?} */ options = ((ast.options || {}));
+        const /** @type {?} */ options = /** @type {?} */ ((ast.options || {}));
         const /** @type {?} */ delay = options.delay ? resolveTimingValue(options.delay) : 0;
         if (delay && (context.previousNode instanceof StyleAst ||
             (startTime == 0 && context.currentTimeline.getCurrentStyleProperties().length))) {
@@ -1957,7 +1945,7 @@ class AnimationTimelineBuilderVisitor {
      * @return {?}
      */
     visitStagger(ast, context) {
-        const /** @type {?} */ parentContext = ((context.parentContext));
+        const /** @type {?} */ parentContext = /** @type {?} */ ((context.parentContext));
         const /** @type {?} */ tl = context.currentTimeline;
         const /** @type {?} */ timings = ast.timings;
         const /** @type {?} */ duration = Math.abs(timings.duration);
@@ -1987,7 +1975,7 @@ class AnimationTimelineBuilderVisitor {
             (tl.currentTime - startingTime) + (tl.startTime - parentContext.currentTimeline.startTime);
     }
 }
-const DEFAULT_NOOP_PREVIOUS_NODE = ({});
+const DEFAULT_NOOP_PREVIOUS_NODE = /** @type {?} */ ({});
 class AnimationTimelineContext {
     /**
      * @param {?} _driver
@@ -2026,18 +2014,18 @@ class AnimationTimelineContext {
     updateOptions(options, skipIfExists) {
         if (!options)
             return;
-        const /** @type {?} */ newOptions = (options);
+        const /** @type {?} */ newOptions = /** @type {?} */ (options);
         let /** @type {?} */ optionsToUpdate = this.options;
         // NOTE: this will get patched up when other animation methods support duration overrides
         if (newOptions.duration != null) {
-            ((optionsToUpdate)).duration = resolveTimingValue(newOptions.duration);
+            (/** @type {?} */ (optionsToUpdate)).duration = resolveTimingValue(newOptions.duration);
         }
         if (newOptions.delay != null) {
             optionsToUpdate.delay = resolveTimingValue(newOptions.delay);
         }
         const /** @type {?} */ newParams = newOptions.params;
         if (newParams) {
-            let /** @type {?} */ paramsToUpdate = ((optionsToUpdate.params));
+            let /** @type {?} */ paramsToUpdate = /** @type {?} */ ((optionsToUpdate.params));
             if (!paramsToUpdate) {
                 paramsToUpdate = this.options.params = {};
             }
@@ -2139,6 +2127,7 @@ class AnimationTimelineContext {
             results.push(this.element);
         }
         if (selector.length > 0) {
+            // if :self is only used then the selector is empty
             const /** @type {?} */ multi = limit != 1;
             results.push(...this._driver.query(this.element, selector, multi));
         }
@@ -2172,7 +2161,7 @@ class TimelineBuilder {
             this._elementTimelineStylesLookup = new Map();
         }
         this._localTimelineStyles = Object.create(this._backFill, {});
-        this._globalTimelineStyles = ((this._elementTimelineStylesLookup.get(element)));
+        this._globalTimelineStyles = /** @type {?} */ ((this._elementTimelineStylesLookup.get(element)));
         if (!this._globalTimelineStyles) {
             this._globalTimelineStyles = this._localTimelineStyles;
             this._elementTimelineStylesLookup.set(element, this._localTimelineStyles);
@@ -2236,7 +2225,7 @@ class TimelineBuilder {
         if (this._currentKeyframe) {
             this._previousKeyframe = this._currentKeyframe;
         }
-        this._currentKeyframe = ((this._keyframes.get(this.duration)));
+        this._currentKeyframe = /** @type {?} */ ((this._keyframes.get(this.duration)));
         if (!this._currentKeyframe) {
             this._currentKeyframe = Object.create(this._backFill, {});
             this._keyframes.set(this.duration, this._currentKeyframe);
@@ -2451,24 +2440,24 @@ class SubTimelineBuilder extends TimelineBuilder {
             oldFirstKeyframe['offset'] = roundOffset(startingGap);
             newKeyframes.push(oldFirstKeyframe);
             /*
-              When the keyframe is stretched then it means that the delay before the animation
-              starts is gone. Instead the first keyframe is placed at the start of the animation
-              and it is then copied to where it starts when the original delay is over. This basically
-              means nothing animates during that delay, but the styles are still renderered. For this
-              to work the original offset values that exist in the original keyframes must be "warped"
-              so that they can take the new keyframe + delay into account.
-      
-              delay=1000, duration=1000, keyframes = 0 .5 1
-      
-              turns into
-      
-              delay=0, duration=2000, keyframes = 0 .33 .66 1
-             */
+                    When the keyframe is stretched then it means that the delay before the animation
+                    starts is gone. Instead the first keyframe is placed at the start of the animation
+                    and it is then copied to where it starts when the original delay is over. This basically
+                    means nothing animates during that delay, but the styles are still renderered. For this
+                    to work the original offset values that exist in the original keyframes must be "warped"
+                    so that they can take the new keyframe + delay into account.
+            
+                    delay=1000, duration=1000, keyframes = 0 .5 1
+            
+                    turns into
+            
+                    delay=0, duration=2000, keyframes = 0 .33 .66 1
+                   */
             // offsets between 1 ... n -1 are all warped by the keyframe stretch
             const /** @type {?} */ limit = keyframes.length - 1;
             for (let /** @type {?} */ i = 1; i <= limit; i++) {
                 let /** @type {?} */ kf = copyStyles(keyframes[i], false);
-                const /** @type {?} */ oldOffset = (kf['offset']);
+                const /** @type {?} */ oldOffset = /** @type {?} */ (kf['offset']);
                 const /** @type {?} */ timeAtKeyframe = delay + oldOffset * duration;
                 kf['offset'] = roundOffset(timeAtKeyframe / totalTime);
                 newKeyframes.push(kf);
@@ -2539,8 +2528,8 @@ class Animation {
      * @return {?}
      */
     buildTimelines(element, startingStyles, destinationStyles, options, subInstructions) {
-        const /** @type {?} */ start = Array.isArray(startingStyles) ? normalizeStyles(startingStyles) : (startingStyles);
-        const /** @type {?} */ dest = Array.isArray(destinationStyles) ? normalizeStyles(destinationStyles) : (destinationStyles);
+        const /** @type {?} */ start = Array.isArray(startingStyles) ? normalizeStyles(startingStyles) : /** @type {?} */ (startingStyles);
+        const /** @type {?} */ dest = Array.isArray(destinationStyles) ? normalizeStyles(destinationStyles) : /** @type {?} */ (destinationStyles);
         const /** @type {?} */ errors = [];
         subInstructions = subInstructions || new ElementInstructionMap();
         const /** @type {?} */ result = buildAnimationTimelines(this._driver, element, this._animationAst, start, dest, options, subInstructions, errors);
@@ -2560,10 +2549,7 @@ class Animation {
  * \@experimental Animation support is experimental.
  * @abstract
  */
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */ class AnimationStyleNormalizer {
+class AnimationStyleNormalizer {
 }
 /**
  * \@experimental Animation support is experimental.
@@ -2583,7 +2569,7 @@ class NoopAnimationStyleNormalizer {
      * @return {?}
      */
     normalizeStyleValue(userProvidedProperty, normalizedProperty, value, errors) {
-        return (value);
+        return /** @type {?} */ (value);
     }
 }
 
@@ -2668,7 +2654,7 @@ function makeBooleanMap(keys) {
  */
 function createTransitionInstruction(element, triggerName, fromState, toState, isRemovalTransition, fromStyles, toStyles, timelines, queriedElements, preStyleProps, postStyleProps, errors) {
     return {
-        type: AnimationTransitionInstructionType.TransitionAnimation,
+        type: 0 /* TransitionAnimation */,
         element,
         triggerName,
         isRemovalTransition,
@@ -2794,7 +2780,7 @@ class AnimationStateStyles {
         });
         this.styles.styles.forEach(value => {
             if (typeof value !== 'string') {
-                const /** @type {?} */ styleObj = (value);
+                const /** @type {?} */ styleObj = /** @type {?} */ (value);
                 Object.keys(styleObj).forEach(prop => {
                     let /** @type {?} */ val = styleObj[prop];
                     if (val.length > 1) {
@@ -3034,7 +3020,7 @@ class TimelineAnimationEngine {
             return;
         }
         if (command == 'create') {
-            const /** @type {?} */ options = ((args[0] || {}));
+            const /** @type {?} */ options = /** @type {?} */ ((args[0] || {}));
             this.create(id, element, options);
             return;
         }
@@ -3109,7 +3095,7 @@ class StateValue {
     /**
      * @return {?}
      */
-    get params() { return (this.options.params); }
+    get params() { return /** @type {?} */ (this.options.params); }
     /**
      * @param {?} input
      */
@@ -3120,7 +3106,7 @@ class StateValue {
         if (isObj) {
             const /** @type {?} */ options = copyObj(/** @type {?} */ (input));
             delete options['value'];
-            this.options = (options);
+            this.options = /** @type {?} */ (options);
         }
         else {
             this.options = {};
@@ -3136,7 +3122,7 @@ class StateValue {
     absorbOptions(options) {
         const /** @type {?} */ newParams = options.params;
         if (newParams) {
-            const /** @type {?} */ oldParams = ((this.options.params));
+            const /** @type {?} */ oldParams = /** @type {?} */ ((this.options.params));
             Object.keys(newParams).forEach(prop => {
                 if (oldParams[prop] == null) {
                     oldParams[prop] = newParams[prop];
@@ -3440,7 +3426,7 @@ class AnimationTransitionNamespace {
                 visitedTriggers.add(triggerName);
                 const /** @type {?} */ trigger = this._triggers[triggerName];
                 const /** @type {?} */ transition = trigger.fallbackTransition;
-                const /** @type {?} */ elementStates = ((engine.statesByElement.get(element)));
+                const /** @type {?} */ elementStates = /** @type {?} */ ((engine.statesByElement.get(element)));
                 const /** @type {?} */ fromState = elementStates[triggerName] || DEFAULT_STATE_VALUE;
                 const /** @type {?} */ toState = new StateValue(VOID_VALUE);
                 const /** @type {?} */ player = new TransitionAnimationPlayer(this.id, triggerName, element);
@@ -3491,7 +3477,7 @@ class AnimationTransitionNamespace {
                 listeners.forEach((listener) => {
                     if (listener.name == entry.triggerName) {
                         const /** @type {?} */ baseEvent = makeAnimationEvent(element, entry.triggerName, entry.fromState.value, entry.toState.value);
-                        ((baseEvent))['_data'] = microtaskId;
+                        (/** @type {?} */ (baseEvent))['_data'] = microtaskId;
                         listenOnPlayer(entry.player, listener.phase, baseEvent, listener.callback);
                     }
                 });
@@ -3715,7 +3701,7 @@ class TransitionAnimationEngine {
             return;
         // special case for when an element is removed and reinserted (move operation)
         // when this occurs we do not want to use the element for deletion later
-        const /** @type {?} */ details = (element[REMOVAL_FLAG]);
+        const /** @type {?} */ details = /** @type {?} */ (element[REMOVAL_FLAG]);
         if (details && details.setForRemoval) {
             details.setForRemoval = false;
         }
@@ -3865,7 +3851,7 @@ class TransitionAnimationEngine {
      * @return {?}
      */
     processLeaveNode(element) {
-        const /** @type {?} */ details = (element[REMOVAL_FLAG]);
+        const /** @type {?} */ details = /** @type {?} */ (element[REMOVAL_FLAG]);
         if (details && details.setForRemoval) {
             // this will prevent it from removing it twice
             element[REMOVAL_FLAG] = NULL_REMOVAL_STATE;
@@ -3974,7 +3960,7 @@ class TransitionAnimationEngine {
         const /** @type {?} */ leaveNodesWithoutAnimations = new Set();
         for (let /** @type {?} */ i = 0; i < this.collectedLeaveElements.length; i++) {
             const /** @type {?} */ element = this.collectedLeaveElements[i];
-            const /** @type {?} */ details = (element[REMOVAL_FLAG]);
+            const /** @type {?} */ details = /** @type {?} */ (element[REMOVAL_FLAG]);
             if (details && details.setForRemoval) {
                 addClass(element, LEAVE_CLASSNAME);
                 allLeaveNodes.push(element);
@@ -4002,7 +3988,7 @@ class TransitionAnimationEngine {
                     player.destroy();
                     return;
                 }
-                const /** @type {?} */ instruction = ((this._buildInstruction(entry, subTimelines)));
+                const /** @type {?} */ instruction = /** @type {?} */ ((this._buildInstruction(entry, subTimelines)));
                 if (instruction.errors && instruction.errors.length) {
                     erroneousTransitions.push(instruction);
                     return;
@@ -4028,7 +4014,7 @@ class TransitionAnimationEngine {
                 instruction.preStyleProps.forEach((stringMap, element) => {
                     const /** @type {?} */ props = Object.keys(stringMap);
                     if (props.length) {
-                        let /** @type {?} */ setVal = ((allPreStyleElements.get(element)));
+                        let /** @type {?} */ setVal = /** @type {?} */ ((allPreStyleElements.get(element)));
                         if (!setVal) {
                             allPreStyleElements.set(element, setVal = new Set());
                         }
@@ -4037,7 +4023,7 @@ class TransitionAnimationEngine {
                 });
                 instruction.postStyleProps.forEach((stringMap, element) => {
                     const /** @type {?} */ props = Object.keys(stringMap);
-                    let /** @type {?} */ setVal = ((allPostStyleElements.get(element)));
+                    let /** @type {?} */ setVal = /** @type {?} */ ((allPostStyleElements.get(element)));
                     if (!setVal) {
                         allPostStyleElements.set(element, setVal = new Set());
                     }
@@ -4180,7 +4166,7 @@ class TransitionAnimationEngine {
         // operation right away unless a parent animation is ongoing.
         for (let /** @type {?} */ i = 0; i < allLeaveNodes.length; i++) {
             const /** @type {?} */ element = allLeaveNodes[i];
-            const /** @type {?} */ details = (element[REMOVAL_FLAG]);
+            const /** @type {?} */ details = /** @type {?} */ (element[REMOVAL_FLAG]);
             removeClass(element, LEAVE_CLASSNAME);
             // this means the element has a removal animation that is being
             // taken care of and therefore the inner elements will hang around
@@ -4232,7 +4218,7 @@ class TransitionAnimationEngine {
      */
     elementContainsData(namespaceId, element) {
         let /** @type {?} */ containsData = false;
-        const /** @type {?} */ details = (element[REMOVAL_FLAG]);
+        const /** @type {?} */ details = /** @type {?} */ (element[REMOVAL_FLAG]);
         if (details && details.setForRemoval)
             containsData = true;
         if (this.playersByElement.has(element))
@@ -4312,7 +4298,7 @@ class TransitionAnimationEngine {
             const /** @type {?} */ players = getOrSetAsInMap(allPreviousPlayersMap, element, []);
             const /** @type {?} */ previousPlayers = this._getPreviousPlayers(element, isQueriedElement, targetNameSpaceId, targetTriggerName, instruction.toState);
             previousPlayers.forEach(player => {
-                const /** @type {?} */ realPlayer = (player.getRealPlayer());
+                const /** @type {?} */ realPlayer = /** @type {?} */ (player.getRealPlayer());
                 if (realPlayer.beforeDestroy) {
                     realPlayer.beforeDestroy();
                 }
@@ -4356,7 +4342,7 @@ class TransitionAnimationEngine {
                 // Mock/WebAnimations
                 // use the element within their implementation. This will be added in Angular5 to
                 // AnimationPlayer
-                const /** @type {?} */ pp = (p);
+                const /** @type {?} */ pp = /** @type {?} */ (p);
                 return pp.element ? pp.element === element : false;
             });
             const /** @type {?} */ preStyles = preStylesMap.get(element);
@@ -4773,7 +4759,7 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
         return false;
     let /** @type {?} */ preEntry = allPreStyleElements.get(element);
     if (preEntry) {
-        postEntry.forEach(data => ((preEntry)).add(data));
+        postEntry.forEach(data => /** @type {?} */ ((preEntry)).add(data));
     }
     else {
         allPreStyleElements.set(element, postEntry);
@@ -4812,7 +4798,7 @@ class AnimationEngine {
         let /** @type {?} */ trigger = this._triggerCache[cacheKey];
         if (!trigger) {
             const /** @type {?} */ errors = [];
-            const /** @type {?} */ ast = (buildAnimationAst(this._driver, /** @type {?} */ (metadata), errors));
+            const /** @type {?} */ ast = /** @type {?} */ (buildAnimationAst(this._driver, /** @type {?} */ (metadata), errors));
             if (errors.length) {
                 throw new Error(`The animation trigger "${name}" has failed to build due to the following errors:\n - ${errors.join("\n - ")}`);
             }
@@ -4874,7 +4860,7 @@ class AnimationEngine {
     process(namespaceId, element, property, value) {
         if (property.charAt(0) == '@') {
             const [id, action] = parseTimelineCommand(property);
-            const /** @type {?} */ args = (value);
+            const /** @type {?} */ args = /** @type {?} */ (value);
             this._timelineEngine.command(id, element, action, args);
         }
         else {
@@ -4906,7 +4892,7 @@ class AnimationEngine {
      * @return {?}
      */
     get players() {
-        return ((this._transitionEngine.players))
+        return (/** @type {?} */ (this._transitionEngine.players))
             .concat(/** @type {?} */ (this._timelineEngine.players));
     }
     /**
@@ -4942,8 +4928,8 @@ class WebAnimationsPlayer {
         this.parentPlayer = null;
         this.previousStyles = {};
         this.currentSnapshot = {};
-        this._duration = (options['duration']);
-        this._delay = (options['delay']) || 0;
+        this._duration = /** @type {?} */ (options['duration']);
+        this._delay = /** @type {?} */ (options['delay']) || 0;
         this.time = this._duration + this._delay;
         if (allowPreviousPlayerStylesMerge(this._duration, this._delay)) {
             previousPlayers.forEach(player => {
@@ -5024,7 +5010,7 @@ class WebAnimationsPlayer {
     _triggerWebAnimation(element, keyframes, options) {
         // jscompiler doesn't seem to know animate is a native property because it's not fully
         // supported yet across common browsers (we polyfill it for Edge/Safari) [CL #143630929]
-        return (element['animate'](keyframes, options));
+        return /** @type {?} */ (element['animate'](keyframes, options));
     }
     /**
      * @return {?}
@@ -5147,7 +5133,7 @@ class WebAnimationsPlayer {
  * @return {?}
  */
 function _computeStyle(element, prop) {
-    return ((window.getComputedStyle(element)))[prop];
+    return (/** @type {?} */ (window.getComputedStyle(element)))[prop];
 }
 
 /**
@@ -5190,7 +5176,7 @@ class WebAnimationsDriver {
      * @return {?}
      */
     computeStyle(element, prop, defaultValue) {
-        return (((window.getComputedStyle(element)))[prop]);
+        return /** @type {?} */ ((/** @type {?} */ (window.getComputedStyle(element)))[prop]);
     }
     /**
      * @param {?} element
@@ -5209,7 +5195,7 @@ class WebAnimationsDriver {
         if (easing) {
             playerOptions['easing'] = easing;
         }
-        const /** @type {?} */ previousWebAnimationPlayers = (previousPlayers.filter(player => { return player instanceof WebAnimationsPlayer; }));
+        const /** @type {?} */ previousWebAnimationPlayers = /** @type {?} */ (previousPlayers.filter(player => { return player instanceof WebAnimationsPlayer; }));
         return new WebAnimationsPlayer(element, keyframes, playerOptions, previousWebAnimationPlayers);
     }
 }
@@ -5217,7 +5203,7 @@ class WebAnimationsDriver {
  * @return {?}
  */
 function supportsWebAnimations() {
-    return typeof Element !== 'undefined' && typeof ((Element)).prototype['animate'] === 'function';
+    return typeof Element !== 'undefined' && typeof (/** @type {?} */ (Element)).prototype['animate'] === 'function';
 }
 
 /**

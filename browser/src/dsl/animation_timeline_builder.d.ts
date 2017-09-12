@@ -77,7 +77,7 @@ export declare class TimelineBuilder {
     private _pendingStyles;
     private _backFill;
     private _currentEmptyStepKeyframe;
-    constructor(_driver: AnimationDriver, element: any, startTime: number, _elementTimelineStylesLookup?: Map<any, ɵStyleData>);
+    constructor(_driver: AnimationDriver, element: any, startTime: number, _elementTimelineStylesLookup?: Map<any, ɵStyleData> | undefined);
     containsAnimation(): boolean;
     getCurrentStyleProperties(): string[];
     readonly currentTime: number;

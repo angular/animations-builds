@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.6-112e777
+ * @license Angular v5.0.0-beta.6-ca5aeba
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -75,12 +75,12 @@ let _query = (element, selector, multi) => {
 };
 if (typeof Element != 'undefined') {
     // this is well supported in all browsers
-    _contains = (elm1, elm2) => { return (elm1.contains(elm2)); };
+    _contains = (elm1, elm2) => { return /** @type {?} */ (elm1.contains(elm2)); };
     if (Element.prototype.matches) {
         _matches = (element, selector) => element.matches(selector);
     }
     else {
-        const /** @type {?} */ proto = (Element.prototype);
+        const /** @type {?} */ proto = /** @type {?} */ (Element.prototype);
         const /** @type {?} */ fn = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
             proto.oMatchesSelector || proto.webkitMatchesSelector;
         if (fn) {
@@ -110,7 +110,7 @@ function validateStyleProperty(prop) {
     if (!_CACHED_BODY) {
         _CACHED_BODY = getBodyNode() || {};
     }
-    return ((_CACHED_BODY)).style ? prop in ((_CACHED_BODY)).style : true;
+    return /** @type {?} */ ((_CACHED_BODY)).style ? prop in /** @type {?} */ ((_CACHED_BODY)).style : true;
 }
 /**
  * @return {?}
