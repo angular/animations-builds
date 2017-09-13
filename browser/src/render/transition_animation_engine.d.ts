@@ -30,6 +30,9 @@ export interface ElementAnimationState {
 export declare class StateValue {
     value: string;
     options: AnimationOptions;
+    readonly params: {
+        [key: string]: any;
+    };
     constructor(input: any);
     absorbOptions(options: AnimationOptions): void;
 }
@@ -74,6 +77,7 @@ export declare class TransitionAnimationEngine {
     statesByElement: Map<any, {
         [triggerName: string]: StateValue;
     }>;
+    disabledNodes: Set<any>;
     totalAnimations: number;
     totalQueuedPlayers: number;
     private _namespaceLookup;
@@ -84,7 +88,6 @@ export declare class TransitionAnimationEngine {
     collectedEnterElements: any[];
     collectedLeaveElements: any[];
     onRemovalComplete: (element: any, context: any) => void;
-    _onRemovalComplete(element: any, context: any): void;
     constructor(driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
     readonly queuedPlayers: TransitionAnimationPlayer[];
     createNamespace(namespaceId: string, hostElement: any): AnimationTransitionNamespace;
@@ -96,6 +99,7 @@ export declare class TransitionAnimationEngine {
     trigger(namespaceId: string, element: any, name: string, value: any): boolean;
     insertNode(namespaceId: string, element: any, parent: any, insertBefore: boolean): void;
     collectEnterElement(element: any): void;
+    markElementAsDisabled(element: any, value: boolean): void;
     removeNode(namespaceId: string, element: any, context: any, doNotRecurse?: boolean): void;
     markElementAsRemoved(namespaceId: string, element: any, hasAnimation?: boolean, context?: any): void;
     listen(namespaceId: string, element: any, name: string, phase: string, callback: (event: any) => boolean): () => any;
@@ -104,7 +108,8 @@ export declare class TransitionAnimationEngine {
     whenRenderingDone(): Promise<any>;
     processLeaveNode(element: any): void;
     flush(microtaskId?: number): void;
-    private _flushAnimations(microtaskId);
+    reportError(errors: string[]): void;
+    private _flushAnimations(cleanupFns, microtaskId);
     elementContainsData(namespaceId: string, element: any): boolean;
     afterFlush(callback: () => any): void;
     afterFlushAnimationsDone(callback: () => any): void;

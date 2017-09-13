@@ -62,6 +62,7 @@ export declare class AnimationTimelineContext {
     invokeQuery(selector: string, originalSelector: string, limit: number, includeSelf: boolean, optional: boolean, errors: any[]): any[];
 }
 export declare class TimelineBuilder {
+    private _driver;
     element: any;
     startTime: number;
     private _elementTimelineStylesLookup;
@@ -76,7 +77,7 @@ export declare class TimelineBuilder {
     private _pendingStyles;
     private _backFill;
     private _currentEmptyStepKeyframe;
-    constructor(element: any, startTime: number, _elementTimelineStylesLookup?: Map<any, ɵStyleData>);
+    constructor(_driver: AnimationDriver, element: any, startTime: number, _elementTimelineStylesLookup?: Map<any, ɵStyleData> | undefined);
     containsAnimation(): boolean;
     getCurrentStyleProperties(): string[];
     readonly currentTime: number;
