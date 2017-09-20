@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-5751865
+ * @license Angular v5.0.0-beta.7-b14c2d1
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4404,17 +4404,13 @@ class TransitionAnimationPlayer {
         this._player = new NoopAnimationPlayer();
         this._containsRealPlayer = false;
         this._queuedCallbacks = {};
-        this._destroyed = false;
+        this.destroyed = false;
         this.markedForDestroy = false;
     }
     /**
      * @return {?}
      */
     get queued() { return this._containsRealPlayer == false; }
-    /**
-     * @return {?}
-     */
-    get destroyed() { return this._destroyed; }
     /**
      * @param {?} player
      * @return {?}
@@ -4499,7 +4495,7 @@ class TransitionAnimationPlayer {
      * @return {?}
      */
     destroy() {
-        this._destroyed = true;
+        (/** @type {?} */ (this)).destroyed = true;
         this._player.destroy();
     }
     /**
@@ -4984,9 +4980,10 @@ class WebAnimationsPlayer {
                 }
             }
         }
-        this._player = this._triggerWebAnimation(this.element, keyframes, this.options);
+        (/** @type {?} */ (this)).domPlayer =
+            this._triggerWebAnimation(this.element, keyframes, this.options);
         this._finalKeyframe = keyframes.length ? keyframes[keyframes.length - 1] : {};
-        this._player.addEventListener('finish', () => this._onFinish());
+        this.domPlayer.addEventListener('finish', () => this._onFinish());
     }
     /**
      * @return {?}
@@ -4997,7 +4994,7 @@ class WebAnimationsPlayer {
             this._resetDomPlayerState();
         }
         else {
-            this._player.pause();
+            this.domPlayer.pause();
         }
     }
     /**
@@ -5012,10 +5009,6 @@ class WebAnimationsPlayer {
         // supported yet across common browsers (we polyfill it for Edge/Safari) [CL #143630929]
         return /** @type {?} */ (element['animate'](keyframes, options));
     }
-    /**
-     * @return {?}
-     */
-    get domPlayer() { return this._player; }
     /**
      * @param {?} fn
      * @return {?}
@@ -5041,14 +5034,14 @@ class WebAnimationsPlayer {
             this._onStartFns = [];
             this._started = true;
         }
-        this._player.play();
+        this.domPlayer.play();
     }
     /**
      * @return {?}
      */
     pause() {
         this.init();
-        this._player.pause();
+        this.domPlayer.pause();
     }
     /**
      * @return {?}
@@ -5056,7 +5049,7 @@ class WebAnimationsPlayer {
     finish() {
         this.init();
         this._onFinish();
-        this._player.finish();
+        this.domPlayer.finish();
     }
     /**
      * @return {?}
@@ -5071,8 +5064,8 @@ class WebAnimationsPlayer {
      * @return {?}
      */
     _resetDomPlayerState() {
-        if (this._player) {
-            this._player.cancel();
+        if (this.domPlayer) {
+            this.domPlayer.cancel();
         }
     }
     /**
@@ -5102,11 +5095,11 @@ class WebAnimationsPlayer {
      * @param {?} p
      * @return {?}
      */
-    setPosition(p) { this._player.currentTime = p * this.time; }
+    setPosition(p) { this.domPlayer.currentTime = p * this.time; }
     /**
      * @return {?}
      */
-    getPosition() { return this._player.currentTime / this.time; }
+    getPosition() { return this.domPlayer.currentTime / this.time; }
     /**
      * @return {?}
      */

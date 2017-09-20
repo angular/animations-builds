@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-5751865
+ * @license Angular v5.0.0-beta.7-b14c2d1
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -10,7 +10,7 @@
 }(this, (function (exports) { 'use strict';
 
 /**
- * @license Angular v5.0.0-beta.7-5751865
+ * @license Angular v5.0.0-beta.7-b14c2d1
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1346,7 +1346,6 @@ var NoopAnimationPlayer = (function () {
 var AnimationGroupPlayer = (function () {
     function AnimationGroupPlayer(_players) {
         var _this = this;
-        this._players = _players;
         this._onDoneFns = [];
         this._onStartFns = [];
         this._finished = false;
@@ -1355,15 +1354,16 @@ var AnimationGroupPlayer = (function () {
         this._onDestroyFns = [];
         this.parentPlayer = null;
         this.totalTime = 0;
+        this.players = _players;
         var /** @type {?} */ doneCount = 0;
         var /** @type {?} */ destroyCount = 0;
         var /** @type {?} */ startCount = 0;
-        var /** @type {?} */ total = this._players.length;
+        var /** @type {?} */ total = this.players.length;
         if (total == 0) {
             scheduleMicroTask(function () { return _this._onFinish(); });
         }
         else {
-            this._players.forEach(function (player) {
+            this.players.forEach(function (player) {
                 player.parentPlayer = _this;
                 player.onDone(function () {
                     if (++doneCount >= total) {
@@ -1382,7 +1382,7 @@ var AnimationGroupPlayer = (function () {
                 });
             });
         }
-        this.totalTime = this._players.reduce(function (time, player) { return Math.max(time, player.totalTime); }, 0);
+        this.totalTime = this.players.reduce(function (time, player) { return Math.max(time, player.totalTime); }, 0);
     }
     /**
      * @return {?}
@@ -1403,7 +1403,7 @@ var AnimationGroupPlayer = (function () {
     AnimationGroupPlayer.prototype.init = /**
      * @return {?}
      */
-    function () { this._players.forEach(function (player) { return player.init(); }); };
+    function () { this.players.forEach(function (player) { return player.init(); }); };
     /**
      * @param {?} fn
      * @return {?}
@@ -1462,7 +1462,7 @@ var AnimationGroupPlayer = (function () {
             this.init();
         }
         this._onStart();
-        this._players.forEach(function (player) { return player.play(); });
+        this.players.forEach(function (player) { return player.play(); });
     };
     /**
      * @return {?}
@@ -1470,14 +1470,14 @@ var AnimationGroupPlayer = (function () {
     AnimationGroupPlayer.prototype.pause = /**
      * @return {?}
      */
-    function () { this._players.forEach(function (player) { return player.pause(); }); };
+    function () { this.players.forEach(function (player) { return player.pause(); }); };
     /**
      * @return {?}
      */
     AnimationGroupPlayer.prototype.restart = /**
      * @return {?}
      */
-    function () { this._players.forEach(function (player) { return player.restart(); }); };
+    function () { this.players.forEach(function (player) { return player.restart(); }); };
     /**
      * @return {?}
      */
@@ -1486,7 +1486,7 @@ var AnimationGroupPlayer = (function () {
      */
     function () {
         this._onFinish();
-        this._players.forEach(function (player) { return player.finish(); });
+        this.players.forEach(function (player) { return player.finish(); });
     };
     /**
      * @return {?}
@@ -1505,7 +1505,7 @@ var AnimationGroupPlayer = (function () {
         if (!this._destroyed) {
             this._destroyed = true;
             this._onFinish();
-            this._players.forEach(function (player) { return player.destroy(); });
+            this.players.forEach(function (player) { return player.destroy(); });
             this._onDestroyFns.forEach(function (fn) { return fn(); });
             this._onDestroyFns = [];
         }
@@ -1517,7 +1517,7 @@ var AnimationGroupPlayer = (function () {
      * @return {?}
      */
     function () {
-        this._players.forEach(function (player) { return player.reset(); });
+        this.players.forEach(function (player) { return player.reset(); });
         this._destroyed = false;
         this._finished = false;
         this._started = false;
@@ -1532,7 +1532,7 @@ var AnimationGroupPlayer = (function () {
      */
     function (p) {
         var /** @type {?} */ timeAtPosition = p * this.totalTime;
-        this._players.forEach(function (player) {
+        this.players.forEach(function (player) {
             var /** @type {?} */ position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
             player.setPosition(position);
         });
@@ -1545,20 +1545,12 @@ var AnimationGroupPlayer = (function () {
      */
     function () {
         var /** @type {?} */ min = 0;
-        this._players.forEach(function (player) {
+        this.players.forEach(function (player) {
             var /** @type {?} */ p = player.getPosition();
             min = Math.min(p, min);
         });
         return min;
     };
-    Object.defineProperty(AnimationGroupPlayer.prototype, "players", {
-        get: /**
-         * @return {?}
-         */
-        function () { return this._players; },
-        enumerable: true,
-        configurable: true
-    });
     /**
      * @return {?}
      */

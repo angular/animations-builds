@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-5751865
+ * @license Angular v5.0.0-beta.7-b14c2d1
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1266,7 +1266,6 @@ class AnimationGroupPlayer {
      * @param {?} _players
      */
     constructor(_players) {
-        this._players = _players;
         this._onDoneFns = [];
         this._onStartFns = [];
         this._finished = false;
@@ -1275,15 +1274,16 @@ class AnimationGroupPlayer {
         this._onDestroyFns = [];
         this.parentPlayer = null;
         this.totalTime = 0;
+        this.players = _players;
         let /** @type {?} */ doneCount = 0;
         let /** @type {?} */ destroyCount = 0;
         let /** @type {?} */ startCount = 0;
-        const /** @type {?} */ total = this._players.length;
+        const /** @type {?} */ total = this.players.length;
         if (total == 0) {
             scheduleMicroTask(() => this._onFinish());
         }
         else {
-            this._players.forEach(player => {
+            this.players.forEach(player => {
                 player.parentPlayer = this;
                 player.onDone(() => {
                     if (++doneCount >= total) {
@@ -1302,7 +1302,7 @@ class AnimationGroupPlayer {
                 });
             });
         }
-        this.totalTime = this._players.reduce((time, player) => Math.max(time, player.totalTime), 0);
+        this.totalTime = this.players.reduce((time, player) => Math.max(time, player.totalTime), 0);
     }
     /**
      * @return {?}
@@ -1317,7 +1317,7 @@ class AnimationGroupPlayer {
     /**
      * @return {?}
      */
-    init() { this._players.forEach(player => player.init()); }
+    init() { this.players.forEach(player => player.init()); }
     /**
      * @param {?} fn
      * @return {?}
@@ -1355,22 +1355,22 @@ class AnimationGroupPlayer {
             this.init();
         }
         this._onStart();
-        this._players.forEach(player => player.play());
+        this.players.forEach(player => player.play());
     }
     /**
      * @return {?}
      */
-    pause() { this._players.forEach(player => player.pause()); }
+    pause() { this.players.forEach(player => player.pause()); }
     /**
      * @return {?}
      */
-    restart() { this._players.forEach(player => player.restart()); }
+    restart() { this.players.forEach(player => player.restart()); }
     /**
      * @return {?}
      */
     finish() {
         this._onFinish();
-        this._players.forEach(player => player.finish());
+        this.players.forEach(player => player.finish());
     }
     /**
      * @return {?}
@@ -1383,7 +1383,7 @@ class AnimationGroupPlayer {
         if (!this._destroyed) {
             this._destroyed = true;
             this._onFinish();
-            this._players.forEach(player => player.destroy());
+            this.players.forEach(player => player.destroy());
             this._onDestroyFns.forEach(fn => fn());
             this._onDestroyFns = [];
         }
@@ -1392,7 +1392,7 @@ class AnimationGroupPlayer {
      * @return {?}
      */
     reset() {
-        this._players.forEach(player => player.reset());
+        this.players.forEach(player => player.reset());
         this._destroyed = false;
         this._finished = false;
         this._started = false;
@@ -1403,7 +1403,7 @@ class AnimationGroupPlayer {
      */
     setPosition(p) {
         const /** @type {?} */ timeAtPosition = p * this.totalTime;
-        this._players.forEach(player => {
+        this.players.forEach(player => {
             const /** @type {?} */ position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
             player.setPosition(position);
         });
@@ -1413,16 +1413,12 @@ class AnimationGroupPlayer {
      */
     getPosition() {
         let /** @type {?} */ min = 0;
-        this._players.forEach(player => {
+        this.players.forEach(player => {
             const /** @type {?} */ p = player.getPosition();
             min = Math.min(p, min);
         });
         return min;
     }
-    /**
-     * @return {?}
-     */
-    get players() { return this._players; }
     /**
      * @return {?}
      */

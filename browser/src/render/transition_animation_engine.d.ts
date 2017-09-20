@@ -125,12 +125,11 @@ export declare class TransitionAnimationPlayer implements AnimationPlayer {
     private _player;
     private _containsRealPlayer;
     private _queuedCallbacks;
-    private _destroyed;
+    readonly destroyed: boolean;
     parentPlayer: AnimationPlayer;
     markedForDestroy: boolean;
     constructor(namespaceId: string, triggerName: string, element: any);
     readonly queued: boolean;
-    readonly destroyed: boolean;
     setRealPlayer(player: AnimationPlayer): void;
     getRealPlayer(): AnimationPlayer;
     private _queueEvent(name, callback);

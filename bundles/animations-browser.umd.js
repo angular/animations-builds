@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-5751865
+ * @license Angular v5.0.0-beta.7-b14c2d1
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.0.0-beta.7-5751865
+ * @license Angular v5.0.0-beta.7-b14c2d1
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5228,7 +5228,7 @@ var TransitionAnimationPlayer = (function () {
         this._player = new _angular_animations.NoopAnimationPlayer();
         this._containsRealPlayer = false;
         this._queuedCallbacks = {};
-        this._destroyed = false;
+        this.destroyed = false;
         this.markedForDestroy = false;
     }
     Object.defineProperty(TransitionAnimationPlayer.prototype, "queued", {
@@ -5236,14 +5236,6 @@ var TransitionAnimationPlayer = (function () {
          * @return {?}
          */
         function () { return this._containsRealPlayer == false; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(TransitionAnimationPlayer.prototype, "destroyed", {
-        get: /**
-         * @return {?}
-         */
-        function () { return this._destroyed; },
         enumerable: true,
         configurable: true
     });
@@ -5377,7 +5369,7 @@ var TransitionAnimationPlayer = (function () {
      * @return {?}
      */
     function () {
-        this._destroyed = true;
+        (/** @type {?} */ (this)).destroyed = true;
         this._player.destroy();
     };
     /**
@@ -5951,9 +5943,10 @@ var WebAnimationsPlayer = (function () {
                 }
             }
         }
-        this._player = this._triggerWebAnimation(this.element, keyframes, this.options);
+        (/** @type {?} */ (this)).domPlayer =
+            this._triggerWebAnimation(this.element, keyframes, this.options);
         this._finalKeyframe = keyframes.length ? keyframes[keyframes.length - 1] : {};
-        this._player.addEventListener('finish', function () { return _this._onFinish(); });
+        this.domPlayer.addEventListener('finish', function () { return _this._onFinish(); });
     };
     /**
      * @return {?}
@@ -5967,7 +5960,7 @@ var WebAnimationsPlayer = (function () {
             this._resetDomPlayerState();
         }
         else {
-            this._player.pause();
+            this.domPlayer.pause();
         }
     };
     /** @internal */
@@ -5990,14 +5983,6 @@ var WebAnimationsPlayer = (function () {
         // supported yet across common browsers (we polyfill it for Edge/Safari) [CL #143630929]
         return /** @type {?} */ (element['animate'](keyframes, options));
     };
-    Object.defineProperty(WebAnimationsPlayer.prototype, "domPlayer", {
-        get: /**
-         * @return {?}
-         */
-        function () { return this._player; },
-        enumerable: true,
-        configurable: true
-    });
     /**
      * @param {?} fn
      * @return {?}
@@ -6038,7 +6023,7 @@ var WebAnimationsPlayer = (function () {
             this._onStartFns = [];
             this._started = true;
         }
-        this._player.play();
+        this.domPlayer.play();
     };
     /**
      * @return {?}
@@ -6048,7 +6033,7 @@ var WebAnimationsPlayer = (function () {
      */
     function () {
         this.init();
-        this._player.pause();
+        this.domPlayer.pause();
     };
     /**
      * @return {?}
@@ -6059,7 +6044,7 @@ var WebAnimationsPlayer = (function () {
     function () {
         this.init();
         this._onFinish();
-        this._player.finish();
+        this.domPlayer.finish();
     };
     /**
      * @return {?}
@@ -6080,8 +6065,8 @@ var WebAnimationsPlayer = (function () {
      * @return {?}
      */
     function () {
-        if (this._player) {
-            this._player.cancel();
+        if (this.domPlayer) {
+            this.domPlayer.cancel();
         }
     };
     /**
@@ -6124,14 +6109,14 @@ var WebAnimationsPlayer = (function () {
      * @param {?} p
      * @return {?}
      */
-    function (p) { this._player.currentTime = p * this.time; };
+    function (p) { this.domPlayer.currentTime = p * this.time; };
     /**
      * @return {?}
      */
     WebAnimationsPlayer.prototype.getPosition = /**
      * @return {?}
      */
-    function () { return this._player.currentTime / this.time; };
+    function () { return this.domPlayer.currentTime / this.time; };
     Object.defineProperty(WebAnimationsPlayer.prototype, "totalTime", {
         get: /**
          * @return {?}
