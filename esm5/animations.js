@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-9d2236a
+ * @license Angular v5.0.0-beta.7-5751865
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1620,4 +1620,4 @@ var ɵPRE_STYLE = '!';
  */
 
 export { AnimationBuilder, AnimationFactory, AUTO_STYLE, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=animations.js.map

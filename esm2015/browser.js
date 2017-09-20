@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-9d2236a
+ * @license Angular v5.0.0-beta.7-5751865
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5261,4 +5261,4 @@ function supportsWebAnimations() {
  */
 
 export { AnimationDriver, Animation as ɵAnimation, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, NoopAnimationDriver as ɵNoopAnimationDriver, AnimationEngine as ɵAnimationEngine, WebAnimationsDriver as ɵWebAnimationsDriver, supportsWebAnimations as ɵsupportsWebAnimations, WebAnimationsPlayer as ɵWebAnimationsPlayer };
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=browser.js.map
