@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-e889c68
+ * @license Angular v5.0.0-beta.7-86ffacf
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2498,7 +2498,12 @@ var AnimationTimelineContext = (function () {
         if (selector.length > 0) {
             // if :self is only used then the selector is empty
             var /** @type {?} */ multi = limit != 1;
-            results.push.apply(results, this._driver.query(this.element, selector, multi));
+            var /** @type {?} */ elements = this._driver.query(this.element, selector, multi);
+            if (limit !== 0) {
+                elements = limit < 0 ? elements.slice(elements.length + limit, elements.length) :
+                    elements.slice(0, limit);
+            }
+            results.push.apply(results, elements);
         }
         if (!optional && results.length == 0) {
             errors.push("`query(\"" + originalSelector + "\")` returned zero elements. (Use `query(\"" + originalSelector + "\", { optional: true })` if you wish to allow this.)");
