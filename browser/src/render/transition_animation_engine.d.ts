@@ -128,8 +128,8 @@ export declare class TransitionAnimationPlayer implements AnimationPlayer {
     readonly destroyed: boolean;
     parentPlayer: AnimationPlayer;
     markedForDestroy: boolean;
-    readonly queued: boolean;
     constructor(namespaceId: string, triggerName: string, element: any);
+    readonly queued: boolean;
     setRealPlayer(player: AnimationPlayer): void;
     getRealPlayer(): AnimationPlayer;
     private _queueEvent(name, callback);
