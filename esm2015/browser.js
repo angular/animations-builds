@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-c1b029a
+ * @license Angular v5.0.0-beta.7-2b84b86
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4411,11 +4411,8 @@ class TransitionAnimationPlayer {
         this._queuedCallbacks = {};
         this.destroyed = false;
         this.markedForDestroy = false;
+        this.queued = true;
     }
-    /**
-     * @return {?}
-     */
-    get queued() { return this._containsRealPlayer == false; }
     /**
      * @param {?} player
      * @return {?}
@@ -4429,6 +4426,7 @@ class TransitionAnimationPlayer {
         });
         this._queuedCallbacks = {};
         this._containsRealPlayer = true;
+        (/** @type {?} */ (this)).queued = false;
     }
     /**
      * @return {?}
