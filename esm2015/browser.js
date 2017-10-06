@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-rc.1-f83989b
+ * @license Angular v5.0.0-rc.1-a8920eb
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -563,324 +563,40 @@ function dashCaseToCamelCase(input) {
 function allowPreviousPlayerStylesMerge(duration, delay) {
     return duration === 0 || delay === 0;
 }
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-const EMPTY_ANIMATION_OPTIONS = {};
-/**
- * @record
- */
-
-/**
- * @abstract
- */
-class Ast {
-    constructor() {
-        this.options = EMPTY_ANIMATION_OPTIONS;
-    }
-    /**
-     * @return {?}
-     */
-    get params() { return this.options['params'] || null; }
-}
-class TriggerAst extends Ast {
-    /**
-     * @param {?} name
-     * @param {?} states
-     * @param {?} transitions
-     */
-    constructor(name, states, transitions) {
-        super();
-        this.name = name;
-        this.states = states;
-        this.transitions = transitions;
-        this.queryCount = 0;
-        this.depCount = 0;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    visit(visitor, context) { return visitor.visitTrigger(this, context); }
-}
-class StateAst extends Ast {
-    /**
-     * @param {?} name
-     * @param {?} style
-     */
-    constructor(name, style$$1) {
-        super();
-        this.name = name;
-        this.style = style$$1;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    visit(visitor, context) { return visitor.visitState(this, context); }
-}
-class TransitionAst extends Ast {
-    /**
-     * @param {?} matchers
-     * @param {?} animation
-     */
-    constructor(matchers, animation) {
-        super();
-        this.matchers = matchers;
-        this.animation = animation;
-        this.queryCount = 0;
-        this.depCount = 0;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    visit(visitor, context) { return visitor.visitTransition(this, context); }
-}
-class SequenceAst extends Ast {
-    /**
-     * @param {?} steps
-     */
-    constructor(steps) {
-        super();
-        this.steps = steps;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    visit(visitor, context) { return visitor.visitSequence(this, context); }
-}
-class GroupAst extends Ast {
-    /**
-     * @param {?} steps
-     */
-    constructor(steps) {
-        super();
-        this.steps = steps;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    visit(visitor, context) { return visitor.visitGroup(this, context); }
-}
-class AnimateAst extends Ast {
-    /**
-     * @param {?} timings
-     * @param {?} style
-     */
-    constructor(timings, style$$1) {
-        super();
-        this.timings = timings;
-        this.style = style$$1;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    visit(visitor, context) { return visitor.visitAnimate(this, context); }
-}
-class StyleAst extends Ast {
-    /**
-     * @param {?} styles
-     * @param {?} easing
-     * @param {?} offset
-     */
-    constructor(styles, easing, offset) {
-        super();
-        this.styles = styles;
-        this.easing = easing;
-        this.offset = offset;
-        this.isEmptyStep = false;
-        this.containsDynamicStyles = false;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    visit(visitor, context) { return visitor.visitStyle(this, context); }
-}
-class KeyframesAst extends Ast {
-    /**
-     * @param {?} styles
-     */
-    constructor(styles) {
-        super();
-        this.styles = styles;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    visit(visitor, context) { return visitor.visitKeyframes(this, context); }
-}
-class ReferenceAst extends Ast {
-    /**
-     * @param {?} animation
-     */
-    constructor(animation) {
-        super();
-        this.animation = animation;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    visit(visitor, context) { return visitor.visitReference(this, context); }
-}
-class AnimateChildAst extends Ast {
-    constructor() { super(); }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    visit(visitor, context) { return visitor.visitAnimateChild(this, context); }
-}
-class AnimateRefAst extends Ast {
-    /**
-     * @param {?} animation
-     */
-    constructor(animation) {
-        super();
-        this.animation = animation;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    visit(visitor, context) { return visitor.visitAnimateRef(this, context); }
-}
-class QueryAst extends Ast {
-    /**
-     * @param {?} selector
-     * @param {?} limit
-     * @param {?} optional
-     * @param {?} includeSelf
-     * @param {?} animation
-     */
-    constructor(selector, limit, optional, includeSelf, animation) {
-        super();
-        this.selector = selector;
-        this.limit = limit;
-        this.optional = optional;
-        this.includeSelf = includeSelf;
-        this.animation = animation;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    visit(visitor, context) { return visitor.visitQuery(this, context); }
-}
-class StaggerAst extends Ast {
-    /**
-     * @param {?} timings
-     * @param {?} animation
-     */
-    constructor(timings, animation) {
-        super();
-        this.timings = timings;
-        this.animation = animation;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    visit(visitor, context) { return visitor.visitStagger(this, context); }
-}
-class TimingAst extends Ast {
-    /**
-     * @param {?} duration
-     * @param {?=} delay
-     * @param {?=} easing
-     */
-    constructor(duration, delay = 0, easing = null) {
-        super();
-        this.duration = duration;
-        this.delay = delay;
-        this.easing = easing;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    visit(visitor, context) { return visitor.visitTiming(this, context); }
-}
-class DynamicTimingAst extends TimingAst {
-    /**
-     * @param {?} value
-     */
-    constructor(value) {
-        super(0, 0, '');
-        this.value = value;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    visit(visitor, context) { return visitor.visitTiming(this, context); }
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * @record
- */
-
 /**
  * @param {?} visitor
  * @param {?} node
  * @param {?} context
  * @return {?}
  */
-function visitAnimationNode(visitor, node, context) {
+function visitDslNode(visitor, node, context) {
     switch (node.type) {
         case 7 /* Trigger */:
-            return visitor.visitTrigger(/** @type {?} */ (node), context);
+            return visitor.visitTrigger(node, context);
         case 0 /* State */:
-            return visitor.visitState(/** @type {?} */ (node), context);
+            return visitor.visitState(node, context);
         case 1 /* Transition */:
-            return visitor.visitTransition(/** @type {?} */ (node), context);
+            return visitor.visitTransition(node, context);
         case 2 /* Sequence */:
-            return visitor.visitSequence(/** @type {?} */ (node), context);
+            return visitor.visitSequence(node, context);
         case 3 /* Group */:
-            return visitor.visitGroup(/** @type {?} */ (node), context);
+            return visitor.visitGroup(node, context);
         case 4 /* Animate */:
-            return visitor.visitAnimate(/** @type {?} */ (node), context);
+            return visitor.visitAnimate(node, context);
         case 5 /* Keyframes */:
-            return visitor.visitKeyframes(/** @type {?} */ (node), context);
+            return visitor.visitKeyframes(node, context);
         case 6 /* Style */:
-            return visitor.visitStyle(/** @type {?} */ (node), context);
+            return visitor.visitStyle(node, context);
         case 8 /* Reference */:
-            return visitor.visitReference(/** @type {?} */ (node), context);
+            return visitor.visitReference(node, context);
         case 9 /* AnimateChild */:
-            return visitor.visitAnimateChild(/** @type {?} */ (node), context);
+            return visitor.visitAnimateChild(node, context);
         case 10 /* AnimateRef */:
-            return visitor.visitAnimateRef(/** @type {?} */ (node), context);
+            return visitor.visitAnimateRef(node, context);
         case 11 /* Query */:
-            return visitor.visitQuery(/** @type {?} */ (node), context);
+            return visitor.visitQuery(node, context);
         case 12 /* Stagger */:
-            return visitor.visitStagger(/** @type {?} */ (node), context);
+            return visitor.visitStagger(node, context);
         default:
             throw new Error(`Unable to resolve animation metadata node #${node.type}`);
     }
@@ -964,20 +680,28 @@ function parseAnimationAlias(alias, errors) {
             return '* => *';
     }
 }
+const TRUE_BOOLEAN_VALUES = new Set();
+TRUE_BOOLEAN_VALUES.add('true');
+TRUE_BOOLEAN_VALUES.add('1');
+const FALSE_BOOLEAN_VALUES = new Set();
+FALSE_BOOLEAN_VALUES.add('false');
+FALSE_BOOLEAN_VALUES.add('0');
 /**
  * @param {?} lhs
  * @param {?} rhs
  * @return {?}
  */
 function makeLambdaFromStates(lhs, rhs) {
+    const /** @type {?} */ LHS_MATCH_BOOLEAN = TRUE_BOOLEAN_VALUES.has(lhs) || FALSE_BOOLEAN_VALUES.has(lhs);
+    const /** @type {?} */ RHS_MATCH_BOOLEAN = TRUE_BOOLEAN_VALUES.has(rhs) || FALSE_BOOLEAN_VALUES.has(rhs);
     return (fromState, toState) => {
         let /** @type {?} */ lhsMatch = lhs == ANY_STATE || lhs == fromState;
         let /** @type {?} */ rhsMatch = rhs == ANY_STATE || rhs == toState;
-        if (!lhsMatch && typeof fromState === 'boolean') {
-            lhsMatch = fromState ? lhs === 'true' : lhs === 'false';
+        if (!lhsMatch && LHS_MATCH_BOOLEAN && typeof fromState === 'boolean') {
+            lhsMatch = fromState ? TRUE_BOOLEAN_VALUES.has(lhs) : FALSE_BOOLEAN_VALUES.has(lhs);
         }
-        if (!rhsMatch && typeof toState === 'boolean') {
-            rhsMatch = toState ? rhs === 'true' : rhs === 'false';
+        if (!rhsMatch && RHS_MATCH_BOOLEAN && typeof toState === 'boolean') {
+            rhsMatch = toState ? TRUE_BOOLEAN_VALUES.has(rhs) : FALSE_BOOLEAN_VALUES.has(rhs);
         }
         return lhsMatch && rhsMatch;
     };
@@ -1025,7 +749,7 @@ class AnimationAstBuilderVisitor {
     build(metadata, errors) {
         const /** @type {?} */ context = new AnimationAstBuilderContext(errors);
         this._resetContextStyleTimingState(context);
-        return /** @type {?} */ (visitAnimationNode(this, normalizeAnimationEntry(metadata), context));
+        return /** @type {?} */ (visitDslNode(this, normalizeAnimationEntry(metadata), context));
     }
     /**
      * @param {?} context
@@ -1068,11 +792,11 @@ class AnimationAstBuilderVisitor {
                 context.errors.push('only state() and transition() definitions can sit inside of a trigger()');
             }
         });
-        const /** @type {?} */ ast = new TriggerAst(metadata.name, states, transitions);
-        ast.options = normalizeAnimationOptions(metadata.options);
-        ast.queryCount = queryCount;
-        ast.depCount = depCount;
-        return ast;
+        return {
+            type: 7 /* Trigger */,
+            name: metadata.name, states, transitions, queryCount, depCount,
+            options: null
+        };
     }
     /**
      * @param {?} metadata
@@ -1102,11 +826,12 @@ class AnimationAstBuilderVisitor {
                 context.errors.push(`state("${metadata.name}", ...) must define default values for all the following style substitutions: ${missingSubsArr.join(', ')}`);
             }
         }
-        const /** @type {?} */ stateAst = new StateAst(metadata.name, styleAst);
-        if (astParams) {
-            stateAst.options = { params: astParams };
-        }
-        return stateAst;
+        return {
+            type: 0 /* State */,
+            name: metadata.name,
+            style: styleAst,
+            options: astParams ? { params: astParams } : null
+        };
     }
     /**
      * @param {?} metadata
@@ -1116,13 +841,16 @@ class AnimationAstBuilderVisitor {
     visitTransition(metadata, context) {
         context.queryCount = 0;
         context.depCount = 0;
-        const /** @type {?} */ entry = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
+        const /** @type {?} */ animation = visitDslNode(this, normalizeAnimationEntry(metadata.animation), context);
         const /** @type {?} */ matchers = parseTransitionExpr(metadata.expr, context.errors);
-        const /** @type {?} */ ast = new TransitionAst(matchers, entry);
-        ast.options = normalizeAnimationOptions(metadata.options);
-        ast.queryCount = context.queryCount;
-        ast.depCount = context.depCount;
-        return ast;
+        return {
+            type: 1 /* Transition */,
+            matchers,
+            animation,
+            queryCount: context.queryCount,
+            depCount: context.depCount,
+            options: normalizeAnimationOptions(metadata.options)
+        };
     }
     /**
      * @param {?} metadata
@@ -1130,9 +858,11 @@ class AnimationAstBuilderVisitor {
      * @return {?}
      */
     visitSequence(metadata, context) {
-        const /** @type {?} */ ast = new SequenceAst(metadata.steps.map(s => visitAnimationNode(this, s, context)));
-        ast.options = normalizeAnimationOptions(metadata.options);
-        return ast;
+        return {
+            type: 2 /* Sequence */,
+            steps: metadata.steps.map(s => visitDslNode(this, s, context)),
+            options: normalizeAnimationOptions(metadata.options)
+        };
     }
     /**
      * @param {?} metadata
@@ -1144,14 +874,16 @@ class AnimationAstBuilderVisitor {
         let /** @type {?} */ furthestTime = 0;
         const /** @type {?} */ steps = metadata.steps.map(step => {
             context.currentTime = currentTime;
-            const /** @type {?} */ innerAst = visitAnimationNode(this, step, context);
+            const /** @type {?} */ innerAst = visitDslNode(this, step, context);
             furthestTime = Math.max(furthestTime, context.currentTime);
             return innerAst;
         });
         context.currentTime = furthestTime;
-        const /** @type {?} */ ast = new GroupAst(steps);
-        ast.options = normalizeAnimationOptions(metadata.options);
-        return ast;
+        return {
+            type: 3 /* Group */,
+            steps,
+            options: normalizeAnimationOptions(metadata.options)
+        };
     }
     /**
      * @param {?} metadata
@@ -1161,10 +893,10 @@ class AnimationAstBuilderVisitor {
     visitAnimate(metadata, context) {
         const /** @type {?} */ timingAst = constructTimingAst(metadata.timings, context.errors);
         context.currentAnimateTimings = timingAst;
-        let /** @type {?} */ styles;
+        let /** @type {?} */ styleAst;
         let /** @type {?} */ styleMetadata = metadata.styles ? metadata.styles : style({});
         if (styleMetadata.type == 5 /* Keyframes */) {
-            styles = this.visitKeyframes(/** @type {?} */ (styleMetadata), context);
+            styleAst = this.visitKeyframes(/** @type {?} */ (styleMetadata), context);
         }
         else {
             let /** @type {?} */ styleMetadata = /** @type {?} */ (metadata.styles);
@@ -1178,12 +910,17 @@ class AnimationAstBuilderVisitor {
                 styleMetadata = style(newStyleData);
             }
             context.currentTime += timingAst.duration + timingAst.delay;
-            const /** @type {?} */ styleAst = this.visitStyle(styleMetadata, context);
-            styleAst.isEmptyStep = isEmpty;
-            styles = styleAst;
+            const /** @type {?} */ _styleAst = this.visitStyle(styleMetadata, context);
+            _styleAst.isEmptyStep = isEmpty;
+            styleAst = _styleAst;
         }
         context.currentAnimateTimings = null;
-        return new AnimateAst(timingAst, styles);
+        return {
+            type: 4 /* Animate */,
+            timings: timingAst,
+            style: styleAst,
+            options: null
+        };
     }
     /**
      * @param {?} metadata
@@ -1241,9 +978,13 @@ class AnimationAstBuilderVisitor {
                 }
             }
         });
-        const /** @type {?} */ ast = new StyleAst(styles, collectedEasing, metadata.offset);
-        ast.containsDynamicStyles = containsDynamicStyles;
-        return ast;
+        return {
+            type: 6 /* Style */,
+            styles,
+            easing: collectedEasing,
+            offset: metadata.offset, containsDynamicStyles,
+            options: null
+        };
     }
     /**
      * @param {?} ast
@@ -1294,9 +1035,10 @@ class AnimationAstBuilderVisitor {
      * @return {?}
      */
     visitKeyframes(metadata, context) {
+        const /** @type {?} */ ast = { type: 5 /* Keyframes */, styles: [], options: null };
         if (!context.currentAnimateTimings) {
             context.errors.push(`keyframes() must be placed inside of a call to animate()`);
-            return new KeyframesAst([]);
+            return ast;
         }
         const /** @type {?} */ MAX_KEYFRAME_OFFSET = 1;
         let /** @type {?} */ totalKeyframesWithOffsets = 0;
@@ -1343,8 +1085,9 @@ class AnimationAstBuilderVisitor {
             currentAnimateTimings.duration = durationUpToThisFrame;
             this._validateStyleAst(kf, context);
             kf.offset = offset;
+            ast.styles.push(kf);
         });
-        return new KeyframesAst(keyframes);
+        return ast;
     }
     /**
      * @param {?} metadata
@@ -1352,10 +1095,11 @@ class AnimationAstBuilderVisitor {
      * @return {?}
      */
     visitReference(metadata, context) {
-        const /** @type {?} */ entry = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
-        const /** @type {?} */ ast = new ReferenceAst(entry);
-        ast.options = normalizeAnimationOptions(metadata.options);
-        return ast;
+        return {
+            type: 8 /* Reference */,
+            animation: visitDslNode(this, normalizeAnimationEntry(metadata.animation), context),
+            options: normalizeAnimationOptions(metadata.options)
+        };
     }
     /**
      * @param {?} metadata
@@ -1364,9 +1108,10 @@ class AnimationAstBuilderVisitor {
      */
     visitAnimateChild(metadata, context) {
         context.depCount++;
-        const /** @type {?} */ ast = new AnimateChildAst();
-        ast.options = normalizeAnimationOptions(metadata.options);
-        return ast;
+        return {
+            type: 9 /* AnimateChild */,
+            options: normalizeAnimationOptions(metadata.options)
+        };
     }
     /**
      * @param {?} metadata
@@ -1374,10 +1119,11 @@ class AnimationAstBuilderVisitor {
      * @return {?}
      */
     visitAnimateRef(metadata, context) {
-        const /** @type {?} */ animation = this.visitReference(metadata.animation, context);
-        const /** @type {?} */ ast = new AnimateRefAst(animation);
-        ast.options = normalizeAnimationOptions(metadata.options);
-        return ast;
+        return {
+            type: 10 /* AnimateRef */,
+            animation: this.visitReference(metadata.animation, context),
+            options: normalizeAnimationOptions(metadata.options)
+        };
     }
     /**
      * @param {?} metadata
@@ -1393,13 +1139,17 @@ class AnimationAstBuilderVisitor {
         context.currentQuerySelector =
             parentSelector.length ? (parentSelector + ' ' + selector) : selector;
         getOrSetAsInMap(context.collectedStyles, context.currentQuerySelector, {});
-        const /** @type {?} */ entry = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
+        const /** @type {?} */ animation = visitDslNode(this, normalizeAnimationEntry(metadata.animation), context);
         context.currentQuery = null;
         context.currentQuerySelector = parentSelector;
-        const /** @type {?} */ ast = new QueryAst(selector, options.limit || 0, !!options.optional, includeSelf, entry);
-        ast.originalSelector = metadata.selector;
-        ast.options = normalizeAnimationOptions(metadata.options);
-        return ast;
+        return {
+            type: 11 /* Query */,
+            selector,
+            limit: options.limit || 0,
+            optional: !!options.optional, includeSelf, animation,
+            originalSelector: metadata.selector,
+            options: normalizeAnimationOptions(metadata.options)
+        };
     }
     /**
      * @param {?} metadata
@@ -1413,8 +1163,11 @@ class AnimationAstBuilderVisitor {
         const /** @type {?} */ timings = metadata.timings === 'full' ?
             { duration: 0, delay: 0, easing: 'full' } :
             resolveTiming(metadata.timings, context.errors, true);
-        const /** @type {?} */ animation = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
-        return new StaggerAst(timings, animation);
+        return {
+            type: 12 /* Stagger */,
+            animation: visitDslNode(this, normalizeAnimationEntry(metadata.animation), context), timings,
+            options: null
+        };
     }
 }
 /**
@@ -1500,15 +1253,18 @@ function constructTimingAst(value, errors) {
     }
     else if (typeof value == 'number') {
         const /** @type {?} */ duration = resolveTiming(/** @type {?} */ (value), errors).duration;
-        return new TimingAst(/** @type {?} */ (value), 0, '');
+        return makeTimingAst(/** @type {?} */ (duration), 0, '');
     }
     const /** @type {?} */ strValue = /** @type {?} */ (value);
     const /** @type {?} */ isDynamic = strValue.split(/\s+/).some(v => v.charAt(0) == '{' && v.charAt(1) == '{');
     if (isDynamic) {
-        return new DynamicTimingAst(strValue);
+        const /** @type {?} */ ast = /** @type {?} */ (makeTimingAst(0, 0, ''));
+        ast.dynamic = true;
+        ast.strValue = strValue;
+        return /** @type {?} */ (ast);
     }
     timings = timings || resolveTiming(strValue, errors);
-    return new TimingAst(timings.duration, timings.delay, timings.easing);
+    return makeTimingAst(timings.duration, timings.delay, timings.easing);
 }
 /**
  * @param {?} options
@@ -1525,6 +1281,15 @@ function normalizeAnimationOptions(options) {
         options = {};
     }
     return options;
+}
+/**
+ * @param {?} duration
+ * @param {?} delay
+ * @param {?} easing
+ * @return {?}
+ */
+function makeTimingAst(duration, delay, easing) {
+    return { duration, delay, easing };
 }
 
 /**
@@ -1647,7 +1412,7 @@ class AnimationTimelineBuilderVisitor {
         const /** @type {?} */ context = new AnimationTimelineContext(driver, rootElement, subInstructions, errors, []);
         context.options = options;
         context.currentTimeline.setStyles([startingStyles], null, context.errors, options);
-        ast.visit(this, context);
+        visitDslNode(this, ast, context);
         // this checks to see if an actual animation happened
         const /** @type {?} */ timelines = context.timelines.filter(timeline => timeline.containsAnimation());
         if (timelines.length && Object.keys(finalStyles).length) {
@@ -1743,7 +1508,7 @@ class AnimationTimelineBuilderVisitor {
      */
     visitReference(ast, context) {
         context.updateOptions(ast.options, true);
-        ast.animation.visit(this, context);
+        visitDslNode(this, ast.animation, context);
         context.previousNode = ast;
     }
     /**
@@ -1759,7 +1524,7 @@ class AnimationTimelineBuilderVisitor {
             ctx = context.createSubContext(options);
             ctx.transformIntoNewTimeline();
             if (options.delay != null) {
-                if (ctx.previousNode instanceof StyleAst) {
+                if (ctx.previousNode.type == 6 /* Style */) {
                     ctx.currentTimeline.snapshotCurrentStyles();
                     ctx.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
                 }
@@ -1768,7 +1533,7 @@ class AnimationTimelineBuilderVisitor {
             }
         }
         if (ast.steps.length) {
-            ast.steps.forEach(s => s.visit(this, ctx));
+            ast.steps.forEach(s => visitDslNode(this, s, ctx));
             // this is here just incase the inner steps only contain or end with a style() call
             ctx.currentTimeline.applyStylesToKeyframe();
             // this means that some animation function within the sequence
@@ -1794,7 +1559,7 @@ class AnimationTimelineBuilderVisitor {
             if (delay) {
                 innerContext.delayNextStep(delay);
             }
-            s.visit(this, innerContext);
+            visitDslNode(this, s, innerContext);
             furthestTime = Math.max(furthestTime, innerContext.currentTimeline.currentTime);
             innerTimelines.push(innerContext.currentTimeline);
         });
@@ -1810,12 +1575,11 @@ class AnimationTimelineBuilderVisitor {
      * @param {?} context
      * @return {?}
      */
-    visitTiming(ast, context) {
-        if (ast instanceof DynamicTimingAst) {
-            const /** @type {?} */ strValue = context.params ?
-                interpolateParams(ast.value, context.params, context.errors) :
-                ast.value.toString();
-            return resolveTiming(strValue, context.errors);
+    _visitTiming(ast, context) {
+        if ((/** @type {?} */ (ast)).dynamic) {
+            const /** @type {?} */ strValue = (/** @type {?} */ (ast)).strValue;
+            const /** @type {?} */ timingValue = context.params ? interpolateParams(strValue, context.params, context.errors) : strValue;
+            return resolveTiming(timingValue, context.errors);
         }
         else {
             return { duration: ast.duration, delay: ast.delay, easing: ast.easing };
@@ -1827,14 +1591,14 @@ class AnimationTimelineBuilderVisitor {
      * @return {?}
      */
     visitAnimate(ast, context) {
-        const /** @type {?} */ timings = context.currentAnimateTimings = this.visitTiming(ast.timings, context);
+        const /** @type {?} */ timings = context.currentAnimateTimings = this._visitTiming(ast.timings, context);
         const /** @type {?} */ timeline = context.currentTimeline;
         if (timings.delay) {
             context.incrementTime(timings.delay);
             timeline.snapshotCurrentStyles();
         }
         const /** @type {?} */ style$$1 = ast.style;
-        if (style$$1 instanceof KeyframesAst) {
+        if (style$$1.type == 5 /* Keyframes */) {
             this.visitKeyframes(style$$1, context);
         }
         else {
@@ -1904,7 +1668,7 @@ class AnimationTimelineBuilderVisitor {
         const /** @type {?} */ startTime = context.currentTimeline.currentTime;
         const /** @type {?} */ options = /** @type {?} */ ((ast.options || {}));
         const /** @type {?} */ delay = options.delay ? resolveTimingValue(options.delay) : 0;
-        if (delay && (context.previousNode instanceof StyleAst ||
+        if (delay && (context.previousNode.type === 6 /* Style */ ||
             (startTime == 0 && context.currentTimeline.getCurrentStyleProperties().length))) {
             context.currentTimeline.snapshotCurrentStyles();
             context.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
@@ -1922,7 +1686,7 @@ class AnimationTimelineBuilderVisitor {
             if (element === context.element) {
                 sameElementTimeline = innerContext.currentTimeline;
             }
-            ast.animation.visit(this, innerContext);
+            visitDslNode(this, ast.animation, innerContext);
             // this is here just incase the inner steps only contain or end
             // with a style() call (which is here to signal that this is a preparatory
             // call to style an element before it is animated again)
@@ -1965,7 +1729,7 @@ class AnimationTimelineBuilderVisitor {
             timeline.delayNextStep(delay);
         }
         const /** @type {?} */ startingTime = timeline.currentTime;
-        ast.animation.visit(this, context);
+        visitDslNode(this, ast.animation, context);
         context.previousNode = ast;
         // time = duration + delay
         // the reason why this computation is so complex is because
@@ -2045,7 +1809,7 @@ class AnimationTimelineContext {
             const /** @type {?} */ oldParams = this.options.params;
             if (oldParams) {
                 const /** @type {?} */ params = options['params'] = {};
-                Object.keys(this.options.params).forEach(name => { params[name] = oldParams[name]; });
+                Object.keys(oldParams).forEach(name => { params[name] = oldParams[name]; });
             }
         }
         return options;
@@ -2866,8 +2630,15 @@ class AnimationTrigger {
  */
 function createFallbackTransition(triggerName, states) {
     const /** @type {?} */ matchers = [(fromState, toState) => true];
-    const /** @type {?} */ animation = new SequenceAst([]);
-    const /** @type {?} */ transition = new TransitionAst(matchers, animation);
+    const /** @type {?} */ animation = { type: 2 /* Sequence */, steps: [], options: null };
+    const /** @type {?} */ transition = {
+        type: 1 /* Transition */,
+        animation,
+        matchers,
+        options: null,
+        queryCount: 0,
+        depCount: 0
+    };
     return new AnimationTransitionFactory(triggerName, transition, states);
 }
 /**
@@ -3098,13 +2869,11 @@ const REMOVAL_FLAG = '__ng_removed';
 
 class StateValue {
     /**
-     * @return {?}
-     */
-    get params() { return /** @type {?} */ (this.options.params); }
-    /**
      * @param {?} input
+     * @param {?=} namespaceId
      */
-    constructor(input) {
+    constructor(input, namespaceId = '') {
+        this.namespaceId = namespaceId;
         const /** @type {?} */ isObj = input && input.hasOwnProperty('value');
         const /** @type {?} */ value = isObj ? input['value'] : input;
         this.value = normalizeTriggerValue(value);
@@ -3120,6 +2889,10 @@ class StateValue {
             this.options.params = {};
         }
     }
+    /**
+     * @return {?}
+     */
+    get params() { return /** @type {?} */ (this.options.params); }
     /**
      * @param {?} options
      * @return {?}
@@ -3240,7 +3013,7 @@ class AnimationTransitionNamespace {
             this._engine.statesByElement.set(element, triggersWithStates = {});
         }
         let /** @type {?} */ fromState = triggersWithStates[triggerName];
-        const /** @type {?} */ toState = new StateValue(value);
+        const /** @type {?} */ toState = new StateValue(value, this.id);
         const /** @type {?} */ isObj = value && value.hasOwnProperty('value');
         if (!isObj && fromState) {
             toState.absorbOptions(fromState.options);
@@ -3349,15 +3122,14 @@ class AnimationTransitionNamespace {
      * @param {?=} animate
      * @return {?}
      */
-    _destroyInnerNodes(rootElement, context, animate = false) {
+    _signalRemovalForInnerTriggers(rootElement, context, animate = false) {
+        // emulate a leave animation for all inner nodes within this node.
+        // If there are no animations found for any of the nodes then clear the cache
+        // for the element.
         this._engine.driver.query(rootElement, NG_TRIGGER_SELECTOR, true).forEach(elm => {
-            if (animate && containsClass(elm, this._hostClassName)) {
-                const /** @type {?} */ innerNs = this._engine.namespacesByHostElement.get(elm);
-                // special case for a host element with animations on the same element
-                if (innerNs) {
-                    innerNs.removeNode(elm, context, true);
-                }
-                this.removeNode(elm, context, true);
+            const /** @type {?} */ namespaces = this._engine.fetchNamespacesByElement(elm);
+            if (namespaces.size) {
+                namespaces.forEach(ns => { ns.triggerLeaveAnimation(elm, context, false, true); });
             }
             else {
                 this.clearElementCache(elm);
@@ -3367,33 +3139,79 @@ class AnimationTransitionNamespace {
     /**
      * @param {?} element
      * @param {?} context
-     * @param {?=} doNotRecurse
+     * @param {?=} destroyAfterComplete
+     * @param {?=} defaultToFallback
      * @return {?}
      */
-    removeNode(element, context, doNotRecurse) {
-        const /** @type {?} */ engine = this._engine;
-        if (!doNotRecurse && element.childElementCount) {
-            this._destroyInnerNodes(element, context, true);
-        }
-        const /** @type {?} */ triggerStates = engine.statesByElement.get(element);
+    triggerLeaveAnimation(element, context, destroyAfterComplete, defaultToFallback) {
+        const /** @type {?} */ triggerStates = this._engine.statesByElement.get(element);
         if (triggerStates) {
             const /** @type {?} */ players = [];
             Object.keys(triggerStates).forEach(triggerName => {
                 // this check is here in the event that an element is removed
                 // twice (both on the host level and the component level)
                 if (this._triggers[triggerName]) {
-                    const /** @type {?} */ player = this.trigger(element, triggerName, VOID_VALUE, false);
+                    const /** @type {?} */ player = this.trigger(element, triggerName, VOID_VALUE, defaultToFallback);
                     if (player) {
                         players.push(player);
                     }
                 }
             });
             if (players.length) {
-                engine.markElementAsRemoved(this.id, element, true, context);
-                optimizeGroupPlayer(players).onDone(() => engine.processLeaveNode(element));
-                return;
+                this._engine.markElementAsRemoved(this.id, element, true, context);
+                if (destroyAfterComplete) {
+                    optimizeGroupPlayer(players).onDone(() => this._engine.processLeaveNode(element));
+                }
+                return true;
             }
         }
+        return false;
+    }
+    /**
+     * @param {?} element
+     * @return {?}
+     */
+    prepareLeaveAnimationListeners(element) {
+        const /** @type {?} */ listeners = this._elementListeners.get(element);
+        if (listeners) {
+            const /** @type {?} */ visitedTriggers = new Set();
+            listeners.forEach(listener => {
+                const /** @type {?} */ triggerName = listener.name;
+                if (visitedTriggers.has(triggerName))
+                    return;
+                visitedTriggers.add(triggerName);
+                const /** @type {?} */ trigger = this._triggers[triggerName];
+                const /** @type {?} */ transition = trigger.fallbackTransition;
+                const /** @type {?} */ elementStates = /** @type {?} */ ((this._engine.statesByElement.get(element)));
+                const /** @type {?} */ fromState = elementStates[triggerName] || DEFAULT_STATE_VALUE;
+                const /** @type {?} */ toState = new StateValue(VOID_VALUE);
+                const /** @type {?} */ player = new TransitionAnimationPlayer(this.id, triggerName, element);
+                this._engine.totalQueuedPlayers++;
+                this._queue.push({
+                    element,
+                    triggerName,
+                    transition,
+                    fromState,
+                    toState,
+                    player,
+                    isFallbackTransition: true
+                });
+            });
+        }
+    }
+    /**
+     * @param {?} element
+     * @param {?} context
+     * @return {?}
+     */
+    removeNode(element, context) {
+        const /** @type {?} */ engine = this._engine;
+        if (element.childElementCount) {
+            this._signalRemovalForInnerTriggers(element, context, true);
+        }
+        // this means that a * => VOID animation was detected and kicked off
+        if (this.triggerLeaveAnimation(element, context, true))
+            return;
         // find the player that is animating and make sure that the
         // removal is delayed until that player has completed
         let /** @type {?} */ containsPotentialParentTransition = false;
@@ -3421,32 +3239,7 @@ class AnimationTransitionNamespace {
         // during flush or will be picked up by a parent query. Either way
         // we need to fire the listeners for this element when it DOES get
         // removed (once the query parent animation is done or after flush)
-        const /** @type {?} */ listeners = this._elementListeners.get(element);
-        if (listeners) {
-            const /** @type {?} */ visitedTriggers = new Set();
-            listeners.forEach(listener => {
-                const /** @type {?} */ triggerName = listener.name;
-                if (visitedTriggers.has(triggerName))
-                    return;
-                visitedTriggers.add(triggerName);
-                const /** @type {?} */ trigger = this._triggers[triggerName];
-                const /** @type {?} */ transition = trigger.fallbackTransition;
-                const /** @type {?} */ elementStates = /** @type {?} */ ((engine.statesByElement.get(element)));
-                const /** @type {?} */ fromState = elementStates[triggerName] || DEFAULT_STATE_VALUE;
-                const /** @type {?} */ toState = new StateValue(VOID_VALUE);
-                const /** @type {?} */ player = new TransitionAnimationPlayer(this.id, triggerName, element);
-                this._engine.totalQueuedPlayers++;
-                this._queue.push({
-                    element,
-                    triggerName,
-                    transition,
-                    fromState,
-                    toState,
-                    player,
-                    isFallbackTransition: true
-                });
-            });
-        }
+        this.prepareLeaveAnimationListeners(element);
         // whether or not a parent has an animation we need to delay the deferral of the leave
         // operation until we have more information (which we do after flush() has been called)
         if (containsPotentialParentTransition) {
@@ -3516,7 +3309,7 @@ class AnimationTransitionNamespace {
      */
     destroy(context) {
         this.players.forEach(p => p.destroy());
-        this._destroyInnerNodes(this.hostElement, context);
+        this._signalRemovalForInnerTriggers(this.hostElement, context);
     }
     /**
      * @param {?} element
@@ -3681,6 +3474,32 @@ class TransitionAnimationEngine {
      */
     _fetchNamespace(id) { return this._namespaceLookup[id]; }
     /**
+     * @param {?} element
+     * @return {?}
+     */
+    fetchNamespacesByElement(element) {
+        // normally there should only be one namespace per element, however
+        // if @triggers are placed on both the component element and then
+        // its host element (within the component code) then there will be
+        // two namespaces returned. We use a set here to simply the dedupe
+        // of namespaces incase there are multiple triggers both the elm and host
+        const /** @type {?} */ namespaces = new Set();
+        const /** @type {?} */ elementStates = this.statesByElement.get(element);
+        if (elementStates) {
+            const /** @type {?} */ keys = Object.keys(elementStates);
+            for (let /** @type {?} */ i = 0; i < keys.length; i++) {
+                const /** @type {?} */ nsId = elementStates[keys[i]].namespaceId;
+                if (nsId) {
+                    const /** @type {?} */ ns = this._fetchNamespace(nsId);
+                    if (ns) {
+                        namespaces.add(ns);
+                    }
+                }
+            }
+        }
+        return namespaces;
+    }
+    /**
      * @param {?} namespaceId
      * @param {?} element
      * @param {?} name
@@ -3747,17 +3566,16 @@ class TransitionAnimationEngine {
      * @param {?} namespaceId
      * @param {?} element
      * @param {?} context
-     * @param {?=} doNotRecurse
      * @return {?}
      */
-    removeNode(namespaceId, element, context, doNotRecurse) {
+    removeNode(namespaceId, element, context) {
         if (!isElementNode(element)) {
             this._onRemovalComplete(element, context);
             return;
         }
         const /** @type {?} */ ns = namespaceId ? this._fetchNamespace(namespaceId) : null;
         if (ns) {
-            ns.removeNode(element, context, doNotRecurse);
+            ns.removeNode(element, context);
         }
         else {
             this.markElementAsRemoved(namespaceId, element, false, context);
@@ -3806,36 +3624,44 @@ class TransitionAnimationEngine {
      */
     destroyInnerAnimations(containerElement) {
         let /** @type {?} */ elements = this.driver.query(containerElement, NG_TRIGGER_SELECTOR, true);
-        elements.forEach(element => {
-            const /** @type {?} */ players = this.playersByElement.get(element);
-            if (players) {
-                players.forEach(player => {
-                    // special case for when an element is set for destruction, but hasn't started.
-                    // in this situation we want to delay the destruction until the flush occurs
-                    // so that any event listeners attached to the player are triggered.
-                    if (player.queued) {
-                        player.markedForDestroy = true;
-                    }
-                    else {
-                        player.destroy();
-                    }
-                });
-            }
-            const /** @type {?} */ stateMap = this.statesByElement.get(element);
-            if (stateMap) {
-                Object.keys(stateMap).forEach(triggerName => stateMap[triggerName] = DELETED_STATE_VALUE);
-            }
-        });
+        elements.forEach(element => this.destroyActiveAnimationsForElement(element));
         if (this.playersByQueriedElement.size == 0)
             return;
         elements = this.driver.query(containerElement, NG_ANIMATING_SELECTOR, true);
-        if (elements.length) {
-            elements.forEach(element => {
-                const /** @type {?} */ players = this.playersByQueriedElement.get(element);
-                if (players) {
-                    players.forEach(player => player.finish());
+        elements.forEach(element => this.finishActiveQueriedAnimationOnElement(element));
+    }
+    /**
+     * @param {?} element
+     * @return {?}
+     */
+    destroyActiveAnimationsForElement(element) {
+        const /** @type {?} */ players = this.playersByElement.get(element);
+        if (players) {
+            players.forEach(player => {
+                // special case for when an element is set for destruction, but hasn't started.
+                // in this situation we want to delay the destruction until the flush occurs
+                // so that any event listeners attached to the player are triggered.
+                if (player.queued) {
+                    player.markedForDestroy = true;
+                }
+                else {
+                    player.destroy();
                 }
             });
+        }
+        const /** @type {?} */ stateMap = this.statesByElement.get(element);
+        if (stateMap) {
+            Object.keys(stateMap).forEach(triggerName => stateMap[triggerName] = DELETED_STATE_VALUE);
+        }
+    }
+    /**
+     * @param {?} element
+     * @return {?}
+     */
+    finishActiveQueriedAnimationOnElement(element) {
+        const /** @type {?} */ players = this.playersByQueriedElement.get(element);
+        if (players) {
+            players.forEach(player => player.finish());
         }
     }
     /**
@@ -3928,7 +3754,7 @@ class TransitionAnimationEngine {
      * @return {?}
      */
     reportError(errors) {
-        throw new Error(`Unable to process animations due to the following failed trigger transitions\n ${errors.join("\n")}`);
+        throw new Error(`Unable to process animations due to the following failed trigger transitions\n ${errors.join('\n')}`);
     }
     /**
      * @param {?} cleanupFns
@@ -4564,12 +4390,10 @@ function deleteOrUnsetInMap(map, key, value) {
  * @return {?}
  */
 function normalizeTriggerValue(value) {
-    switch (typeof value) {
-        case 'boolean':
-            return value ? '1' : '0';
-        default:
-            return value != null ? value.toString() : null;
-    }
+    // we use `!= null` here because it's the most simple
+    // way to test against a "falsy" value without mixing
+    // in empty strings or a zero value. DO NOT OPTIMIZE.
+    return value != null ? value : null;
 }
 /**
  * @param {?} node
@@ -4650,20 +4474,6 @@ function createIsRootFilterFn(nodes) {
     return isRoot;
 }
 const CLASSES_CACHE_KEY = '$$classes';
-/**
- * @param {?} element
- * @param {?} className
- * @return {?}
- */
-function containsClass(element, className) {
-    if (element.classList) {
-        return element.classList.contains(className);
-    }
-    else {
-        const /** @type {?} */ classes = element[CLASSES_CACHE_KEY];
-        return classes && classes[className];
-    }
-}
 /**
  * @param {?} element
  * @param {?} className

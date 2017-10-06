@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-rc.1-f83989b
+ * @license Angular v5.0.0-rc.1-a8920eb
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.0.0-rc.1-f83989b
+ * @license Angular v5.0.0-rc.1-a8920eb
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -662,396 +662,40 @@ function dashCaseToCamelCase(input) {
 function allowPreviousPlayerStylesMerge(duration, delay) {
     return duration === 0 || delay === 0;
 }
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-var EMPTY_ANIMATION_OPTIONS = {};
-/**
- * @record
- */
-
-/**
- * @abstract
- */
-var Ast = (function () {
-    function Ast() {
-        this.options = EMPTY_ANIMATION_OPTIONS;
-    }
-    Object.defineProperty(Ast.prototype, "params", {
-        get: /**
-         * @return {?}
-         */
-        function () { return this.options['params'] || null; },
-        enumerable: true,
-        configurable: true
-    });
-    return Ast;
-}());
-var TriggerAst = (function (_super) {
-    __extends(TriggerAst, _super);
-    function TriggerAst(name, states, transitions) {
-        var _this = _super.call(this) || this;
-        _this.name = name;
-        _this.states = states;
-        _this.transitions = transitions;
-        _this.queryCount = 0;
-        _this.depCount = 0;
-        return _this;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    TriggerAst.prototype.visit = /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    function (visitor, context) { return visitor.visitTrigger(this, context); };
-    return TriggerAst;
-}(Ast));
-var StateAst = (function (_super) {
-    __extends(StateAst, _super);
-    function StateAst(name, style$$1) {
-        var _this = _super.call(this) || this;
-        _this.name = name;
-        _this.style = style$$1;
-        return _this;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    StateAst.prototype.visit = /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    function (visitor, context) { return visitor.visitState(this, context); };
-    return StateAst;
-}(Ast));
-var TransitionAst = (function (_super) {
-    __extends(TransitionAst, _super);
-    function TransitionAst(matchers, animation) {
-        var _this = _super.call(this) || this;
-        _this.matchers = matchers;
-        _this.animation = animation;
-        _this.queryCount = 0;
-        _this.depCount = 0;
-        return _this;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    TransitionAst.prototype.visit = /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    function (visitor, context) { return visitor.visitTransition(this, context); };
-    return TransitionAst;
-}(Ast));
-var SequenceAst = (function (_super) {
-    __extends(SequenceAst, _super);
-    function SequenceAst(steps) {
-        var _this = _super.call(this) || this;
-        _this.steps = steps;
-        return _this;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    SequenceAst.prototype.visit = /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    function (visitor, context) { return visitor.visitSequence(this, context); };
-    return SequenceAst;
-}(Ast));
-var GroupAst = (function (_super) {
-    __extends(GroupAst, _super);
-    function GroupAst(steps) {
-        var _this = _super.call(this) || this;
-        _this.steps = steps;
-        return _this;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    GroupAst.prototype.visit = /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    function (visitor, context) { return visitor.visitGroup(this, context); };
-    return GroupAst;
-}(Ast));
-var AnimateAst = (function (_super) {
-    __extends(AnimateAst, _super);
-    function AnimateAst(timings, style$$1) {
-        var _this = _super.call(this) || this;
-        _this.timings = timings;
-        _this.style = style$$1;
-        return _this;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    AnimateAst.prototype.visit = /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    function (visitor, context) { return visitor.visitAnimate(this, context); };
-    return AnimateAst;
-}(Ast));
-var StyleAst = (function (_super) {
-    __extends(StyleAst, _super);
-    function StyleAst(styles, easing, offset) {
-        var _this = _super.call(this) || this;
-        _this.styles = styles;
-        _this.easing = easing;
-        _this.offset = offset;
-        _this.isEmptyStep = false;
-        _this.containsDynamicStyles = false;
-        return _this;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    StyleAst.prototype.visit = /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    function (visitor, context) { return visitor.visitStyle(this, context); };
-    return StyleAst;
-}(Ast));
-var KeyframesAst = (function (_super) {
-    __extends(KeyframesAst, _super);
-    function KeyframesAst(styles) {
-        var _this = _super.call(this) || this;
-        _this.styles = styles;
-        return _this;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    KeyframesAst.prototype.visit = /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    function (visitor, context) { return visitor.visitKeyframes(this, context); };
-    return KeyframesAst;
-}(Ast));
-var ReferenceAst = (function (_super) {
-    __extends(ReferenceAst, _super);
-    function ReferenceAst(animation) {
-        var _this = _super.call(this) || this;
-        _this.animation = animation;
-        return _this;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    ReferenceAst.prototype.visit = /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    function (visitor, context) { return visitor.visitReference(this, context); };
-    return ReferenceAst;
-}(Ast));
-var AnimateChildAst = (function (_super) {
-    __extends(AnimateChildAst, _super);
-    function AnimateChildAst() {
-        return _super.call(this) || this;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    AnimateChildAst.prototype.visit = /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    function (visitor, context) { return visitor.visitAnimateChild(this, context); };
-    return AnimateChildAst;
-}(Ast));
-var AnimateRefAst = (function (_super) {
-    __extends(AnimateRefAst, _super);
-    function AnimateRefAst(animation) {
-        var _this = _super.call(this) || this;
-        _this.animation = animation;
-        return _this;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    AnimateRefAst.prototype.visit = /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    function (visitor, context) { return visitor.visitAnimateRef(this, context); };
-    return AnimateRefAst;
-}(Ast));
-var QueryAst = (function (_super) {
-    __extends(QueryAst, _super);
-    function QueryAst(selector, limit, optional, includeSelf, animation) {
-        var _this = _super.call(this) || this;
-        _this.selector = selector;
-        _this.limit = limit;
-        _this.optional = optional;
-        _this.includeSelf = includeSelf;
-        _this.animation = animation;
-        return _this;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    QueryAst.prototype.visit = /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    function (visitor, context) { return visitor.visitQuery(this, context); };
-    return QueryAst;
-}(Ast));
-var StaggerAst = (function (_super) {
-    __extends(StaggerAst, _super);
-    function StaggerAst(timings, animation) {
-        var _this = _super.call(this) || this;
-        _this.timings = timings;
-        _this.animation = animation;
-        return _this;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    StaggerAst.prototype.visit = /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    function (visitor, context) { return visitor.visitStagger(this, context); };
-    return StaggerAst;
-}(Ast));
-var TimingAst = (function (_super) {
-    __extends(TimingAst, _super);
-    function TimingAst(duration, delay, easing) {
-        if (delay === void 0) { delay = 0; }
-        if (easing === void 0) { easing = null; }
-        var _this = _super.call(this) || this;
-        _this.duration = duration;
-        _this.delay = delay;
-        _this.easing = easing;
-        return _this;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    TimingAst.prototype.visit = /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    function (visitor, context) { return visitor.visitTiming(this, context); };
-    return TimingAst;
-}(Ast));
-var DynamicTimingAst = (function (_super) {
-    __extends(DynamicTimingAst, _super);
-    function DynamicTimingAst(value) {
-        var _this = _super.call(this, 0, 0, '') || this;
-        _this.value = value;
-        return _this;
-    }
-    /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    DynamicTimingAst.prototype.visit = /**
-     * @param {?} visitor
-     * @param {?} context
-     * @return {?}
-     */
-    function (visitor, context) { return visitor.visitTiming(this, context); };
-    return DynamicTimingAst;
-}(TimingAst));
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * @record
- */
-
 /**
  * @param {?} visitor
  * @param {?} node
  * @param {?} context
  * @return {?}
  */
-function visitAnimationNode(visitor, node, context) {
+function visitDslNode(visitor, node, context) {
     switch (node.type) {
         case 7 /* Trigger */:
-            return visitor.visitTrigger(/** @type {?} */ (node), context);
+            return visitor.visitTrigger(node, context);
         case 0 /* State */:
-            return visitor.visitState(/** @type {?} */ (node), context);
+            return visitor.visitState(node, context);
         case 1 /* Transition */:
-            return visitor.visitTransition(/** @type {?} */ (node), context);
+            return visitor.visitTransition(node, context);
         case 2 /* Sequence */:
-            return visitor.visitSequence(/** @type {?} */ (node), context);
+            return visitor.visitSequence(node, context);
         case 3 /* Group */:
-            return visitor.visitGroup(/** @type {?} */ (node), context);
+            return visitor.visitGroup(node, context);
         case 4 /* Animate */:
-            return visitor.visitAnimate(/** @type {?} */ (node), context);
+            return visitor.visitAnimate(node, context);
         case 5 /* Keyframes */:
-            return visitor.visitKeyframes(/** @type {?} */ (node), context);
+            return visitor.visitKeyframes(node, context);
         case 6 /* Style */:
-            return visitor.visitStyle(/** @type {?} */ (node), context);
+            return visitor.visitStyle(node, context);
         case 8 /* Reference */:
-            return visitor.visitReference(/** @type {?} */ (node), context);
+            return visitor.visitReference(node, context);
         case 9 /* AnimateChild */:
-            return visitor.visitAnimateChild(/** @type {?} */ (node), context);
+            return visitor.visitAnimateChild(node, context);
         case 10 /* AnimateRef */:
-            return visitor.visitAnimateRef(/** @type {?} */ (node), context);
+            return visitor.visitAnimateRef(node, context);
         case 11 /* Query */:
-            return visitor.visitQuery(/** @type {?} */ (node), context);
+            return visitor.visitQuery(node, context);
         case 12 /* Stagger */:
-            return visitor.visitStagger(/** @type {?} */ (node), context);
+            return visitor.visitStagger(node, context);
         default:
             throw new Error("Unable to resolve animation metadata node #" + node.type);
     }
@@ -1135,20 +779,28 @@ function parseAnimationAlias(alias, errors) {
             return '* => *';
     }
 }
+var TRUE_BOOLEAN_VALUES = new Set();
+TRUE_BOOLEAN_VALUES.add('true');
+TRUE_BOOLEAN_VALUES.add('1');
+var FALSE_BOOLEAN_VALUES = new Set();
+FALSE_BOOLEAN_VALUES.add('false');
+FALSE_BOOLEAN_VALUES.add('0');
 /**
  * @param {?} lhs
  * @param {?} rhs
  * @return {?}
  */
 function makeLambdaFromStates(lhs, rhs) {
+    var /** @type {?} */ LHS_MATCH_BOOLEAN = TRUE_BOOLEAN_VALUES.has(lhs) || FALSE_BOOLEAN_VALUES.has(lhs);
+    var /** @type {?} */ RHS_MATCH_BOOLEAN = TRUE_BOOLEAN_VALUES.has(rhs) || FALSE_BOOLEAN_VALUES.has(rhs);
     return function (fromState, toState) {
         var /** @type {?} */ lhsMatch = lhs == ANY_STATE || lhs == fromState;
         var /** @type {?} */ rhsMatch = rhs == ANY_STATE || rhs == toState;
-        if (!lhsMatch && typeof fromState === 'boolean') {
-            lhsMatch = fromState ? lhs === 'true' : lhs === 'false';
+        if (!lhsMatch && LHS_MATCH_BOOLEAN && typeof fromState === 'boolean') {
+            lhsMatch = fromState ? TRUE_BOOLEAN_VALUES.has(lhs) : FALSE_BOOLEAN_VALUES.has(lhs);
         }
-        if (!rhsMatch && typeof toState === 'boolean') {
-            rhsMatch = toState ? rhs === 'true' : rhs === 'false';
+        if (!rhsMatch && RHS_MATCH_BOOLEAN && typeof toState === 'boolean') {
+            rhsMatch = toState ? TRUE_BOOLEAN_VALUES.has(rhs) : FALSE_BOOLEAN_VALUES.has(rhs);
         }
         return lhsMatch && rhsMatch;
     };
@@ -1198,7 +850,7 @@ var AnimationAstBuilderVisitor = (function () {
     function (metadata, errors) {
         var /** @type {?} */ context = new AnimationAstBuilderContext(errors);
         this._resetContextStyleTimingState(context);
-        return /** @type {?} */ (visitAnimationNode(this, normalizeAnimationEntry(metadata), context));
+        return /** @type {?} */ (visitDslNode(this, normalizeAnimationEntry(metadata), context));
     };
     /**
      * @param {?} context
@@ -1251,11 +903,11 @@ var AnimationAstBuilderVisitor = (function () {
                 context.errors.push('only state() and transition() definitions can sit inside of a trigger()');
             }
         });
-        var /** @type {?} */ ast = new TriggerAst(metadata.name, states, transitions);
-        ast.options = normalizeAnimationOptions(metadata.options);
-        ast.queryCount = queryCount;
-        ast.depCount = depCount;
-        return ast;
+        return {
+            type: 7 /* Trigger */,
+            name: metadata.name, states: states, transitions: transitions, queryCount: queryCount, depCount: depCount,
+            options: null
+        };
     };
     /**
      * @param {?} metadata
@@ -1290,11 +942,12 @@ var AnimationAstBuilderVisitor = (function () {
                 context.errors.push("state(\"" + metadata.name + "\", ...) must define default values for all the following style substitutions: " + missingSubsArr.join(', '));
             }
         }
-        var /** @type {?} */ stateAst = new StateAst(metadata.name, styleAst);
-        if (astParams) {
-            stateAst.options = { params: astParams };
-        }
-        return stateAst;
+        return {
+            type: 0 /* State */,
+            name: metadata.name,
+            style: styleAst,
+            options: astParams ? { params: astParams } : null
+        };
     };
     /**
      * @param {?} metadata
@@ -1309,13 +962,16 @@ var AnimationAstBuilderVisitor = (function () {
     function (metadata, context) {
         context.queryCount = 0;
         context.depCount = 0;
-        var /** @type {?} */ entry = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
+        var /** @type {?} */ animation = visitDslNode(this, normalizeAnimationEntry(metadata.animation), context);
         var /** @type {?} */ matchers = parseTransitionExpr(metadata.expr, context.errors);
-        var /** @type {?} */ ast = new TransitionAst(matchers, entry);
-        ast.options = normalizeAnimationOptions(metadata.options);
-        ast.queryCount = context.queryCount;
-        ast.depCount = context.depCount;
-        return ast;
+        return {
+            type: 1 /* Transition */,
+            matchers: matchers,
+            animation: animation,
+            queryCount: context.queryCount,
+            depCount: context.depCount,
+            options: normalizeAnimationOptions(metadata.options)
+        };
     };
     /**
      * @param {?} metadata
@@ -1329,9 +985,11 @@ var AnimationAstBuilderVisitor = (function () {
      */
     function (metadata, context) {
         var _this = this;
-        var /** @type {?} */ ast = new SequenceAst(metadata.steps.map(function (s) { return visitAnimationNode(_this, s, context); }));
-        ast.options = normalizeAnimationOptions(metadata.options);
-        return ast;
+        return {
+            type: 2 /* Sequence */,
+            steps: metadata.steps.map(function (s) { return visitDslNode(_this, s, context); }),
+            options: normalizeAnimationOptions(metadata.options)
+        };
     };
     /**
      * @param {?} metadata
@@ -1349,14 +1007,16 @@ var AnimationAstBuilderVisitor = (function () {
         var /** @type {?} */ furthestTime = 0;
         var /** @type {?} */ steps = metadata.steps.map(function (step) {
             context.currentTime = currentTime;
-            var /** @type {?} */ innerAst = visitAnimationNode(_this, step, context);
+            var /** @type {?} */ innerAst = visitDslNode(_this, step, context);
             furthestTime = Math.max(furthestTime, context.currentTime);
             return innerAst;
         });
         context.currentTime = furthestTime;
-        var /** @type {?} */ ast = new GroupAst(steps);
-        ast.options = normalizeAnimationOptions(metadata.options);
-        return ast;
+        return {
+            type: 3 /* Group */,
+            steps: steps,
+            options: normalizeAnimationOptions(metadata.options)
+        };
     };
     /**
      * @param {?} metadata
@@ -1371,10 +1031,10 @@ var AnimationAstBuilderVisitor = (function () {
     function (metadata, context) {
         var /** @type {?} */ timingAst = constructTimingAst(metadata.timings, context.errors);
         context.currentAnimateTimings = timingAst;
-        var /** @type {?} */ styles;
+        var /** @type {?} */ styleAst;
         var /** @type {?} */ styleMetadata = metadata.styles ? metadata.styles : _angular_animations.style({});
         if (styleMetadata.type == 5 /* Keyframes */) {
-            styles = this.visitKeyframes(/** @type {?} */ (styleMetadata), context);
+            styleAst = this.visitKeyframes(/** @type {?} */ (styleMetadata), context);
         }
         else {
             var /** @type {?} */ styleMetadata_1 = /** @type {?} */ (metadata.styles);
@@ -1388,12 +1048,17 @@ var AnimationAstBuilderVisitor = (function () {
                 styleMetadata_1 = _angular_animations.style(newStyleData);
             }
             context.currentTime += timingAst.duration + timingAst.delay;
-            var /** @type {?} */ styleAst = this.visitStyle(styleMetadata_1, context);
-            styleAst.isEmptyStep = isEmpty;
-            styles = styleAst;
+            var /** @type {?} */ _styleAst = this.visitStyle(styleMetadata_1, context);
+            _styleAst.isEmptyStep = isEmpty;
+            styleAst = _styleAst;
         }
         context.currentAnimateTimings = null;
-        return new AnimateAst(timingAst, styles);
+        return {
+            type: 4 /* Animate */,
+            timings: timingAst,
+            style: styleAst,
+            options: null
+        };
     };
     /**
      * @param {?} metadata
@@ -1461,9 +1126,13 @@ var AnimationAstBuilderVisitor = (function () {
                 }
             }
         });
-        var /** @type {?} */ ast = new StyleAst(styles, collectedEasing, metadata.offset);
-        ast.containsDynamicStyles = containsDynamicStyles;
-        return ast;
+        return {
+            type: 6 /* Style */,
+            styles: styles,
+            easing: collectedEasing,
+            offset: metadata.offset, containsDynamicStyles: containsDynamicStyles,
+            options: null
+        };
     };
     /**
      * @param {?} ast
@@ -1526,9 +1195,10 @@ var AnimationAstBuilderVisitor = (function () {
      */
     function (metadata, context) {
         var _this = this;
+        var /** @type {?} */ ast = { type: 5 /* Keyframes */, styles: [], options: null };
         if (!context.currentAnimateTimings) {
             context.errors.push("keyframes() must be placed inside of a call to animate()");
-            return new KeyframesAst([]);
+            return ast;
         }
         var /** @type {?} */ MAX_KEYFRAME_OFFSET = 1;
         var /** @type {?} */ totalKeyframesWithOffsets = 0;
@@ -1575,8 +1245,9 @@ var AnimationAstBuilderVisitor = (function () {
             currentAnimateTimings.duration = durationUpToThisFrame;
             _this._validateStyleAst(kf, context);
             kf.offset = offset;
+            ast.styles.push(kf);
         });
-        return new KeyframesAst(keyframes);
+        return ast;
     };
     /**
      * @param {?} metadata
@@ -1589,10 +1260,11 @@ var AnimationAstBuilderVisitor = (function () {
      * @return {?}
      */
     function (metadata, context) {
-        var /** @type {?} */ entry = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
-        var /** @type {?} */ ast = new ReferenceAst(entry);
-        ast.options = normalizeAnimationOptions(metadata.options);
-        return ast;
+        return {
+            type: 8 /* Reference */,
+            animation: visitDslNode(this, normalizeAnimationEntry(metadata.animation), context),
+            options: normalizeAnimationOptions(metadata.options)
+        };
     };
     /**
      * @param {?} metadata
@@ -1606,9 +1278,10 @@ var AnimationAstBuilderVisitor = (function () {
      */
     function (metadata, context) {
         context.depCount++;
-        var /** @type {?} */ ast = new AnimateChildAst();
-        ast.options = normalizeAnimationOptions(metadata.options);
-        return ast;
+        return {
+            type: 9 /* AnimateChild */,
+            options: normalizeAnimationOptions(metadata.options)
+        };
     };
     /**
      * @param {?} metadata
@@ -1621,10 +1294,11 @@ var AnimationAstBuilderVisitor = (function () {
      * @return {?}
      */
     function (metadata, context) {
-        var /** @type {?} */ animation = this.visitReference(metadata.animation, context);
-        var /** @type {?} */ ast = new AnimateRefAst(animation);
-        ast.options = normalizeAnimationOptions(metadata.options);
-        return ast;
+        return {
+            type: 10 /* AnimateRef */,
+            animation: this.visitReference(metadata.animation, context),
+            options: normalizeAnimationOptions(metadata.options)
+        };
     };
     /**
      * @param {?} metadata
@@ -1645,13 +1319,17 @@ var AnimationAstBuilderVisitor = (function () {
         context.currentQuerySelector =
             parentSelector.length ? (parentSelector + ' ' + selector) : selector;
         getOrSetAsInMap(context.collectedStyles, context.currentQuerySelector, {});
-        var /** @type {?} */ entry = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
+        var /** @type {?} */ animation = visitDslNode(this, normalizeAnimationEntry(metadata.animation), context);
         context.currentQuery = null;
         context.currentQuerySelector = parentSelector;
-        var /** @type {?} */ ast = new QueryAst(selector, options.limit || 0, !!options.optional, includeSelf, entry);
-        ast.originalSelector = metadata.selector;
-        ast.options = normalizeAnimationOptions(metadata.options);
-        return ast;
+        return {
+            type: 11 /* Query */,
+            selector: selector,
+            limit: options.limit || 0,
+            optional: !!options.optional, includeSelf: includeSelf, animation: animation,
+            originalSelector: metadata.selector,
+            options: normalizeAnimationOptions(metadata.options)
+        };
     };
     /**
      * @param {?} metadata
@@ -1670,8 +1348,11 @@ var AnimationAstBuilderVisitor = (function () {
         var /** @type {?} */ timings = metadata.timings === 'full' ?
             { duration: 0, delay: 0, easing: 'full' } :
             resolveTiming(metadata.timings, context.errors, true);
-        var /** @type {?} */ animation = visitAnimationNode(this, normalizeAnimationEntry(metadata.animation), context);
-        return new StaggerAst(timings, animation);
+        return {
+            type: 12 /* Stagger */,
+            animation: visitDslNode(this, normalizeAnimationEntry(metadata.animation), context), timings: timings,
+            options: null
+        };
     };
     return AnimationAstBuilderVisitor;
 }());
@@ -1756,15 +1437,18 @@ function constructTimingAst(value, errors) {
     }
     else if (typeof value == 'number') {
         var /** @type {?} */ duration = resolveTiming(/** @type {?} */ (value), errors).duration;
-        return new TimingAst(/** @type {?} */ (value), 0, '');
+        return makeTimingAst(/** @type {?} */ (duration), 0, '');
     }
     var /** @type {?} */ strValue = /** @type {?} */ (value);
     var /** @type {?} */ isDynamic = strValue.split(/\s+/).some(function (v) { return v.charAt(0) == '{' && v.charAt(1) == '{'; });
     if (isDynamic) {
-        return new DynamicTimingAst(strValue);
+        var /** @type {?} */ ast = /** @type {?} */ (makeTimingAst(0, 0, ''));
+        ast.dynamic = true;
+        ast.strValue = strValue;
+        return /** @type {?} */ (ast);
     }
     timings = timings || resolveTiming(strValue, errors);
-    return new TimingAst(timings.duration, timings.delay, timings.easing);
+    return makeTimingAst(timings.duration, timings.delay, timings.easing);
 }
 /**
  * @param {?} options
@@ -1781,6 +1465,15 @@ function normalizeAnimationOptions(options) {
         options = {};
     }
     return options;
+}
+/**
+ * @param {?} duration
+ * @param {?} delay
+ * @param {?} easing
+ * @return {?}
+ */
+function makeTimingAst(duration, delay, easing) {
+    return { duration: duration, delay: delay, easing: easing };
 }
 
 /**
@@ -1939,7 +1632,7 @@ var AnimationTimelineBuilderVisitor = (function () {
         var /** @type {?} */ context = new AnimationTimelineContext(driver, rootElement, subInstructions, errors, []);
         context.options = options;
         context.currentTimeline.setStyles([startingStyles], null, context.errors, options);
-        ast.visit(this, context);
+        visitDslNode(this, ast, context);
         // this checks to see if an actual animation happened
         var /** @type {?} */ timelines = context.timelines.filter(function (timeline) { return timeline.containsAnimation(); });
         if (timelines.length && Object.keys(finalStyles).length) {
@@ -2071,7 +1764,7 @@ var AnimationTimelineBuilderVisitor = (function () {
      */
     function (ast, context) {
         context.updateOptions(ast.options, true);
-        ast.animation.visit(this, context);
+        visitDslNode(this, ast.animation, context);
         context.previousNode = ast;
     };
     /**
@@ -2093,7 +1786,7 @@ var AnimationTimelineBuilderVisitor = (function () {
             ctx = context.createSubContext(options);
             ctx.transformIntoNewTimeline();
             if (options.delay != null) {
-                if (ctx.previousNode instanceof StyleAst) {
+                if (ctx.previousNode.type == 6 /* Style */) {
                     ctx.currentTimeline.snapshotCurrentStyles();
                     ctx.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
                 }
@@ -2102,7 +1795,7 @@ var AnimationTimelineBuilderVisitor = (function () {
             }
         }
         if (ast.steps.length) {
-            ast.steps.forEach(function (s) { return s.visit(_this, ctx); });
+            ast.steps.forEach(function (s) { return visitDslNode(_this, s, ctx); });
             // this is here just incase the inner steps only contain or end with a style() call
             ctx.currentTimeline.applyStylesToKeyframe();
             // this means that some animation function within the sequence
@@ -2134,7 +1827,7 @@ var AnimationTimelineBuilderVisitor = (function () {
             if (delay) {
                 innerContext.delayNextStep(delay);
             }
-            s.visit(_this, innerContext);
+            visitDslNode(_this, s, innerContext);
             furthestTime = Math.max(furthestTime, innerContext.currentTimeline.currentTime);
             innerTimelines.push(innerContext.currentTimeline);
         });
@@ -2150,17 +1843,16 @@ var AnimationTimelineBuilderVisitor = (function () {
      * @param {?} context
      * @return {?}
      */
-    AnimationTimelineBuilderVisitor.prototype.visitTiming = /**
+    AnimationTimelineBuilderVisitor.prototype._visitTiming = /**
      * @param {?} ast
      * @param {?} context
      * @return {?}
      */
     function (ast, context) {
-        if (ast instanceof DynamicTimingAst) {
-            var /** @type {?} */ strValue = context.params ?
-                interpolateParams(ast.value, context.params, context.errors) :
-                ast.value.toString();
-            return resolveTiming(strValue, context.errors);
+        if ((/** @type {?} */ (ast)).dynamic) {
+            var /** @type {?} */ strValue = (/** @type {?} */ (ast)).strValue;
+            var /** @type {?} */ timingValue = context.params ? interpolateParams(strValue, context.params, context.errors) : strValue;
+            return resolveTiming(timingValue, context.errors);
         }
         else {
             return { duration: ast.duration, delay: ast.delay, easing: ast.easing };
@@ -2177,14 +1869,14 @@ var AnimationTimelineBuilderVisitor = (function () {
      * @return {?}
      */
     function (ast, context) {
-        var /** @type {?} */ timings = context.currentAnimateTimings = this.visitTiming(ast.timings, context);
+        var /** @type {?} */ timings = context.currentAnimateTimings = this._visitTiming(ast.timings, context);
         var /** @type {?} */ timeline = context.currentTimeline;
         if (timings.delay) {
             context.incrementTime(timings.delay);
             timeline.snapshotCurrentStyles();
         }
         var /** @type {?} */ style$$1 = ast.style;
-        if (style$$1 instanceof KeyframesAst) {
+        if (style$$1.type == 5 /* Keyframes */) {
             this.visitKeyframes(style$$1, context);
         }
         else {
@@ -2270,7 +1962,7 @@ var AnimationTimelineBuilderVisitor = (function () {
         var /** @type {?} */ startTime = context.currentTimeline.currentTime;
         var /** @type {?} */ options = /** @type {?} */ ((ast.options || {}));
         var /** @type {?} */ delay = options.delay ? resolveTimingValue(options.delay) : 0;
-        if (delay && (context.previousNode instanceof StyleAst ||
+        if (delay && (context.previousNode.type === 6 /* Style */ ||
             (startTime == 0 && context.currentTimeline.getCurrentStyleProperties().length))) {
             context.currentTimeline.snapshotCurrentStyles();
             context.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
@@ -2288,7 +1980,7 @@ var AnimationTimelineBuilderVisitor = (function () {
             if (element === context.element) {
                 sameElementTimeline = innerContext.currentTimeline;
             }
-            ast.animation.visit(_this, innerContext);
+            visitDslNode(_this, ast.animation, innerContext);
             // this is here just incase the inner steps only contain or end
             // with a style() call (which is here to signal that this is a preparatory
             // call to style an element before it is animated again)
@@ -2336,7 +2028,7 @@ var AnimationTimelineBuilderVisitor = (function () {
             timeline.delayNextStep(delay);
         }
         var /** @type {?} */ startingTime = timeline.currentTime;
-        ast.animation.visit(this, context);
+        visitDslNode(this, ast.animation, context);
         context.previousNode = ast;
         // time = duration + delay
         // the reason why this computation is so complex is because
@@ -2422,7 +2114,7 @@ var AnimationTimelineContext = (function () {
             var /** @type {?} */ oldParams_1 = this.options.params;
             if (oldParams_1) {
                 var /** @type {?} */ params_1 = options['params'] = {};
-                Object.keys(this.options.params).forEach(function (name) { params_1[name] = oldParams_1[name]; });
+                Object.keys(oldParams_1).forEach(function (name) { params_1[name] = oldParams_1[name]; });
             }
         }
         return options;
@@ -3421,8 +3113,15 @@ var AnimationTrigger = (function () {
  */
 function createFallbackTransition(triggerName, states) {
     var /** @type {?} */ matchers = [function (fromState, toState) { return true; }];
-    var /** @type {?} */ animation = new SequenceAst([]);
-    var /** @type {?} */ transition = new TransitionAst(matchers, animation);
+    var /** @type {?} */ animation = { type: 2 /* Sequence */, steps: [], options: null };
+    var /** @type {?} */ transition = {
+        type: 1 /* Transition */,
+        animation: animation,
+        matchers: matchers,
+        options: null,
+        queryCount: 0,
+        depCount: 0
+    };
     return new AnimationTransitionFactory(triggerName, transition, states);
 }
 /**
@@ -3690,7 +3389,9 @@ var REMOVAL_FLAG = '__ng_removed';
  */
 
 var StateValue = (function () {
-    function StateValue(input) {
+    function StateValue(input, namespaceId) {
+        if (namespaceId === void 0) { namespaceId = ''; }
+        this.namespaceId = namespaceId;
         var /** @type {?} */ isObj = input && input.hasOwnProperty('value');
         var /** @type {?} */ value = isObj ? input['value'] : input;
         this.value = normalizeTriggerValue(value);
@@ -3863,7 +3564,7 @@ var AnimationTransitionNamespace = (function () {
             this._engine.statesByElement.set(element, triggersWithStates = {});
         }
         var /** @type {?} */ fromState = triggersWithStates[triggerName];
-        var /** @type {?} */ toState = new StateValue(value);
+        var /** @type {?} */ toState = new StateValue(value, this.id);
         var /** @type {?} */ isObj = value && value.hasOwnProperty('value');
         if (!isObj && fromState) {
             toState.absorbOptions(fromState.options);
@@ -3981,7 +3682,7 @@ var AnimationTransitionNamespace = (function () {
      * @param {?=} animate
      * @return {?}
      */
-    AnimationTransitionNamespace.prototype._destroyInnerNodes = /**
+    AnimationTransitionNamespace.prototype._signalRemovalForInnerTriggers = /**
      * @param {?} rootElement
      * @param {?} context
      * @param {?=} animate
@@ -3990,14 +3691,13 @@ var AnimationTransitionNamespace = (function () {
     function (rootElement, context, animate) {
         var _this = this;
         if (animate === void 0) { animate = false; }
+        // emulate a leave animation for all inner nodes within this node.
+        // If there are no animations found for any of the nodes then clear the cache
+        // for the element.
         this._engine.driver.query(rootElement, NG_TRIGGER_SELECTOR, true).forEach(function (elm) {
-            if (animate && containsClass(elm, _this._hostClassName)) {
-                var /** @type {?} */ innerNs = _this._engine.namespacesByHostElement.get(elm);
-                // special case for a host element with animations on the same element
-                if (innerNs) {
-                    innerNs.removeNode(elm, context, true);
-                }
-                _this.removeNode(elm, context, true);
+            var /** @type {?} */ namespaces = _this._engine.fetchNamespacesByElement(elm);
+            if (namespaces.size) {
+                namespaces.forEach(function (ns) { ns.triggerLeaveAnimation(elm, context, false, true); });
             }
             else {
                 _this.clearElementCache(elm);
@@ -4007,40 +3707,98 @@ var AnimationTransitionNamespace = (function () {
     /**
      * @param {?} element
      * @param {?} context
-     * @param {?=} doNotRecurse
+     * @param {?=} destroyAfterComplete
+     * @param {?=} defaultToFallback
      * @return {?}
      */
-    AnimationTransitionNamespace.prototype.removeNode = /**
+    AnimationTransitionNamespace.prototype.triggerLeaveAnimation = /**
      * @param {?} element
      * @param {?} context
-     * @param {?=} doNotRecurse
+     * @param {?=} destroyAfterComplete
+     * @param {?=} defaultToFallback
      * @return {?}
      */
-    function (element, context, doNotRecurse) {
+    function (element, context, destroyAfterComplete, defaultToFallback) {
         var _this = this;
-        var /** @type {?} */ engine = this._engine;
-        if (!doNotRecurse && element.childElementCount) {
-            this._destroyInnerNodes(element, context, true);
-        }
-        var /** @type {?} */ triggerStates = engine.statesByElement.get(element);
+        var /** @type {?} */ triggerStates = this._engine.statesByElement.get(element);
         if (triggerStates) {
             var /** @type {?} */ players_1 = [];
             Object.keys(triggerStates).forEach(function (triggerName) {
                 // this check is here in the event that an element is removed
                 // twice (both on the host level and the component level)
                 if (_this._triggers[triggerName]) {
-                    var /** @type {?} */ player = _this.trigger(element, triggerName, VOID_VALUE, false);
+                    var /** @type {?} */ player = _this.trigger(element, triggerName, VOID_VALUE, defaultToFallback);
                     if (player) {
                         players_1.push(player);
                     }
                 }
             });
             if (players_1.length) {
-                engine.markElementAsRemoved(this.id, element, true, context);
-                optimizeGroupPlayer(players_1).onDone(function () { return engine.processLeaveNode(element); });
-                return;
+                this._engine.markElementAsRemoved(this.id, element, true, context);
+                if (destroyAfterComplete) {
+                    optimizeGroupPlayer(players_1).onDone(function () { return _this._engine.processLeaveNode(element); });
+                }
+                return true;
             }
         }
+        return false;
+    };
+    /**
+     * @param {?} element
+     * @return {?}
+     */
+    AnimationTransitionNamespace.prototype.prepareLeaveAnimationListeners = /**
+     * @param {?} element
+     * @return {?}
+     */
+    function (element) {
+        var _this = this;
+        var /** @type {?} */ listeners = this._elementListeners.get(element);
+        if (listeners) {
+            var /** @type {?} */ visitedTriggers_1 = new Set();
+            listeners.forEach(function (listener) {
+                var /** @type {?} */ triggerName = listener.name;
+                if (visitedTriggers_1.has(triggerName))
+                    return;
+                visitedTriggers_1.add(triggerName);
+                var /** @type {?} */ trigger = _this._triggers[triggerName];
+                var /** @type {?} */ transition = trigger.fallbackTransition;
+                var /** @type {?} */ elementStates = /** @type {?} */ ((_this._engine.statesByElement.get(element)));
+                var /** @type {?} */ fromState = elementStates[triggerName] || DEFAULT_STATE_VALUE;
+                var /** @type {?} */ toState = new StateValue(VOID_VALUE);
+                var /** @type {?} */ player = new TransitionAnimationPlayer(_this.id, triggerName, element);
+                _this._engine.totalQueuedPlayers++;
+                _this._queue.push({
+                    element: element,
+                    triggerName: triggerName,
+                    transition: transition,
+                    fromState: fromState,
+                    toState: toState,
+                    player: player,
+                    isFallbackTransition: true
+                });
+            });
+        }
+    };
+    /**
+     * @param {?} element
+     * @param {?} context
+     * @return {?}
+     */
+    AnimationTransitionNamespace.prototype.removeNode = /**
+     * @param {?} element
+     * @param {?} context
+     * @return {?}
+     */
+    function (element, context) {
+        var _this = this;
+        var /** @type {?} */ engine = this._engine;
+        if (element.childElementCount) {
+            this._signalRemovalForInnerTriggers(element, context, true);
+        }
+        // this means that a * => VOID animation was detected and kicked off
+        if (this.triggerLeaveAnimation(element, context, true))
+            return;
         // find the player that is animating and make sure that the
         // removal is delayed until that player has completed
         var /** @type {?} */ containsPotentialParentTransition = false;
@@ -4068,32 +3826,7 @@ var AnimationTransitionNamespace = (function () {
         // during flush or will be picked up by a parent query. Either way
         // we need to fire the listeners for this element when it DOES get
         // removed (once the query parent animation is done or after flush)
-        var /** @type {?} */ listeners = this._elementListeners.get(element);
-        if (listeners) {
-            var /** @type {?} */ visitedTriggers_1 = new Set();
-            listeners.forEach(function (listener) {
-                var /** @type {?} */ triggerName = listener.name;
-                if (visitedTriggers_1.has(triggerName))
-                    return;
-                visitedTriggers_1.add(triggerName);
-                var /** @type {?} */ trigger = _this._triggers[triggerName];
-                var /** @type {?} */ transition = trigger.fallbackTransition;
-                var /** @type {?} */ elementStates = /** @type {?} */ ((engine.statesByElement.get(element)));
-                var /** @type {?} */ fromState = elementStates[triggerName] || DEFAULT_STATE_VALUE;
-                var /** @type {?} */ toState = new StateValue(VOID_VALUE);
-                var /** @type {?} */ player = new TransitionAnimationPlayer(_this.id, triggerName, element);
-                _this._engine.totalQueuedPlayers++;
-                _this._queue.push({
-                    element: element,
-                    triggerName: triggerName,
-                    transition: transition,
-                    fromState: fromState,
-                    toState: toState,
-                    player: player,
-                    isFallbackTransition: true
-                });
-            });
-        }
+        this.prepareLeaveAnimationListeners(element);
         // whether or not a parent has an animation we need to delay the deferral of the leave
         // operation until we have more information (which we do after flush() has been called)
         if (containsPotentialParentTransition) {
@@ -4177,7 +3910,7 @@ var AnimationTransitionNamespace = (function () {
      */
     function (context) {
         this.players.forEach(function (p) { return p.destroy(); });
-        this._destroyInnerNodes(this.hostElement, context);
+        this._signalRemovalForInnerTriggers(this.hostElement, context);
     };
     /**
      * @param {?} element
@@ -4385,6 +4118,36 @@ var TransitionAnimationEngine = (function () {
      */
     function (id) { return this._namespaceLookup[id]; };
     /**
+     * @param {?} element
+     * @return {?}
+     */
+    TransitionAnimationEngine.prototype.fetchNamespacesByElement = /**
+     * @param {?} element
+     * @return {?}
+     */
+    function (element) {
+        // normally there should only be one namespace per element, however
+        // if @triggers are placed on both the component element and then
+        // its host element (within the component code) then there will be
+        // two namespaces returned. We use a set here to simply the dedupe
+        // of namespaces incase there are multiple triggers both the elm and host
+        var /** @type {?} */ namespaces = new Set();
+        var /** @type {?} */ elementStates = this.statesByElement.get(element);
+        if (elementStates) {
+            var /** @type {?} */ keys = Object.keys(elementStates);
+            for (var /** @type {?} */ i = 0; i < keys.length; i++) {
+                var /** @type {?} */ nsId = elementStates[keys[i]].namespaceId;
+                if (nsId) {
+                    var /** @type {?} */ ns = this._fetchNamespace(nsId);
+                    if (ns) {
+                        namespaces.add(ns);
+                    }
+                }
+            }
+        }
+        return namespaces;
+    };
+    /**
      * @param {?} namespaceId
      * @param {?} element
      * @param {?} name
@@ -4474,24 +4237,22 @@ var TransitionAnimationEngine = (function () {
      * @param {?} namespaceId
      * @param {?} element
      * @param {?} context
-     * @param {?=} doNotRecurse
      * @return {?}
      */
     TransitionAnimationEngine.prototype.removeNode = /**
      * @param {?} namespaceId
      * @param {?} element
      * @param {?} context
-     * @param {?=} doNotRecurse
      * @return {?}
      */
-    function (namespaceId, element, context, doNotRecurse) {
+    function (namespaceId, element, context) {
         if (!isElementNode(element)) {
             this._onRemovalComplete(element, context);
             return;
         }
         var /** @type {?} */ ns = namespaceId ? this._fetchNamespace(namespaceId) : null;
         if (ns) {
-            ns.removeNode(element, context, doNotRecurse);
+            ns.removeNode(element, context);
         }
         else {
             this.markElementAsRemoved(namespaceId, element, false, context);
@@ -4565,36 +4326,52 @@ var TransitionAnimationEngine = (function () {
     function (containerElement) {
         var _this = this;
         var /** @type {?} */ elements = this.driver.query(containerElement, NG_TRIGGER_SELECTOR, true);
-        elements.forEach(function (element) {
-            var /** @type {?} */ players = _this.playersByElement.get(element);
-            if (players) {
-                players.forEach(function (player) {
-                    // special case for when an element is set for destruction, but hasn't started.
-                    // in this situation we want to delay the destruction until the flush occurs
-                    // so that any event listeners attached to the player are triggered.
-                    if (player.queued) {
-                        player.markedForDestroy = true;
-                    }
-                    else {
-                        player.destroy();
-                    }
-                });
-            }
-            var /** @type {?} */ stateMap = _this.statesByElement.get(element);
-            if (stateMap) {
-                Object.keys(stateMap).forEach(function (triggerName) { return stateMap[triggerName] = DELETED_STATE_VALUE; });
-            }
-        });
+        elements.forEach(function (element) { return _this.destroyActiveAnimationsForElement(element); });
         if (this.playersByQueriedElement.size == 0)
             return;
         elements = this.driver.query(containerElement, NG_ANIMATING_SELECTOR, true);
-        if (elements.length) {
-            elements.forEach(function (element) {
-                var /** @type {?} */ players = _this.playersByQueriedElement.get(element);
-                if (players) {
-                    players.forEach(function (player) { return player.finish(); });
+        elements.forEach(function (element) { return _this.finishActiveQueriedAnimationOnElement(element); });
+    };
+    /**
+     * @param {?} element
+     * @return {?}
+     */
+    TransitionAnimationEngine.prototype.destroyActiveAnimationsForElement = /**
+     * @param {?} element
+     * @return {?}
+     */
+    function (element) {
+        var /** @type {?} */ players = this.playersByElement.get(element);
+        if (players) {
+            players.forEach(function (player) {
+                // special case for when an element is set for destruction, but hasn't started.
+                // in this situation we want to delay the destruction until the flush occurs
+                // so that any event listeners attached to the player are triggered.
+                if (player.queued) {
+                    player.markedForDestroy = true;
+                }
+                else {
+                    player.destroy();
                 }
             });
+        }
+        var /** @type {?} */ stateMap = this.statesByElement.get(element);
+        if (stateMap) {
+            Object.keys(stateMap).forEach(function (triggerName) { return stateMap[triggerName] = DELETED_STATE_VALUE; });
+        }
+    };
+    /**
+     * @param {?} element
+     * @return {?}
+     */
+    TransitionAnimationEngine.prototype.finishActiveQueriedAnimationOnElement = /**
+     * @param {?} element
+     * @return {?}
+     */
+    function (element) {
+        var /** @type {?} */ players = this.playersByQueriedElement.get(element);
+        if (players) {
+            players.forEach(function (player) { return player.finish(); });
         }
     };
     /**
@@ -4706,7 +4483,7 @@ var TransitionAnimationEngine = (function () {
      * @return {?}
      */
     function (errors) {
-        throw new Error("Unable to process animations due to the following failed trigger transitions\n " + errors.join("\n"));
+        throw new Error("Unable to process animations due to the following failed trigger transitions\n " + errors.join('\n'));
     };
     /**
      * @param {?} cleanupFns
@@ -5453,12 +5230,10 @@ function deleteOrUnsetInMap(map, key, value) {
  * @return {?}
  */
 function normalizeTriggerValue(value) {
-    switch (typeof value) {
-        case 'boolean':
-            return value ? '1' : '0';
-        default:
-            return value != null ? value.toString() : null;
-    }
+    // we use `!= null` here because it's the most simple
+    // way to test against a "falsy" value without mixing
+    // in empty strings or a zero value. DO NOT OPTIMIZE.
+    return value != null ? value : null;
 }
 /**
  * @param {?} node
@@ -5539,20 +5314,6 @@ function createIsRootFilterFn(nodes) {
     return isRoot;
 }
 var CLASSES_CACHE_KEY = '$$classes';
-/**
- * @param {?} element
- * @param {?} className
- * @return {?}
- */
-function containsClass(element, className) {
-    if (element.classList) {
-        return element.classList.contains(className);
-    }
-    else {
-        var /** @type {?} */ classes = element[CLASSES_CACHE_KEY];
-        return classes && classes[className];
-    }
-}
 /**
  * @param {?} element
  * @param {?} className
