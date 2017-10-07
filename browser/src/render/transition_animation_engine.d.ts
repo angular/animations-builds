@@ -28,13 +28,12 @@ export interface ElementAnimationState {
     removedBeforeQueried: boolean;
 }
 export declare class StateValue {
-    namespaceId: string;
     value: string;
     options: AnimationOptions;
     readonly params: {
         [key: string]: any;
     };
-    constructor(input: any, namespaceId?: string);
+    constructor(input: any);
     absorbOptions(options: AnimationOptions): void;
 }
 export declare const VOID_VALUE = "void";
@@ -56,10 +55,8 @@ export declare class AnimationTransitionNamespace {
     trigger(element: any, triggerName: string, value: any, defaultToFallback?: boolean): TransitionAnimationPlayer | undefined;
     deregister(name: string): void;
     clearElementCache(element: any): void;
-    private _signalRemovalForInnerTriggers(rootElement, context, animate?);
-    triggerLeaveAnimation(element: any, context: any, destroyAfterComplete?: boolean, defaultToFallback?: boolean): boolean;
-    prepareLeaveAnimationListeners(element: any): void;
-    removeNode(element: any, context: any): void;
+    private _destroyInnerNodes(rootElement, context, animate?);
+    removeNode(element: any, context: any, doNotRecurse?: boolean): void;
     insertNode(element: any, parent: any): void;
     drainQueuedTransitions(microtaskId: number): QueueInstruction[];
     destroy(context: any): void;
@@ -99,18 +96,15 @@ export declare class TransitionAnimationEngine {
     registerTrigger(namespaceId: string, name: string, trigger: AnimationTrigger): void;
     destroy(namespaceId: string, context: any): void;
     private _fetchNamespace(id);
-    fetchNamespacesByElement(element: any): Set<AnimationTransitionNamespace>;
     trigger(namespaceId: string, element: any, name: string, value: any): boolean;
     insertNode(namespaceId: string, element: any, parent: any, insertBefore: boolean): void;
     collectEnterElement(element: any): void;
     markElementAsDisabled(element: any, value: boolean): void;
-    removeNode(namespaceId: string, element: any, context: any): void;
+    removeNode(namespaceId: string, element: any, context: any, doNotRecurse?: boolean): void;
     markElementAsRemoved(namespaceId: string, element: any, hasAnimation?: boolean, context?: any): void;
     listen(namespaceId: string, element: any, name: string, phase: string, callback: (event: any) => boolean): () => any;
     private _buildInstruction(entry, subTimelines);
     destroyInnerAnimations(containerElement: any): void;
-    destroyActiveAnimationsForElement(element: any): void;
-    finishActiveQueriedAnimationOnElement(element: any): void;
     whenRenderingDone(): Promise<any>;
     processLeaveNode(element: any): void;
     flush(microtaskId?: number): void;
