@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.4.5-18f1b01
+ * @license Angular v4.4.5-f983a6c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -758,20 +758,28 @@ function parseAnimationAlias(alias, errors) {
             return '* => *';
     }
 }
+const TRUE_BOOLEAN_VALUES = new Set();
+TRUE_BOOLEAN_VALUES.add('true');
+TRUE_BOOLEAN_VALUES.add('1');
+const FALSE_BOOLEAN_VALUES = new Set();
+FALSE_BOOLEAN_VALUES.add('false');
+FALSE_BOOLEAN_VALUES.add('0');
 /**
  * @param {?} lhs
  * @param {?} rhs
  * @return {?}
  */
 function makeLambdaFromStates(lhs, rhs) {
+    const /** @type {?} */ LHS_MATCH_BOOLEAN = TRUE_BOOLEAN_VALUES.has(lhs) || FALSE_BOOLEAN_VALUES.has(lhs);
+    const /** @type {?} */ RHS_MATCH_BOOLEAN = TRUE_BOOLEAN_VALUES.has(rhs) || FALSE_BOOLEAN_VALUES.has(rhs);
     return (fromState, toState) => {
         let /** @type {?} */ lhsMatch = lhs == ANY_STATE || lhs == fromState;
         let /** @type {?} */ rhsMatch = rhs == ANY_STATE || rhs == toState;
-        if (!lhsMatch && typeof fromState === 'boolean') {
-            lhsMatch = fromState ? lhs === 'true' : lhs === 'false';
+        if (!lhsMatch && LHS_MATCH_BOOLEAN && typeof fromState === 'boolean') {
+            lhsMatch = fromState ? TRUE_BOOLEAN_VALUES.has(lhs) : FALSE_BOOLEAN_VALUES.has(lhs);
         }
-        if (!rhsMatch && typeof toState === 'boolean') {
-            rhsMatch = toState ? rhs === 'true' : rhs === 'false';
+        if (!rhsMatch && RHS_MATCH_BOOLEAN && typeof toState === 'boolean') {
+            rhsMatch = toState ? TRUE_BOOLEAN_VALUES.has(rhs) : FALSE_BOOLEAN_VALUES.has(rhs);
         }
         return lhsMatch && rhsMatch;
     };
@@ -3679,7 +3687,7 @@ class TransitionAnimationEngine {
      * @return {?}
      */
     reportError(errors) {
-        throw new Error(`Unable to process animations due to the following failed trigger transitions\n ${errors.join("\n")}`);
+        throw new Error(`Unable to process animations due to the following failed trigger transitions\n ${errors.join('\n')}`);
     }
     /**
      * @param {?} cleanupFns
@@ -4319,12 +4327,10 @@ function deleteOrUnsetInMap(map, key, value) {
  * @return {?}
  */
 function normalizeTriggerValue(value) {
-    switch (typeof value) {
-        case 'boolean':
-            return value ? '1' : '0';
-        default:
-            return value != null ? value.toString() : null;
-    }
+    // we use `!= null` here because it's the most simple
+    // way to test against a "falsy" value without mixing
+    // in empty strings or a zero value. DO NOT OPTIMIZE.
+    return value != null ? value : null;
 }
 /**
  * @param {?} node
