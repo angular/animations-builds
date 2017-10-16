@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-rc.2-405ccc7
+ * @license Angular v5.0.0-rc.2-d035175
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3347,7 +3347,9 @@ var REMOVAL_FLAG = '__ng_removed';
  */
 
 var StateValue = (function () {
-    function StateValue(input) {
+    function StateValue(input, namespaceId) {
+        if (namespaceId === void 0) { namespaceId = ''; }
+        this.namespaceId = namespaceId;
         var /** @type {?} */ isObj = input && input.hasOwnProperty('value');
         var /** @type {?} */ value = isObj ? input['value'] : input;
         this.value = normalizeTriggerValue(value);
@@ -3439,7 +3441,7 @@ var AnimationTransitionNamespace = (function () {
         if (!triggersWithStates.hasOwnProperty(name)) {
             addClass(element, NG_TRIGGER_CLASSNAME);
             addClass(element, NG_TRIGGER_CLASSNAME + '-' + name);
-            triggersWithStates[name] = null;
+            triggersWithStates[name] = DEFAULT_STATE_VALUE;
         }
         return function () {
             // the event listener is removed AFTER the flush has occurred such
@@ -3520,7 +3522,7 @@ var AnimationTransitionNamespace = (function () {
             this._engine.statesByElement.set(element, triggersWithStates = {});
         }
         var /** @type {?} */ fromState = triggersWithStates[triggerName];
-        var /** @type {?} */ toState = new StateValue(value);
+        var /** @type {?} */ toState = new StateValue(value, this.id);
         var /** @type {?} */ isObj = value && value.hasOwnProperty('value');
         if (!isObj && fromState) {
             toState.absorbOptions(fromState.options);
@@ -3638,7 +3640,7 @@ var AnimationTransitionNamespace = (function () {
      * @param {?=} animate
      * @return {?}
      */
-    AnimationTransitionNamespace.prototype._destroyInnerNodes = /**
+    AnimationTransitionNamespace.prototype._signalRemovalForInnerTriggers = /**
      * @param {?} rootElement
      * @param {?} context
      * @param {?=} animate
@@ -3647,14 +3649,13 @@ var AnimationTransitionNamespace = (function () {
     function (rootElement, context, animate) {
         var _this = this;
         if (animate === void 0) { animate = false; }
+        // emulate a leave animation for all inner nodes within this node.
+        // If there are no animations found for any of the nodes then clear the cache
+        // for the element.
         this._engine.driver.query(rootElement, NG_TRIGGER_SELECTOR, true).forEach(function (elm) {
-            if (animate && containsClass(elm, _this._hostClassName)) {
-                var /** @type {?} */ innerNs = _this._engine.namespacesByHostElement.get(elm);
-                // special case for a host element with animations on the same element
-                if (innerNs) {
-                    innerNs.removeNode(elm, context, true);
-                }
-                _this.removeNode(elm, context, true);
+            var /** @type {?} */ namespaces = _this._engine.fetchNamespacesByElement(elm);
+            if (namespaces.size) {
+                namespaces.forEach(function (ns) { ns.triggerLeaveAnimation(elm, context, false, true); });
             }
             else {
                 _this.clearElementCache(elm);
@@ -3664,40 +3665,98 @@ var AnimationTransitionNamespace = (function () {
     /**
      * @param {?} element
      * @param {?} context
-     * @param {?=} doNotRecurse
+     * @param {?=} destroyAfterComplete
+     * @param {?=} defaultToFallback
      * @return {?}
      */
-    AnimationTransitionNamespace.prototype.removeNode = /**
+    AnimationTransitionNamespace.prototype.triggerLeaveAnimation = /**
      * @param {?} element
      * @param {?} context
-     * @param {?=} doNotRecurse
+     * @param {?=} destroyAfterComplete
+     * @param {?=} defaultToFallback
      * @return {?}
      */
-    function (element, context, doNotRecurse) {
+    function (element, context, destroyAfterComplete, defaultToFallback) {
         var _this = this;
-        var /** @type {?} */ engine = this._engine;
-        if (!doNotRecurse && element.childElementCount) {
-            this._destroyInnerNodes(element, context, true);
-        }
-        var /** @type {?} */ triggerStates = engine.statesByElement.get(element);
+        var /** @type {?} */ triggerStates = this._engine.statesByElement.get(element);
         if (triggerStates) {
             var /** @type {?} */ players_1 = [];
             Object.keys(triggerStates).forEach(function (triggerName) {
                 // this check is here in the event that an element is removed
                 // twice (both on the host level and the component level)
                 if (_this._triggers[triggerName]) {
-                    var /** @type {?} */ player = _this.trigger(element, triggerName, VOID_VALUE, false);
+                    var /** @type {?} */ player = _this.trigger(element, triggerName, VOID_VALUE, defaultToFallback);
                     if (player) {
                         players_1.push(player);
                     }
                 }
             });
             if (players_1.length) {
-                engine.markElementAsRemoved(this.id, element, true, context);
-                optimizeGroupPlayer(players_1).onDone(function () { return engine.processLeaveNode(element); });
-                return;
+                this._engine.markElementAsRemoved(this.id, element, true, context);
+                if (destroyAfterComplete) {
+                    optimizeGroupPlayer(players_1).onDone(function () { return _this._engine.processLeaveNode(element); });
+                }
+                return true;
             }
         }
+        return false;
+    };
+    /**
+     * @param {?} element
+     * @return {?}
+     */
+    AnimationTransitionNamespace.prototype.prepareLeaveAnimationListeners = /**
+     * @param {?} element
+     * @return {?}
+     */
+    function (element) {
+        var _this = this;
+        var /** @type {?} */ listeners = this._elementListeners.get(element);
+        if (listeners) {
+            var /** @type {?} */ visitedTriggers_1 = new Set();
+            listeners.forEach(function (listener) {
+                var /** @type {?} */ triggerName = listener.name;
+                if (visitedTriggers_1.has(triggerName))
+                    return;
+                visitedTriggers_1.add(triggerName);
+                var /** @type {?} */ trigger = _this._triggers[triggerName];
+                var /** @type {?} */ transition = trigger.fallbackTransition;
+                var /** @type {?} */ elementStates = /** @type {?} */ ((_this._engine.statesByElement.get(element)));
+                var /** @type {?} */ fromState = elementStates[triggerName] || DEFAULT_STATE_VALUE;
+                var /** @type {?} */ toState = new StateValue(VOID_VALUE);
+                var /** @type {?} */ player = new TransitionAnimationPlayer(_this.id, triggerName, element);
+                _this._engine.totalQueuedPlayers++;
+                _this._queue.push({
+                    element: element,
+                    triggerName: triggerName,
+                    transition: transition,
+                    fromState: fromState,
+                    toState: toState,
+                    player: player,
+                    isFallbackTransition: true
+                });
+            });
+        }
+    };
+    /**
+     * @param {?} element
+     * @param {?} context
+     * @return {?}
+     */
+    AnimationTransitionNamespace.prototype.removeNode = /**
+     * @param {?} element
+     * @param {?} context
+     * @return {?}
+     */
+    function (element, context) {
+        var _this = this;
+        var /** @type {?} */ engine = this._engine;
+        if (element.childElementCount) {
+            this._signalRemovalForInnerTriggers(element, context, true);
+        }
+        // this means that a * => VOID animation was detected and kicked off
+        if (this.triggerLeaveAnimation(element, context, true))
+            return;
         // find the player that is animating and make sure that the
         // removal is delayed until that player has completed
         var /** @type {?} */ containsPotentialParentTransition = false;
@@ -3725,32 +3784,7 @@ var AnimationTransitionNamespace = (function () {
         // during flush or will be picked up by a parent query. Either way
         // we need to fire the listeners for this element when it DOES get
         // removed (once the query parent animation is done or after flush)
-        var /** @type {?} */ listeners = this._elementListeners.get(element);
-        if (listeners) {
-            var /** @type {?} */ visitedTriggers_1 = new Set();
-            listeners.forEach(function (listener) {
-                var /** @type {?} */ triggerName = listener.name;
-                if (visitedTriggers_1.has(triggerName))
-                    return;
-                visitedTriggers_1.add(triggerName);
-                var /** @type {?} */ trigger = _this._triggers[triggerName];
-                var /** @type {?} */ transition = trigger.fallbackTransition;
-                var /** @type {?} */ elementStates = /** @type {?} */ ((engine.statesByElement.get(element)));
-                var /** @type {?} */ fromState = elementStates[triggerName] || DEFAULT_STATE_VALUE;
-                var /** @type {?} */ toState = new StateValue(VOID_VALUE);
-                var /** @type {?} */ player = new TransitionAnimationPlayer(_this.id, triggerName, element);
-                _this._engine.totalQueuedPlayers++;
-                _this._queue.push({
-                    element: element,
-                    triggerName: triggerName,
-                    transition: transition,
-                    fromState: fromState,
-                    toState: toState,
-                    player: player,
-                    isFallbackTransition: true
-                });
-            });
-        }
+        this.prepareLeaveAnimationListeners(element);
         // whether or not a parent has an animation we need to delay the deferral of the leave
         // operation until we have more information (which we do after flush() has been called)
         if (containsPotentialParentTransition) {
@@ -3834,7 +3868,7 @@ var AnimationTransitionNamespace = (function () {
      */
     function (context) {
         this.players.forEach(function (p) { return p.destroy(); });
-        this._destroyInnerNodes(this.hostElement, context);
+        this._signalRemovalForInnerTriggers(this.hostElement, context);
     };
     /**
      * @param {?} element
@@ -4042,6 +4076,36 @@ var TransitionAnimationEngine = (function () {
      */
     function (id) { return this._namespaceLookup[id]; };
     /**
+     * @param {?} element
+     * @return {?}
+     */
+    TransitionAnimationEngine.prototype.fetchNamespacesByElement = /**
+     * @param {?} element
+     * @return {?}
+     */
+    function (element) {
+        // normally there should only be one namespace per element, however
+        // if @triggers are placed on both the component element and then
+        // its host element (within the component code) then there will be
+        // two namespaces returned. We use a set here to simply the dedupe
+        // of namespaces incase there are multiple triggers both the elm and host
+        var /** @type {?} */ namespaces = new Set();
+        var /** @type {?} */ elementStates = this.statesByElement.get(element);
+        if (elementStates) {
+            var /** @type {?} */ keys = Object.keys(elementStates);
+            for (var /** @type {?} */ i = 0; i < keys.length; i++) {
+                var /** @type {?} */ nsId = elementStates[keys[i]].namespaceId;
+                if (nsId) {
+                    var /** @type {?} */ ns = this._fetchNamespace(nsId);
+                    if (ns) {
+                        namespaces.add(ns);
+                    }
+                }
+            }
+        }
+        return namespaces;
+    };
+    /**
      * @param {?} namespaceId
      * @param {?} element
      * @param {?} name
@@ -4131,24 +4195,22 @@ var TransitionAnimationEngine = (function () {
      * @param {?} namespaceId
      * @param {?} element
      * @param {?} context
-     * @param {?=} doNotRecurse
      * @return {?}
      */
     TransitionAnimationEngine.prototype.removeNode = /**
      * @param {?} namespaceId
      * @param {?} element
      * @param {?} context
-     * @param {?=} doNotRecurse
      * @return {?}
      */
-    function (namespaceId, element, context, doNotRecurse) {
+    function (namespaceId, element, context) {
         if (!isElementNode(element)) {
             this._onRemovalComplete(element, context);
             return;
         }
         var /** @type {?} */ ns = namespaceId ? this._fetchNamespace(namespaceId) : null;
         if (ns) {
-            ns.removeNode(element, context, doNotRecurse);
+            ns.removeNode(element, context);
         }
         else {
             this.markElementAsRemoved(namespaceId, element, false, context);
@@ -4222,36 +4284,52 @@ var TransitionAnimationEngine = (function () {
     function (containerElement) {
         var _this = this;
         var /** @type {?} */ elements = this.driver.query(containerElement, NG_TRIGGER_SELECTOR, true);
-        elements.forEach(function (element) {
-            var /** @type {?} */ players = _this.playersByElement.get(element);
-            if (players) {
-                players.forEach(function (player) {
-                    // special case for when an element is set for destruction, but hasn't started.
-                    // in this situation we want to delay the destruction until the flush occurs
-                    // so that any event listeners attached to the player are triggered.
-                    if (player.queued) {
-                        player.markedForDestroy = true;
-                    }
-                    else {
-                        player.destroy();
-                    }
-                });
-            }
-            var /** @type {?} */ stateMap = _this.statesByElement.get(element);
-            if (stateMap) {
-                Object.keys(stateMap).forEach(function (triggerName) { return stateMap[triggerName] = DELETED_STATE_VALUE; });
-            }
-        });
+        elements.forEach(function (element) { return _this.destroyActiveAnimationsForElement(element); });
         if (this.playersByQueriedElement.size == 0)
             return;
         elements = this.driver.query(containerElement, NG_ANIMATING_SELECTOR, true);
-        if (elements.length) {
-            elements.forEach(function (element) {
-                var /** @type {?} */ players = _this.playersByQueriedElement.get(element);
-                if (players) {
-                    players.forEach(function (player) { return player.finish(); });
+        elements.forEach(function (element) { return _this.finishActiveQueriedAnimationOnElement(element); });
+    };
+    /**
+     * @param {?} element
+     * @return {?}
+     */
+    TransitionAnimationEngine.prototype.destroyActiveAnimationsForElement = /**
+     * @param {?} element
+     * @return {?}
+     */
+    function (element) {
+        var /** @type {?} */ players = this.playersByElement.get(element);
+        if (players) {
+            players.forEach(function (player) {
+                // special case for when an element is set for destruction, but hasn't started.
+                // in this situation we want to delay the destruction until the flush occurs
+                // so that any event listeners attached to the player are triggered.
+                if (player.queued) {
+                    player.markedForDestroy = true;
+                }
+                else {
+                    player.destroy();
                 }
             });
+        }
+        var /** @type {?} */ stateMap = this.statesByElement.get(element);
+        if (stateMap) {
+            Object.keys(stateMap).forEach(function (triggerName) { return stateMap[triggerName] = DELETED_STATE_VALUE; });
+        }
+    };
+    /**
+     * @param {?} element
+     * @return {?}
+     */
+    TransitionAnimationEngine.prototype.finishActiveQueriedAnimationOnElement = /**
+     * @param {?} element
+     * @return {?}
+     */
+    function (element) {
+        var /** @type {?} */ players = this.playersByQueriedElement.get(element);
+        if (players) {
+            players.forEach(function (player) { return player.finish(); });
         }
     };
     /**
@@ -5194,20 +5272,6 @@ function createIsRootFilterFn(nodes) {
     return isRoot;
 }
 var CLASSES_CACHE_KEY = '$$classes';
-/**
- * @param {?} element
- * @param {?} className
- * @return {?}
- */
-function containsClass(element, className) {
-    if (element.classList) {
-        return element.classList.contains(className);
-    }
-    else {
-        var /** @type {?} */ classes = element[CLASSES_CACHE_KEY];
-        return classes && classes[className];
-    }
-}
 /**
  * @param {?} element
  * @param {?} className
