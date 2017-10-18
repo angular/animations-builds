@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-rc.2-5a9ed2d
+ * @license Angular v5.0.0-rc.2-b0c7ea8
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4576,15 +4576,11 @@ var TransitionAnimationEngine = (function () {
             }
         }
         var /** @type {?} */ allPreviousPlayersMap = new Map();
-        // this map works to tell which element in the DOM tree is contained by
-        // which animation. Further down below this map will get populated once
-        // the players are built and in doing so it can efficiently figure out
-        // if a sub player is skipped due to a parent player having priority.
-        var /** @type {?} */ animationElementMap = new Map();
+        var /** @type {?} */ sortedParentElements = [];
         queuedInstructions.forEach(function (entry) {
             var /** @type {?} */ element = entry.element;
             if (subTimelines.has(element)) {
-                animationElementMap.set(element, element);
+                sortedParentElements.unshift(element);
                 _this._beforeAnimationBuild(entry.player.namespaceId, entry.instruction, allPreviousPlayersMap);
             }
         });
@@ -4624,7 +4620,6 @@ var TransitionAnimationEngine = (function () {
         });
         var /** @type {?} */ rootPlayers = [];
         var /** @type {?} */ subPlayers = [];
-        var /** @type {?} */ NO_PARENT_ANIMATION_ELEMENT_DETECTED = {};
         queuedInstructions.forEach(function (entry) {
             var element = entry.element, player = entry.player, instruction = entry.instruction;
             // this means that it was never consumed by a parent animation which
@@ -4634,37 +4629,27 @@ var TransitionAnimationEngine = (function () {
                     skippedPlayers.push(player);
                     return;
                 }
-                // this will flow up the DOM and query the map to figure out
-                // if a parent animation has priority over it. In the situation
-                // that a parent is detected then it will cancel the loop. If
-                // nothing is detected, or it takes a few hops to find a parent,
-                // then it will fill in the missing nodes and signal them as having
-                // a detected parent (or a NO_PARENT value via a special constant).
-                var /** @type {?} */ parentWithAnimation_1 = NO_PARENT_ANIMATION_ELEMENT_DETECTED;
-                if (animationElementMap.size > 1) {
-                    var /** @type {?} */ elm = element;
-                    var /** @type {?} */ parentsToAdd = [];
-                    while (elm = elm.parentNode) {
-                        var /** @type {?} */ detectedParent = animationElementMap.get(elm);
-                        if (detectedParent) {
-                            parentWithAnimation_1 = detectedParent;
-                            break;
-                        }
-                        parentsToAdd.push(elm);
-                    }
-                    parentsToAdd.forEach(function (parent) { return animationElementMap.set(parent, parentWithAnimation_1); });
-                }
                 var /** @type {?} */ innerPlayer = _this._buildAnimation(player.namespaceId, instruction, allPreviousPlayersMap, skippedPlayersMap, preStylesMap, postStylesMap);
                 player.setRealPlayer(innerPlayer);
-                if (parentWithAnimation_1 === NO_PARENT_ANIMATION_ELEMENT_DETECTED) {
-                    rootPlayers.push(player);
+                var /** @type {?} */ parentHasPriority = null;
+                for (var /** @type {?} */ i = 0; i < sortedParentElements.length; i++) {
+                    var /** @type {?} */ parent_2 = sortedParentElements[i];
+                    if (parent_2 === element)
+                        break;
+                    if (_this.driver.containsElement(parent_2, element)) {
+                        parentHasPriority = parent_2;
+                        break;
+                    }
                 }
-                else {
-                    var /** @type {?} */ parentPlayers = _this.playersByElement.get(parentWithAnimation_1);
+                if (parentHasPriority) {
+                    var /** @type {?} */ parentPlayers = _this.playersByElement.get(parentHasPriority);
                     if (parentPlayers && parentPlayers.length) {
                         player.parentPlayer = optimizeGroupPlayer(parentPlayers);
                     }
                     skippedPlayers.push(player);
+                }
+                else {
+                    rootPlayers.push(player);
                 }
             }
             else {
@@ -4694,7 +4679,7 @@ var TransitionAnimationEngine = (function () {
         // fire the start/done transition callback events
         skippedPlayers.forEach(function (player) {
             if (player.parentPlayer) {
-                player.syncPlayerEvents(player.parentPlayer);
+                player.parentPlayer.onDestroy(function () { return player.destroy(); });
             }
             else {
                 player.destroy();
@@ -5021,23 +5006,6 @@ var TransitionAnimationPlayer = (function () {
      */
     function () { return this._player; };
     /**
-     * @param {?} player
-     * @return {?}
-     */
-    TransitionAnimationPlayer.prototype.syncPlayerEvents = /**
-     * @param {?} player
-     * @return {?}
-     */
-    function (player) {
-        var _this = this;
-        var /** @type {?} */ p = /** @type {?} */ (this._player);
-        if (p.triggerCallback) {
-            player.onStart(function () { return p.triggerCallback('start'); });
-        }
-        player.onDone(function () { return _this.finish(); });
-        player.onDestroy(function () { return _this.destroy(); });
-    };
-    /**
      * @param {?} name
      * @param {?} callback
      * @return {?}
@@ -5179,21 +5147,6 @@ var TransitionAnimationPlayer = (function () {
         enumerable: true,
         configurable: true
     });
-    /* @internal */
-    /**
-     * @param {?} phaseName
-     * @return {?}
-     */
-    TransitionAnimationPlayer.prototype.triggerCallback = /**
-     * @param {?} phaseName
-     * @return {?}
-     */
-    function (phaseName) {
-        var /** @type {?} */ p = /** @type {?} */ (this._player);
-        if (p.triggerCallback) {
-            p.triggerCallback(phaseName);
-        }
-    };
     return TransitionAnimationPlayer;
 }());
 /**
@@ -5914,20 +5867,6 @@ var WebAnimationsPlayer = (function () {
             });
         }
         this.currentSnapshot = styles;
-    };
-    /* @internal */
-    /**
-     * @param {?} phaseName
-     * @return {?}
-     */
-    WebAnimationsPlayer.prototype.triggerCallback = /**
-     * @param {?} phaseName
-     * @return {?}
-     */
-    function (phaseName) {
-        var /** @type {?} */ methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
-        methods.forEach(function (fn) { return fn(); });
-        methods.length = 0;
     };
     return WebAnimationsPlayer;
 }());

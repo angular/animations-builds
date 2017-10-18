@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-rc.2-5a9ed2d
+ * @license Angular v5.0.0-rc.2-b0c7ea8
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1339,20 +1339,6 @@ var NoopAnimationPlayer = (function () {
      * @return {?}
      */
     function () { return 0; };
-    /* @internal */
-    /**
-     * @param {?} phaseName
-     * @return {?}
-     */
-    NoopAnimationPlayer.prototype.triggerCallback = /**
-     * @param {?} phaseName
-     * @return {?}
-     */
-    function (phaseName) {
-        var /** @type {?} */ methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
-        methods.forEach(function (fn) { return fn(); });
-        methods.length = 0;
-    };
     return NoopAnimationPlayer;
 }());
 
@@ -1587,20 +1573,6 @@ var AnimationGroupPlayer = (function () {
                 player.beforeDestroy();
             }
         });
-    };
-    /* @internal */
-    /**
-     * @param {?} phaseName
-     * @return {?}
-     */
-    AnimationGroupPlayer.prototype.triggerCallback = /**
-     * @param {?} phaseName
-     * @return {?}
-     */
-    function (phaseName) {
-        var /** @type {?} */ methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
-        methods.forEach(function (fn) { return fn(); });
-        methods.length = 0;
     };
     return AnimationGroupPlayer;
 }());
