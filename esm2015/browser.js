@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.1.0-beta.0-161f88f
+ * @license Angular v5.1.0-beta.0-24cf8b3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4123,7 +4123,7 @@ class TransitionAnimationEngine {
         // and destroyed (even if they are outside of the current namespace)
         const /** @type {?} */ targetNameSpaceId = instruction.isRemovalTransition ? undefined : namespaceId;
         const /** @type {?} */ targetTriggerName = instruction.isRemovalTransition ? undefined : triggerName;
-        instruction.timelines.map(timelineInstruction => {
+        for (const /** @type {?} */ timelineInstruction of instruction.timelines) {
             const /** @type {?} */ element = timelineInstruction.element;
             const /** @type {?} */ isQueriedElement = element !== rootElement;
             const /** @type {?} */ players = getOrSetAsInMap(allPreviousPlayersMap, element, []);
@@ -4136,7 +4136,7 @@ class TransitionAnimationEngine {
                 player.destroy();
                 players.push(player);
             });
-        });
+        }
         // this needs to be done so that the PRE/POST styles can be
         // computed properly without interfering with the previous animation
         eraseStyles(rootElement, instruction.fromStyles);
