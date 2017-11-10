@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.1-aa3d75b
+ * @license Angular v5.0.1-612f508
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.0.1-aa3d75b
+ * @license Angular v5.0.1-612f508
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4879,18 +4879,17 @@ var TransitionAnimationEngine = (function () {
      * @return {?}
      */
     function (namespaceId, instruction, allPreviousPlayersMap) {
-        var _this = this;
         var /** @type {?} */ triggerName = instruction.triggerName;
         var /** @type {?} */ rootElement = instruction.element;
         // when a removal animation occurs, ALL previous players are collected
         // and destroyed (even if they are outside of the current namespace)
         var /** @type {?} */ targetNameSpaceId = instruction.isRemovalTransition ? undefined : namespaceId;
         var /** @type {?} */ targetTriggerName = instruction.isRemovalTransition ? undefined : triggerName;
-        instruction.timelines.map(function (timelineInstruction) {
+        var _loop_1 = function (timelineInstruction) {
             var /** @type {?} */ element = timelineInstruction.element;
             var /** @type {?} */ isQueriedElement = element !== rootElement;
             var /** @type {?} */ players = getOrSetAsInMap(allPreviousPlayersMap, element, []);
-            var /** @type {?} */ previousPlayers = _this._getPreviousPlayers(element, isQueriedElement, targetNameSpaceId, targetTriggerName, instruction.toState);
+            var /** @type {?} */ previousPlayers = this_1._getPreviousPlayers(element, isQueriedElement, targetNameSpaceId, targetTriggerName, instruction.toState);
             previousPlayers.forEach(function (player) {
                 var /** @type {?} */ realPlayer = /** @type {?} */ (player.getRealPlayer());
                 if (realPlayer.beforeDestroy) {
@@ -4899,7 +4898,12 @@ var TransitionAnimationEngine = (function () {
                 player.destroy();
                 players.push(player);
             });
-        });
+        };
+        var this_1 = this;
+        for (var _i = 0, _a = instruction.timelines; _i < _a.length; _i++) {
+            var timelineInstruction = _a[_i];
+            _loop_1(timelineInstruction);
+        }
         // this needs to be done so that the PRE/POST styles can be
         // computed properly without interfering with the previous animation
         eraseStyles(rootElement, instruction.fromStyles);
