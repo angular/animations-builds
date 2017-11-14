@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.1.0-beta.0-b9bd320
+ * @license Angular v5.1.0-beta.0-12af6d3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.1.0-beta.0-b9bd320
+ * @license Angular v5.1.0-beta.0-12af6d3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4668,6 +4668,7 @@ var TransitionAnimationEngine = (function () {
             // means that it is independent and therefore should be set for animation
             if (subTimelines.has(element)) {
                 if (disabledElementsSet.has(element)) {
+                    player.onDestroy(function () { return setStyles(element, instruction.toStyles); });
                     skippedPlayers.push(player);
                     return;
                 }
