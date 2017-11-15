@@ -138,6 +138,7 @@ export declare class TransitionAnimationPlayer implements AnimationPlayer {
     readonly queued: boolean;
     setRealPlayer(player: AnimationPlayer): void;
     getRealPlayer(): AnimationPlayer;
+    syncPlayerEvents(player: AnimationPlayer): void;
     private _queueEvent(name, callback);
     onDone(fn: () => void): void;
     onStart(fn: () => void): void;
