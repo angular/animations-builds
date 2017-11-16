@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.1.0-beta.0-f8658cd
+ * @license Angular v5.1.0-beta.0-336041a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.1.0-beta.0-f8658cd
+ * @license Angular v5.1.0-beta.0-336041a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -278,7 +278,7 @@ var invokeQuery = _query;
 /**
  * \@experimental
  */
-var NoopAnimationDriver = (function () {
+var NoopAnimationDriver = /** @class */ (function () {
     function NoopAnimationDriver() {
     }
     /**
@@ -372,7 +372,7 @@ var NoopAnimationDriver = (function () {
  * \@experimental
  * @abstract
  */
-var AnimationDriver = (function () {
+var AnimationDriver = /** @class */ (function () {
     function AnimationDriver() {
     }
     AnimationDriver.NOOP = new NoopAnimationDriver();
@@ -833,7 +833,7 @@ var LEAVE_TOKEN_REGEX = new RegExp(LEAVE_TOKEN, 'g');
 var ENTER_TOKEN = ':enter';
 var ENTER_TOKEN_REGEX = new RegExp(ENTER_TOKEN, 'g');
 var ROOT_SELECTOR = '';
-var AnimationAstBuilderVisitor = (function () {
+var AnimationAstBuilderVisitor = /** @class */ (function () {
     function AnimationAstBuilderVisitor(_driver) {
         this._driver = _driver;
     }
@@ -1379,7 +1379,7 @@ function normalizeSelector(selector) {
 function normalizeParams(obj) {
     return obj ? copyObj(obj) : null;
 }
-var AnimationAstBuilderContext = (function () {
+var AnimationAstBuilderContext = /** @class */ (function () {
     function AnimationAstBuilderContext(errors) {
         this.errors = errors;
         this.queryCount = 0;
@@ -1514,7 +1514,7 @@ function createTimelineInstruction(element, keyframes, preStyleProps, postStyleP
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-var ElementInstructionMap = (function () {
+var ElementInstructionMap = /** @class */ (function () {
     function ElementInstructionMap() {
         this._map = new Map();
     }
@@ -1601,7 +1601,7 @@ function buildAnimationTimelines(driver, rootElement, ast, startingStyles, final
     if (errors === void 0) { errors = []; }
     return new AnimationTimelineBuilderVisitor().buildKeyframes(driver, rootElement, ast, startingStyles, finalStyles, options, subInstructions, errors);
 }
-var AnimationTimelineBuilderVisitor = (function () {
+var AnimationTimelineBuilderVisitor = /** @class */ (function () {
     function AnimationTimelineBuilderVisitor() {
     }
     /**
@@ -2040,7 +2040,7 @@ var AnimationTimelineBuilderVisitor = (function () {
     return AnimationTimelineBuilderVisitor;
 }());
 var DEFAULT_NOOP_PREVIOUS_NODE = /** @type {?} */ ({});
-var AnimationTimelineContext = (function () {
+var AnimationTimelineContext = /** @class */ (function () {
     function AnimationTimelineContext(_driver, element, subInstructions, errors, timelines, initialTimeline) {
         this._driver = _driver;
         this.element = element;
@@ -2246,7 +2246,7 @@ var AnimationTimelineContext = (function () {
     };
     return AnimationTimelineContext;
 }());
-var TimelineBuilder = (function () {
+var TimelineBuilder = /** @class */ (function () {
     function TimelineBuilder(_driver, element, startTime, _elementTimelineStylesLookup) {
         this._driver = _driver;
         this.element = element;
@@ -2577,7 +2577,7 @@ var TimelineBuilder = (function () {
     };
     return TimelineBuilder;
 }());
-var SubTimelineBuilder = (function (_super) {
+var SubTimelineBuilder = /** @class */ (function (_super) {
     __extends(SubTimelineBuilder, _super);
     function SubTimelineBuilder(driver, element, keyframes, preStyleProps, postStyleProps, timings, _stretchStartingKeyframe) {
         if (_stretchStartingKeyframe === void 0) { _stretchStartingKeyframe = false; }
@@ -2684,7 +2684,7 @@ function flattenStyles(input, allStyles) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-var Animation = (function () {
+var Animation = /** @class */ (function () {
     function Animation(_driver, input) {
         this._driver = _driver;
         var /** @type {?} */ errors = [];
@@ -2731,10 +2731,17 @@ var Animation = (function () {
  * @suppress {checkTypes} checked by tsc
  */
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * \@experimental Animation support is experimental.
  * @abstract
  */
-var AnimationStyleNormalizer = (function () {
+var AnimationStyleNormalizer = /** @class */ (function () {
     function AnimationStyleNormalizer() {
     }
     return AnimationStyleNormalizer;
@@ -2742,7 +2749,7 @@ var AnimationStyleNormalizer = (function () {
 /**
  * \@experimental Animation support is experimental.
  */
-var NoopAnimationStyleNormalizer = (function () {
+var NoopAnimationStyleNormalizer = /** @class */ (function () {
     function NoopAnimationStyleNormalizer() {
     }
     /**
@@ -2787,7 +2794,7 @@ var NoopAnimationStyleNormalizer = (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var WebAnimationsStyleNormalizer = (function (_super) {
+var WebAnimationsStyleNormalizer = /** @class */ (function (_super) {
     __extends(WebAnimationsStyleNormalizer, _super);
     function WebAnimationsStyleNormalizer() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -2895,7 +2902,7 @@ function createTransitionInstruction(element, triggerName, fromState, toState, i
  * @suppress {checkTypes} checked by tsc
  */
 var EMPTY_OBJECT = {};
-var AnimationTransitionFactory = (function () {
+var AnimationTransitionFactory = /** @class */ (function () {
     function AnimationTransitionFactory(_triggerName, ast, _stateStyles) {
         this._triggerName = _triggerName;
         this.ast = ast;
@@ -2992,7 +2999,7 @@ var AnimationTransitionFactory = (function () {
 function oneOrMoreTransitionsMatch(matchFns, currentState, nextState) {
     return matchFns.some(function (fn) { return fn(currentState, nextState); });
 }
-var AnimationStateStyles = (function () {
+var AnimationStateStyles = /** @class */ (function () {
     function AnimationStateStyles(styles, defaultParams) {
         this.styles = styles;
         this.defaultParams = defaultParams;
@@ -3049,7 +3056,7 @@ function buildTrigger(name, ast) {
 /**
  * \@experimental Animation support is experimental.
  */
-var AnimationTrigger = (function () {
+var AnimationTrigger = /** @class */ (function () {
     function AnimationTrigger(name, ast) {
         var _this = this;
         this.name = name;
@@ -3153,7 +3160,7 @@ function balanceProperties(obj, key1, key2) {
  * found in the LICENSE file at https://angular.io/license
  */
 var EMPTY_INSTRUCTION_MAP = new ElementInstructionMap();
-var TimelineAnimationEngine = (function () {
+var TimelineAnimationEngine = /** @class */ (function () {
     function TimelineAnimationEngine(_driver, _normalizer) {
         this._driver = _driver;
         this._normalizer = _normalizer;
@@ -3388,7 +3395,7 @@ var REMOVAL_FLAG = '__ng_removed';
  * @record
  */
 
-var StateValue = (function () {
+var StateValue = /** @class */ (function () {
     function StateValue(input, namespaceId) {
         if (namespaceId === void 0) { namespaceId = ''; }
         this.namespaceId = namespaceId;
@@ -3439,7 +3446,7 @@ var StateValue = (function () {
 var VOID_VALUE = 'void';
 var DEFAULT_STATE_VALUE = new StateValue(VOID_VALUE);
 var DELETED_STATE_VALUE = new StateValue('DELETED');
-var AnimationTransitionNamespace = (function () {
+var AnimationTransitionNamespace = /** @class */ (function () {
     function AnimationTransitionNamespace(id, hostElement, _engine) {
         this.id = id;
         this.hostElement = hostElement;
@@ -3934,7 +3941,7 @@ var AnimationTransitionNamespace = (function () {
  * @record
  */
 
-var TransitionAnimationEngine = (function () {
+var TransitionAnimationEngine = /** @class */ (function () {
     function TransitionAnimationEngine(driver, _normalizer) {
         this.driver = driver;
         this._normalizer = _normalizer;
@@ -5007,7 +5014,7 @@ var TransitionAnimationEngine = (function () {
     };
     return TransitionAnimationEngine;
 }());
-var TransitionAnimationPlayer = (function () {
+var TransitionAnimationPlayer = /** @class */ (function () {
     function TransitionAnimationPlayer(namespaceId, triggerName, element) {
         this.namespaceId = namespaceId;
         this.triggerName = triggerName;
@@ -5415,7 +5422,7 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
         return false;
     var /** @type {?} */ preEntry = allPreStyleElements.get(element);
     if (preEntry) {
-        postEntry.forEach(function (data) { return /** @type {?} */ ((preEntry)).add(data); });
+        postEntry.forEach(function (data) { return ((preEntry)).add(data); });
     }
     else {
         allPreStyleElements.set(element, postEntry);
@@ -5428,7 +5435,7 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-var AnimationEngine = (function () {
+var AnimationEngine = /** @class */ (function () {
     function AnimationEngine(_driver, normalizer) {
         var _this = this;
         this._driver = _driver;
@@ -5626,7 +5633,7 @@ var AnimationEngine = (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-var WebAnimationsPlayer = (function () {
+var WebAnimationsPlayer = /** @class */ (function () {
     function WebAnimationsPlayer(element, keyframes, options, previousPlayers) {
         if (previousPlayers === void 0) { previousPlayers = []; }
         var _this = this;
@@ -5930,7 +5937,7 @@ function _computeStyle(element, prop) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-var WebAnimationsDriver = (function () {
+var WebAnimationsDriver = /** @class */ (function () {
     function WebAnimationsDriver() {
     }
     /**

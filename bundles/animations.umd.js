@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.1.0-beta.0-f8658cd
+ * @license Angular v5.1.0-beta.0-336041a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -10,7 +10,7 @@
 }(this, (function (exports) { 'use strict';
 
 /**
- * @license Angular v5.1.0-beta.0-f8658cd
+ * @license Angular v5.1.0-beta.0-336041a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -58,7 +58,7 @@
  * \@experimental Animation support is experimental.
  * @abstract
  */
-var AnimationBuilder = (function () {
+var AnimationBuilder = /** @class */ (function () {
     function AnimationBuilder() {
     }
     return AnimationBuilder;
@@ -70,7 +70,7 @@ var AnimationBuilder = (function () {
  * \@experimental Animation support is experimental.
  * @abstract
  */
-var AnimationFactory = (function () {
+var AnimationFactory = /** @class */ (function () {
     function AnimationFactory() {
     }
     return AnimationFactory;
@@ -1190,7 +1190,7 @@ function scheduleMicroTask(cb) {
 /**
  * \@experimental Animation support is experimental.
  */
-var NoopAnimationPlayer = (function () {
+var NoopAnimationPlayer = /** @class */ (function () {
     function NoopAnimationPlayer() {
         this._onDoneFns = [];
         this._onStartFns = [];
@@ -1364,7 +1364,7 @@ var NoopAnimationPlayer = (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var AnimationGroupPlayer = (function () {
+var AnimationGroupPlayer = /** @class */ (function () {
     function AnimationGroupPlayer(_players) {
         var _this = this;
         this._onDoneFns = [];

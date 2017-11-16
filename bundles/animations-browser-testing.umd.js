@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.1.0-beta.0-f8658cd
+ * @license Angular v5.1.0-beta.0-336041a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v5.1.0-beta.0-f8658cd
+ * @license Angular v5.1.0-beta.0-336041a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -295,7 +295,7 @@ function allowPreviousPlayerStylesMerge(duration, delay) {
 /**
  * \@experimental Animation support is experimental.
  */
-var MockAnimationDriver = (function () {
+var MockAnimationDriver = /** @class */ (function () {
     function MockAnimationDriver() {
     }
     /**
@@ -391,7 +391,7 @@ var MockAnimationDriver = (function () {
 /**
  * \@experimental Animation support is experimental.
  */
-var MockAnimationPlayer = (function (_super) {
+var MockAnimationPlayer = /** @class */ (function (_super) {
     __extends(MockAnimationPlayer, _super);
     function MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers) {
         var _this = _super.call(this) || this;
