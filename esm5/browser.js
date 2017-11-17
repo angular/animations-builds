@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.1.0-beta.1-4064cbe
+ * @license Angular v5.1.0-beta.1-1861e41
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -840,6 +840,9 @@ var AnimationAstBuilderVisitor = /** @class */ (function () {
         var /** @type {?} */ depCount = context.depCount = 0;
         var /** @type {?} */ states = [];
         var /** @type {?} */ transitions = [];
+        if (metadata.name.charAt(0) == '@') {
+            context.errors.push('animation triggers cannot be prefixed with an `@` sign (e.g. trigger(\'@foo\', [...]))');
+        }
         metadata.definitions.forEach(function (def) {
             _this._resetContextStyleTimingState(context);
             if (def.type == 0 /* State */) {
