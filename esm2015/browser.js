@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.3-2a5b619
+ * @license Angular v5.0.3-c7b211c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -304,8 +304,8 @@ const SUBSTITUTION_EXPR_START = '{{';
 const SUBSTITUTION_EXPR_END = '}}';
 const ENTER_CLASSNAME = 'ng-enter';
 const LEAVE_CLASSNAME = 'ng-leave';
-const ENTER_SELECTOR = '.ng-enter';
-const LEAVE_SELECTOR = '.ng-leave';
+
+
 const NG_TRIGGER_CLASSNAME = 'ng-trigger';
 const NG_TRIGGER_SELECTOR = '.ng-trigger';
 const NG_ANIMATING_CLASSNAME = 'ng-animating';
@@ -729,10 +729,6 @@ const SELF_TOKEN_REGEX = new RegExp(`\s*${SELF_TOKEN}\s*,?`, 'g');
 function buildAnimationAst(driver, metadata, errors) {
     return new AnimationAstBuilderVisitor(driver).build(metadata, errors);
 }
-const LEAVE_TOKEN = ':leave';
-const LEAVE_TOKEN_REGEX = new RegExp(LEAVE_TOKEN, 'g');
-const ENTER_TOKEN = ':enter';
-const ENTER_TOKEN_REGEX = new RegExp(ENTER_TOKEN, 'g');
 const ROOT_SELECTOR = '';
 class AnimationAstBuilderVisitor {
     /**
@@ -1182,9 +1178,8 @@ function normalizeSelector(selector) {
     if (hasAmpersand) {
         selector = selector.replace(SELF_TOKEN_REGEX, '');
     }
-    selector = selector.replace(ENTER_TOKEN_REGEX, ENTER_SELECTOR)
-        .replace(LEAVE_TOKEN_REGEX, LEAVE_SELECTOR)
-        .replace(/@\*/g, NG_TRIGGER_SELECTOR)
+    // the :enter and :leave selectors are filled in at runtime during timeline building
+    selector = selector.replace(/@\*/g, NG_TRIGGER_SELECTOR)
         .replace(/@\w+/g, match => NG_TRIGGER_SELECTOR + '-' + match.substr(1))
         .replace(/:animating/g, NG_ANIMATING_SELECTOR);
     return [selector, hasAmpersand];
@@ -1384,10 +1379,16 @@ class ElementInstructionMap {
  * found in the LICENSE file at https://angular.io/license
  */
 const ONE_FRAME_IN_MILLISECONDS = 1;
+const ENTER_TOKEN = ':enter';
+const ENTER_TOKEN_REGEX = new RegExp(ENTER_TOKEN, 'g');
+const LEAVE_TOKEN = ':leave';
+const LEAVE_TOKEN_REGEX = new RegExp(LEAVE_TOKEN, 'g');
 /**
  * @param {?} driver
  * @param {?} rootElement
  * @param {?} ast
+ * @param {?} enterClassName
+ * @param {?} leaveClassName
  * @param {?=} startingStyles
  * @param {?=} finalStyles
  * @param {?=} options
@@ -1395,14 +1396,16 @@ const ONE_FRAME_IN_MILLISECONDS = 1;
  * @param {?=} errors
  * @return {?}
  */
-function buildAnimationTimelines(driver, rootElement, ast, startingStyles = {}, finalStyles = {}, options, subInstructions, errors = []) {
-    return new AnimationTimelineBuilderVisitor().buildKeyframes(driver, rootElement, ast, startingStyles, finalStyles, options, subInstructions, errors);
+function buildAnimationTimelines(driver, rootElement, ast, enterClassName, leaveClassName, startingStyles = {}, finalStyles = {}, options, subInstructions, errors = []) {
+    return new AnimationTimelineBuilderVisitor().buildKeyframes(driver, rootElement, ast, enterClassName, leaveClassName, startingStyles, finalStyles, options, subInstructions, errors);
 }
 class AnimationTimelineBuilderVisitor {
     /**
      * @param {?} driver
      * @param {?} rootElement
      * @param {?} ast
+     * @param {?} enterClassName
+     * @param {?} leaveClassName
      * @param {?} startingStyles
      * @param {?} finalStyles
      * @param {?} options
@@ -1410,9 +1413,9 @@ class AnimationTimelineBuilderVisitor {
      * @param {?=} errors
      * @return {?}
      */
-    buildKeyframes(driver, rootElement, ast, startingStyles, finalStyles, options, subInstructions, errors = []) {
+    buildKeyframes(driver, rootElement, ast, enterClassName, leaveClassName, startingStyles, finalStyles, options, subInstructions, errors = []) {
         subInstructions = subInstructions || new ElementInstructionMap();
-        const /** @type {?} */ context = new AnimationTimelineContext(driver, rootElement, subInstructions, errors, []);
+        const /** @type {?} */ context = new AnimationTimelineContext(driver, rootElement, subInstructions, enterClassName, leaveClassName, errors, []);
         context.options = options;
         context.currentTimeline.setStyles([startingStyles], null, context.errors, options);
         visitDslNode(this, ast, context);
@@ -1748,14 +1751,18 @@ class AnimationTimelineContext {
      * @param {?} _driver
      * @param {?} element
      * @param {?} subInstructions
+     * @param {?} _enterClassName
+     * @param {?} _leaveClassName
      * @param {?} errors
      * @param {?} timelines
      * @param {?=} initialTimeline
      */
-    constructor(_driver, element, subInstructions, errors, timelines, initialTimeline) {
+    constructor(_driver, element, subInstructions, _enterClassName, _leaveClassName, errors, timelines, initialTimeline) {
         this._driver = _driver;
         this.element = element;
         this.subInstructions = subInstructions;
+        this._enterClassName = _enterClassName;
+        this._leaveClassName = _leaveClassName;
         this.errors = errors;
         this.timelines = timelines;
         this.parentContext = null;
@@ -1825,7 +1832,7 @@ class AnimationTimelineContext {
      */
     createSubContext(options = null, element, newTime) {
         const /** @type {?} */ target = element || this.element;
-        const /** @type {?} */ context = new AnimationTimelineContext(this._driver, target, this.subInstructions, this.errors, this.timelines, this.currentTimeline.fork(target, newTime || 0));
+        const /** @type {?} */ context = new AnimationTimelineContext(this._driver, target, this.subInstructions, this._enterClassName, this._leaveClassName, this.errors, this.timelines, this.currentTimeline.fork(target, newTime || 0));
         context.previousNode = this.previousNode;
         context.currentAnimateTimings = this.currentAnimateTimings;
         context.options = this._copyOptions();
@@ -1895,6 +1902,8 @@ class AnimationTimelineContext {
         }
         if (selector.length > 0) {
             // if :self is only used then the selector is empty
+            selector = selector.replace(ENTER_TOKEN_REGEX, '.' + this._enterClassName);
+            selector = selector.replace(LEAVE_TOKEN_REGEX, '.' + this._leaveClassName);
             const /** @type {?} */ multi = limit != 1;
             let /** @type {?} */ elements = this._driver.query(this.element, selector, multi);
             if (limit !== 0) {
@@ -2304,7 +2313,7 @@ class Animation {
         const /** @type {?} */ dest = Array.isArray(destinationStyles) ? normalizeStyles(destinationStyles) : /** @type {?} */ (destinationStyles);
         const /** @type {?} */ errors = [];
         subInstructions = subInstructions || new ElementInstructionMap();
-        const /** @type {?} */ result = buildAnimationTimelines(this._driver, element, this._animationAst, start, dest, options, subInstructions, errors);
+        const /** @type {?} */ result = buildAnimationTimelines(this._driver, element, this._animationAst, ENTER_CLASSNAME, LEAVE_CLASSNAME, start, dest, options, subInstructions, errors);
         if (errors.length) {
             const /** @type {?} */ errorMessage = `animation building failed:\n${errors.join("\n")}`;
             throw new Error(errorMessage);
@@ -2483,12 +2492,14 @@ class AnimationTransitionFactory {
      * @param {?} element
      * @param {?} currentState
      * @param {?} nextState
+     * @param {?} enterClassName
+     * @param {?} leaveClassName
      * @param {?=} currentOptions
      * @param {?=} nextOptions
      * @param {?=} subInstructions
      * @return {?}
      */
-    build(driver, element, currentState, nextState, currentOptions, nextOptions, subInstructions) {
+    build(driver, element, currentState, nextState, enterClassName, leaveClassName, currentOptions, nextOptions, subInstructions) {
         const /** @type {?} */ errors = [];
         const /** @type {?} */ transitionAnimationParams = this.ast.options && this.ast.options.params || EMPTY_OBJECT;
         const /** @type {?} */ currentAnimationParams = currentOptions && currentOptions.params || EMPTY_OBJECT;
@@ -2500,7 +2511,7 @@ class AnimationTransitionFactory {
         const /** @type {?} */ postStyleMap = new Map();
         const /** @type {?} */ isRemoval = nextState === 'void';
         const /** @type {?} */ animationOptions = { params: Object.assign({}, transitionAnimationParams, nextAnimationParams) };
-        const /** @type {?} */ timelines = buildAnimationTimelines(driver, element, this.ast.animation, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
+        const /** @type {?} */ timelines = buildAnimationTimelines(driver, element, this.ast.animation, enterClassName, leaveClassName, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
         if (errors.length) {
             return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, [], [], preStyleMap, postStyleMap, errors);
         }
@@ -2723,7 +2734,7 @@ class TimelineAnimationEngine {
         let /** @type {?} */ instructions;
         const /** @type {?} */ autoStylesMap = new Map();
         if (ast) {
-            instructions = buildAnimationTimelines(this._driver, element, ast, {}, {}, options, EMPTY_INSTRUCTION_MAP, errors);
+            instructions = buildAnimationTimelines(this._driver, element, ast, ENTER_CLASSNAME, LEAVE_CLASSNAME, {}, {}, options, EMPTY_INSTRUCTION_MAP, errors);
             instructions.forEach(inst => {
                 const /** @type {?} */ styles = getOrSetAsInMap(autoStylesMap, inst.element, {});
                 inst.postStyleProps.forEach(prop => styles[prop] = null);
@@ -2848,6 +2859,8 @@ const QUEUED_CLASSNAME = 'ng-animate-queued';
 const QUEUED_SELECTOR = '.ng-animate-queued';
 const DISABLED_CLASSNAME = 'ng-animate-disabled';
 const DISABLED_SELECTOR = '.ng-animate-disabled';
+const STAR_CLASSNAME = 'ng-star-inserted';
+const STAR_SELECTOR = '.ng-star-inserted';
 const EMPTY_PLAYER_ARRAY = [];
 const NULL_REMOVAL_STATE = {
     namespaceId: '',
@@ -3616,10 +3629,12 @@ class TransitionAnimationEngine {
     /**
      * @param {?} entry
      * @param {?} subTimelines
+     * @param {?} enterClassName
+     * @param {?} leaveClassName
      * @return {?}
      */
-    _buildInstruction(entry, subTimelines) {
-        return entry.transition.build(this.driver, entry.element, entry.fromState.value, entry.toState.value, entry.fromState.options, entry.toState.options, subTimelines);
+    _buildInstruction(entry, subTimelines, enterClassName, leaveClassName) {
+        return entry.transition.build(this.driver, entry.element, entry.fromState.value, entry.toState.value, enterClassName, leaveClassName, entry.fromState.options, entry.toState.options, subTimelines);
     }
     /**
      * @param {?} containerElement
@@ -3715,6 +3730,12 @@ class TransitionAnimationEngine {
             this.newHostElements.forEach((ns, element) => this._balanceNamespaceList(ns, element));
             this.newHostElements.clear();
         }
+        if (this.totalAnimations && this.collectedEnterElements.length) {
+            for (let /** @type {?} */ i = 0; i < this.collectedEnterElements.length; i++) {
+                const /** @type {?} */ elm = this.collectedEnterElements[i];
+                addClass(elm, STAR_CLASSNAME);
+            }
+        }
         if (this._namespaceList.length &&
             (this.totalQueuedPlayers || this.collectedLeaveElements.length)) {
             const /** @type {?} */ cleanupFns = [];
@@ -3781,34 +3802,52 @@ class TransitionAnimationEngine {
             }
         });
         const /** @type {?} */ bodyNode = getBodyNode();
-        const /** @type {?} */ allEnterNodes = this.collectedEnterElements.length ?
-            this.collectedEnterElements.filter(createIsRootFilterFn(this.collectedEnterElements)) :
-            [];
+        const /** @type {?} */ allTriggerElements = Array.from(this.statesByElement.keys());
+        const /** @type {?} */ enterNodeMap = buildRootMap(allTriggerElements, this.collectedEnterElements);
         // this must occur before the instructions are built below such that
         // the :enter queries match the elements (since the timeline queries
         // are fired during instruction building).
-        for (let /** @type {?} */ i = 0; i < allEnterNodes.length; i++) {
-            addClass(allEnterNodes[i], ENTER_CLASSNAME);
-        }
+        const /** @type {?} */ enterNodeMapIds = new Map();
+        let /** @type {?} */ i = 0;
+        enterNodeMap.forEach((nodes, root) => {
+            const /** @type {?} */ className = ENTER_CLASSNAME + i++;
+            enterNodeMapIds.set(root, className);
+            nodes.forEach(node => addClass(node, className));
+        });
         const /** @type {?} */ allLeaveNodes = [];
+        const /** @type {?} */ mergedLeaveNodes = new Set();
         const /** @type {?} */ leaveNodesWithoutAnimations = new Set();
         for (let /** @type {?} */ i = 0; i < this.collectedLeaveElements.length; i++) {
             const /** @type {?} */ element = this.collectedLeaveElements[i];
             const /** @type {?} */ details = /** @type {?} */ (element[REMOVAL_FLAG]);
             if (details && details.setForRemoval) {
-                addClass(element, LEAVE_CLASSNAME);
                 allLeaveNodes.push(element);
-                if (!details.hasAnimation) {
+                mergedLeaveNodes.add(element);
+                if (details.hasAnimation) {
+                    this.driver.query(element, STAR_SELECTOR, true).forEach(elm => mergedLeaveNodes.add(elm));
+                }
+                else {
                     leaveNodesWithoutAnimations.add(element);
                 }
             }
         }
+        const /** @type {?} */ leaveNodeMapIds = new Map();
+        const /** @type {?} */ leaveNodeMap = buildRootMap(allTriggerElements, Array.from(mergedLeaveNodes));
+        leaveNodeMap.forEach((nodes, root) => {
+            const /** @type {?} */ className = LEAVE_CLASSNAME + i++;
+            leaveNodeMapIds.set(root, className);
+            nodes.forEach(node => addClass(node, className));
+        });
         cleanupFns.push(() => {
-            allEnterNodes.forEach(element => removeClass(element, ENTER_CLASSNAME));
-            allLeaveNodes.forEach(element => {
-                removeClass(element, LEAVE_CLASSNAME);
-                this.processLeaveNode(element);
+            enterNodeMap.forEach((nodes, root) => {
+                const /** @type {?} */ className = /** @type {?} */ ((enterNodeMapIds.get(root)));
+                nodes.forEach(node => removeClass(node, className));
             });
+            leaveNodeMap.forEach((nodes, root) => {
+                const /** @type {?} */ className = /** @type {?} */ ((leaveNodeMapIds.get(root)));
+                nodes.forEach(node => removeClass(node, className));
+            });
+            allLeaveNodes.forEach(element => { this.processLeaveNode(element); });
         });
         const /** @type {?} */ allPlayers = [];
         const /** @type {?} */ erroneousTransitions = [];
@@ -3822,7 +3861,9 @@ class TransitionAnimationEngine {
                     player.destroy();
                     return;
                 }
-                const /** @type {?} */ instruction = /** @type {?} */ ((this._buildInstruction(entry, subTimelines)));
+                const /** @type {?} */ leaveClassName = /** @type {?} */ ((leaveNodeMapIds.get(element)));
+                const /** @type {?} */ enterClassName = /** @type {?} */ ((enterNodeMapIds.get(element)));
+                const /** @type {?} */ instruction = /** @type {?} */ ((this._buildInstruction(entry, subTimelines, enterClassName, leaveClassName)));
                 if (instruction.errors && instruction.errors.length) {
                     erroneousTransitions.push(instruction);
                     return;
@@ -3874,17 +3915,6 @@ class TransitionAnimationEngine {
             allPlayers.forEach(player => player.destroy());
             this.reportError(errors);
         }
-        // these can only be detected here since we have a map of all the elements
-        // that have animations attached to them... We use a set here in the event
-        // multiple enter captures on the same element were caught in different
-        // renderer namespaces (e.g. when a @trigger was on a host binding that had *ngIf)
-        const /** @type {?} */ enterNodesWithoutAnimations = new Set();
-        for (let /** @type {?} */ i = 0; i < allEnterNodes.length; i++) {
-            const /** @type {?} */ element = allEnterNodes[i];
-            if (!subTimelines.has(element)) {
-                enterNodesWithoutAnimations.add(element);
-            }
-        }
         const /** @type {?} */ allPreviousPlayersMap = new Map();
         // this map works to tell which element in the DOM tree is contained by
         // which animation. Further down below this map will get populated once
@@ -3917,16 +3947,18 @@ class TransitionAnimationEngine {
             return replacePostStylesAsPre(node, allPreStyleElements, allPostStyleElements);
         });
         // POST STAGE: fill the * styles
-        const [postStylesMap, allLeaveQueriedNodes] = cloakAndComputeStyles(this.driver, leaveNodesWithoutAnimations, allPostStyleElements, AUTO_STYLE);
+        const /** @type {?} */ postStylesMap = new Map();
+        const /** @type {?} */ allLeaveQueriedNodes = cloakAndComputeStyles(postStylesMap, this.driver, leaveNodesWithoutAnimations, allPostStyleElements, AUTO_STYLE);
         allLeaveQueriedNodes.forEach(node => {
             if (replacePostStylesAsPre(node, allPreStyleElements, allPostStyleElements)) {
                 replaceNodes.push(node);
             }
         });
         // PRE STAGE: fill the ! styles
-        const [preStylesMap] = allPreStyleElements.size ?
-            cloakAndComputeStyles(this.driver, enterNodesWithoutAnimations, allPreStyleElements, ɵPRE_STYLE) :
-            [new Map()];
+        const /** @type {?} */ preStylesMap = new Map();
+        enterNodeMap.forEach((nodes, root) => {
+            cloakAndComputeStyles(preStylesMap, this.driver, new Set(nodes), allPreStyleElements, ɵPRE_STYLE);
+        });
         replaceNodes.forEach(node => {
             const /** @type {?} */ post = postStylesMap.get(node);
             const /** @type {?} */ pre = preStylesMap.get(node);
@@ -4461,16 +4493,16 @@ function cloakElement(element, value) {
     return oldValue;
 }
 /**
+ * @param {?} valuesMap
  * @param {?} driver
  * @param {?} elements
  * @param {?} elementPropsMap
  * @param {?} defaultStyle
  * @return {?}
  */
-function cloakAndComputeStyles(driver, elements, elementPropsMap, defaultStyle) {
+function cloakAndComputeStyles(valuesMap, driver, elements, elementPropsMap, defaultStyle) {
     const /** @type {?} */ cloakVals = [];
     elements.forEach(element => cloakVals.push(cloakElement(element)));
-    const /** @type {?} */ valuesMap = new Map();
     const /** @type {?} */ failedElements = [];
     elementPropsMap.forEach((props, element) => {
         const /** @type {?} */ styles = {};
@@ -4489,30 +4521,54 @@ function cloakAndComputeStyles(driver, elements, elementPropsMap, defaultStyle) 
     // an index value for the closure (but instead just the value)
     let /** @type {?} */ i = 0;
     elements.forEach(element => cloakElement(element, cloakVals[i++]));
-    return [valuesMap, failedElements];
+    return failedElements;
 }
 /**
+ * @param {?} roots
  * @param {?} nodes
  * @return {?}
  */
-function createIsRootFilterFn(nodes) {
+function buildRootMap(roots, nodes) {
+    const /** @type {?} */ rootMap = new Map();
+    roots.forEach(root => rootMap.set(root, []));
+    if (nodes.length == 0)
+        return rootMap;
+    const /** @type {?} */ NULL_NODE = 1;
     const /** @type {?} */ nodeSet = new Set(nodes);
-    const /** @type {?} */ knownRootContainer = new Set();
-    let /** @type {?} */ isRoot;
-    isRoot = node => {
+    const /** @type {?} */ localRootMap = new Map();
+    /**
+     * @param {?} node
+     * @return {?}
+     */
+    function getRoot(node) {
         if (!node)
-            return true;
-        if (nodeSet.has(node.parentNode))
-            return false;
-        if (knownRootContainer.has(node.parentNode))
-            return true;
-        if (isRoot(node.parentNode)) {
-            knownRootContainer.add(node);
-            return true;
+            return NULL_NODE;
+        let /** @type {?} */ root = localRootMap.get(node);
+        if (root)
+            return root;
+        const /** @type {?} */ parent = node.parentNode;
+        if (rootMap.has(parent)) {
+            // ngIf inside @trigger
+            root = parent;
         }
-        return false;
-    };
-    return isRoot;
+        else if (nodeSet.has(parent)) {
+            // ngIf inside ngIf
+            root = NULL_NODE;
+        }
+        else {
+            // recurse upwards
+            root = getRoot(parent);
+        }
+        localRootMap.set(node, root);
+        return root;
+    }
+    nodes.forEach(node => {
+        const /** @type {?} */ root = getRoot(node);
+        if (root !== NULL_NODE) {
+            /** @type {?} */ ((rootMap.get(root))).push(node);
+        }
+    });
+    return rootMap;
 }
 const CLASSES_CACHE_KEY = '$$classes';
 /**

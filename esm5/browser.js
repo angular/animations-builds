@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.3-2a5b619
+ * @license Angular v5.0.3-c7b211c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -353,8 +353,8 @@ var SUBSTITUTION_EXPR_START = '{{';
 var SUBSTITUTION_EXPR_END = '}}';
 var ENTER_CLASSNAME = 'ng-enter';
 var LEAVE_CLASSNAME = 'ng-leave';
-var ENTER_SELECTOR = '.ng-enter';
-var LEAVE_SELECTOR = '.ng-leave';
+
+
 var NG_TRIGGER_CLASSNAME = 'ng-trigger';
 var NG_TRIGGER_SELECTOR = '.ng-trigger';
 var NG_ANIMATING_CLASSNAME = 'ng-animating';
@@ -786,10 +786,6 @@ var SELF_TOKEN_REGEX = new RegExp("s*" + SELF_TOKEN + "s*,?", 'g');
 function buildAnimationAst(driver, metadata, errors) {
     return new AnimationAstBuilderVisitor(driver).build(metadata, errors);
 }
-var LEAVE_TOKEN = ':leave';
-var LEAVE_TOKEN_REGEX = new RegExp(LEAVE_TOKEN, 'g');
-var ENTER_TOKEN = ':enter';
-var ENTER_TOKEN_REGEX = new RegExp(ENTER_TOKEN, 'g');
 var ROOT_SELECTOR = '';
 var AnimationAstBuilderVisitor = (function () {
     function AnimationAstBuilderVisitor(_driver) {
@@ -1326,9 +1322,8 @@ function normalizeSelector(selector) {
     if (hasAmpersand) {
         selector = selector.replace(SELF_TOKEN_REGEX, '');
     }
-    selector = selector.replace(ENTER_TOKEN_REGEX, ENTER_SELECTOR)
-        .replace(LEAVE_TOKEN_REGEX, LEAVE_SELECTOR)
-        .replace(/@\*/g, NG_TRIGGER_SELECTOR)
+    // the :enter and :leave selectors are filled in at runtime during timeline building
+    selector = selector.replace(/@\*/g, NG_TRIGGER_SELECTOR)
         .replace(/@\w+/g, function (match) { return NG_TRIGGER_SELECTOR + '-' + match.substr(1); })
         .replace(/:animating/g, NG_ANIMATING_SELECTOR);
     return [selector, hasAmpersand];
@@ -1545,10 +1540,16 @@ var ElementInstructionMap = (function () {
  * found in the LICENSE file at https://angular.io/license
  */
 var ONE_FRAME_IN_MILLISECONDS = 1;
+var ENTER_TOKEN = ':enter';
+var ENTER_TOKEN_REGEX = new RegExp(ENTER_TOKEN, 'g');
+var LEAVE_TOKEN = ':leave';
+var LEAVE_TOKEN_REGEX = new RegExp(LEAVE_TOKEN, 'g');
 /**
  * @param {?} driver
  * @param {?} rootElement
  * @param {?} ast
+ * @param {?} enterClassName
+ * @param {?} leaveClassName
  * @param {?=} startingStyles
  * @param {?=} finalStyles
  * @param {?=} options
@@ -1556,11 +1557,11 @@ var ONE_FRAME_IN_MILLISECONDS = 1;
  * @param {?=} errors
  * @return {?}
  */
-function buildAnimationTimelines(driver, rootElement, ast, startingStyles, finalStyles, options, subInstructions, errors) {
+function buildAnimationTimelines(driver, rootElement, ast, enterClassName, leaveClassName, startingStyles, finalStyles, options, subInstructions, errors) {
     if (startingStyles === void 0) { startingStyles = {}; }
     if (finalStyles === void 0) { finalStyles = {}; }
     if (errors === void 0) { errors = []; }
-    return new AnimationTimelineBuilderVisitor().buildKeyframes(driver, rootElement, ast, startingStyles, finalStyles, options, subInstructions, errors);
+    return new AnimationTimelineBuilderVisitor().buildKeyframes(driver, rootElement, ast, enterClassName, leaveClassName, startingStyles, finalStyles, options, subInstructions, errors);
 }
 var AnimationTimelineBuilderVisitor = (function () {
     function AnimationTimelineBuilderVisitor() {
@@ -1569,6 +1570,8 @@ var AnimationTimelineBuilderVisitor = (function () {
      * @param {?} driver
      * @param {?} rootElement
      * @param {?} ast
+     * @param {?} enterClassName
+     * @param {?} leaveClassName
      * @param {?} startingStyles
      * @param {?} finalStyles
      * @param {?} options
@@ -1580,6 +1583,8 @@ var AnimationTimelineBuilderVisitor = (function () {
      * @param {?} driver
      * @param {?} rootElement
      * @param {?} ast
+     * @param {?} enterClassName
+     * @param {?} leaveClassName
      * @param {?} startingStyles
      * @param {?} finalStyles
      * @param {?} options
@@ -1587,10 +1592,10 @@ var AnimationTimelineBuilderVisitor = (function () {
      * @param {?=} errors
      * @return {?}
      */
-    function (driver, rootElement, ast, startingStyles, finalStyles, options, subInstructions, errors) {
+    function (driver, rootElement, ast, enterClassName, leaveClassName, startingStyles, finalStyles, options, subInstructions, errors) {
         if (errors === void 0) { errors = []; }
         subInstructions = subInstructions || new ElementInstructionMap();
-        var /** @type {?} */ context = new AnimationTimelineContext(driver, rootElement, subInstructions, errors, []);
+        var /** @type {?} */ context = new AnimationTimelineContext(driver, rootElement, subInstructions, enterClassName, leaveClassName, errors, []);
         context.options = options;
         context.currentTimeline.setStyles([startingStyles], null, context.errors, options);
         visitDslNode(this, ast, context);
@@ -2002,10 +2007,12 @@ var AnimationTimelineBuilderVisitor = (function () {
 }());
 var DEFAULT_NOOP_PREVIOUS_NODE = /** @type {?} */ ({});
 var AnimationTimelineContext = (function () {
-    function AnimationTimelineContext(_driver, element, subInstructions, errors, timelines, initialTimeline) {
+    function AnimationTimelineContext(_driver, element, subInstructions, _enterClassName, _leaveClassName, errors, timelines, initialTimeline) {
         this._driver = _driver;
         this.element = element;
         this.subInstructions = subInstructions;
+        this._enterClassName = _enterClassName;
+        this._leaveClassName = _leaveClassName;
         this.errors = errors;
         this.timelines = timelines;
         this.parentContext = null;
@@ -2095,7 +2102,7 @@ var AnimationTimelineContext = (function () {
     function (options, element, newTime) {
         if (options === void 0) { options = null; }
         var /** @type {?} */ target = element || this.element;
-        var /** @type {?} */ context = new AnimationTimelineContext(this._driver, target, this.subInstructions, this.errors, this.timelines, this.currentTimeline.fork(target, newTime || 0));
+        var /** @type {?} */ context = new AnimationTimelineContext(this._driver, target, this.subInstructions, this._enterClassName, this._leaveClassName, this.errors, this.timelines, this.currentTimeline.fork(target, newTime || 0));
         context.previousNode = this.previousNode;
         context.currentAnimateTimings = this.currentAnimateTimings;
         context.options = this._copyOptions();
@@ -2192,6 +2199,8 @@ var AnimationTimelineContext = (function () {
         }
         if (selector.length > 0) {
             // if :self is only used then the selector is empty
+            selector = selector.replace(ENTER_TOKEN_REGEX, '.' + this._enterClassName);
+            selector = selector.replace(LEAVE_TOKEN_REGEX, '.' + this._leaveClassName);
             var /** @type {?} */ multi = limit != 1;
             var /** @type {?} */ elements = this._driver.query(this.element, selector, multi);
             if (limit !== 0) {
@@ -2677,7 +2686,7 @@ var Animation = (function () {
         var /** @type {?} */ dest = Array.isArray(destinationStyles) ? normalizeStyles(destinationStyles) : /** @type {?} */ (destinationStyles);
         var /** @type {?} */ errors = [];
         subInstructions = subInstructions || new ElementInstructionMap();
-        var /** @type {?} */ result = buildAnimationTimelines(this._driver, element, this._animationAst, start, dest, options, subInstructions, errors);
+        var /** @type {?} */ result = buildAnimationTimelines(this._driver, element, this._animationAst, ENTER_CLASSNAME, LEAVE_CLASSNAME, start, dest, options, subInstructions, errors);
         if (errors.length) {
             var /** @type {?} */ errorMessage = "animation building failed:\n" + errors.join("\n");
             throw new Error(errorMessage);
@@ -2898,6 +2907,8 @@ var AnimationTransitionFactory = (function () {
      * @param {?} element
      * @param {?} currentState
      * @param {?} nextState
+     * @param {?} enterClassName
+     * @param {?} leaveClassName
      * @param {?=} currentOptions
      * @param {?=} nextOptions
      * @param {?=} subInstructions
@@ -2908,12 +2919,14 @@ var AnimationTransitionFactory = (function () {
      * @param {?} element
      * @param {?} currentState
      * @param {?} nextState
+     * @param {?} enterClassName
+     * @param {?} leaveClassName
      * @param {?=} currentOptions
      * @param {?=} nextOptions
      * @param {?=} subInstructions
      * @return {?}
      */
-    function (driver, element, currentState, nextState, currentOptions, nextOptions, subInstructions) {
+    function (driver, element, currentState, nextState, enterClassName, leaveClassName, currentOptions, nextOptions, subInstructions) {
         var /** @type {?} */ errors = [];
         var /** @type {?} */ transitionAnimationParams = this.ast.options && this.ast.options.params || EMPTY_OBJECT;
         var /** @type {?} */ currentAnimationParams = currentOptions && currentOptions.params || EMPTY_OBJECT;
@@ -2925,7 +2938,7 @@ var AnimationTransitionFactory = (function () {
         var /** @type {?} */ postStyleMap = new Map();
         var /** @type {?} */ isRemoval = nextState === 'void';
         var /** @type {?} */ animationOptions = { params: __assign({}, transitionAnimationParams, nextAnimationParams) };
-        var /** @type {?} */ timelines = buildAnimationTimelines(driver, element, this.ast.animation, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
+        var /** @type {?} */ timelines = buildAnimationTimelines(driver, element, this.ast.animation, enterClassName, leaveClassName, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
         if (errors.length) {
             return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, [], [], preStyleMap, postStyleMap, errors);
         }
@@ -3179,7 +3192,7 @@ var TimelineAnimationEngine = (function () {
         var /** @type {?} */ instructions;
         var /** @type {?} */ autoStylesMap = new Map();
         if (ast) {
-            instructions = buildAnimationTimelines(this._driver, element, ast, {}, {}, options, EMPTY_INSTRUCTION_MAP, errors);
+            instructions = buildAnimationTimelines(this._driver, element, ast, ENTER_CLASSNAME, LEAVE_CLASSNAME, {}, {}, options, EMPTY_INSTRUCTION_MAP, errors);
             instructions.forEach(function (inst) {
                 var /** @type {?} */ styles = getOrSetAsInMap(autoStylesMap, inst.element, {});
                 inst.postStyleProps.forEach(function (prop) { return styles[prop] = null; });
@@ -3327,6 +3340,8 @@ var QUEUED_CLASSNAME = 'ng-animate-queued';
 var QUEUED_SELECTOR = '.ng-animate-queued';
 var DISABLED_CLASSNAME = 'ng-animate-disabled';
 var DISABLED_SELECTOR = '.ng-animate-disabled';
+var STAR_CLASSNAME = 'ng-star-inserted';
+var STAR_SELECTOR = '.ng-star-inserted';
 var EMPTY_PLAYER_ARRAY = [];
 var NULL_REMOVAL_STATE = {
     namespaceId: '',
@@ -4266,15 +4281,19 @@ var TransitionAnimationEngine = (function () {
     /**
      * @param {?} entry
      * @param {?} subTimelines
+     * @param {?} enterClassName
+     * @param {?} leaveClassName
      * @return {?}
      */
     TransitionAnimationEngine.prototype._buildInstruction = /**
      * @param {?} entry
      * @param {?} subTimelines
+     * @param {?} enterClassName
+     * @param {?} leaveClassName
      * @return {?}
      */
-    function (entry, subTimelines) {
-        return entry.transition.build(this.driver, entry.element, entry.fromState.value, entry.toState.value, entry.fromState.options, entry.toState.options, subTimelines);
+    function (entry, subTimelines, enterClassName, leaveClassName) {
+        return entry.transition.build(this.driver, entry.element, entry.fromState.value, entry.toState.value, enterClassName, leaveClassName, entry.fromState.options, entry.toState.options, subTimelines);
     };
     /**
      * @param {?} containerElement
@@ -4398,6 +4417,12 @@ var TransitionAnimationEngine = (function () {
             this.newHostElements.forEach(function (ns, element) { return _this._balanceNamespaceList(ns, element); });
             this.newHostElements.clear();
         }
+        if (this.totalAnimations && this.collectedEnterElements.length) {
+            for (var /** @type {?} */ i = 0; i < this.collectedEnterElements.length; i++) {
+                var /** @type {?} */ elm = this.collectedEnterElements[i];
+                addClass(elm, STAR_CLASSNAME);
+            }
+        }
         if (this._namespaceList.length &&
             (this.totalQueuedPlayers || this.collectedLeaveElements.length)) {
             var /** @type {?} */ cleanupFns = [];
@@ -4469,44 +4494,62 @@ var TransitionAnimationEngine = (function () {
         this.disabledNodes.forEach(function (node) {
             disabledElementsSet.add(node);
             var /** @type {?} */ nodesThatAreDisabled = _this.driver.query(node, QUEUED_SELECTOR, true);
-            for (var /** @type {?} */ i = 0; i < nodesThatAreDisabled.length; i++) {
-                disabledElementsSet.add(nodesThatAreDisabled[i]);
+            for (var /** @type {?} */ i_1 = 0; i_1 < nodesThatAreDisabled.length; i_1++) {
+                disabledElementsSet.add(nodesThatAreDisabled[i_1]);
             }
         });
         var /** @type {?} */ bodyNode = getBodyNode();
-        var /** @type {?} */ allEnterNodes = this.collectedEnterElements.length ?
-            this.collectedEnterElements.filter(createIsRootFilterFn(this.collectedEnterElements)) :
-            [];
+        var /** @type {?} */ allTriggerElements = Array.from(this.statesByElement.keys());
+        var /** @type {?} */ enterNodeMap = buildRootMap(allTriggerElements, this.collectedEnterElements);
         // this must occur before the instructions are built below such that
         // the :enter queries match the elements (since the timeline queries
         // are fired during instruction building).
-        for (var /** @type {?} */ i = 0; i < allEnterNodes.length; i++) {
-            addClass(allEnterNodes[i], ENTER_CLASSNAME);
-        }
+        var /** @type {?} */ enterNodeMapIds = new Map();
+        var /** @type {?} */ i = 0;
+        enterNodeMap.forEach(function (nodes, root) {
+            var /** @type {?} */ className = ENTER_CLASSNAME + i++;
+            enterNodeMapIds.set(root, className);
+            nodes.forEach(function (node) { return addClass(node, className); });
+        });
         var /** @type {?} */ allLeaveNodes = [];
+        var /** @type {?} */ mergedLeaveNodes = new Set();
         var /** @type {?} */ leaveNodesWithoutAnimations = new Set();
-        for (var /** @type {?} */ i = 0; i < this.collectedLeaveElements.length; i++) {
-            var /** @type {?} */ element = this.collectedLeaveElements[i];
+        for (var /** @type {?} */ i_2 = 0; i_2 < this.collectedLeaveElements.length; i_2++) {
+            var /** @type {?} */ element = this.collectedLeaveElements[i_2];
             var /** @type {?} */ details = /** @type {?} */ (element[REMOVAL_FLAG]);
             if (details && details.setForRemoval) {
-                addClass(element, LEAVE_CLASSNAME);
                 allLeaveNodes.push(element);
-                if (!details.hasAnimation) {
+                mergedLeaveNodes.add(element);
+                if (details.hasAnimation) {
+                    this.driver.query(element, STAR_SELECTOR, true).forEach(function (elm) { return mergedLeaveNodes.add(elm); });
+                }
+                else {
                     leaveNodesWithoutAnimations.add(element);
                 }
             }
         }
+        var /** @type {?} */ leaveNodeMapIds = new Map();
+        var /** @type {?} */ leaveNodeMap = buildRootMap(allTriggerElements, Array.from(mergedLeaveNodes));
+        leaveNodeMap.forEach(function (nodes, root) {
+            var /** @type {?} */ className = LEAVE_CLASSNAME + i++;
+            leaveNodeMapIds.set(root, className);
+            nodes.forEach(function (node) { return addClass(node, className); });
+        });
         cleanupFns.push(function () {
-            allEnterNodes.forEach(function (element) { return removeClass(element, ENTER_CLASSNAME); });
-            allLeaveNodes.forEach(function (element) {
-                removeClass(element, LEAVE_CLASSNAME);
-                _this.processLeaveNode(element);
+            enterNodeMap.forEach(function (nodes, root) {
+                var /** @type {?} */ className = /** @type {?} */ ((enterNodeMapIds.get(root)));
+                nodes.forEach(function (node) { return removeClass(node, className); });
             });
+            leaveNodeMap.forEach(function (nodes, root) {
+                var /** @type {?} */ className = /** @type {?} */ ((leaveNodeMapIds.get(root)));
+                nodes.forEach(function (node) { return removeClass(node, className); });
+            });
+            allLeaveNodes.forEach(function (element) { _this.processLeaveNode(element); });
         });
         var /** @type {?} */ allPlayers = [];
         var /** @type {?} */ erroneousTransitions = [];
-        for (var /** @type {?} */ i = this._namespaceList.length - 1; i >= 0; i--) {
-            var /** @type {?} */ ns = this._namespaceList[i];
+        for (var /** @type {?} */ i_3 = this._namespaceList.length - 1; i_3 >= 0; i_3--) {
+            var /** @type {?} */ ns = this._namespaceList[i_3];
             ns.drainQueuedTransitions(microtaskId).forEach(function (entry) {
                 var /** @type {?} */ player = entry.player;
                 allPlayers.push(player);
@@ -4515,7 +4558,9 @@ var TransitionAnimationEngine = (function () {
                     player.destroy();
                     return;
                 }
-                var /** @type {?} */ instruction = /** @type {?} */ ((_this._buildInstruction(entry, subTimelines)));
+                var /** @type {?} */ leaveClassName = /** @type {?} */ ((leaveNodeMapIds.get(element)));
+                var /** @type {?} */ enterClassName = /** @type {?} */ ((enterNodeMapIds.get(element)));
+                var /** @type {?} */ instruction = /** @type {?} */ ((_this._buildInstruction(entry, subTimelines, enterClassName, leaveClassName)));
                 if (instruction.errors && instruction.errors.length) {
                     erroneousTransitions.push(instruction);
                     return;
@@ -4567,17 +4612,6 @@ var TransitionAnimationEngine = (function () {
             allPlayers.forEach(function (player) { return player.destroy(); });
             this.reportError(errors_1);
         }
-        // these can only be detected here since we have a map of all the elements
-        // that have animations attached to them... We use a set here in the event
-        // multiple enter captures on the same element were caught in different
-        // renderer namespaces (e.g. when a @trigger was on a host binding that had *ngIf)
-        var /** @type {?} */ enterNodesWithoutAnimations = new Set();
-        for (var /** @type {?} */ i = 0; i < allEnterNodes.length; i++) {
-            var /** @type {?} */ element = allEnterNodes[i];
-            if (!subTimelines.has(element)) {
-                enterNodesWithoutAnimations.add(element);
-            }
-        }
         var /** @type {?} */ allPreviousPlayersMap = new Map();
         // this map works to tell which element in the DOM tree is contained by
         // which animation. Further down below this map will get populated once
@@ -4610,16 +4644,18 @@ var TransitionAnimationEngine = (function () {
             return replacePostStylesAsPre(node, allPreStyleElements, allPostStyleElements);
         });
         // POST STAGE: fill the * styles
-        var _a = cloakAndComputeStyles(this.driver, leaveNodesWithoutAnimations, allPostStyleElements, AUTO_STYLE), postStylesMap = _a[0], allLeaveQueriedNodes = _a[1];
+        var /** @type {?} */ postStylesMap = new Map();
+        var /** @type {?} */ allLeaveQueriedNodes = cloakAndComputeStyles(postStylesMap, this.driver, leaveNodesWithoutAnimations, allPostStyleElements, AUTO_STYLE);
         allLeaveQueriedNodes.forEach(function (node) {
             if (replacePostStylesAsPre(node, allPreStyleElements, allPostStyleElements)) {
                 replaceNodes.push(node);
             }
         });
         // PRE STAGE: fill the ! styles
-        var preStylesMap = (allPreStyleElements.size ?
-            cloakAndComputeStyles(this.driver, enterNodesWithoutAnimations, allPreStyleElements, ɵPRE_STYLE) :
-            [new Map()])[0];
+        var /** @type {?} */ preStylesMap = new Map();
+        enterNodeMap.forEach(function (nodes, root) {
+            cloakAndComputeStyles(preStylesMap, _this.driver, new Set(nodes), allPreStyleElements, ɵPRE_STYLE);
+        });
         replaceNodes.forEach(function (node) {
             var /** @type {?} */ post = postStylesMap.get(node);
             var /** @type {?} */ pre = preStylesMap.get(node);
@@ -4707,8 +4743,8 @@ var TransitionAnimationEngine = (function () {
         // run through all of the queued removals and see if they
         // were picked up by a query. If not then perform the removal
         // operation right away unless a parent animation is ongoing.
-        for (var /** @type {?} */ i = 0; i < allLeaveNodes.length; i++) {
-            var /** @type {?} */ element = allLeaveNodes[i];
+        for (var /** @type {?} */ i_4 = 0; i_4 < allLeaveNodes.length; i_4++) {
+            var /** @type {?} */ element = allLeaveNodes[i_4];
             var /** @type {?} */ details = /** @type {?} */ (element[REMOVAL_FLAG]);
             removeClass(element, LEAVE_CLASSNAME);
             // this means the element has a removal animation that is being
@@ -5273,16 +5309,16 @@ function cloakElement(element, value) {
     return oldValue;
 }
 /**
+ * @param {?} valuesMap
  * @param {?} driver
  * @param {?} elements
  * @param {?} elementPropsMap
  * @param {?} defaultStyle
  * @return {?}
  */
-function cloakAndComputeStyles(driver, elements, elementPropsMap, defaultStyle) {
+function cloakAndComputeStyles(valuesMap, driver, elements, elementPropsMap, defaultStyle) {
     var /** @type {?} */ cloakVals = [];
     elements.forEach(function (element) { return cloakVals.push(cloakElement(element)); });
-    var /** @type {?} */ valuesMap = new Map();
     var /** @type {?} */ failedElements = [];
     elementPropsMap.forEach(function (props, element) {
         var /** @type {?} */ styles = {};
@@ -5301,30 +5337,54 @@ function cloakAndComputeStyles(driver, elements, elementPropsMap, defaultStyle) 
     // an index value for the closure (but instead just the value)
     var /** @type {?} */ i = 0;
     elements.forEach(function (element) { return cloakElement(element, cloakVals[i++]); });
-    return [valuesMap, failedElements];
+    return failedElements;
 }
 /**
+ * @param {?} roots
  * @param {?} nodes
  * @return {?}
  */
-function createIsRootFilterFn(nodes) {
+function buildRootMap(roots, nodes) {
+    var /** @type {?} */ rootMap = new Map();
+    roots.forEach(function (root) { return rootMap.set(root, []); });
+    if (nodes.length == 0)
+        return rootMap;
+    var /** @type {?} */ NULL_NODE = 1;
     var /** @type {?} */ nodeSet = new Set(nodes);
-    var /** @type {?} */ knownRootContainer = new Set();
-    var /** @type {?} */ isRoot;
-    isRoot = function (node) {
+    var /** @type {?} */ localRootMap = new Map();
+    /**
+     * @param {?} node
+     * @return {?}
+     */
+    function getRoot(node) {
         if (!node)
-            return true;
-        if (nodeSet.has(node.parentNode))
-            return false;
-        if (knownRootContainer.has(node.parentNode))
-            return true;
-        if (isRoot(node.parentNode)) {
-            knownRootContainer.add(node);
-            return true;
+            return NULL_NODE;
+        var /** @type {?} */ root = localRootMap.get(node);
+        if (root)
+            return root;
+        var /** @type {?} */ parent = node.parentNode;
+        if (rootMap.has(parent)) {
+            // ngIf inside @trigger
+            root = parent;
         }
-        return false;
-    };
-    return isRoot;
+        else if (nodeSet.has(parent)) {
+            // ngIf inside ngIf
+            root = NULL_NODE;
+        }
+        else {
+            // recurse upwards
+            root = getRoot(parent);
+        }
+        localRootMap.set(node, root);
+        return root;
+    }
+    nodes.forEach(function (node) {
+        var /** @type {?} */ root = getRoot(node);
+        if (root !== NULL_NODE) {
+            /** @type {?} */ ((rootMap.get(root))).push(node);
+        }
+    });
+    return rootMap;
 }
 var CLASSES_CACHE_KEY = '$$classes';
 /**
