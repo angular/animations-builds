@@ -10,9 +10,9 @@ import { AnimationDriver } from '../render/animation_driver';
 import { AnimateAst, AnimateChildAst, AnimateRefAst, Ast, AstVisitor, GroupAst, KeyframesAst, QueryAst, ReferenceAst, SequenceAst, StaggerAst, StateAst, StyleAst, TransitionAst, TriggerAst } from './animation_ast';
 import { AnimationTimelineInstruction } from './animation_timeline_instruction';
 import { ElementInstructionMap } from './element_instruction_map';
-export declare function buildAnimationTimelines(driver: AnimationDriver, rootElement: any, ast: Ast<AnimationMetadataType>, startingStyles: ɵStyleData | undefined, finalStyles: ɵStyleData | undefined, options: AnimationOptions, subInstructions?: ElementInstructionMap, errors?: any[]): AnimationTimelineInstruction[];
+export declare function buildAnimationTimelines(driver: AnimationDriver, rootElement: any, ast: Ast<AnimationMetadataType>, enterClassName: string, leaveClassName: string, startingStyles: ɵStyleData | undefined, finalStyles: ɵStyleData | undefined, options: AnimationOptions, subInstructions?: ElementInstructionMap, errors?: any[]): AnimationTimelineInstruction[];
 export declare class AnimationTimelineBuilderVisitor implements AstVisitor {
-    buildKeyframes(driver: AnimationDriver, rootElement: any, ast: Ast<AnimationMetadataType>, startingStyles: ɵStyleData, finalStyles: ɵStyleData, options: AnimationOptions, subInstructions?: ElementInstructionMap, errors?: any[]): AnimationTimelineInstruction[];
+    buildKeyframes(driver: AnimationDriver, rootElement: any, ast: Ast<AnimationMetadataType>, enterClassName: string, leaveClassName: string, startingStyles: ɵStyleData, finalStyles: ɵStyleData, options: AnimationOptions, subInstructions?: ElementInstructionMap, errors?: any[]): AnimationTimelineInstruction[];
     visitTrigger(ast: TriggerAst, context: AnimationTimelineContext): any;
     visitState(ast: StateAst, context: AnimationTimelineContext): any;
     visitTransition(ast: TransitionAst, context: AnimationTimelineContext): any;
@@ -37,6 +37,8 @@ export declare class AnimationTimelineContext {
     private _driver;
     element: any;
     subInstructions: ElementInstructionMap;
+    private _enterClassName;
+    private _leaveClassName;
     errors: any[];
     timelines: TimelineBuilder[];
     parentContext: AnimationTimelineContext | null;
@@ -48,7 +50,7 @@ export declare class AnimationTimelineContext {
     currentQueryIndex: number;
     currentQueryTotal: number;
     currentStaggerTime: number;
-    constructor(_driver: AnimationDriver, element: any, subInstructions: ElementInstructionMap, errors: any[], timelines: TimelineBuilder[], initialTimeline?: TimelineBuilder);
+    constructor(_driver: AnimationDriver, element: any, subInstructions: ElementInstructionMap, _enterClassName: string, _leaveClassName: string, errors: any[], timelines: TimelineBuilder[], initialTimeline?: TimelineBuilder);
     readonly params: {
         [name: string]: any;
     } | undefined;
