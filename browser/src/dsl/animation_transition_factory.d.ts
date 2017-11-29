@@ -21,7 +21,7 @@ export declare class AnimationTransitionFactory {
     buildStyles(stateName: string, params: {
         [key: string]: any;
     }, errors: any[]): ɵStyleData;
-    build(driver: AnimationDriver, element: any, currentState: any, nextState: any, currentOptions?: AnimationOptions, nextOptions?: AnimationOptions, subInstructions?: ElementInstructionMap): AnimationTransitionInstruction;
+    build(driver: AnimationDriver, element: any, currentState: any, nextState: any, enterClassName: string, leaveClassName: string, currentOptions?: AnimationOptions, nextOptions?: AnimationOptions, subInstructions?: ElementInstructionMap): AnimationTransitionInstruction;
 }
 export declare class AnimationStateStyles {
     private styles;
