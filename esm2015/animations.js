@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.5-d824cc2
+ * @license Angular v5.0.5-eb57bc3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1314,7 +1314,6 @@ class AnimationGroupPlayer {
         }
         else {
             this.players.forEach(player => {
-                player.parentPlayer = this;
                 player.onDone(() => {
                     if (++doneCount >= total) {
                         this._onFinish();
