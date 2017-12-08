@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.1.0-ddada6e
+ * @license Angular v5.1.0-3ce3b4d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.1.0-ddada6e
+ * @license Angular v5.1.0-3ce3b4d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5097,15 +5097,8 @@ var TransitionAnimationPlayer = /** @class */ (function () {
         this._queuedCallbacks = {};
         this.destroyed = false;
         this.markedForDestroy = false;
+        this.queued = true;
     }
-    Object.defineProperty(TransitionAnimationPlayer.prototype, "queued", {
-        get: /**
-         * @return {?}
-         */
-        function () { return this._containsRealPlayer == false; },
-        enumerable: true,
-        configurable: true
-    });
     /**
      * @param {?} player
      * @return {?}
@@ -5124,6 +5117,7 @@ var TransitionAnimationPlayer = /** @class */ (function () {
         });
         this._queuedCallbacks = {};
         this._containsRealPlayer = true;
+        (/** @type {?} */ (this)).queued = false;
     };
     /**
      * @return {?}
