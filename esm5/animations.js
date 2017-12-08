@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-3215c4b
+ * @license Angular v5.1.0-5a0076f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -47,8 +47,11 @@
  * \@experimental Animation support is experimental.
  * @abstract
  */
-class AnimationBuilder {
-}
+var AnimationBuilder = /** @class */ (function () {
+    function AnimationBuilder() {
+    }
+    return AnimationBuilder;
+}());
 /**
  * An instance of `AnimationFactory` is returned from {\@link AnimationBuilder#build
  * AnimationBuilder.build}.
@@ -56,8 +59,11 @@ class AnimationBuilder {
  * \@experimental Animation support is experimental.
  * @abstract
  */
-class AnimationFactory {
-}
+var AnimationFactory = /** @class */ (function () {
+    function AnimationFactory() {
+    }
+    return AnimationFactory;
+}());
 
 /**
  * @fileoverview added by tsickle
@@ -75,7 +81,7 @@ class AnimationFactory {
 /**
  * \@experimental Animation support is experimental.
  */
-const AUTO_STYLE = '*';
+var AUTO_STYLE = '*';
 /**
  * \@experimental Animation support is experimental.
  * @record
@@ -195,6 +201,11 @@ const AUTO_STYLE = '*';
  * the
  * trigger is bound to (in the form of `[\@triggerName]="expression"`.
  *
+ * Animation trigger bindings strigify values and then match the previous and current values against
+ * any linked transitions. If a boolean value is provided into the trigger binding then it will both
+ * be represented as `1` or `true` and `0` or `false` for a true and false boolean values
+ * respectively.
+ *
  * ### Usage
  *
  * `trigger` will create an animation trigger reference based on the provided `name` value. The
@@ -292,7 +303,7 @@ const AUTO_STYLE = '*';
  * @return {?}
  */
 function trigger(name, definitions) {
-    return { type: 7 /* Trigger */, name, definitions, options: {} };
+    return { type: 7 /* Trigger */, name: name, definitions: definitions, options: {} };
 }
 /**
  * `animate` is an animation-specific function that is designed to be used inside of Angular's
@@ -342,8 +353,9 @@ function trigger(name, definitions) {
  * @param {?=} styles
  * @return {?}
  */
-function animate(timings, styles = null) {
-    return { type: 4 /* Animate */, styles, timings };
+function animate(timings, styles) {
+    if (styles === void 0) { styles = null; }
+    return { type: 4 /* Animate */, styles: styles, timings: timings };
 }
 /**
  * `group` is an animation-specific function that is designed to be used inside of Angular's
@@ -379,8 +391,9 @@ function animate(timings, styles = null) {
  * @param {?=} options
  * @return {?}
  */
-function group(steps, options = null) {
-    return { type: 3 /* Group */, steps, options };
+function group(steps, options) {
+    if (options === void 0) { options = null; }
+    return { type: 3 /* Group */, steps: steps, options: options };
 }
 /**
  * `sequence` is an animation-specific function that is designed to be used inside of Angular's
@@ -419,8 +432,9 @@ function group(steps, options = null) {
  * @param {?=} options
  * @return {?}
  */
-function sequence(steps, options = null) {
-    return { type: 2 /* Sequence */, steps, options };
+function sequence(steps, options) {
+    if (options === void 0) { options = null; }
+    return { type: 2 /* Sequence */, steps: steps, options: options };
 }
 /**
  * `style` is an animation-specific function that is designed to be used inside of Angular's
@@ -522,7 +536,7 @@ function style(tokens) {
  * @return {?}
  */
 function state(name, styles, options) {
-    return { type: 0 /* State */, name, styles, options };
+    return { type: 0 /* State */, name: name, styles: styles, options: options };
 }
 /**
  * `keyframes` is an animation-specific function that is designed to be used inside of Angular's
@@ -572,7 +586,7 @@ function state(name, styles, options) {
  * @return {?}
  */
 function keyframes(steps) {
-    return { type: 5 /* Keyframes */, steps };
+    return { type: 5 /* Keyframes */, steps: steps };
 }
 /**
  * `transition` is an animation-specific function that is designed to be used inside of Angular's
@@ -677,6 +691,22 @@ function keyframes(steps) {
  * ])
  * ```
  *
+ * ### Boolean values
+ * if a trigger binding value is a boolean value then it can be matched using a transition
+ * expression that compares `true` and `false` or `1` and `0`.
+ *
+ * ```
+ * // in the template
+ * <div [\@openClose]="open ? true : false">...</div>
+ *
+ * // in the component metadata
+ * trigger('openClose', [
+ *   state('true', style({ height: '*' })),
+ *   state('false', style({ height: '0px' })),
+ *   transition('false <=> true', animate(500))
+ * ])
+ * ```
+ *
  * ### Using :increment and :decrement
  * In addition to the :enter and :leave transition aliases, the :increment and :decrement aliases
  * can be used to kick off a transition when a numeric value has increased or decreased in value.
@@ -761,8 +791,9 @@ function keyframes(steps) {
  * @param {?=} options
  * @return {?}
  */
-function transition(stateChangeExpr, steps, options = null) {
-    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, options };
+function transition(stateChangeExpr, steps, options) {
+    if (options === void 0) { options = null; }
+    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, options: options };
 }
 /**
  * `animation` is an animation-specific function that is designed to be used inside of Angular's
@@ -776,7 +807,7 @@ function transition(stateChangeExpr, steps, options = null) {
  * var fadeAnimation = animation([
  *   style({ opacity: '{{ start }}' }),
  *   animate('{{ time }}',
- *     style({ opacity: '{{ end }}'))
+ *     style({ opacity: '{{ end }}'}))
  * ], { params: { time: '1000ms', start: 0, end: 1 }});
  * ```
  *
@@ -802,8 +833,9 @@ function transition(stateChangeExpr, steps, options = null) {
  * @param {?=} options
  * @return {?}
  */
-function animation(steps, options = null) {
-    return { type: 8 /* Reference */, animation: steps, options };
+function animation(steps, options) {
+    if (options === void 0) { options = null; }
+    return { type: 8 /* Reference */, animation: steps, options: options };
 }
 /**
  * `animateChild` is an animation-specific function that is designed to be used inside of Angular's
@@ -904,8 +936,9 @@ function animation(steps, options = null) {
  * @param {?=} options
  * @return {?}
  */
-function animateChild(options = null) {
-    return { type: 9 /* AnimateChild */, options };
+function animateChild(options) {
+    if (options === void 0) { options = null; }
+    return { type: 9 /* AnimateChild */, options: options };
 }
 /**
  * `useAnimation` is an animation-specific function that is designed to be used inside of Angular's
@@ -917,8 +950,9 @@ function animateChild(options = null) {
  * @param {?=} options
  * @return {?}
  */
-function useAnimation(animation, options = null) {
-    return { type: 10 /* AnimateRef */, animation, options };
+function useAnimation(animation, options) {
+    if (options === void 0) { options = null; }
+    return { type: 10 /* AnimateRef */, animation: animation, options: options };
 }
 /**
  * `query` is an animation-specific function that is designed to be used inside of Angular's
@@ -1016,8 +1050,9 @@ function useAnimation(animation, options = null) {
  * @param {?=} options
  * @return {?}
  */
-function query(selector, animation, options = null) {
-    return { type: 11 /* Query */, selector, animation, options };
+function query(selector, animation, options) {
+    if (options === void 0) { options = null; }
+    return { type: 11 /* Query */, selector: selector, animation: animation, options: options };
 }
 /**
  * `stagger` is an animation-specific function that is designed to be used inside of Angular's
@@ -1101,7 +1136,7 @@ function query(selector, animation, options = null) {
  * @return {?}
  */
 function stagger(timings, animation) {
-    return { type: 12 /* Stagger */, timings, animation };
+    return { type: 12 /* Stagger */, timings: timings, animation: animation };
 }
 
 /**
@@ -1144,8 +1179,8 @@ function scheduleMicroTask(cb) {
 /**
  * \@experimental Animation support is experimental.
  */
-class NoopAnimationPlayer {
-    constructor() {
+var NoopAnimationPlayer = /** @class */ (function () {
+    function NoopAnimationPlayer() {
         this._onDoneFns = [];
         this._onStartFns = [];
         this._onDestroyFns = [];
@@ -1158,97 +1193,168 @@ class NoopAnimationPlayer {
     /**
      * @return {?}
      */
-    _onFinish() {
+    NoopAnimationPlayer.prototype._onFinish = /**
+     * @return {?}
+     */
+    function () {
         if (!this._finished) {
             this._finished = true;
-            this._onDoneFns.forEach(fn => fn());
+            this._onDoneFns.forEach(function (fn) { return fn(); });
             this._onDoneFns = [];
         }
-    }
+    };
     /**
      * @param {?} fn
      * @return {?}
      */
-    onStart(fn) { this._onStartFns.push(fn); }
+    NoopAnimationPlayer.prototype.onStart = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onStartFns.push(fn); };
     /**
      * @param {?} fn
      * @return {?}
      */
-    onDone(fn) { this._onDoneFns.push(fn); }
+    NoopAnimationPlayer.prototype.onDone = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onDoneFns.push(fn); };
     /**
      * @param {?} fn
      * @return {?}
      */
-    onDestroy(fn) { this._onDestroyFns.push(fn); }
+    NoopAnimationPlayer.prototype.onDestroy = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onDestroyFns.push(fn); };
     /**
      * @return {?}
      */
-    hasStarted() { return this._started; }
+    NoopAnimationPlayer.prototype.hasStarted = /**
+     * @return {?}
+     */
+    function () { return this._started; };
     /**
      * @return {?}
      */
-    init() { }
+    NoopAnimationPlayer.prototype.init = /**
+     * @return {?}
+     */
+    function () { };
     /**
      * @return {?}
      */
-    play() {
+    NoopAnimationPlayer.prototype.play = /**
+     * @return {?}
+     */
+    function () {
         if (!this.hasStarted()) {
-            this.triggerMicrotask();
             this._onStart();
+            this.triggerMicrotask();
         }
         this._started = true;
-    }
+    };
+    /* @internal */
     /**
      * @return {?}
      */
-    triggerMicrotask() { scheduleMicroTask(() => this._onFinish()); }
+    NoopAnimationPlayer.prototype.triggerMicrotask = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        scheduleMicroTask(function () { return _this._onFinish(); });
+    };
     /**
      * @return {?}
      */
-    _onStart() {
-        this._onStartFns.forEach(fn => fn());
+    NoopAnimationPlayer.prototype._onStart = /**
+     * @return {?}
+     */
+    function () {
+        this._onStartFns.forEach(function (fn) { return fn(); });
         this._onStartFns = [];
-    }
+    };
     /**
      * @return {?}
      */
-    pause() { }
+    NoopAnimationPlayer.prototype.pause = /**
+     * @return {?}
+     */
+    function () { };
     /**
      * @return {?}
      */
-    restart() { }
+    NoopAnimationPlayer.prototype.restart = /**
+     * @return {?}
+     */
+    function () { };
     /**
      * @return {?}
      */
-    finish() { this._onFinish(); }
+    NoopAnimationPlayer.prototype.finish = /**
+     * @return {?}
+     */
+    function () { this._onFinish(); };
     /**
      * @return {?}
      */
-    destroy() {
+    NoopAnimationPlayer.prototype.destroy = /**
+     * @return {?}
+     */
+    function () {
         if (!this._destroyed) {
             this._destroyed = true;
             if (!this.hasStarted()) {
                 this._onStart();
             }
             this.finish();
-            this._onDestroyFns.forEach(fn => fn());
+            this._onDestroyFns.forEach(function (fn) { return fn(); });
             this._onDestroyFns = [];
         }
-    }
+    };
     /**
      * @return {?}
      */
-    reset() { }
+    NoopAnimationPlayer.prototype.reset = /**
+     * @return {?}
+     */
+    function () { };
     /**
      * @param {?} p
      * @return {?}
      */
-    setPosition(p) { }
+    NoopAnimationPlayer.prototype.setPosition = /**
+     * @param {?} p
+     * @return {?}
+     */
+    function (p) { };
     /**
      * @return {?}
      */
-    getPosition() { return 0; }
-}
+    NoopAnimationPlayer.prototype.getPosition = /**
+     * @return {?}
+     */
+    function () { return 0; };
+    /* @internal */
+    /**
+     * @param {?} phaseName
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.triggerCallback = /**
+     * @param {?} phaseName
+     * @return {?}
+     */
+    function (phaseName) {
+        var /** @type {?} */ methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
+        methods.forEach(function (fn) { return fn(); });
+        methods.length = 0;
+    };
+    return NoopAnimationPlayer;
+}());
 
 /**
  * @fileoverview added by tsickle
@@ -1261,12 +1367,9 @@ class NoopAnimationPlayer {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-class AnimationGroupPlayer {
-    /**
-     * @param {?} _players
-     */
-    constructor(_players) {
-        this._players = _players;
+var AnimationGroupPlayer = /** @class */ (function () {
+    function AnimationGroupPlayer(_players) {
+        var _this = this;
         this._onDoneFns = [];
         this._onStartFns = [];
         this._finished = false;
@@ -1275,165 +1378,231 @@ class AnimationGroupPlayer {
         this._onDestroyFns = [];
         this.parentPlayer = null;
         this.totalTime = 0;
-        let /** @type {?} */ doneCount = 0;
-        let /** @type {?} */ destroyCount = 0;
-        let /** @type {?} */ startCount = 0;
-        const /** @type {?} */ total = this._players.length;
+        this.players = _players;
+        var /** @type {?} */ doneCount = 0;
+        var /** @type {?} */ destroyCount = 0;
+        var /** @type {?} */ startCount = 0;
+        var /** @type {?} */ total = this.players.length;
         if (total == 0) {
-            scheduleMicroTask(() => this._onFinish());
+            scheduleMicroTask(function () { return _this._onFinish(); });
         }
         else {
-            this._players.forEach(player => {
-                player.parentPlayer = this;
-                player.onDone(() => {
+            this.players.forEach(function (player) {
+                player.onDone(function () {
                     if (++doneCount >= total) {
-                        this._onFinish();
+                        _this._onFinish();
                     }
                 });
-                player.onDestroy(() => {
+                player.onDestroy(function () {
                     if (++destroyCount >= total) {
-                        this._onDestroy();
+                        _this._onDestroy();
                     }
                 });
-                player.onStart(() => {
+                player.onStart(function () {
                     if (++startCount >= total) {
-                        this._onStart();
+                        _this._onStart();
                     }
                 });
             });
         }
-        this.totalTime = this._players.reduce((time, player) => Math.max(time, player.totalTime), 0);
+        this.totalTime = this.players.reduce(function (time, player) { return Math.max(time, player.totalTime); }, 0);
     }
     /**
      * @return {?}
      */
-    _onFinish() {
+    AnimationGroupPlayer.prototype._onFinish = /**
+     * @return {?}
+     */
+    function () {
         if (!this._finished) {
             this._finished = true;
-            this._onDoneFns.forEach(fn => fn());
+            this._onDoneFns.forEach(function (fn) { return fn(); });
             this._onDoneFns = [];
         }
-    }
+    };
     /**
      * @return {?}
      */
-    init() { this._players.forEach(player => player.init()); }
+    AnimationGroupPlayer.prototype.init = /**
+     * @return {?}
+     */
+    function () { this.players.forEach(function (player) { return player.init(); }); };
     /**
      * @param {?} fn
      * @return {?}
      */
-    onStart(fn) { this._onStartFns.push(fn); }
+    AnimationGroupPlayer.prototype.onStart = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onStartFns.push(fn); };
     /**
      * @return {?}
      */
-    _onStart() {
+    AnimationGroupPlayer.prototype._onStart = /**
+     * @return {?}
+     */
+    function () {
         if (!this.hasStarted()) {
-            this._onStartFns.forEach(fn => fn());
+            this._onStartFns.forEach(function (fn) { return fn(); });
             this._onStartFns = [];
             this._started = true;
         }
-    }
+    };
     /**
      * @param {?} fn
      * @return {?}
      */
-    onDone(fn) { this._onDoneFns.push(fn); }
+    AnimationGroupPlayer.prototype.onDone = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onDoneFns.push(fn); };
     /**
      * @param {?} fn
      * @return {?}
      */
-    onDestroy(fn) { this._onDestroyFns.push(fn); }
+    AnimationGroupPlayer.prototype.onDestroy = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onDestroyFns.push(fn); };
     /**
      * @return {?}
      */
-    hasStarted() { return this._started; }
+    AnimationGroupPlayer.prototype.hasStarted = /**
+     * @return {?}
+     */
+    function () { return this._started; };
     /**
      * @return {?}
      */
-    play() {
+    AnimationGroupPlayer.prototype.play = /**
+     * @return {?}
+     */
+    function () {
         if (!this.parentPlayer) {
             this.init();
         }
         this._onStart();
-        this._players.forEach(player => player.play());
-    }
+        this.players.forEach(function (player) { return player.play(); });
+    };
     /**
      * @return {?}
      */
-    pause() { this._players.forEach(player => player.pause()); }
+    AnimationGroupPlayer.prototype.pause = /**
+     * @return {?}
+     */
+    function () { this.players.forEach(function (player) { return player.pause(); }); };
     /**
      * @return {?}
      */
-    restart() { this._players.forEach(player => player.restart()); }
+    AnimationGroupPlayer.prototype.restart = /**
+     * @return {?}
+     */
+    function () { this.players.forEach(function (player) { return player.restart(); }); };
     /**
      * @return {?}
      */
-    finish() {
+    AnimationGroupPlayer.prototype.finish = /**
+     * @return {?}
+     */
+    function () {
         this._onFinish();
-        this._players.forEach(player => player.finish());
-    }
+        this.players.forEach(function (player) { return player.finish(); });
+    };
     /**
      * @return {?}
      */
-    destroy() { this._onDestroy(); }
+    AnimationGroupPlayer.prototype.destroy = /**
+     * @return {?}
+     */
+    function () { this._onDestroy(); };
     /**
      * @return {?}
      */
-    _onDestroy() {
+    AnimationGroupPlayer.prototype._onDestroy = /**
+     * @return {?}
+     */
+    function () {
         if (!this._destroyed) {
             this._destroyed = true;
             this._onFinish();
-            this._players.forEach(player => player.destroy());
-            this._onDestroyFns.forEach(fn => fn());
+            this.players.forEach(function (player) { return player.destroy(); });
+            this._onDestroyFns.forEach(function (fn) { return fn(); });
             this._onDestroyFns = [];
         }
-    }
+    };
     /**
      * @return {?}
      */
-    reset() {
-        this._players.forEach(player => player.reset());
+    AnimationGroupPlayer.prototype.reset = /**
+     * @return {?}
+     */
+    function () {
+        this.players.forEach(function (player) { return player.reset(); });
         this._destroyed = false;
         this._finished = false;
         this._started = false;
-    }
+    };
     /**
      * @param {?} p
      * @return {?}
      */
-    setPosition(p) {
-        const /** @type {?} */ timeAtPosition = p * this.totalTime;
-        this._players.forEach(player => {
-            const /** @type {?} */ position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
+    AnimationGroupPlayer.prototype.setPosition = /**
+     * @param {?} p
+     * @return {?}
+     */
+    function (p) {
+        var /** @type {?} */ timeAtPosition = p * this.totalTime;
+        this.players.forEach(function (player) {
+            var /** @type {?} */ position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
             player.setPosition(position);
         });
-    }
+    };
     /**
      * @return {?}
      */
-    getPosition() {
-        let /** @type {?} */ min = 0;
-        this._players.forEach(player => {
-            const /** @type {?} */ p = player.getPosition();
+    AnimationGroupPlayer.prototype.getPosition = /**
+     * @return {?}
+     */
+    function () {
+        var /** @type {?} */ min = 0;
+        this.players.forEach(function (player) {
+            var /** @type {?} */ p = player.getPosition();
             min = Math.min(p, min);
         });
         return min;
-    }
+    };
     /**
      * @return {?}
      */
-    get players() { return this._players; }
-    /**
+    AnimationGroupPlayer.prototype.beforeDestroy = /**
      * @return {?}
      */
-    beforeDestroy() {
-        this.players.forEach(player => {
+    function () {
+        this.players.forEach(function (player) {
             if (player.beforeDestroy) {
                 player.beforeDestroy();
             }
         });
-    }
-}
+    };
+    /* @internal */
+    /**
+     * @param {?} phaseName
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.triggerCallback = /**
+     * @param {?} phaseName
+     * @return {?}
+     */
+    function (phaseName) {
+        var /** @type {?} */ methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
+        methods.forEach(function (fn) { return fn(); });
+        methods.length = 0;
+    };
+    return AnimationGroupPlayer;
+}());
 
 /**
  * @fileoverview added by tsickle
@@ -1446,7 +1615,7 @@ class AnimationGroupPlayer {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const ɵPRE_STYLE = '!';
+var ɵPRE_STYLE = '!';
 
 /**
  * @fileoverview added by tsickle
@@ -1491,4 +1660,4 @@ const ɵPRE_STYLE = '!';
  */
 
 export { AnimationBuilder, AnimationFactory, AUTO_STYLE, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=animations.js.map

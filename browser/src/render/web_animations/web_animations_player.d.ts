@@ -19,7 +19,6 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     private _onDoneFns;
     private _onStartFns;
     private _onDestroyFns;
-    private _player;
     private _duration;
     private _delay;
     private _initialized;
@@ -27,6 +26,7 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     private _started;
     private _destroyed;
     private _finalKeyframe;
+    readonly domPlayer: DOMAnimation;
     time: number;
     parentPlayer: AnimationPlayer | null;
     previousStyles: {
@@ -44,7 +44,6 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     init(): void;
     private _buildPlayer();
     private _preparePlayerBeforeStart();
-    readonly domPlayer: DOMAnimation;
     onStart(fn: () => void): void;
     onDone(fn: () => void): void;
     onDestroy(fn: () => void): void;

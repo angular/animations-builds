@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-3215c4b
+ * @license Angular v5.1.0-5a0076f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -47,11 +47,8 @@
  * \@experimental Animation support is experimental.
  * @abstract
  */
-var AnimationBuilder = (function () {
-    function AnimationBuilder() {
-    }
-    return AnimationBuilder;
-}());
+class AnimationBuilder {
+}
 /**
  * An instance of `AnimationFactory` is returned from {\@link AnimationBuilder#build
  * AnimationBuilder.build}.
@@ -59,11 +56,8 @@ var AnimationBuilder = (function () {
  * \@experimental Animation support is experimental.
  * @abstract
  */
-var AnimationFactory = (function () {
-    function AnimationFactory() {
-    }
-    return AnimationFactory;
-}());
+class AnimationFactory {
+}
 
 /**
  * @fileoverview added by tsickle
@@ -81,7 +75,7 @@ var AnimationFactory = (function () {
 /**
  * \@experimental Animation support is experimental.
  */
-var AUTO_STYLE = '*';
+const AUTO_STYLE = '*';
 /**
  * \@experimental Animation support is experimental.
  * @record
@@ -201,6 +195,11 @@ var AUTO_STYLE = '*';
  * the
  * trigger is bound to (in the form of `[\@triggerName]="expression"`.
  *
+ * Animation trigger bindings strigify values and then match the previous and current values against
+ * any linked transitions. If a boolean value is provided into the trigger binding then it will both
+ * be represented as `1` or `true` and `0` or `false` for a true and false boolean values
+ * respectively.
+ *
  * ### Usage
  *
  * `trigger` will create an animation trigger reference based on the provided `name` value. The
@@ -298,7 +297,7 @@ var AUTO_STYLE = '*';
  * @return {?}
  */
 function trigger(name, definitions) {
-    return { type: 7 /* Trigger */, name: name, definitions: definitions, options: {} };
+    return { type: 7 /* Trigger */, name, definitions, options: {} };
 }
 /**
  * `animate` is an animation-specific function that is designed to be used inside of Angular's
@@ -348,9 +347,8 @@ function trigger(name, definitions) {
  * @param {?=} styles
  * @return {?}
  */
-function animate(timings, styles) {
-    if (styles === void 0) { styles = null; }
-    return { type: 4 /* Animate */, styles: styles, timings: timings };
+function animate(timings, styles = null) {
+    return { type: 4 /* Animate */, styles, timings };
 }
 /**
  * `group` is an animation-specific function that is designed to be used inside of Angular's
@@ -386,9 +384,8 @@ function animate(timings, styles) {
  * @param {?=} options
  * @return {?}
  */
-function group(steps, options) {
-    if (options === void 0) { options = null; }
-    return { type: 3 /* Group */, steps: steps, options: options };
+function group(steps, options = null) {
+    return { type: 3 /* Group */, steps, options };
 }
 /**
  * `sequence` is an animation-specific function that is designed to be used inside of Angular's
@@ -427,9 +424,8 @@ function group(steps, options) {
  * @param {?=} options
  * @return {?}
  */
-function sequence(steps, options) {
-    if (options === void 0) { options = null; }
-    return { type: 2 /* Sequence */, steps: steps, options: options };
+function sequence(steps, options = null) {
+    return { type: 2 /* Sequence */, steps, options };
 }
 /**
  * `style` is an animation-specific function that is designed to be used inside of Angular's
@@ -531,7 +527,7 @@ function style(tokens) {
  * @return {?}
  */
 function state(name, styles, options) {
-    return { type: 0 /* State */, name: name, styles: styles, options: options };
+    return { type: 0 /* State */, name, styles, options };
 }
 /**
  * `keyframes` is an animation-specific function that is designed to be used inside of Angular's
@@ -581,7 +577,7 @@ function state(name, styles, options) {
  * @return {?}
  */
 function keyframes(steps) {
-    return { type: 5 /* Keyframes */, steps: steps };
+    return { type: 5 /* Keyframes */, steps };
 }
 /**
  * `transition` is an animation-specific function that is designed to be used inside of Angular's
@@ -686,6 +682,22 @@ function keyframes(steps) {
  * ])
  * ```
  *
+ * ### Boolean values
+ * if a trigger binding value is a boolean value then it can be matched using a transition
+ * expression that compares `true` and `false` or `1` and `0`.
+ *
+ * ```
+ * // in the template
+ * <div [\@openClose]="open ? true : false">...</div>
+ *
+ * // in the component metadata
+ * trigger('openClose', [
+ *   state('true', style({ height: '*' })),
+ *   state('false', style({ height: '0px' })),
+ *   transition('false <=> true', animate(500))
+ * ])
+ * ```
+ *
  * ### Using :increment and :decrement
  * In addition to the :enter and :leave transition aliases, the :increment and :decrement aliases
  * can be used to kick off a transition when a numeric value has increased or decreased in value.
@@ -770,9 +782,8 @@ function keyframes(steps) {
  * @param {?=} options
  * @return {?}
  */
-function transition(stateChangeExpr, steps, options) {
-    if (options === void 0) { options = null; }
-    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, options: options };
+function transition(stateChangeExpr, steps, options = null) {
+    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, options };
 }
 /**
  * `animation` is an animation-specific function that is designed to be used inside of Angular's
@@ -786,7 +797,7 @@ function transition(stateChangeExpr, steps, options) {
  * var fadeAnimation = animation([
  *   style({ opacity: '{{ start }}' }),
  *   animate('{{ time }}',
- *     style({ opacity: '{{ end }}'))
+ *     style({ opacity: '{{ end }}'}))
  * ], { params: { time: '1000ms', start: 0, end: 1 }});
  * ```
  *
@@ -812,9 +823,8 @@ function transition(stateChangeExpr, steps, options) {
  * @param {?=} options
  * @return {?}
  */
-function animation(steps, options) {
-    if (options === void 0) { options = null; }
-    return { type: 8 /* Reference */, animation: steps, options: options };
+function animation(steps, options = null) {
+    return { type: 8 /* Reference */, animation: steps, options };
 }
 /**
  * `animateChild` is an animation-specific function that is designed to be used inside of Angular's
@@ -915,9 +925,8 @@ function animation(steps, options) {
  * @param {?=} options
  * @return {?}
  */
-function animateChild(options) {
-    if (options === void 0) { options = null; }
-    return { type: 9 /* AnimateChild */, options: options };
+function animateChild(options = null) {
+    return { type: 9 /* AnimateChild */, options };
 }
 /**
  * `useAnimation` is an animation-specific function that is designed to be used inside of Angular's
@@ -929,9 +938,8 @@ function animateChild(options) {
  * @param {?=} options
  * @return {?}
  */
-function useAnimation(animation, options) {
-    if (options === void 0) { options = null; }
-    return { type: 10 /* AnimateRef */, animation: animation, options: options };
+function useAnimation(animation, options = null) {
+    return { type: 10 /* AnimateRef */, animation, options };
 }
 /**
  * `query` is an animation-specific function that is designed to be used inside of Angular's
@@ -1029,9 +1037,8 @@ function useAnimation(animation, options) {
  * @param {?=} options
  * @return {?}
  */
-function query(selector, animation, options) {
-    if (options === void 0) { options = null; }
-    return { type: 11 /* Query */, selector: selector, animation: animation, options: options };
+function query(selector, animation, options = null) {
+    return { type: 11 /* Query */, selector, animation, options };
 }
 /**
  * `stagger` is an animation-specific function that is designed to be used inside of Angular's
@@ -1115,7 +1122,7 @@ function query(selector, animation, options) {
  * @return {?}
  */
 function stagger(timings, animation) {
-    return { type: 12 /* Stagger */, timings: timings, animation: animation };
+    return { type: 12 /* Stagger */, timings, animation };
 }
 
 /**
@@ -1158,8 +1165,8 @@ function scheduleMicroTask(cb) {
 /**
  * \@experimental Animation support is experimental.
  */
-var NoopAnimationPlayer = (function () {
-    function NoopAnimationPlayer() {
+class NoopAnimationPlayer {
+    constructor() {
         this._onDoneFns = [];
         this._onStartFns = [];
         this._onDestroyFns = [];
@@ -1172,154 +1179,106 @@ var NoopAnimationPlayer = (function () {
     /**
      * @return {?}
      */
-    NoopAnimationPlayer.prototype._onFinish = /**
-     * @return {?}
-     */
-    function () {
+    _onFinish() {
         if (!this._finished) {
             this._finished = true;
-            this._onDoneFns.forEach(function (fn) { return fn(); });
+            this._onDoneFns.forEach(fn => fn());
             this._onDoneFns = [];
         }
-    };
+    }
     /**
      * @param {?} fn
      * @return {?}
      */
-    NoopAnimationPlayer.prototype.onStart = /**
-     * @param {?} fn
-     * @return {?}
-     */
-    function (fn) { this._onStartFns.push(fn); };
+    onStart(fn) { this._onStartFns.push(fn); }
     /**
      * @param {?} fn
      * @return {?}
      */
-    NoopAnimationPlayer.prototype.onDone = /**
-     * @param {?} fn
-     * @return {?}
-     */
-    function (fn) { this._onDoneFns.push(fn); };
+    onDone(fn) { this._onDoneFns.push(fn); }
     /**
      * @param {?} fn
      * @return {?}
      */
-    NoopAnimationPlayer.prototype.onDestroy = /**
-     * @param {?} fn
-     * @return {?}
-     */
-    function (fn) { this._onDestroyFns.push(fn); };
+    onDestroy(fn) { this._onDestroyFns.push(fn); }
     /**
      * @return {?}
      */
-    NoopAnimationPlayer.prototype.hasStarted = /**
-     * @return {?}
-     */
-    function () { return this._started; };
+    hasStarted() { return this._started; }
     /**
      * @return {?}
      */
-    NoopAnimationPlayer.prototype.init = /**
-     * @return {?}
-     */
-    function () { };
+    init() { }
     /**
      * @return {?}
      */
-    NoopAnimationPlayer.prototype.play = /**
-     * @return {?}
-     */
-    function () {
+    play() {
         if (!this.hasStarted()) {
-            this.triggerMicrotask();
             this._onStart();
+            this.triggerMicrotask();
         }
         this._started = true;
-    };
-    /* @internal */
+    }
     /**
      * @return {?}
      */
-    NoopAnimationPlayer.prototype.triggerMicrotask = /**
-     * @return {?}
-     */
-    function () {
-        var _this = this;
-        scheduleMicroTask(function () { return _this._onFinish(); });
-    };
+    triggerMicrotask() { scheduleMicroTask(() => this._onFinish()); }
     /**
      * @return {?}
      */
-    NoopAnimationPlayer.prototype._onStart = /**
-     * @return {?}
-     */
-    function () {
-        this._onStartFns.forEach(function (fn) { return fn(); });
+    _onStart() {
+        this._onStartFns.forEach(fn => fn());
         this._onStartFns = [];
-    };
+    }
     /**
      * @return {?}
      */
-    NoopAnimationPlayer.prototype.pause = /**
-     * @return {?}
-     */
-    function () { };
+    pause() { }
     /**
      * @return {?}
      */
-    NoopAnimationPlayer.prototype.restart = /**
-     * @return {?}
-     */
-    function () { };
+    restart() { }
     /**
      * @return {?}
      */
-    NoopAnimationPlayer.prototype.finish = /**
-     * @return {?}
-     */
-    function () { this._onFinish(); };
+    finish() { this._onFinish(); }
     /**
      * @return {?}
      */
-    NoopAnimationPlayer.prototype.destroy = /**
-     * @return {?}
-     */
-    function () {
+    destroy() {
         if (!this._destroyed) {
             this._destroyed = true;
             if (!this.hasStarted()) {
                 this._onStart();
             }
             this.finish();
-            this._onDestroyFns.forEach(function (fn) { return fn(); });
+            this._onDestroyFns.forEach(fn => fn());
             this._onDestroyFns = [];
         }
-    };
+    }
     /**
      * @return {?}
      */
-    NoopAnimationPlayer.prototype.reset = /**
-     * @return {?}
-     */
-    function () { };
+    reset() { }
     /**
      * @param {?} p
      * @return {?}
      */
-    NoopAnimationPlayer.prototype.setPosition = /**
-     * @param {?} p
-     * @return {?}
-     */
-    function (p) { };
+    setPosition(p) { }
     /**
      * @return {?}
      */
-    NoopAnimationPlayer.prototype.getPosition = /**
+    getPosition() { return 0; }
+    /**
+     * @param {?} phaseName
      * @return {?}
      */
-    function () { return 0; };
-    return NoopAnimationPlayer;
-}());
+    triggerCallback(phaseName) {
+        const /** @type {?} */ methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
+        methods.forEach(fn => fn());
+        methods.length = 0;
+    }
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1332,10 +1291,11 @@ var NoopAnimationPlayer = (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var AnimationGroupPlayer = (function () {
-    function AnimationGroupPlayer(_players) {
-        var _this = this;
-        this._players = _players;
+class AnimationGroupPlayer {
+    /**
+     * @param {?} _players
+     */
+    constructor(_players) {
         this._onDoneFns = [];
         this._onStartFns = [];
         this._finished = false;
@@ -1344,225 +1304,170 @@ var AnimationGroupPlayer = (function () {
         this._onDestroyFns = [];
         this.parentPlayer = null;
         this.totalTime = 0;
-        var /** @type {?} */ doneCount = 0;
-        var /** @type {?} */ destroyCount = 0;
-        var /** @type {?} */ startCount = 0;
-        var /** @type {?} */ total = this._players.length;
+        this.players = _players;
+        let /** @type {?} */ doneCount = 0;
+        let /** @type {?} */ destroyCount = 0;
+        let /** @type {?} */ startCount = 0;
+        const /** @type {?} */ total = this.players.length;
         if (total == 0) {
-            scheduleMicroTask(function () { return _this._onFinish(); });
+            scheduleMicroTask(() => this._onFinish());
         }
         else {
-            this._players.forEach(function (player) {
-                player.parentPlayer = _this;
-                player.onDone(function () {
+            this.players.forEach(player => {
+                player.onDone(() => {
                     if (++doneCount >= total) {
-                        _this._onFinish();
+                        this._onFinish();
                     }
                 });
-                player.onDestroy(function () {
+                player.onDestroy(() => {
                     if (++destroyCount >= total) {
-                        _this._onDestroy();
+                        this._onDestroy();
                     }
                 });
-                player.onStart(function () {
+                player.onStart(() => {
                     if (++startCount >= total) {
-                        _this._onStart();
+                        this._onStart();
                     }
                 });
             });
         }
-        this.totalTime = this._players.reduce(function (time, player) { return Math.max(time, player.totalTime); }, 0);
+        this.totalTime = this.players.reduce((time, player) => Math.max(time, player.totalTime), 0);
     }
     /**
      * @return {?}
      */
-    AnimationGroupPlayer.prototype._onFinish = /**
-     * @return {?}
-     */
-    function () {
+    _onFinish() {
         if (!this._finished) {
             this._finished = true;
-            this._onDoneFns.forEach(function (fn) { return fn(); });
+            this._onDoneFns.forEach(fn => fn());
             this._onDoneFns = [];
         }
-    };
+    }
     /**
      * @return {?}
      */
-    AnimationGroupPlayer.prototype.init = /**
-     * @return {?}
-     */
-    function () { this._players.forEach(function (player) { return player.init(); }); };
+    init() { this.players.forEach(player => player.init()); }
     /**
      * @param {?} fn
      * @return {?}
      */
-    AnimationGroupPlayer.prototype.onStart = /**
-     * @param {?} fn
-     * @return {?}
-     */
-    function (fn) { this._onStartFns.push(fn); };
+    onStart(fn) { this._onStartFns.push(fn); }
     /**
      * @return {?}
      */
-    AnimationGroupPlayer.prototype._onStart = /**
-     * @return {?}
-     */
-    function () {
+    _onStart() {
         if (!this.hasStarted()) {
-            this._onStartFns.forEach(function (fn) { return fn(); });
+            this._onStartFns.forEach(fn => fn());
             this._onStartFns = [];
             this._started = true;
         }
-    };
+    }
     /**
      * @param {?} fn
      * @return {?}
      */
-    AnimationGroupPlayer.prototype.onDone = /**
-     * @param {?} fn
-     * @return {?}
-     */
-    function (fn) { this._onDoneFns.push(fn); };
+    onDone(fn) { this._onDoneFns.push(fn); }
     /**
      * @param {?} fn
      * @return {?}
      */
-    AnimationGroupPlayer.prototype.onDestroy = /**
-     * @param {?} fn
-     * @return {?}
-     */
-    function (fn) { this._onDestroyFns.push(fn); };
+    onDestroy(fn) { this._onDestroyFns.push(fn); }
     /**
      * @return {?}
      */
-    AnimationGroupPlayer.prototype.hasStarted = /**
-     * @return {?}
-     */
-    function () { return this._started; };
+    hasStarted() { return this._started; }
     /**
      * @return {?}
      */
-    AnimationGroupPlayer.prototype.play = /**
-     * @return {?}
-     */
-    function () {
+    play() {
         if (!this.parentPlayer) {
             this.init();
         }
         this._onStart();
-        this._players.forEach(function (player) { return player.play(); });
-    };
+        this.players.forEach(player => player.play());
+    }
     /**
      * @return {?}
      */
-    AnimationGroupPlayer.prototype.pause = /**
-     * @return {?}
-     */
-    function () { this._players.forEach(function (player) { return player.pause(); }); };
+    pause() { this.players.forEach(player => player.pause()); }
     /**
      * @return {?}
      */
-    AnimationGroupPlayer.prototype.restart = /**
-     * @return {?}
-     */
-    function () { this._players.forEach(function (player) { return player.restart(); }); };
+    restart() { this.players.forEach(player => player.restart()); }
     /**
      * @return {?}
      */
-    AnimationGroupPlayer.prototype.finish = /**
-     * @return {?}
-     */
-    function () {
+    finish() {
         this._onFinish();
-        this._players.forEach(function (player) { return player.finish(); });
-    };
+        this.players.forEach(player => player.finish());
+    }
     /**
      * @return {?}
      */
-    AnimationGroupPlayer.prototype.destroy = /**
-     * @return {?}
-     */
-    function () { this._onDestroy(); };
+    destroy() { this._onDestroy(); }
     /**
      * @return {?}
      */
-    AnimationGroupPlayer.prototype._onDestroy = /**
-     * @return {?}
-     */
-    function () {
+    _onDestroy() {
         if (!this._destroyed) {
             this._destroyed = true;
             this._onFinish();
-            this._players.forEach(function (player) { return player.destroy(); });
-            this._onDestroyFns.forEach(function (fn) { return fn(); });
+            this.players.forEach(player => player.destroy());
+            this._onDestroyFns.forEach(fn => fn());
             this._onDestroyFns = [];
         }
-    };
+    }
     /**
      * @return {?}
      */
-    AnimationGroupPlayer.prototype.reset = /**
-     * @return {?}
-     */
-    function () {
-        this._players.forEach(function (player) { return player.reset(); });
+    reset() {
+        this.players.forEach(player => player.reset());
         this._destroyed = false;
         this._finished = false;
         this._started = false;
-    };
+    }
     /**
      * @param {?} p
      * @return {?}
      */
-    AnimationGroupPlayer.prototype.setPosition = /**
-     * @param {?} p
-     * @return {?}
-     */
-    function (p) {
-        var /** @type {?} */ timeAtPosition = p * this.totalTime;
-        this._players.forEach(function (player) {
-            var /** @type {?} */ position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
+    setPosition(p) {
+        const /** @type {?} */ timeAtPosition = p * this.totalTime;
+        this.players.forEach(player => {
+            const /** @type {?} */ position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
             player.setPosition(position);
         });
-    };
+    }
     /**
      * @return {?}
      */
-    AnimationGroupPlayer.prototype.getPosition = /**
-     * @return {?}
-     */
-    function () {
-        var /** @type {?} */ min = 0;
-        this._players.forEach(function (player) {
-            var /** @type {?} */ p = player.getPosition();
+    getPosition() {
+        let /** @type {?} */ min = 0;
+        this.players.forEach(player => {
+            const /** @type {?} */ p = player.getPosition();
             min = Math.min(p, min);
         });
         return min;
-    };
-    Object.defineProperty(AnimationGroupPlayer.prototype, "players", {
-        get: /**
-         * @return {?}
-         */
-        function () { return this._players; },
-        enumerable: true,
-        configurable: true
-    });
+    }
     /**
      * @return {?}
      */
-    AnimationGroupPlayer.prototype.beforeDestroy = /**
-     * @return {?}
-     */
-    function () {
-        this.players.forEach(function (player) {
+    beforeDestroy() {
+        this.players.forEach(player => {
             if (player.beforeDestroy) {
                 player.beforeDestroy();
             }
         });
-    };
-    return AnimationGroupPlayer;
-}());
+    }
+    /**
+     * @param {?} phaseName
+     * @return {?}
+     */
+    triggerCallback(phaseName) {
+        const /** @type {?} */ methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
+        methods.forEach(fn => fn());
+        methods.length = 0;
+    }
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1575,7 +1480,7 @@ var AnimationGroupPlayer = (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var ɵPRE_STYLE = '!';
+const ɵPRE_STYLE = '!';
 
 /**
  * @fileoverview added by tsickle
@@ -1620,4 +1525,4 @@ var ɵPRE_STYLE = '!';
  */
 
 export { AnimationBuilder, AnimationFactory, AUTO_STYLE, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=animations.js.map

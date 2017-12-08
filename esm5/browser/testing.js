@@ -1,8 +1,9 @@
 /**
- * @license Angular v5.0.0-beta.7-3215c4b
+ * @license Angular v5.1.0-5a0076f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
+import { __extends } from 'tslib';
 import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
 
 /**
@@ -68,32 +69,34 @@ import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
  * @return {?}
  */
 
-let _contains = (elm1, elm2) => false;
-let _matches = (element, selector) => false;
-let _query = (element, selector, multi) => {
+var _contains = function (elm1, elm2) { return false; };
+var _matches = function (element, selector) {
+    return false;
+};
+var _query = function (element, selector, multi) {
     return [];
 };
 if (typeof Element != 'undefined') {
     // this is well supported in all browsers
-    _contains = (elm1, elm2) => { return /** @type {?} */ (elm1.contains(elm2)); };
+    _contains = function (elm1, elm2) { return /** @type {?} */ (elm1.contains(elm2)); };
     if (Element.prototype.matches) {
-        _matches = (element, selector) => element.matches(selector);
+        _matches = function (element, selector) { return element.matches(selector); };
     }
     else {
-        const /** @type {?} */ proto = /** @type {?} */ (Element.prototype);
-        const /** @type {?} */ fn = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
+        var /** @type {?} */ proto = /** @type {?} */ (Element.prototype);
+        var /** @type {?} */ fn_1 = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
             proto.oMatchesSelector || proto.webkitMatchesSelector;
-        if (fn) {
-            _matches = (element, selector) => fn.apply(element, [selector]);
+        if (fn_1) {
+            _matches = function (element, selector) { return fn_1.apply(element, [selector]); };
         }
     }
-    _query = (element, selector, multi) => {
-        let /** @type {?} */ results = [];
+    _query = function (element, selector, multi) {
+        var /** @type {?} */ results = [];
         if (multi) {
-            results.push(...element.querySelectorAll(selector));
+            results.push.apply(results, element.querySelectorAll(selector));
         }
         else {
-            const /** @type {?} */ elm = element.querySelector(selector);
+            var /** @type {?} */ elm = element.querySelector(selector);
             if (elm) {
                 results.push(elm);
             }
@@ -101,7 +104,17 @@ if (typeof Element != 'undefined') {
         return results;
     };
 }
-let _CACHED_BODY = null;
+/**
+ * @param {?} prop
+ * @return {?}
+ */
+function containsVendorPrefix(prop) {
+    // Webkit is the only real popular vendor prefix nowadays
+    // cc: http://shouldiprefix.com/
+    return prop.substring(1, 6) == 'ebkit'; // webkit or Webkit
+}
+var _CACHED_BODY = null;
+var _IS_WEBKIT = false;
 /**
  * @param {?} prop
  * @return {?}
@@ -109,8 +122,17 @@ let _CACHED_BODY = null;
 function validateStyleProperty(prop) {
     if (!_CACHED_BODY) {
         _CACHED_BODY = getBodyNode() || {};
+        _IS_WEBKIT = /** @type {?} */ ((_CACHED_BODY)).style ? ('WebkitAppearance' in /** @type {?} */ ((_CACHED_BODY)).style) : false;
     }
-    return /** @type {?} */ ((_CACHED_BODY)).style ? prop in /** @type {?} */ ((_CACHED_BODY)).style : true;
+    var /** @type {?} */ result = true;
+    if (/** @type {?} */ ((_CACHED_BODY)).style && !containsVendorPrefix(prop)) {
+        result = prop in /** @type {?} */ ((_CACHED_BODY)).style;
+        if (!result && _IS_WEBKIT) {
+            var /** @type {?} */ camelProp = 'Webkit' + prop.charAt(0).toUpperCase() + prop.substr(1);
+            result = camelProp in /** @type {?} */ ((_CACHED_BODY)).style;
+        }
+    }
+    return result;
 }
 /**
  * @return {?}
@@ -121,9 +143,9 @@ function getBodyNode() {
     }
     return null;
 }
-const matchesElement = _matches;
-const containsElement = _contains;
-const invokeQuery = _query;
+var matchesElement = _matches;
+var containsElement = _contains;
+var invokeQuery = _query;
 
 /**
  * @fileoverview added by tsickle
@@ -237,6 +259,12 @@ const invokeQuery = _query;
 function allowPreviousPlayerStylesMerge(duration, delay) {
     return duration === 0 || delay === 0;
 }
+/**
+ * @param {?} visitor
+ * @param {?} node
+ * @param {?} context
+ * @return {?}
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -252,44 +280,72 @@ function allowPreviousPlayerStylesMerge(duration, delay) {
 /**
  * \@experimental Animation support is experimental.
  */
-class MockAnimationDriver {
+var MockAnimationDriver = /** @class */ (function () {
+    function MockAnimationDriver() {
+    }
     /**
      * @param {?} prop
      * @return {?}
      */
-    validateStyleProperty(prop) { return validateStyleProperty(prop); }
+    MockAnimationDriver.prototype.validateStyleProperty = /**
+     * @param {?} prop
+     * @return {?}
+     */
+    function (prop) { return validateStyleProperty(prop); };
     /**
      * @param {?} element
      * @param {?} selector
      * @return {?}
      */
-    matchesElement(element, selector) {
+    MockAnimationDriver.prototype.matchesElement = /**
+     * @param {?} element
+     * @param {?} selector
+     * @return {?}
+     */
+    function (element, selector) {
         return matchesElement(element, selector);
-    }
+    };
     /**
      * @param {?} elm1
      * @param {?} elm2
      * @return {?}
      */
-    containsElement(elm1, elm2) { return containsElement(elm1, elm2); }
+    MockAnimationDriver.prototype.containsElement = /**
+     * @param {?} elm1
+     * @param {?} elm2
+     * @return {?}
+     */
+    function (elm1, elm2) { return containsElement(elm1, elm2); };
     /**
      * @param {?} element
      * @param {?} selector
      * @param {?} multi
      * @return {?}
      */
-    query(element, selector, multi) {
+    MockAnimationDriver.prototype.query = /**
+     * @param {?} element
+     * @param {?} selector
+     * @param {?} multi
+     * @return {?}
+     */
+    function (element, selector, multi) {
         return invokeQuery(element, selector, multi);
-    }
+    };
     /**
      * @param {?} element
      * @param {?} prop
      * @param {?=} defaultValue
      * @return {?}
      */
-    computeStyle(element, prop, defaultValue) {
+    MockAnimationDriver.prototype.computeStyle = /**
+     * @param {?} element
+     * @param {?} prop
+     * @param {?=} defaultValue
+     * @return {?}
+     */
+    function (element, prop, defaultValue) {
         return defaultValue || '';
-    }
+    };
     /**
      * @param {?} element
      * @param {?} keyframes
@@ -299,113 +355,148 @@ class MockAnimationDriver {
      * @param {?=} previousPlayers
      * @return {?}
      */
-    animate(element, keyframes, duration, delay, easing, previousPlayers = []) {
-        const /** @type {?} */ player = new MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers);
-        MockAnimationDriver.log.push(/** @type {?} */ (player));
-        return player;
-    }
-}
-MockAnimationDriver.log = [];
-/**
- * \@experimental Animation support is experimental.
- */
-class MockAnimationPlayer extends NoopAnimationPlayer {
-    /**
+    MockAnimationDriver.prototype.animate = /**
      * @param {?} element
      * @param {?} keyframes
      * @param {?} duration
      * @param {?} delay
      * @param {?} easing
-     * @param {?} previousPlayers
+     * @param {?=} previousPlayers
+     * @return {?}
      */
-    constructor(element, keyframes, duration, delay, easing, previousPlayers) {
-        super();
-        this.element = element;
-        this.keyframes = keyframes;
-        this.duration = duration;
-        this.delay = delay;
-        this.easing = easing;
-        this.previousPlayers = previousPlayers;
-        this.__finished = false;
-        this.__started = false;
-        this.previousStyles = {};
-        this._onInitFns = [];
-        this.currentSnapshot = {};
+    function (element, keyframes, duration, delay, easing, previousPlayers) {
+        if (previousPlayers === void 0) { previousPlayers = []; }
+        var /** @type {?} */ player = new MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers);
+        MockAnimationDriver.log.push(/** @type {?} */ (player));
+        return player;
+    };
+    MockAnimationDriver.log = [];
+    return MockAnimationDriver;
+}());
+/**
+ * \@experimental Animation support is experimental.
+ */
+var MockAnimationPlayer = /** @class */ (function (_super) {
+    __extends(MockAnimationPlayer, _super);
+    function MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers) {
+        var _this = _super.call(this) || this;
+        _this.element = element;
+        _this.keyframes = keyframes;
+        _this.duration = duration;
+        _this.delay = delay;
+        _this.easing = easing;
+        _this.previousPlayers = previousPlayers;
+        _this.__finished = false;
+        _this.__started = false;
+        _this.previousStyles = {};
+        _this._onInitFns = [];
+        _this.currentSnapshot = {};
         if (allowPreviousPlayerStylesMerge(duration, delay)) {
-            previousPlayers.forEach(player => {
+            previousPlayers.forEach(function (player) {
                 if (player instanceof MockAnimationPlayer) {
-                    const /** @type {?} */ styles = player.currentSnapshot;
-                    Object.keys(styles).forEach(prop => this.previousStyles[prop] = styles[prop]);
+                    var /** @type {?} */ styles_1 = player.currentSnapshot;
+                    Object.keys(styles_1).forEach(function (prop) { return _this.previousStyles[prop] = styles_1[prop]; });
                 }
             });
         }
-        this.totalTime = delay + duration;
+        _this.totalTime = delay + duration;
+        return _this;
     }
+    /* @internal */
     /**
      * @param {?} fn
      * @return {?}
      */
-    onInit(fn) { this._onInitFns.push(fn); }
+    MockAnimationPlayer.prototype.onInit = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onInitFns.push(fn); };
+    /* @internal */
     /**
      * @return {?}
      */
-    init() {
-        super.init();
-        this._onInitFns.forEach(fn => fn());
+    MockAnimationPlayer.prototype.init = /**
+     * @return {?}
+     */
+    function () {
+        _super.prototype.init.call(this);
+        this._onInitFns.forEach(function (fn) { return fn(); });
         this._onInitFns = [];
-    }
+    };
     /**
      * @return {?}
      */
-    finish() {
-        super.finish();
+    MockAnimationPlayer.prototype.finish = /**
+     * @return {?}
+     */
+    function () {
+        _super.prototype.finish.call(this);
         this.__finished = true;
-    }
+    };
     /**
      * @return {?}
      */
-    destroy() {
-        super.destroy();
+    MockAnimationPlayer.prototype.destroy = /**
+     * @return {?}
+     */
+    function () {
+        _super.prototype.destroy.call(this);
         this.__finished = true;
-    }
+    };
+    /* @internal */
     /**
      * @return {?}
      */
-    triggerMicrotask() { }
+    MockAnimationPlayer.prototype.triggerMicrotask = /**
+     * @return {?}
+     */
+    function () { };
     /**
      * @return {?}
      */
-    play() {
-        super.play();
+    MockAnimationPlayer.prototype.play = /**
+     * @return {?}
+     */
+    function () {
+        _super.prototype.play.call(this);
         this.__started = true;
-    }
+    };
     /**
      * @return {?}
      */
-    hasStarted() { return this.__started; }
+    MockAnimationPlayer.prototype.hasStarted = /**
+     * @return {?}
+     */
+    function () { return this.__started; };
     /**
      * @return {?}
      */
-    beforeDestroy() {
-        const /** @type {?} */ captures = {};
-        Object.keys(this.previousStyles).forEach(prop => {
-            captures[prop] = this.previousStyles[prop];
+    MockAnimationPlayer.prototype.beforeDestroy = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        var /** @type {?} */ captures = {};
+        Object.keys(this.previousStyles).forEach(function (prop) {
+            captures[prop] = _this.previousStyles[prop];
         });
         if (this.hasStarted()) {
             // when assembling the captured styles, it's important that
             // we build the keyframe styles in the following order:
             // {other styles within keyframes, ... previousStyles }
-            this.keyframes.forEach(kf => {
-                Object.keys(kf).forEach(prop => {
+            this.keyframes.forEach(function (kf) {
+                Object.keys(kf).forEach(function (prop) {
                     if (prop != 'offset') {
-                        captures[prop] = this.__finished ? kf[prop] : AUTO_STYLE;
+                        captures[prop] = _this.__finished ? kf[prop] : AUTO_STYLE;
                     }
                 });
             });
         }
         this.currentSnapshot = captures;
-    }
-}
+    };
+    return MockAnimationPlayer;
+}(NoopAnimationPlayer));
 
 /**
  * @fileoverview added by tsickle
@@ -445,4 +536,4 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
  */
 
 export { MockAnimationDriver, MockAnimationPlayer };
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=testing.js.map
