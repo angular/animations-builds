@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.1.0-baeec4d
+ * @license Angular v5.1.0-e6a2805
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.1.0-baeec4d
+ * @license Angular v5.1.0-e6a2805
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -240,7 +240,17 @@ if (typeof Element != 'undefined') {
         return results;
     };
 }
+/**
+ * @param {?} prop
+ * @return {?}
+ */
+function containsVendorPrefix(prop) {
+    // Webkit is the only real popular vendor prefix nowadays
+    // cc: http://shouldiprefix.com/
+    return prop.substring(1, 6) == 'ebkit'; // webkit or Webkit
+}
 var _CACHED_BODY = null;
+var _IS_WEBKIT = false;
 /**
  * @param {?} prop
  * @return {?}
@@ -248,8 +258,17 @@ var _CACHED_BODY = null;
 function validateStyleProperty(prop) {
     if (!_CACHED_BODY) {
         _CACHED_BODY = getBodyNode() || {};
+        _IS_WEBKIT = /** @type {?} */ ((_CACHED_BODY)).style ? ('WebkitAppearance' in /** @type {?} */ ((_CACHED_BODY)).style) : false;
     }
-    return /** @type {?} */ ((_CACHED_BODY)).style ? prop in /** @type {?} */ ((_CACHED_BODY)).style : true;
+    var /** @type {?} */ result = true;
+    if (/** @type {?} */ ((_CACHED_BODY)).style && !containsVendorPrefix(prop)) {
+        result = prop in /** @type {?} */ ((_CACHED_BODY)).style;
+        if (!result && _IS_WEBKIT) {
+            var /** @type {?} */ camelProp = 'Webkit' + prop.charAt(0).toUpperCase() + prop.substr(1);
+            result = camelProp in /** @type {?} */ ((_CACHED_BODY)).style;
+        }
+    }
+    return result;
 }
 /**
  * @return {?}
@@ -779,12 +798,12 @@ function parseAnimationAlias(alias, errors) {
             return '* => *';
     }
 }
-var TRUE_BOOLEAN_VALUES = new Set();
-TRUE_BOOLEAN_VALUES.add('true');
-TRUE_BOOLEAN_VALUES.add('1');
-var FALSE_BOOLEAN_VALUES = new Set();
-FALSE_BOOLEAN_VALUES.add('false');
-FALSE_BOOLEAN_VALUES.add('0');
+// DO NOT REFACTOR ... keep the follow set instantiations
+// with the values intact (closure compiler for some reason
+// removes follow-up lines that add the values outside of
+// the constructor...
+var TRUE_BOOLEAN_VALUES = new Set(['true', '1']);
+var FALSE_BOOLEAN_VALUES = new Set(['false', '0']);
 /**
  * @param {?} lhs
  * @param {?} rhs
@@ -5808,7 +5827,7 @@ var WebAnimationsPlayer = /** @class */ (function () {
         this._initialized = true;
         var /** @type {?} */ keyframes = this.keyframes.map(function (styles) { return copyStyles(styles, false); });
         var /** @type {?} */ previousStyleProps = Object.keys(this.previousStyles);
-        if (previousStyleProps.length) {
+        if (previousStyleProps.length && keyframes.length) {
             var /** @type {?} */ startingKeyframe_1 = keyframes[0];
             var /** @type {?} */ missingStyleProps_1 = [];
             previousStyleProps.forEach(function (prop) {
