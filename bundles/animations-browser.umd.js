@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.1.0-d713225
+ * @license Angular v5.1.0-d09d497
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.1.0-d713225
+ * @license Angular v5.1.0-d09d497
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3739,9 +3739,13 @@ var AnimationTransitionNamespace = /** @class */ (function () {
         // If there are no animations found for any of the nodes then clear the cache
         // for the element.
         this._engine.driver.query(rootElement, NG_TRIGGER_SELECTOR, true).forEach(function (elm) {
+            // this means that an inner remove() operation has already kicked off
+            // the animation on this element...
+            if (elm[REMOVAL_FLAG])
+                return;
             var /** @type {?} */ namespaces = _this._engine.fetchNamespacesByElement(elm);
             if (namespaces.size) {
-                namespaces.forEach(function (ns) { ns.triggerLeaveAnimation(elm, context, false, true); });
+                namespaces.forEach(function (ns) { return ns.triggerLeaveAnimation(elm, context, false, true); });
             }
             else {
                 _this.clearElementCache(elm);
