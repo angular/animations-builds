@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.1.2-8c99175
+ * @license Angular v5.1.2-3e34fa8
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1315,17 +1315,17 @@ class AnimationGroupPlayer {
         else {
             this.players.forEach(player => {
                 player.onDone(() => {
-                    if (++doneCount >= total) {
+                    if (++doneCount == total) {
                         this._onFinish();
                     }
                 });
                 player.onDestroy(() => {
-                    if (++destroyCount >= total) {
+                    if (++destroyCount == total) {
                         this._onDestroy();
                     }
                 });
                 player.onStart(() => {
-                    if (++startCount >= total) {
+                    if (++startCount == total) {
                         this._onStart();
                     }
                 });
@@ -1357,9 +1357,9 @@ class AnimationGroupPlayer {
      */
     _onStart() {
         if (!this.hasStarted()) {
+            this._started = true;
             this._onStartFns.forEach(fn => fn());
             this._onStartFns = [];
-            this._started = true;
         }
     }
     /**
