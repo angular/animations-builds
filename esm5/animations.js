@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.2.0-beta.1-83c1383
+ * @license Angular v5.2.0-beta.1-83d207d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1161,13 +1161,6 @@ function scheduleMicroTask(cb) {
  * @suppress {checkTypes} checked by tsc
  */
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * AnimationPlayer controls an animation sequence that was produced from a programmatic animation.
  * (see {\@link AnimationBuilder AnimationBuilder} for more information on how to create programmatic
  * animations.)
@@ -1608,13 +1601,6 @@ var AnimationGroupPlayer = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 var ɵPRE_STYLE = '!';
 
 /**
@@ -1627,11 +1613,6 @@ var ɵPRE_STYLE = '!';
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
- */
-/**
- * @module
- * @description
- * Entry point for all animation APIs of the animation package.
  */
 
 /**
