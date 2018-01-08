@@ -1,6 +1,6 @@
 /**
- * @license Angular v5.2.0-beta.0-057b357
- * (c) 2010-2017 Google, Inc. https://angular.io/
+ * @license Angular v5.2.0-rc.0-d2808aa
+ * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 (function (global, factory) {
@@ -44,20 +44,13 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.2.0-beta.0-057b357
- * (c) 2010-2017 Google, Inc. https://angular.io/
+ * @license Angular v5.2.0-rc.0-d2808aa
+ * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
  */
 /**
  * @param {?} players
@@ -288,13 +281,6 @@ var invokeQuery = _query;
  * @suppress {checkTypes} checked by tsc
  */
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * \@experimental
  */
 var NoopAnimationDriver = /** @class */ (function () {
@@ -401,13 +387,6 @@ var AnimationDriver = /** @class */ (function () {
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
  */
 var ONE_SECOND = 1000;
 var SUBSTITUTION_EXPR_START = '{{';
@@ -828,13 +807,6 @@ function makeLambdaFromStates(lhs, rhs) {
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
  */
 var SELF_TOKEN = ':self';
 var SELF_TOKEN_REGEX = new RegExp("s*" + SELF_TOKEN + "s*,?", 'g');
@@ -1592,13 +1564,6 @@ var ElementInstructionMap = /** @class */ (function () {
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
  */
 var ONE_FRAME_IN_MILLISECONDS = 1;
 var ENTER_TOKEN = ':enter';
@@ -2818,13 +2783,6 @@ var NoopAnimationStyleNormalizer = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 var WebAnimationsStyleNormalizer = /** @class */ (function (_super) {
     __extends(WebAnimationsStyleNormalizer, _super);
     function WebAnimationsStyleNormalizer() {
@@ -3187,13 +3145,6 @@ function balanceProperties(obj, key1, key2) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 var EMPTY_INSTRUCTION_MAP = new ElementInstructionMap();
 var TimelineAnimationEngine = /** @class */ (function () {
     function TimelineAnimationEngine(_driver, _normalizer) {
@@ -3396,13 +3347,6 @@ var TimelineAnimationEngine = /** @class */ (function () {
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
  */
 var QUEUED_CLASSNAME = 'ng-animate-queued';
 var QUEUED_SELECTOR = '.ng-animate-queued';

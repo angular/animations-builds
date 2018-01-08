@@ -1,6 +1,6 @@
 /**
- * @license Angular v5.2.0-beta.0-057b357
- * (c) 2010-2017 Google, Inc. https://angular.io/
+ * @license Angular v5.2.0-rc.0-d2808aa
+ * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 /**
@@ -1161,13 +1161,6 @@ function scheduleMicroTask(cb) {
  * @suppress {checkTypes} checked by tsc
  */
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * AnimationPlayer controls an animation sequence that was produced from a programmatic animation.
  * (see {\@link AnimationBuilder AnimationBuilder} for more information on how to create programmatic
  * animations.)
@@ -1389,17 +1382,17 @@ var AnimationGroupPlayer = /** @class */ (function () {
         else {
             this.players.forEach(function (player) {
                 player.onDone(function () {
-                    if (++doneCount >= total) {
+                    if (++doneCount == total) {
                         _this._onFinish();
                     }
                 });
                 player.onDestroy(function () {
-                    if (++destroyCount >= total) {
+                    if (++destroyCount == total) {
                         _this._onDestroy();
                     }
                 });
                 player.onStart(function () {
-                    if (++startCount >= total) {
+                    if (++startCount == total) {
                         _this._onStart();
                     }
                 });
@@ -1444,9 +1437,9 @@ var AnimationGroupPlayer = /** @class */ (function () {
      */
     function () {
         if (!this.hasStarted()) {
+            this._started = true;
             this._onStartFns.forEach(function (fn) { return fn(); });
             this._onStartFns = [];
-            this._started = true;
         }
     };
     /**
@@ -1608,13 +1601,6 @@ var AnimationGroupPlayer = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 var ɵPRE_STYLE = '!';
 
 /**
@@ -1627,11 +1613,6 @@ var ɵPRE_STYLE = '!';
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
- */
-/**
- * @module
- * @description
- * Entry point for all animation APIs of the animation package.
  */
 
 /**
