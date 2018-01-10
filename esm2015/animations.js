@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.2.0-167cbed
+ * @license Angular v5.2.0-48c1898
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -730,9 +730,9 @@ function keyframes(steps) {
  *     <button (click)="next()">Next</button>
  *     <hr>
  *     <div [\@bannerAnimation]="selectedIndex" class="banner-container">
- *       <div class="banner"> {{ banner }} </div>
+ *       <div class="banner" *ngFor="let banner of banners"> {{ banner }} </div>
  *     </div>
- *   `
+ *   `,
  *   animations: [
  *     trigger('bannerAnimation', [
  *       transition(":increment", group([
@@ -752,7 +752,7 @@ function keyframes(steps) {
  *         query(':leave', [
  *           animate('0.5s ease-out', style({ left: '100%' }))
  *         ])
- *       ])),
+ *       ]))
  *     ])
  *   ]
  * })
