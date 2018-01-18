@@ -28,9 +28,13 @@ export interface ElementAnimationState {
     removedBeforeQueried: boolean;
 }
 export declare class StateValue {
+    namespaceId: string;
     value: string;
     options: AnimationOptions;
-    constructor(input: any);
+    readonly params: {
+        [key: string]: any;
+    };
+    constructor(input: any, namespaceId?: string);
     absorbOptions(options: AnimationOptions): void;
 }
 export declare const VOID_VALUE = "void";
@@ -52,8 +56,10 @@ export declare class AnimationTransitionNamespace {
     trigger(element: any, triggerName: string, value: any, defaultToFallback?: boolean): TransitionAnimationPlayer | undefined;
     deregister(name: string): void;
     clearElementCache(element: any): void;
-    private _destroyInnerNodes(rootElement, context, animate?);
-    removeNode(element: any, context: any, doNotRecurse?: boolean): void;
+    private _signalRemovalForInnerTriggers(rootElement, context, animate?);
+    triggerLeaveAnimation(element: any, context: any, destroyAfterComplete?: boolean, defaultToFallback?: boolean): boolean;
+    prepareLeaveAnimationListeners(element: any): void;
+    removeNode(element: any, context: any): void;
     insertNode(element: any, parent: any): void;
     drainQueuedTransitions(microtaskId: number): QueueInstruction[];
     destroy(context: any): void;
@@ -74,6 +80,7 @@ export declare class TransitionAnimationEngine {
     statesByElement: Map<any, {
         [triggerName: string]: StateValue;
     }>;
+    disabledNodes: Set<any>;
     totalAnimations: number;
     totalQueuedPlayers: number;
     private _namespaceLookup;
@@ -84,7 +91,6 @@ export declare class TransitionAnimationEngine {
     collectedEnterElements: any[];
     collectedLeaveElements: any[];
     onRemovalComplete: (element: any, context: any) => void;
-    _onRemovalComplete(element: any, context: any): void;
     constructor(driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
     readonly queuedPlayers: TransitionAnimationPlayer[];
     createNamespace(namespaceId: string, hostElement: any): AnimationTransitionNamespace;
@@ -93,18 +99,23 @@ export declare class TransitionAnimationEngine {
     registerTrigger(namespaceId: string, name: string, trigger: AnimationTrigger): void;
     destroy(namespaceId: string, context: any): void;
     private _fetchNamespace(id);
+    fetchNamespacesByElement(element: any): Set<AnimationTransitionNamespace>;
     trigger(namespaceId: string, element: any, name: string, value: any): boolean;
     insertNode(namespaceId: string, element: any, parent: any, insertBefore: boolean): void;
     collectEnterElement(element: any): void;
-    removeNode(namespaceId: string, element: any, context: any, doNotRecurse?: boolean): void;
+    markElementAsDisabled(element: any, value: boolean): void;
+    removeNode(namespaceId: string, element: any, context: any): void;
     markElementAsRemoved(namespaceId: string, element: any, hasAnimation?: boolean, context?: any): void;
     listen(namespaceId: string, element: any, name: string, phase: string, callback: (event: any) => boolean): () => any;
-    private _buildInstruction(entry, subTimelines);
+    private _buildInstruction(entry, subTimelines, enterClassName, leaveClassName);
     destroyInnerAnimations(containerElement: any): void;
+    destroyActiveAnimationsForElement(element: any): void;
+    finishActiveQueriedAnimationOnElement(element: any): void;
     whenRenderingDone(): Promise<any>;
     processLeaveNode(element: any): void;
     flush(microtaskId?: number): void;
-    private _flushAnimations(microtaskId);
+    reportError(errors: string[]): void;
+    private _flushAnimations(cleanupFns, microtaskId);
     elementContainsData(namespaceId: string, element: any): boolean;
     afterFlush(callback: () => any): void;
     afterFlushAnimationsDone(callback: () => any): void;
@@ -120,14 +131,14 @@ export declare class TransitionAnimationPlayer implements AnimationPlayer {
     private _player;
     private _containsRealPlayer;
     private _queuedCallbacks;
-    private _destroyed;
+    readonly destroyed: boolean;
     parentPlayer: AnimationPlayer;
     markedForDestroy: boolean;
-    constructor(namespaceId: string, triggerName: string, element: any);
     readonly queued: boolean;
-    readonly destroyed: boolean;
+    constructor(namespaceId: string, triggerName: string, element: any);
     setRealPlayer(player: AnimationPlayer): void;
     getRealPlayer(): AnimationPlayer;
+    syncPlayerEvents(player: AnimationPlayer): void;
     private _queueEvent(name, callback);
     onDone(fn: () => void): void;
     onStart(fn: () => void): void;

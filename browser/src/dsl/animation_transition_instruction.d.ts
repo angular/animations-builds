@@ -24,9 +24,10 @@ export interface AnimationTransitionInstruction extends AnimationEngineInstructi
     postStyleProps: Map<any, {
         [prop: string]: boolean;
     }>;
+    errors?: any[];
 }
 export declare function createTransitionInstruction(element: any, triggerName: string, fromState: string, toState: string, isRemovalTransition: boolean, fromStyles: ɵStyleData, toStyles: ɵStyleData, timelines: AnimationTimelineInstruction[], queriedElements: any[], preStyleProps: Map<any, {
     [prop: string]: boolean;
 }>, postStyleProps: Map<any, {
     [prop: string]: boolean;
-}>): AnimationTransitionInstruction;
+}>, errors?: any[]): AnimationTransitionInstruction;

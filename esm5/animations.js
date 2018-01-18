@@ -1,14 +1,11 @@
 /**
- * @license Angular v4.2.2-a6c99f0
- * (c) 2010-2017 Google, Inc. https://angular.io/
+ * @license Angular v5.2.0-2717a3e
+ * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * AnimationBuilder is an injectable service that is available when the {\@link
@@ -50,14 +47,11 @@
  * \@experimental Animation support is experimental.
  * @abstract
  */
-class AnimationBuilder {
-    /**
-     * @abstract
-     * @param {?} animation
-     * @return {?}
-     */
-    build(animation) { }
-}
+var AnimationBuilder = /** @class */ (function () {
+    function AnimationBuilder() {
+    }
+    return AnimationBuilder;
+}());
 /**
  * An instance of `AnimationFactory` is returned from {\@link AnimationBuilder#build
  * AnimationBuilder.build}.
@@ -65,40 +59,158 @@ class AnimationBuilder {
  * \@experimental Animation support is experimental.
  * @abstract
  */
-class AnimationFactory {
-    /**
-     * @abstract
-     * @param {?} element
-     * @param {?=} options
-     * @return {?}
-     */
-    create(element, options) { }
-}
+var AnimationFactory = /** @class */ (function () {
+    function AnimationFactory() {
+    }
+    return AnimationFactory;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ * @record
+ */
 
 /**
  * \@experimental Animation support is experimental.
  */
-const AUTO_STYLE = '*';
+var AUTO_STYLE = '*';
+/**
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link trigger trigger animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link state state animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link transition transition animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link keyframes keyframes animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link style style animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link animate animate animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link animateChild animateChild animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link useAnimation useAnimation animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link sequence sequence animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link group group animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link stagger stagger animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
 /**
  * `trigger` is an animation-specific function that is designed to be used inside of Angular's
- * animation DSL language. If this information is new, please navigate to the {\@link
- * Component#animations component animations metadata page} to gain a better understanding of
- * how animations in Angular are used.
+ * animation DSL language. If this information is new, please navigate to the
+ * {\@link Component#animations component animations metadata page} to gain a better
+ * understanding of how animations in Angular are used.
  *
- * `trigger` Creates an animation trigger which will a list of {\@link state state} and {\@link
- * transition transition} entries that will be evaluated when the expression bound to the trigger
- * changes.
+ * `trigger` Creates an animation trigger which will a list of {\@link state state} and
+ * {\@link transition transition} entries that will be evaluated when the expression
+ * bound to the trigger changes.
  *
- * Triggers are registered within the component annotation data under the {\@link
- * Component#animations animations section}. An animation trigger can be placed on an element
- * within a template by referencing the name of the trigger followed by the expression value that the
+ * Triggers are registered within the component annotation data under the
+ * {\@link Component#animations animations section}. An animation trigger can be placed on an element
+ * within a template by referencing the name of the trigger followed by the expression value that
+ * the
  * trigger is bound to (in the form of `[\@triggerName]="expression"`.
+ *
+ * Animation trigger bindings strigify values and then match the previous and current values against
+ * any linked transitions. If a boolean value is provided into the trigger binding then it will both
+ * be represented as `1` or `true` and `0` or `false` for a true and false boolean values
+ * respectively.
  *
  * ### Usage
  *
  * `trigger` will create an animation trigger reference based on the provided `name` value. The
- * provided `animation` value is expected to be an array consisting of {\@link state state} and {\@link
- * transition transition} declarations.
+ * provided `animation` value is expected to be an array consisting of {\@link state state} and
+ * {\@link transition transition} declarations.
  *
  * ```typescript
  * \@Component({
@@ -124,9 +236,66 @@ const AUTO_STYLE = '*';
  * ```html
  * <!-- somewhere inside of my-component-tpl.html -->
  * <div [\@myAnimationTrigger]="myStatusExp">...</div>
- * tools/gulp-tasks/validate-commit-message.js ```
+ * ```
  *
- * {\@example core/animation/ts/dsl/animation_example.ts region='Component'}
+ * ## Disable Animations
+ * A special animation control binding called `\@.disabled` can be placed on an element which will
+ * then disable animations for any inner animation triggers situated within the element as well as
+ * any animations on the element itself.
+ *
+ * When true, the `\@.disabled` binding will prevent all animations from rendering. The example
+ * below shows how to use this feature:
+ *
+ * ```ts
+ * \@Component({
+ *   selector: 'my-component',
+ *   template: `
+ *     <div [\@.disabled]="isDisabled">
+ *       <div [\@childAnimation]="exp"></div>
+ *     </div>
+ *   `,
+ *   animations: [
+ *     trigger("childAnimation", [
+ *       // ...
+ *     ])
+ *   ]
+ * })
+ * class MyComponent {
+ *   isDisabled = true;
+ *   exp = '...';
+ * }
+ * ```
+ *
+ * The `\@childAnimation` trigger will not animate because `\@.disabled` prevents it from happening
+ * (when true).
+ *
+ * Note that `\@.disbled` will only disable all animations (this means any animations running on
+ * the same element will also be disabled).
+ *
+ * ### Disabling Animations Application-wide
+ * When an area of the template is set to have animations disabled, **all** inner components will
+ * also have their animations disabled as well. This means that all animations for an angular
+ * application can be disabled by placing a host binding set on `\@.disabled` on the topmost Angular
+ * component.
+ *
+ * ```ts
+ * import {Component, HostBinding} from '\@angular/core';
+ *
+ * \@Component({
+ *   selector: 'app-component',
+ *   templateUrl: 'app.component.html',
+ * })
+ * class AppComponent {
+ *   \@HostBinding('\@.disabled')
+ *   public animationsDisabled = true;
+ * }
+ * ```
+ *
+ * ### What about animations that us `query()` and `animateChild()`?
+ * Despite inner animations being disabled, a parent animation can {\@link query query} for inner
+ * elements located in disabled areas of the template and still animate them as it sees fit. This is
+ * also the case for when a sub animation is queried by a parent and then later animated using {\@link
+ * animateChild animateChild}.
  *
  * \@experimental Animation support is experimental.
  * @param {?} name
@@ -134,7 +303,7 @@ const AUTO_STYLE = '*';
  * @return {?}
  */
 function trigger(name, definitions) {
-    return { type: 7 /* Trigger */, name, definitions, options: {} };
+    return { type: 7 /* Trigger */, name: name, definitions: definitions, options: {} };
 }
 /**
  * `animate` is an animation-specific function that is designed to be used inside of Angular's
@@ -184,8 +353,9 @@ function trigger(name, definitions) {
  * @param {?=} styles
  * @return {?}
  */
-function animate(timings, styles = null) {
-    return { type: 4 /* Animate */, styles, timings };
+function animate(timings, styles) {
+    if (styles === void 0) { styles = null; }
+    return { type: 4 /* Animate */, styles: styles, timings: timings };
 }
 /**
  * `group` is an animation-specific function that is designed to be used inside of Angular's
@@ -194,7 +364,7 @@ function animate(timings, styles = null) {
  * how animations in Angular are used.
  *
  * `group` specifies a list of animation steps that are all run in parallel. Grouped animations are
- * useful when a series of styles must be animated/closed off at different statrting/ending times.
+ * useful when a series of styles must be animated/closed off at different starting/ending times.
  *
  * The `group` function can either be used within a {\@link sequence sequence} or a {\@link transition
  * transition} and it will only continue to the next instruction once all of the inner animation
@@ -221,8 +391,9 @@ function animate(timings, styles = null) {
  * @param {?=} options
  * @return {?}
  */
-function group(steps, options = null) {
-    return { type: 3 /* Group */, steps, options };
+function group(steps, options) {
+    if (options === void 0) { options = null; }
+    return { type: 3 /* Group */, steps: steps, options: options };
 }
 /**
  * `sequence` is an animation-specific function that is designed to be used inside of Angular's
@@ -261,8 +432,9 @@ function group(steps, options = null) {
  * @param {?=} options
  * @return {?}
  */
-function sequence(steps, options = null) {
-    return { type: 2 /* Sequence */, steps, options };
+function sequence(steps, options) {
+    if (options === void 0) { options = null; }
+    return { type: 2 /* Sequence */, steps: steps, options: options };
 }
 /**
  * `style` is an animation-specific function that is designed to be used inside of Angular's
@@ -360,10 +532,11 @@ function style(tokens) {
  * \@experimental Animation support is experimental.
  * @param {?} name
  * @param {?} styles
+ * @param {?=} options
  * @return {?}
  */
-function state(name, styles) {
-    return { type: 0 /* State */, name, styles };
+function state(name, styles, options) {
+    return { type: 0 /* State */, name: name, styles: styles, options: options };
 }
 /**
  * `keyframes` is an animation-specific function that is designed to be used inside of Angular's
@@ -413,7 +586,7 @@ function state(name, styles) {
  * @return {?}
  */
 function keyframes(steps) {
-    return { type: 5 /* Keyframes */, steps };
+    return { type: 5 /* Keyframes */, steps: steps };
 }
 /**
  * `transition` is an animation-specific function that is designed to be used inside of Angular's
@@ -502,7 +675,7 @@ function keyframes(steps) {
  * ])
  * ```
  *
- * ### Transition Aliases (`:enter` and `:leave`)
+ * ### Using :enter and :leave
  *
  * Given that enter (insertion) and leave (removal) animations are so common, the `transition`
  * function accepts both `:enter` and `:leave` values which are aliases for the `void => *` and `*
@@ -512,10 +685,102 @@ function keyframes(steps) {
  * transition(":enter", [
  *   style({ opacity: 0 }),
  *   animate(500, style({ opacity: 1 }))
- * ])
+ * ]),
  * transition(":leave", [
  *   animate(500, style({ opacity: 0 }))
  * ])
+ * ```
+ *
+ * ### Boolean values
+ * if a trigger binding value is a boolean value then it can be matched using a transition
+ * expression that compares `true` and `false` or `1` and `0`.
+ *
+ * ```
+ * // in the template
+ * <div [\@openClose]="open ? true : false">...</div>
+ *
+ * // in the component metadata
+ * trigger('openClose', [
+ *   state('true', style({ height: '*' })),
+ *   state('false', style({ height: '0px' })),
+ *   transition('false <=> true', animate(500))
+ * ])
+ * ```
+ *
+ * ### Using :increment and :decrement
+ * In addition to the :enter and :leave transition aliases, the :increment and :decrement aliases
+ * can be used to kick off a transition when a numeric value has increased or decreased in value.
+ *
+ * ```
+ * import {group, animate, query, transition, style, trigger} from '\@angular/animations';
+ * import {Component} from '\@angular/core';
+ *
+ * \@Component({
+ *   selector: 'banner-carousel-component',
+ *   styles: [`
+ *     .banner-container {
+ *        position:relative;
+ *        height:500px;
+ *        overflow:hidden;
+ *      }
+ *     .banner-container > .banner {
+ *        position:absolute;
+ *        left:0;
+ *        top:0;
+ *        font-size:200px;
+ *        line-height:500px;
+ *        font-weight:bold;
+ *        text-align:center;
+ *        width:100%;
+ *      }
+ *   `],
+ *   template: `
+ *     <button (click)="previous()">Previous</button>
+ *     <button (click)="next()">Next</button>
+ *     <hr>
+ *     <div [\@bannerAnimation]="selectedIndex" class="banner-container">
+ *       <div class="banner" *ngFor="let banner of banners"> {{ banner }} </div>
+ *     </div>
+ *   `,
+ *   animations: [
+ *     trigger('bannerAnimation', [
+ *       transition(":increment", group([
+ *         query(':enter', [
+ *           style({ left: '100%' }),
+ *           animate('0.5s ease-out', style('*'))
+ *         ]),
+ *         query(':leave', [
+ *           animate('0.5s ease-out', style({ left: '-100%' }))
+ *         ])
+ *       ])),
+ *       transition(":decrement", group([
+ *         query(':enter', [
+ *           style({ left: '-100%' }),
+ *           animate('0.5s ease-out', style('*'))
+ *         ]),
+ *         query(':leave', [
+ *           animate('0.5s ease-out', style({ left: '100%' }))
+ *         ])
+ *       ]))
+ *     ])
+ *   ]
+ * })
+ * class BannerCarouselComponent {
+ *   allBanners: string[] = ['1', '2', '3', '4'];
+ *   selectedIndex: number = 0;
+ *
+ *   get banners() {
+ *      return [this.allBanners[this.selectedIndex]];
+ *   }
+ *
+ *   previous() {
+ *     this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
+ *   }
+ *
+ *   next() {
+ *     this.selectedIndex = Math.min(this.selectedIndex + 1, this.allBanners.length - 1);
+ *   }
+ * }
  * ```
  *
  * {\@example core/animation/ts/dsl/animation_example.ts region='Component'}
@@ -526,8 +791,9 @@ function keyframes(steps) {
  * @param {?=} options
  * @return {?}
  */
-function transition(stateChangeExpr, steps, options = null) {
-    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, options };
+function transition(stateChangeExpr, steps, options) {
+    if (options === void 0) { options = null; }
+    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, options: options };
 }
 /**
  * `animation` is an animation-specific function that is designed to be used inside of Angular's
@@ -541,7 +807,7 @@ function transition(stateChangeExpr, steps, options = null) {
  * var fadeAnimation = animation([
  *   style({ opacity: '{{ start }}' }),
  *   animate('{{ time }}',
- *     style({ opacity: '{{ end }}'))
+ *     style({ opacity: '{{ end }}'}))
  * ], { params: { time: '1000ms', start: 0, end: 1 }});
  * ```
  *
@@ -567,8 +833,9 @@ function transition(stateChangeExpr, steps, options = null) {
  * @param {?=} options
  * @return {?}
  */
-function animation(steps, options = null) {
-    return { type: 8 /* Reference */, animation: steps, options };
+function animation(steps, options) {
+    if (options === void 0) { options = null; }
+    return { type: 8 /* Reference */, animation: steps, options: options };
 }
 /**
  * `animateChild` is an animation-specific function that is designed to be used inside of Angular's
@@ -669,8 +936,9 @@ function animation(steps, options = null) {
  * @param {?=} options
  * @return {?}
  */
-function animateChild(options = null) {
-    return { type: 9 /* AnimateChild */, options };
+function animateChild(options) {
+    if (options === void 0) { options = null; }
+    return { type: 9 /* AnimateChild */, options: options };
 }
 /**
  * `useAnimation` is an animation-specific function that is designed to be used inside of Angular's
@@ -682,8 +950,9 @@ function animateChild(options = null) {
  * @param {?=} options
  * @return {?}
  */
-function useAnimation(animation, options = null) {
-    return { type: 10 /* AnimateRef */, animation, options };
+function useAnimation(animation, options) {
+    if (options === void 0) { options = null; }
+    return { type: 10 /* AnimateRef */, animation: animation, options: options };
 }
 /**
  * `query` is an animation-specific function that is designed to be used inside of Angular's
@@ -781,8 +1050,9 @@ function useAnimation(animation, options = null) {
  * @param {?=} options
  * @return {?}
  */
-function query(selector, animation, options = null) {
-    return { type: 11 /* Query */, selector, animation, options };
+function query(selector, animation, options) {
+    if (options === void 0) { options = null; }
+    return { type: 11 /* Query */, selector: selector, animation: animation, options: options };
 }
 /**
  * `stagger` is an animation-specific function that is designed to be used inside of Angular's
@@ -866,9 +1136,13 @@ function query(selector, animation, options = null) {
  * @return {?}
  */
 function stagger(timings, animation) {
-    return { type: 12 /* Stagger */, timings, animation };
+    return { type: 12 /* Stagger */, timings: timings, animation: animation };
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -883,17 +1157,23 @@ function scheduleMicroTask(cb) {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
+/**
+ * AnimationPlayer controls an animation sequence that was produced from a programmatic animation.
+ * (see {\@link AnimationBuilder AnimationBuilder} for more information on how to create programmatic
+ * animations.)
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
 /**
  * \@experimental Animation support is experimental.
  */
-class NoopAnimationPlayer {
-    constructor() {
+var NoopAnimationPlayer = /** @class */ (function () {
+    function NoopAnimationPlayer() {
         this._onDoneFns = [];
         this._onStartFns = [];
         this._onDestroyFns = [];
@@ -906,98 +1186,173 @@ class NoopAnimationPlayer {
     /**
      * @return {?}
      */
-    _onFinish() {
+    NoopAnimationPlayer.prototype._onFinish = /**
+     * @return {?}
+     */
+    function () {
         if (!this._finished) {
             this._finished = true;
-            this._onDoneFns.forEach(fn => fn());
+            this._onDoneFns.forEach(function (fn) { return fn(); });
             this._onDoneFns = [];
         }
-    }
+    };
     /**
      * @param {?} fn
      * @return {?}
      */
-    onStart(fn) { this._onStartFns.push(fn); }
+    NoopAnimationPlayer.prototype.onStart = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onStartFns.push(fn); };
     /**
      * @param {?} fn
      * @return {?}
      */
-    onDone(fn) { this._onDoneFns.push(fn); }
+    NoopAnimationPlayer.prototype.onDone = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onDoneFns.push(fn); };
     /**
      * @param {?} fn
      * @return {?}
      */
-    onDestroy(fn) { this._onDestroyFns.push(fn); }
+    NoopAnimationPlayer.prototype.onDestroy = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onDestroyFns.push(fn); };
     /**
      * @return {?}
      */
-    hasStarted() { return this._started; }
+    NoopAnimationPlayer.prototype.hasStarted = /**
+     * @return {?}
+     */
+    function () { return this._started; };
     /**
      * @return {?}
      */
-    init() { }
+    NoopAnimationPlayer.prototype.init = /**
+     * @return {?}
+     */
+    function () { };
     /**
      * @return {?}
      */
-    play() {
+    NoopAnimationPlayer.prototype.play = /**
+     * @return {?}
+     */
+    function () {
         if (!this.hasStarted()) {
-            this.triggerMicrotask();
             this._onStart();
+            this.triggerMicrotask();
         }
         this._started = true;
-    }
+    };
+    /* @internal */
     /**
      * @return {?}
      */
-    triggerMicrotask() { scheduleMicroTask(() => this._onFinish()); }
+    NoopAnimationPlayer.prototype.triggerMicrotask = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        scheduleMicroTask(function () { return _this._onFinish(); });
+    };
     /**
      * @return {?}
      */
-    _onStart() {
-        this._onStartFns.forEach(fn => fn());
+    NoopAnimationPlayer.prototype._onStart = /**
+     * @return {?}
+     */
+    function () {
+        this._onStartFns.forEach(function (fn) { return fn(); });
         this._onStartFns = [];
-    }
+    };
     /**
      * @return {?}
      */
-    pause() { }
+    NoopAnimationPlayer.prototype.pause = /**
+     * @return {?}
+     */
+    function () { };
     /**
      * @return {?}
      */
-    restart() { }
+    NoopAnimationPlayer.prototype.restart = /**
+     * @return {?}
+     */
+    function () { };
     /**
      * @return {?}
      */
-    finish() { this._onFinish(); }
+    NoopAnimationPlayer.prototype.finish = /**
+     * @return {?}
+     */
+    function () { this._onFinish(); };
     /**
      * @return {?}
      */
-    destroy() {
+    NoopAnimationPlayer.prototype.destroy = /**
+     * @return {?}
+     */
+    function () {
         if (!this._destroyed) {
             this._destroyed = true;
             if (!this.hasStarted()) {
                 this._onStart();
             }
             this.finish();
-            this._onDestroyFns.forEach(fn => fn());
+            this._onDestroyFns.forEach(function (fn) { return fn(); });
             this._onDestroyFns = [];
         }
-    }
+    };
     /**
      * @return {?}
      */
-    reset() { }
+    NoopAnimationPlayer.prototype.reset = /**
+     * @return {?}
+     */
+    function () { };
     /**
      * @param {?} p
      * @return {?}
      */
-    setPosition(p) { }
+    NoopAnimationPlayer.prototype.setPosition = /**
+     * @param {?} p
+     * @return {?}
+     */
+    function (p) { };
     /**
      * @return {?}
      */
-    getPosition() { return 0; }
-}
+    NoopAnimationPlayer.prototype.getPosition = /**
+     * @return {?}
+     */
+    function () { return 0; };
+    /* @internal */
+    /**
+     * @param {?} phaseName
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.triggerCallback = /**
+     * @param {?} phaseName
+     * @return {?}
+     */
+    function (phaseName) {
+        var /** @type {?} */ methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
+        methods.forEach(function (fn) { return fn(); });
+        methods.length = 0;
+    };
+    return NoopAnimationPlayer;
+}());
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -1005,12 +1360,9 @@ class NoopAnimationPlayer {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-class AnimationGroupPlayer {
-    /**
-     * @param {?} _players
-     */
-    constructor(_players) {
-        this._players = _players;
+var AnimationGroupPlayer = /** @class */ (function () {
+    function AnimationGroupPlayer(_players) {
+        var _this = this;
         this._onDoneFns = [];
         this._onStartFns = [];
         this._finished = false;
@@ -1019,156 +1371,242 @@ class AnimationGroupPlayer {
         this._onDestroyFns = [];
         this.parentPlayer = null;
         this.totalTime = 0;
-        let doneCount = 0;
-        let destroyCount = 0;
-        let startCount = 0;
-        const total = this._players.length;
+        this.players = _players;
+        var /** @type {?} */ doneCount = 0;
+        var /** @type {?} */ destroyCount = 0;
+        var /** @type {?} */ startCount = 0;
+        var /** @type {?} */ total = this.players.length;
         if (total == 0) {
-            scheduleMicroTask(() => this._onFinish());
+            scheduleMicroTask(function () { return _this._onFinish(); });
         }
         else {
-            this._players.forEach(player => {
-                player.parentPlayer = this;
-                player.onDone(() => {
-                    if (++doneCount >= total) {
-                        this._onFinish();
+            this.players.forEach(function (player) {
+                player.onDone(function () {
+                    if (++doneCount == total) {
+                        _this._onFinish();
                     }
                 });
-                player.onDestroy(() => {
-                    if (++destroyCount >= total) {
-                        this._onDestroy();
+                player.onDestroy(function () {
+                    if (++destroyCount == total) {
+                        _this._onDestroy();
                     }
                 });
-                player.onStart(() => {
-                    if (++startCount >= total) {
-                        this._onStart();
+                player.onStart(function () {
+                    if (++startCount == total) {
+                        _this._onStart();
                     }
                 });
             });
         }
-        this.totalTime = this._players.reduce((time, player) => Math.max(time, player.totalTime), 0);
+        this.totalTime = this.players.reduce(function (time, player) { return Math.max(time, player.totalTime); }, 0);
     }
     /**
      * @return {?}
      */
-    _onFinish() {
+    AnimationGroupPlayer.prototype._onFinish = /**
+     * @return {?}
+     */
+    function () {
         if (!this._finished) {
             this._finished = true;
-            this._onDoneFns.forEach(fn => fn());
+            this._onDoneFns.forEach(function (fn) { return fn(); });
             this._onDoneFns = [];
         }
-    }
+    };
     /**
      * @return {?}
      */
-    init() { this._players.forEach(player => player.init()); }
+    AnimationGroupPlayer.prototype.init = /**
+     * @return {?}
+     */
+    function () { this.players.forEach(function (player) { return player.init(); }); };
     /**
      * @param {?} fn
      * @return {?}
      */
-    onStart(fn) { this._onStartFns.push(fn); }
+    AnimationGroupPlayer.prototype.onStart = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onStartFns.push(fn); };
     /**
      * @return {?}
      */
-    _onStart() {
+    AnimationGroupPlayer.prototype._onStart = /**
+     * @return {?}
+     */
+    function () {
         if (!this.hasStarted()) {
-            this._onStartFns.forEach(fn => fn());
-            this._onStartFns = [];
             this._started = true;
+            this._onStartFns.forEach(function (fn) { return fn(); });
+            this._onStartFns = [];
         }
-    }
+    };
     /**
      * @param {?} fn
      * @return {?}
      */
-    onDone(fn) { this._onDoneFns.push(fn); }
+    AnimationGroupPlayer.prototype.onDone = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onDoneFns.push(fn); };
     /**
      * @param {?} fn
      * @return {?}
      */
-    onDestroy(fn) { this._onDestroyFns.push(fn); }
+    AnimationGroupPlayer.prototype.onDestroy = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onDestroyFns.push(fn); };
     /**
      * @return {?}
      */
-    hasStarted() { return this._started; }
+    AnimationGroupPlayer.prototype.hasStarted = /**
+     * @return {?}
+     */
+    function () { return this._started; };
     /**
      * @return {?}
      */
-    play() {
+    AnimationGroupPlayer.prototype.play = /**
+     * @return {?}
+     */
+    function () {
         if (!this.parentPlayer) {
             this.init();
         }
         this._onStart();
-        this._players.forEach(player => player.play());
-    }
+        this.players.forEach(function (player) { return player.play(); });
+    };
     /**
      * @return {?}
      */
-    pause() { this._players.forEach(player => player.pause()); }
+    AnimationGroupPlayer.prototype.pause = /**
+     * @return {?}
+     */
+    function () { this.players.forEach(function (player) { return player.pause(); }); };
     /**
      * @return {?}
      */
-    restart() { this._players.forEach(player => player.restart()); }
+    AnimationGroupPlayer.prototype.restart = /**
+     * @return {?}
+     */
+    function () { this.players.forEach(function (player) { return player.restart(); }); };
     /**
      * @return {?}
      */
-    finish() {
+    AnimationGroupPlayer.prototype.finish = /**
+     * @return {?}
+     */
+    function () {
         this._onFinish();
-        this._players.forEach(player => player.finish());
-    }
+        this.players.forEach(function (player) { return player.finish(); });
+    };
     /**
      * @return {?}
      */
-    destroy() { this._onDestroy(); }
+    AnimationGroupPlayer.prototype.destroy = /**
+     * @return {?}
+     */
+    function () { this._onDestroy(); };
     /**
      * @return {?}
      */
-    _onDestroy() {
+    AnimationGroupPlayer.prototype._onDestroy = /**
+     * @return {?}
+     */
+    function () {
         if (!this._destroyed) {
             this._destroyed = true;
             this._onFinish();
-            this._players.forEach(player => player.destroy());
-            this._onDestroyFns.forEach(fn => fn());
+            this.players.forEach(function (player) { return player.destroy(); });
+            this._onDestroyFns.forEach(function (fn) { return fn(); });
             this._onDestroyFns = [];
         }
-    }
+    };
     /**
      * @return {?}
      */
-    reset() {
-        this._players.forEach(player => player.reset());
+    AnimationGroupPlayer.prototype.reset = /**
+     * @return {?}
+     */
+    function () {
+        this.players.forEach(function (player) { return player.reset(); });
         this._destroyed = false;
         this._finished = false;
         this._started = false;
-    }
+    };
     /**
      * @param {?} p
      * @return {?}
      */
-    setPosition(p) {
-        const /** @type {?} */ timeAtPosition = p * this.totalTime;
-        this._players.forEach(player => {
-            const /** @type {?} */ position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
+    AnimationGroupPlayer.prototype.setPosition = /**
+     * @param {?} p
+     * @return {?}
+     */
+    function (p) {
+        var /** @type {?} */ timeAtPosition = p * this.totalTime;
+        this.players.forEach(function (player) {
+            var /** @type {?} */ position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
             player.setPosition(position);
         });
-    }
+    };
     /**
      * @return {?}
      */
-    getPosition() {
-        let /** @type {?} */ min = 0;
-        this._players.forEach(player => {
-            const /** @type {?} */ p = player.getPosition();
+    AnimationGroupPlayer.prototype.getPosition = /**
+     * @return {?}
+     */
+    function () {
+        var /** @type {?} */ min = 0;
+        this.players.forEach(function (player) {
+            var /** @type {?} */ p = player.getPosition();
             min = Math.min(p, min);
         });
         return min;
-    }
+    };
     /**
      * @return {?}
      */
-    get players() { return this._players; }
-}
+    AnimationGroupPlayer.prototype.beforeDestroy = /**
+     * @return {?}
+     */
+    function () {
+        this.players.forEach(function (player) {
+            if (player.beforeDestroy) {
+                player.beforeDestroy();
+            }
+        });
+    };
+    /* @internal */
+    /**
+     * @param {?} phaseName
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.triggerCallback = /**
+     * @param {?} phaseName
+     * @return {?}
+     */
+    function (phaseName) {
+        var /** @type {?} */ methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
+        methods.forEach(function (fn) { return fn(); });
+        methods.length = 0;
+    };
+    return AnimationGroupPlayer;
+}());
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+var ɵPRE_STYLE = '!';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -1176,8 +1614,11 @@ class AnimationGroupPlayer {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const ɵPRE_STYLE = '!';
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -1188,22 +1629,13 @@ const ɵPRE_STYLE = '!';
 /**
  * @module
  * @description
- * Entry point for all animation APIs of the animation package.
+ * Entry point for all public APIs of this package.
  */
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
-/**
- * @module
- * @description
- * Entry point for all public APIs of the animation package.
- */
-
 /**
  * Generated bundle index. Do not edit.
  */

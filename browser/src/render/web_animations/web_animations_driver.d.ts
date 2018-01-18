@@ -9,6 +9,7 @@ import { AnimationPlayer, ɵStyleData } from '@angular/animations';
 import { AnimationDriver } from '../animation_driver';
 import { WebAnimationsPlayer } from './web_animations_player';
 export declare class WebAnimationsDriver implements AnimationDriver {
+    validateStyleProperty(prop: string): boolean;
     matchesElement(element: any, selector: string): boolean;
     containsElement(elm1: any, elm2: any): boolean;
     query(element: any, selector: string, multi: boolean): any[];
