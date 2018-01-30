@@ -1,1 +1,1 @@
-{"alias": "./browser/index.metadata.json"}
+{"__symbolic":"module","version":3,"metadata":{},"exports":[{"from":"./browser/browser"}],"flatModuleIndexRedirect":true}
