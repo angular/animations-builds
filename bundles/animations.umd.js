@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.2.4-56b9591
+ * @license Angular v5.2.4-9d02db3
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -10,7 +10,7 @@
 }(this, (function (exports) { 'use strict';
 
 /**
- * @license Angular v5.2.4-56b9591
+ * @license Angular v5.2.4-9d02db3
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -280,7 +280,7 @@ var AUTO_STYLE = '*';
  * The `\@childAnimation` trigger will not animate because `\@.disabled` prevents it from happening
  * (when true).
  *
- * Note that `\@.disbled` will only disable all animations (this means any animations running on
+ * Note that `\@.disabled` will only disable all animations (this means any animations running on
  * the same element will also be disabled).
  *
  * ### Disabling Animations Application-wide
