@@ -1,13 +1,13 @@
 /**
- * @license Angular v6.0.0-beta.3-62e7b9d
+ * @license Angular v6.0.0-beta.3-235a235
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/animations')) :
-	typeof define === 'function' && define.amd ? define('@angular/animations/browser', ['exports', '@angular/animations'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.animations = global.ng.animations || {}, global.ng.animations.browser = {}),global.ng.animations));
-}(this, (function (exports,_angular_animations) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/animations'), require('@angular/core')) :
+	typeof define === 'function' && define.amd ? define('@angular/animations/browser', ['exports', '@angular/animations', '@angular/core'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.animations = global.ng.animations || {}, global.ng.animations.browser = {}),global.ng.animations,global.ng.core));
+}(this, (function (exports,_angular_animations,_angular_core) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v6.0.0-beta.3-62e7b9d
+ * @license Angular v6.0.0-beta.3-235a235
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -371,6 +371,11 @@ var NoopAnimationDriver = /** @class */ (function () {
         if (previousPlayers === void 0) { previousPlayers = []; }
         return new _angular_animations.NoopAnimationPlayer();
     };
+    NoopAnimationDriver.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    NoopAnimationDriver.ctorParameters = function () { return []; };
     return NoopAnimationDriver;
 }());
 /**

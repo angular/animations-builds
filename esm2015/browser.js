@@ -1,9 +1,10 @@
 /**
- * @license Angular v6.0.0-beta.3-62e7b9d
+ * @license Angular v6.0.0-beta.3-235a235
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 import { AUTO_STYLE, NoopAnimationPlayer, sequence, style, ɵAnimationGroupPlayer, ɵPRE_STYLE } from '@angular/animations';
+import { Injectable } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -285,6 +286,11 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer();
     }
 }
+NoopAnimationDriver.decorators = [
+    { type: Injectable },
+];
+/** @nocollapse */
+NoopAnimationDriver.ctorParameters = () => [];
 /**
  * \@experimental
  * @abstract
