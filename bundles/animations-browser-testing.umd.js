@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.4-884de18
+ * @license Angular v6.0.0-beta.4-e1bf067
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v6.0.0-beta.4-884de18
+ * @license Angular v6.0.0-beta.4-e1bf067
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -69,8 +69,8 @@ function __extends(d, b) {
 
 /**
  * @param {?} e
- * @param {?=} phaseName
- * @param {?=} totalTime
+ * @param {?} phaseName
+ * @param {?} player
  * @return {?}
  */
 
@@ -81,6 +81,7 @@ function __extends(d, b) {
  * @param {?} toState
  * @param {?=} phaseName
  * @param {?=} totalTime
+ * @param {?=} disabled
  * @return {?}
  */
 
@@ -392,7 +393,7 @@ var MockAnimationDriver = /** @class */ (function () {
 var MockAnimationPlayer = /** @class */ (function (_super) {
     __extends(MockAnimationPlayer, _super);
     function MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers) {
-        var _this = _super.call(this) || this;
+        var _this = _super.call(this, duration, delay) || this;
         _this.element = element;
         _this.keyframes = keyframes;
         _this.duration = duration;
@@ -412,7 +413,6 @@ var MockAnimationPlayer = /** @class */ (function (_super) {
                 }
             });
         }
-        _this.totalTime = delay + duration;
         return _this;
     }
     /* @internal */

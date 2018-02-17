@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.4-884de18
+ * @license Angular v6.0.0-beta.4-e1bf067
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -34,8 +34,8 @@ import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
 
 /**
  * @param {?} e
- * @param {?=} phaseName
- * @param {?=} totalTime
+ * @param {?} phaseName
+ * @param {?} player
  * @return {?}
  */
 
@@ -46,6 +46,7 @@ import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
  * @param {?} toState
  * @param {?=} phaseName
  * @param {?=} totalTime
+ * @param {?=} disabled
  * @return {?}
  */
 
@@ -323,7 +324,7 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
      * @param {?} previousPlayers
      */
     constructor(element, keyframes, duration, delay, easing, previousPlayers) {
-        super();
+        super(duration, delay);
         this.element = element;
         this.keyframes = keyframes;
         this.duration = duration;
@@ -343,7 +344,6 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
                 }
             });
         }
-        this.totalTime = delay + duration;
     }
     /**
      * @param {?} fn

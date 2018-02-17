@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.4-884de18
+ * @license Angular v6.0.0-beta.4-e1bf067
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -84,24 +84,26 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles = 
 function listenOnPlayer(player, eventName, event, callback) {
     switch (eventName) {
         case 'start':
-            player.onStart(() => callback(event && copyAnimationEvent(event, 'start', player.totalTime)));
+            player.onStart(() => callback(event && copyAnimationEvent(event, 'start', player)));
             break;
         case 'done':
-            player.onDone(() => callback(event && copyAnimationEvent(event, 'done', player.totalTime)));
+            player.onDone(() => callback(event && copyAnimationEvent(event, 'done', player)));
             break;
         case 'destroy':
-            player.onDestroy(() => callback(event && copyAnimationEvent(event, 'destroy', player.totalTime)));
+            player.onDestroy(() => callback(event && copyAnimationEvent(event, 'destroy', player)));
             break;
     }
 }
 /**
  * @param {?} e
- * @param {?=} phaseName
- * @param {?=} totalTime
+ * @param {?} phaseName
+ * @param {?} player
  * @return {?}
  */
-function copyAnimationEvent(e, phaseName, totalTime) {
-    const /** @type {?} */ event = makeAnimationEvent(e.element, e.triggerName, e.fromState, e.toState, phaseName || e.phaseName, totalTime == undefined ? e.totalTime : totalTime);
+function copyAnimationEvent(e, phaseName, player) {
+    const /** @type {?} */ totalTime = player.totalTime;
+    const /** @type {?} */ disabled = (/** @type {?} */ (player)).disabled ? true : false;
+    const /** @type {?} */ event = makeAnimationEvent(e.element, e.triggerName, e.fromState, e.toState, phaseName || e.phaseName, totalTime == undefined ? e.totalTime : totalTime, disabled);
     const /** @type {?} */ data = (/** @type {?} */ (e))['_data'];
     if (data != null) {
         (/** @type {?} */ (event))['_data'] = data;
@@ -115,10 +117,11 @@ function copyAnimationEvent(e, phaseName, totalTime) {
  * @param {?} toState
  * @param {?=} phaseName
  * @param {?=} totalTime
+ * @param {?=} disabled
  * @return {?}
  */
-function makeAnimationEvent(element, triggerName, fromState, toState, phaseName = '', totalTime = 0) {
-    return { element, triggerName, fromState, toState, phaseName, totalTime };
+function makeAnimationEvent(element, triggerName, fromState, toState, phaseName = '', totalTime = 0, disabled) {
+    return { element, triggerName, fromState, toState, phaseName, totalTime, disabled: !!disabled };
 }
 /**
  * @param {?} map
@@ -283,7 +286,7 @@ class NoopAnimationDriver {
      * @return {?}
      */
     animate(element, keyframes, duration, delay, easing, previousPlayers = []) {
-        return new NoopAnimationPlayer();
+        return new NoopAnimationPlayer(duration, delay);
     }
 }
 NoopAnimationDriver.decorators = [
@@ -2420,10 +2423,11 @@ function makeBooleanMap(keys) {
  * @param {?} queriedElements
  * @param {?} preStyleProps
  * @param {?} postStyleProps
+ * @param {?} totalTime
  * @param {?=} errors
  * @return {?}
  */
-function createTransitionInstruction(element, triggerName, fromState, toState, isRemovalTransition, fromStyles, toStyles, timelines, queriedElements, preStyleProps, postStyleProps, errors) {
+function createTransitionInstruction(element, triggerName, fromState, toState, isRemovalTransition, fromStyles, toStyles, timelines, queriedElements, preStyleProps, postStyleProps, totalTime, errors) {
     return {
         type: 0 /* TransitionAnimation */,
         element,
@@ -2437,6 +2441,7 @@ function createTransitionInstruction(element, triggerName, fromState, toState, i
         queriedElements,
         preStyleProps,
         postStyleProps,
+        totalTime,
         errors
     };
 }
@@ -2502,8 +2507,10 @@ class AnimationTransitionFactory {
         const /** @type {?} */ isRemoval = nextState === 'void';
         const /** @type {?} */ animationOptions = { params: Object.assign({}, transitionAnimationParams, nextAnimationParams) };
         const /** @type {?} */ timelines = buildAnimationTimelines(driver, element, this.ast.animation, enterClassName, leaveClassName, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
+        let /** @type {?} */ totalTime = 0;
+        timelines.forEach(tl => { totalTime = Math.max(tl.duration + tl.delay, totalTime); });
         if (errors.length) {
-            return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, [], [], preStyleMap, postStyleMap, errors);
+            return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, [], [], preStyleMap, postStyleMap, totalTime, errors);
         }
         timelines.forEach(tl => {
             const /** @type {?} */ elm = tl.element;
@@ -2516,7 +2523,7 @@ class AnimationTransitionFactory {
             }
         });
         const /** @type {?} */ queriedElementsList = iteratorToArray(queriedElements.values());
-        return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, timelines, queriedElementsList, preStyleMap, postStyleMap);
+        return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, timelines, queriedElementsList, preStyleMap, postStyleMap, totalTime);
     }
 }
 /**
@@ -3954,6 +3961,8 @@ class TransitionAnimationEngine {
             if (subTimelines.has(element)) {
                 if (disabledElementsSet.has(element)) {
                     player.onDestroy(() => setStyles(element, instruction.toStyles));
+                    player.disabled = true;
+                    player.overrideTotalTime(instruction.totalTime);
                     skippedPlayers.push(player);
                     return;
                 }
@@ -4195,7 +4204,7 @@ class TransitionAnimationEngine {
             // FIXME (matsko): make sure to-be-removed animations are removed properly
             const /** @type {?} */ details = element[REMOVAL_FLAG];
             if (details && details.removedBeforeQueried)
-                return new NoopAnimationPlayer();
+                return new NoopAnimationPlayer(timelineInstruction.duration, timelineInstruction.delay);
             const /** @type {?} */ isQueriedElement = element !== rootElement;
             const /** @type {?} */ previousPlayers = flattenGroupPlayers((allPreviousPlayersMap.get(element) || EMPTY_PLAYER_ARRAY)
                 .map(p => p.getRealPlayer()))
@@ -4250,7 +4259,7 @@ class TransitionAnimationEngine {
         }
         // special case for when an empty transition|definition is provided
         // ... there is no point in rendering an empty animation
-        return new NoopAnimationPlayer();
+        return new NoopAnimationPlayer(instruction.duration, instruction.delay);
     }
 }
 class TransitionAnimationPlayer {
@@ -4268,7 +4277,9 @@ class TransitionAnimationPlayer {
         this._queuedCallbacks = {};
         this.destroyed = false;
         this.markedForDestroy = false;
+        this.disabled = false;
         this.queued = true;
+        this.totalTime = 0;
     }
     /**
      * @param {?} player
@@ -4283,6 +4294,7 @@ class TransitionAnimationPlayer {
         });
         this._queuedCallbacks = {};
         this._containsRealPlayer = true;
+        this.overrideTotalTime(player.totalTime);
         (/** @type {?} */ (this)).queued = false;
     }
     /**
@@ -4290,13 +4302,18 @@ class TransitionAnimationPlayer {
      */
     getRealPlayer() { return this._player; }
     /**
+     * @param {?} totalTime
+     * @return {?}
+     */
+    overrideTotalTime(totalTime) { (/** @type {?} */ (this)).totalTime = totalTime; }
+    /**
      * @param {?} player
      * @return {?}
      */
     syncPlayerEvents(player) {
         const /** @type {?} */ p = /** @type {?} */ (this._player);
         if (p.triggerCallback) {
-            player.onStart(() => p.triggerCallback('start'));
+            player.onStart(() => /** @type {?} */ ((p.triggerCallback))('start'));
         }
         player.onDone(() => this.finish());
         player.onDestroy(() => this.destroy());
@@ -4387,10 +4404,6 @@ class TransitionAnimationPlayer {
      * @return {?}
      */
     getPosition() { return this.queued ? 0 : this._player.getPosition(); }
-    /**
-     * @return {?}
-     */
-    get totalTime() { return this._player.totalTime; }
     /**
      * @param {?} phaseName
      * @return {?}

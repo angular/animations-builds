@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.4-884de18
+ * @license Angular v6.0.0-beta.4-e1bf067
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -87,24 +87,26 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles, p
 function listenOnPlayer(player, eventName, event, callback) {
     switch (eventName) {
         case 'start':
-            player.onStart(function () { return callback(event && copyAnimationEvent(event, 'start', player.totalTime)); });
+            player.onStart(function () { return callback(event && copyAnimationEvent(event, 'start', player)); });
             break;
         case 'done':
-            player.onDone(function () { return callback(event && copyAnimationEvent(event, 'done', player.totalTime)); });
+            player.onDone(function () { return callback(event && copyAnimationEvent(event, 'done', player)); });
             break;
         case 'destroy':
-            player.onDestroy(function () { return callback(event && copyAnimationEvent(event, 'destroy', player.totalTime)); });
+            player.onDestroy(function () { return callback(event && copyAnimationEvent(event, 'destroy', player)); });
             break;
     }
 }
 /**
  * @param {?} e
- * @param {?=} phaseName
- * @param {?=} totalTime
+ * @param {?} phaseName
+ * @param {?} player
  * @return {?}
  */
-function copyAnimationEvent(e, phaseName, totalTime) {
-    var /** @type {?} */ event = makeAnimationEvent(e.element, e.triggerName, e.fromState, e.toState, phaseName || e.phaseName, totalTime == undefined ? e.totalTime : totalTime);
+function copyAnimationEvent(e, phaseName, player) {
+    var /** @type {?} */ totalTime = player.totalTime;
+    var /** @type {?} */ disabled = (/** @type {?} */ (player)).disabled ? true : false;
+    var /** @type {?} */ event = makeAnimationEvent(e.element, e.triggerName, e.fromState, e.toState, phaseName || e.phaseName, totalTime == undefined ? e.totalTime : totalTime, disabled);
     var /** @type {?} */ data = (/** @type {?} */ (e))['_data'];
     if (data != null) {
         (/** @type {?} */ (event))['_data'] = data;
@@ -118,12 +120,13 @@ function copyAnimationEvent(e, phaseName, totalTime) {
  * @param {?} toState
  * @param {?=} phaseName
  * @param {?=} totalTime
+ * @param {?=} disabled
  * @return {?}
  */
-function makeAnimationEvent(element, triggerName, fromState, toState, phaseName, totalTime) {
+function makeAnimationEvent(element, triggerName, fromState, toState, phaseName, totalTime, disabled) {
     if (phaseName === void 0) { phaseName = ''; }
     if (totalTime === void 0) { totalTime = 0; }
-    return { element: element, triggerName: triggerName, fromState: fromState, toState: toState, phaseName: phaseName, totalTime: totalTime };
+    return { element: element, triggerName: triggerName, fromState: fromState, toState: toState, phaseName: phaseName, totalTime: totalTime, disabled: !!disabled };
 }
 /**
  * @param {?} map
@@ -328,7 +331,7 @@ var NoopAnimationDriver = /** @class */ (function () {
      */
     function (element, keyframes, duration, delay, easing, previousPlayers) {
         if (previousPlayers === void 0) { previousPlayers = []; }
-        return new NoopAnimationPlayer();
+        return new NoopAnimationPlayer(duration, delay);
     };
     NoopAnimationDriver.decorators = [
         { type: Injectable },
@@ -2829,10 +2832,11 @@ function makeBooleanMap(keys) {
  * @param {?} queriedElements
  * @param {?} preStyleProps
  * @param {?} postStyleProps
+ * @param {?} totalTime
  * @param {?=} errors
  * @return {?}
  */
-function createTransitionInstruction(element, triggerName, fromState, toState, isRemovalTransition, fromStyles, toStyles, timelines, queriedElements, preStyleProps, postStyleProps, errors) {
+function createTransitionInstruction(element, triggerName, fromState, toState, isRemovalTransition, fromStyles, toStyles, timelines, queriedElements, preStyleProps, postStyleProps, totalTime, errors) {
     return {
         type: 0 /* TransitionAnimation */,
         element: element,
@@ -2846,6 +2850,7 @@ function createTransitionInstruction(element, triggerName, fromState, toState, i
         queriedElements: queriedElements,
         preStyleProps: preStyleProps,
         postStyleProps: postStyleProps,
+        totalTime: totalTime,
         errors: errors
     };
 }
@@ -2929,8 +2934,10 @@ var AnimationTransitionFactory = /** @class */ (function () {
         var /** @type {?} */ isRemoval = nextState === 'void';
         var /** @type {?} */ animationOptions = { params: __assign({}, transitionAnimationParams, nextAnimationParams) };
         var /** @type {?} */ timelines = buildAnimationTimelines(driver, element, this.ast.animation, enterClassName, leaveClassName, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
+        var /** @type {?} */ totalTime = 0;
+        timelines.forEach(function (tl) { totalTime = Math.max(tl.duration + tl.delay, totalTime); });
         if (errors.length) {
-            return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, [], [], preStyleMap, postStyleMap, errors);
+            return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, [], [], preStyleMap, postStyleMap, totalTime, errors);
         }
         timelines.forEach(function (tl) {
             var /** @type {?} */ elm = tl.element;
@@ -2943,7 +2950,7 @@ var AnimationTransitionFactory = /** @class */ (function () {
             }
         });
         var /** @type {?} */ queriedElementsList = iteratorToArray(queriedElements.values());
-        return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, timelines, queriedElementsList, preStyleMap, postStyleMap);
+        return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, timelines, queriedElementsList, preStyleMap, postStyleMap, totalTime);
     };
     return AnimationTransitionFactory;
 }());
@@ -4651,6 +4658,8 @@ var TransitionAnimationEngine = /** @class */ (function () {
             if (subTimelines.has(element)) {
                 if (disabledElementsSet.has(element)) {
                     player.onDestroy(function () { return setStyles(element, instruction.toStyles); });
+                    player.disabled = true;
+                    player.overrideTotalTime(instruction.totalTime);
                     skippedPlayers.push(player);
                     return;
                 }
@@ -4934,7 +4943,7 @@ var TransitionAnimationEngine = /** @class */ (function () {
             // FIXME (matsko): make sure to-be-removed animations are removed properly
             var /** @type {?} */ details = element[REMOVAL_FLAG];
             if (details && details.removedBeforeQueried)
-                return new NoopAnimationPlayer();
+                return new NoopAnimationPlayer(timelineInstruction.duration, timelineInstruction.delay);
             var /** @type {?} */ isQueriedElement = element !== rootElement;
             var /** @type {?} */ previousPlayers = flattenGroupPlayers((allPreviousPlayersMap.get(element) || EMPTY_PLAYER_ARRAY)
                 .map(function (p) { return p.getRealPlayer(); }))
@@ -4995,7 +5004,7 @@ var TransitionAnimationEngine = /** @class */ (function () {
         }
         // special case for when an empty transition|definition is provided
         // ... there is no point in rendering an empty animation
-        return new NoopAnimationPlayer();
+        return new NoopAnimationPlayer(instruction.duration, instruction.delay);
     };
     return TransitionAnimationEngine;
 }());
@@ -5009,7 +5018,9 @@ var TransitionAnimationPlayer = /** @class */ (function () {
         this._queuedCallbacks = {};
         this.destroyed = false;
         this.markedForDestroy = false;
+        this.disabled = false;
         this.queued = true;
+        this.totalTime = 0;
     }
     /**
      * @param {?} player
@@ -5029,6 +5040,7 @@ var TransitionAnimationPlayer = /** @class */ (function () {
         });
         this._queuedCallbacks = {};
         this._containsRealPlayer = true;
+        this.overrideTotalTime(player.totalTime);
         (/** @type {?} */ (this)).queued = false;
     };
     /**
@@ -5038,6 +5050,15 @@ var TransitionAnimationPlayer = /** @class */ (function () {
      * @return {?}
      */
     function () { return this._player; };
+    /**
+     * @param {?} totalTime
+     * @return {?}
+     */
+    TransitionAnimationPlayer.prototype.overrideTotalTime = /**
+     * @param {?} totalTime
+     * @return {?}
+     */
+    function (totalTime) { (/** @type {?} */ (this)).totalTime = totalTime; };
     /**
      * @param {?} player
      * @return {?}
@@ -5050,7 +5071,7 @@ var TransitionAnimationPlayer = /** @class */ (function () {
         var _this = this;
         var /** @type {?} */ p = /** @type {?} */ (this._player);
         if (p.triggerCallback) {
-            player.onStart(function () { return p.triggerCallback('start'); });
+            player.onStart(function () { return ((p.triggerCallback))('start'); });
         }
         player.onDone(function () { return _this.finish(); });
         player.onDestroy(function () { return _this.destroy(); });
@@ -5189,14 +5210,6 @@ var TransitionAnimationPlayer = /** @class */ (function () {
      * @return {?}
      */
     function () { return this.queued ? 0 : this._player.getPosition(); };
-    Object.defineProperty(TransitionAnimationPlayer.prototype, "totalTime", {
-        get: /**
-         * @return {?}
-         */
-        function () { return this._player.totalTime; },
-        enumerable: true,
-        configurable: true
-    });
     /* @internal */
     /**
      * @param {?} phaseName
