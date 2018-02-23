@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.5-9eecb0b
+ * @license Angular v6.0.0-beta.5-b2f366b
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v6.0.0-beta.5-9eecb0b
+ * @license Angular v6.0.0-beta.5-b2f366b
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -359,6 +359,7 @@ var NoopAnimationDriver = /** @class */ (function () {
      * @param {?} delay
      * @param {?} easing
      * @param {?=} previousPlayers
+     * @param {?=} scrubberAccessRequested
      * @return {?}
      */
     NoopAnimationDriver.prototype.animate = /**
@@ -368,9 +369,10 @@ var NoopAnimationDriver = /** @class */ (function () {
      * @param {?} delay
      * @param {?} easing
      * @param {?=} previousPlayers
+     * @param {?=} scrubberAccessRequested
      * @return {?}
      */
-    function (element, keyframes, duration, delay, easing, previousPlayers) {
+    function (element, keyframes, duration, delay, easing, previousPlayers, scrubberAccessRequested) {
         if (previousPlayers === void 0) { previousPlayers = []; }
         return new _angular_animations.NoopAnimationPlayer(duration, delay);
     };
@@ -669,6 +671,36 @@ function allowPreviousPlayerStylesMerge(duration, delay) {
     return duration === 0 || delay === 0;
 }
 /**
+ * @param {?} element
+ * @param {?} keyframes
+ * @param {?} previousStyles
+ * @return {?}
+ */
+function balancePreviousStylesIntoKeyframes(element, keyframes, previousStyles) {
+    var /** @type {?} */ previousStyleProps = Object.keys(previousStyles);
+    if (previousStyleProps.length && keyframes.length) {
+        var /** @type {?} */ startingKeyframe_1 = keyframes[0];
+        var /** @type {?} */ missingStyleProps_1 = [];
+        previousStyleProps.forEach(function (prop) {
+            if (!startingKeyframe_1.hasOwnProperty(prop)) {
+                missingStyleProps_1.push(prop);
+            }
+            startingKeyframe_1[prop] = previousStyles[prop];
+        });
+        if (missingStyleProps_1.length) {
+            var _loop_1 = function () {
+                var /** @type {?} */ kf = keyframes[i];
+                missingStyleProps_1.forEach(function (prop) { kf[prop] = computeStyle(element, prop); });
+            };
+            // tslint:disable-next-line
+            for (var /** @type {?} */ i = 1; i < keyframes.length; i++) {
+                _loop_1();
+            }
+        }
+    }
+    return keyframes;
+}
+/**
  * @param {?} visitor
  * @param {?} node
  * @param {?} context
@@ -705,6 +737,14 @@ function visitDslNode(visitor, node, context) {
         default:
             throw new Error("Unable to resolve animation metadata node #" + node.type);
     }
+}
+/**
+ * @param {?} element
+ * @param {?} prop
+ * @return {?}
+ */
+function computeStyle(element, prop) {
+    return (/** @type {?} */ (window.getComputedStyle(element)))[prop];
 }
 
 /**
@@ -3201,7 +3241,7 @@ var TimelineAnimationEngine = /** @class */ (function () {
     function (i, preStyles, postStyles) {
         var /** @type {?} */ element = i.element;
         var /** @type {?} */ keyframes = normalizeKeyframes(this._driver, this._normalizer, element, i.keyframes, preStyles, postStyles);
-        return this._driver.animate(element, keyframes, i.duration, i.delay, i.easing, []);
+        return this._driver.animate(element, keyframes, i.duration, i.delay, i.easing, [], true);
     };
     /**
      * @param {?} id
@@ -5722,14 +5762,782 @@ var AnimationEngine = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-var WebAnimationsPlayer = /** @class */ (function () {
-    function WebAnimationsPlayer(element, keyframes, options, previousPlayers) {
-        if (previousPlayers === void 0) { previousPlayers = []; }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var ELAPSED_TIME_MAX_DECIMAL_PLACES = 3;
+var ANIMATION_PROP = 'animation';
+var ANIMATIONEND_EVENT = 'animationend';
+var ONE_SECOND$1 = 1000;
+var ElementAnimationStyleHandler = /** @class */ (function () {
+    function ElementAnimationStyleHandler(_element, _name, _duration, _delay, _easing, _fillMode, _onDoneFn) {
         var _this = this;
+        this._element = _element;
+        this._name = _name;
+        this._duration = _duration;
+        this._delay = _delay;
+        this._easing = _easing;
+        this._fillMode = _fillMode;
+        this._onDoneFn = _onDoneFn;
+        this._finished = false;
+        this._destroyed = false;
+        this._startTime = 0;
+        this._position = 0;
+        this._eventFn = function (e) { return _this._handleCallback(e); };
+    }
+    /**
+     * @return {?}
+     */
+    ElementAnimationStyleHandler.prototype.apply = /**
+     * @return {?}
+     */
+    function () {
+        applyKeyframeAnimation(this._element, this._duration + "ms " + this._easing + " " + this._delay + "ms 1 normal " + this._fillMode + " " + this._name);
+        addRemoveAnimationEvent(this._element, this._eventFn, false);
+        this._startTime = Date.now();
+    };
+    /**
+     * @return {?}
+     */
+    ElementAnimationStyleHandler.prototype.pause = /**
+     * @return {?}
+     */
+    function () { playPauseAnimation(this._element, this._name, 'paused'); };
+    /**
+     * @return {?}
+     */
+    ElementAnimationStyleHandler.prototype.resume = /**
+     * @return {?}
+     */
+    function () { playPauseAnimation(this._element, this._name, 'running'); };
+    /**
+     * @param {?} position
+     * @return {?}
+     */
+    ElementAnimationStyleHandler.prototype.setPosition = /**
+     * @param {?} position
+     * @return {?}
+     */
+    function (position) {
+        var /** @type {?} */ index = findIndexForAnimation(this._element, this._name);
+        this._position = position * this._duration;
+        setAnimationStyle(this._element, 'Delay', "-" + this._position + "ms", index);
+    };
+    /**
+     * @return {?}
+     */
+    ElementAnimationStyleHandler.prototype.getPosition = /**
+     * @return {?}
+     */
+    function () { return this._position; };
+    /**
+     * @param {?} event
+     * @return {?}
+     */
+    ElementAnimationStyleHandler.prototype._handleCallback = /**
+     * @param {?} event
+     * @return {?}
+     */
+    function (event) {
+        var /** @type {?} */ timestamp = event._ngTestManualTimestamp || Date.now();
+        var /** @type {?} */ elapsedTime = parseFloat(event.elapsedTime.toFixed(ELAPSED_TIME_MAX_DECIMAL_PLACES)) * ONE_SECOND$1;
+        if (event.animationName == this._name &&
+            Math.max(timestamp - this._startTime, 0) >= this._delay && elapsedTime >= this._duration) {
+            this.finish();
+        }
+    };
+    /**
+     * @return {?}
+     */
+    ElementAnimationStyleHandler.prototype.finish = /**
+     * @return {?}
+     */
+    function () {
+        if (this._finished)
+            return;
+        this._finished = true;
+        this._onDoneFn();
+        addRemoveAnimationEvent(this._element, this._eventFn, true);
+    };
+    /**
+     * @return {?}
+     */
+    ElementAnimationStyleHandler.prototype.destroy = /**
+     * @return {?}
+     */
+    function () {
+        if (this._destroyed)
+            return;
+        this._destroyed = true;
+        this.finish();
+        removeKeyframeAnimation(this._element, this._name);
+    };
+    return ElementAnimationStyleHandler;
+}());
+/**
+ * @param {?} element
+ * @param {?} name
+ * @param {?} status
+ * @return {?}
+ */
+function playPauseAnimation(element, name, status) {
+    var /** @type {?} */ index = findIndexForAnimation(element, name);
+    setAnimationStyle(element, 'PlayState', status, index);
+}
+/**
+ * @param {?} element
+ * @param {?} value
+ * @return {?}
+ */
+function applyKeyframeAnimation(element, value) {
+    var /** @type {?} */ anim = getAnimationStyle(element, '').trim();
+    var /** @type {?} */ index = 0;
+    if (anim.length) {
+        index = countChars(anim, ',') + 1;
+        value = anim + ", " + value;
+    }
+    setAnimationStyle(element, '', value);
+    return index;
+}
+/**
+ * @param {?} element
+ * @param {?} name
+ * @return {?}
+ */
+function removeKeyframeAnimation(element, name) {
+    var /** @type {?} */ anim = getAnimationStyle(element, '');
+    var /** @type {?} */ tokens = anim.split(',');
+    var /** @type {?} */ index = findMatchingTokenIndex(tokens, name);
+    if (index >= 0) {
+        tokens.splice(index, 1);
+        var /** @type {?} */ newValue = tokens.join(',');
+        setAnimationStyle(element, '', newValue);
+    }
+}
+/**
+ * @param {?} element
+ * @param {?} value
+ * @return {?}
+ */
+function findIndexForAnimation(element, value) {
+    var /** @type {?} */ anim = getAnimationStyle(element, '');
+    if (anim.indexOf(',') > 0) {
+        var /** @type {?} */ tokens = anim.split(',');
+        return findMatchingTokenIndex(tokens, value);
+    }
+    return findMatchingTokenIndex([anim], value);
+}
+/**
+ * @param {?} tokens
+ * @param {?} searchToken
+ * @return {?}
+ */
+function findMatchingTokenIndex(tokens, searchToken) {
+    for (var /** @type {?} */ i = 0; i < tokens.length; i++) {
+        if (tokens[i].indexOf(searchToken) >= 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+/**
+ * @param {?} element
+ * @param {?} fn
+ * @param {?} doRemove
+ * @return {?}
+ */
+function addRemoveAnimationEvent(element, fn, doRemove) {
+    doRemove ? element.removeEventListener(ANIMATIONEND_EVENT, fn) :
+        element.addEventListener(ANIMATIONEND_EVENT, fn);
+}
+/**
+ * @param {?} element
+ * @param {?} name
+ * @param {?} value
+ * @param {?=} index
+ * @return {?}
+ */
+function setAnimationStyle(element, name, value, index) {
+    var /** @type {?} */ prop = ANIMATION_PROP + name;
+    if (index != null) {
+        var /** @type {?} */ oldValue = element.style[prop];
+        if (oldValue.length) {
+            var /** @type {?} */ tokens = oldValue.split(',');
+            tokens[index] = value;
+            value = tokens.join(',');
+        }
+    }
+    element.style[prop] = value;
+}
+/**
+ * @param {?} element
+ * @param {?} name
+ * @return {?}
+ */
+function getAnimationStyle(element, name) {
+    return element.style[ANIMATION_PROP + name];
+}
+/**
+ * @param {?} value
+ * @param {?} char
+ * @return {?}
+ */
+function countChars(value, char) {
+    var /** @type {?} */ count = 0;
+    for (var /** @type {?} */ i = 0; i < value.length; i++) {
+        var /** @type {?} */ c = value.charAt(i);
+        if (c === char)
+            count++;
+    }
+    return count;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+var DEFAULT_FILL_MODE = 'forwards';
+var DEFAULT_EASING = 'linear';
+/** @enum {number} */
+var AnimatorControlState = {
+    INITIALIZED: 1,
+    STARTED: 2,
+    FINISHED: 3,
+    DESTROYED: 4,
+};
+AnimatorControlState[AnimatorControlState.INITIALIZED] = "INITIALIZED";
+AnimatorControlState[AnimatorControlState.STARTED] = "STARTED";
+AnimatorControlState[AnimatorControlState.FINISHED] = "FINISHED";
+AnimatorControlState[AnimatorControlState.DESTROYED] = "DESTROYED";
+var CssKeyframesPlayer = /** @class */ (function () {
+    function CssKeyframesPlayer(element, keyframes, animationName, _duration, _delay, easing, _finalStyles) {
+        this.element = element;
+        this.keyframes = keyframes;
+        this.animationName = animationName;
+        this._duration = _duration;
+        this._delay = _delay;
+        this._finalStyles = _finalStyles;
+        this._onDoneFns = [];
+        this._onStartFns = [];
+        this._onDestroyFns = [];
+        this._started = false;
+        this.currentSnapshot = {};
+        this.state = 0;
+        this.easing = easing || DEFAULT_EASING;
+        this.totalTime = _duration + _delay;
+        this._buildStyler();
+    }
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype.onStart = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onStartFns.push(fn); };
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype.onDone = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onDoneFns.push(fn); };
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype.onDestroy = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onDestroyFns.push(fn); };
+    /**
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype.destroy = /**
+     * @return {?}
+     */
+    function () {
+        this.init();
+        if (this.state >= AnimatorControlState.DESTROYED)
+            return;
+        this.state = AnimatorControlState.DESTROYED;
+        this._styler.destroy();
+        this._flushStartFns();
+        this._flushDoneFns();
+        this._onDestroyFns.forEach(function (fn) { return fn(); });
+        this._onDestroyFns = [];
+    };
+    /**
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype._flushDoneFns = /**
+     * @return {?}
+     */
+    function () {
+        this._onDoneFns.forEach(function (fn) { return fn(); });
+        this._onDoneFns = [];
+    };
+    /**
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype._flushStartFns = /**
+     * @return {?}
+     */
+    function () {
+        this._onStartFns.forEach(function (fn) { return fn(); });
+        this._onStartFns = [];
+    };
+    /**
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype.finish = /**
+     * @return {?}
+     */
+    function () {
+        this.init();
+        if (this.state >= AnimatorControlState.FINISHED)
+            return;
+        this.state = AnimatorControlState.FINISHED;
+        this._styler.finish();
+        this._flushStartFns();
+        this._flushDoneFns();
+    };
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype.setPosition = /**
+     * @param {?} value
+     * @return {?}
+     */
+    function (value) { this._styler.setPosition(value); };
+    /**
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype.getPosition = /**
+     * @return {?}
+     */
+    function () { return this._styler.getPosition(); };
+    /**
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype.hasStarted = /**
+     * @return {?}
+     */
+    function () { return this.state >= AnimatorControlState.STARTED; };
+    /**
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype.init = /**
+     * @return {?}
+     */
+    function () {
+        if (this.state >= AnimatorControlState.INITIALIZED)
+            return;
+        this.state = AnimatorControlState.INITIALIZED;
+        var /** @type {?} */ elm = this.element;
+        this._styler.apply();
+        if (this._delay) {
+            this._styler.pause();
+        }
+    };
+    /**
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype.play = /**
+     * @return {?}
+     */
+    function () {
+        this.init();
+        if (!this.hasStarted()) {
+            this._flushStartFns();
+            this.state = AnimatorControlState.STARTED;
+        }
+        this._styler.resume();
+    };
+    /**
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype.pause = /**
+     * @return {?}
+     */
+    function () {
+        this.init();
+        this._styler.pause();
+    };
+    /**
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype.restart = /**
+     * @return {?}
+     */
+    function () {
+        this.reset();
+        this.play();
+    };
+    /**
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype.reset = /**
+     * @return {?}
+     */
+    function () {
+        this._styler.destroy();
+        this._buildStyler();
+        this._styler.apply();
+    };
+    /**
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype._buildStyler = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        this._styler = new ElementAnimationStyleHandler(this.element, this.animationName, this._duration, this._delay, this.easing, DEFAULT_FILL_MODE, function () { return _this.finish(); });
+    };
+    /* @internal */
+    /**
+     * @param {?} phaseName
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype.triggerCallback = /**
+     * @param {?} phaseName
+     * @return {?}
+     */
+    function (phaseName) {
+        var /** @type {?} */ methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
+        methods.forEach(function (fn) { return fn(); });
+        methods.length = 0;
+    };
+    /**
+     * @return {?}
+     */
+    CssKeyframesPlayer.prototype.beforeDestroy = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        this.init();
+        var /** @type {?} */ styles = {};
+        if (this.hasStarted()) {
+            var /** @type {?} */ finished_1 = this.state >= AnimatorControlState.FINISHED;
+            Object.keys(this._finalStyles).forEach(function (prop) {
+                if (prop != 'offset') {
+                    styles[prop] = finished_1 ? _this._finalStyles[prop] : computeStyle(_this.element, prop);
+                }
+            });
+        }
+        this.currentSnapshot = styles;
+    };
+    return CssKeyframesPlayer;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+var DirectStylePlayer = /** @class */ (function (_super) {
+    __extends(DirectStylePlayer, _super);
+    function DirectStylePlayer(element, _styles) {
+        var _this = _super.call(this) || this;
+        _this.element = element;
+        _this._styles = _styles;
+        _this._startingStyles = {};
+        _this.__initialized = false;
+        return _this;
+    }
+    /**
+     * @return {?}
+     */
+    DirectStylePlayer.prototype.init = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        if (this.__initialized || !this._startingStyles)
+            return;
+        this.__initialized = true;
+        Object.keys(this._styles).forEach(function (prop) {
+            /** @type {?} */ ((_this._startingStyles))[prop] = _this.element.style[prop];
+        });
+        _super.prototype.init.call(this);
+    };
+    /**
+     * @return {?}
+     */
+    DirectStylePlayer.prototype.play = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        if (!this._startingStyles)
+            return;
+        this.init();
+        Object.keys(this._styles).forEach(function (prop) { _this.element.style[prop] = _this._styles[prop]; });
+        _super.prototype.play.call(this);
+    };
+    /**
+     * @return {?}
+     */
+    DirectStylePlayer.prototype.destroy = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        if (!this._startingStyles)
+            return;
+        Object.keys(this._startingStyles).forEach(function (prop) {
+            var /** @type {?} */ value = /** @type {?} */ ((_this._startingStyles))[prop];
+            if (value) {
+                _this.element.style[prop] = value;
+            }
+            else {
+                _this.element.style.removeProperty(prop);
+            }
+        });
+        this._startingStyles = null;
+        _super.prototype.destroy.call(this);
+    };
+    return DirectStylePlayer;
+}(_angular_animations.NoopAnimationPlayer));
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+var KEYFRAMES_NAME_PREFIX = 'gen_css_kf_';
+var TAB_SPACE = ' ';
+var CssKeyframesDriver = /** @class */ (function () {
+    function CssKeyframesDriver() {
+        this._count = 0;
+        this._head = document.querySelector('head');
+        this._warningIssued = false;
+    }
+    /**
+     * @param {?} prop
+     * @return {?}
+     */
+    CssKeyframesDriver.prototype.validateStyleProperty = /**
+     * @param {?} prop
+     * @return {?}
+     */
+    function (prop) { return validateStyleProperty(prop); };
+    /**
+     * @param {?} element
+     * @param {?} selector
+     * @return {?}
+     */
+    CssKeyframesDriver.prototype.matchesElement = /**
+     * @param {?} element
+     * @param {?} selector
+     * @return {?}
+     */
+    function (element, selector) {
+        return matchesElement(element, selector);
+    };
+    /**
+     * @param {?} elm1
+     * @param {?} elm2
+     * @return {?}
+     */
+    CssKeyframesDriver.prototype.containsElement = /**
+     * @param {?} elm1
+     * @param {?} elm2
+     * @return {?}
+     */
+    function (elm1, elm2) { return containsElement(elm1, elm2); };
+    /**
+     * @param {?} element
+     * @param {?} selector
+     * @param {?} multi
+     * @return {?}
+     */
+    CssKeyframesDriver.prototype.query = /**
+     * @param {?} element
+     * @param {?} selector
+     * @param {?} multi
+     * @return {?}
+     */
+    function (element, selector, multi) {
+        return invokeQuery(element, selector, multi);
+    };
+    /**
+     * @param {?} element
+     * @param {?} prop
+     * @param {?=} defaultValue
+     * @return {?}
+     */
+    CssKeyframesDriver.prototype.computeStyle = /**
+     * @param {?} element
+     * @param {?} prop
+     * @param {?=} defaultValue
+     * @return {?}
+     */
+    function (element, prop, defaultValue) {
+        return /** @type {?} */ ((/** @type {?} */ (window.getComputedStyle(element)))[prop]);
+    };
+    /**
+     * @param {?} element
+     * @param {?} name
+     * @param {?} keyframes
+     * @return {?}
+     */
+    CssKeyframesDriver.prototype.buildKeyframeElement = /**
+     * @param {?} element
+     * @param {?} name
+     * @param {?} keyframes
+     * @return {?}
+     */
+    function (element, name, keyframes) {
+        keyframes = keyframes.map(function (kf) { return hypenatePropsObject(kf); });
+        var /** @type {?} */ keyframeStr = "@keyframes " + name + " {\n";
+        var /** @type {?} */ tab = '';
+        keyframes.forEach(function (kf) {
+            tab = TAB_SPACE;
+            var /** @type {?} */ offset = parseFloat(kf["offset"]);
+            keyframeStr += "" + tab + offset * 100 + "% {\n";
+            tab += TAB_SPACE;
+            Object.keys(kf).forEach(function (prop) {
+                var /** @type {?} */ value = kf[prop];
+                switch (prop) {
+                    case 'offset':
+                        return;
+                    case 'easing':
+                        if (value) {
+                            keyframeStr += tab + "animation-timing-function: " + value + ";\n";
+                        }
+                        return;
+                    default:
+                        keyframeStr += "" + tab + prop + ": " + value + ";\n";
+                        return;
+                }
+            });
+            keyframeStr += tab + "}\n";
+        });
+        keyframeStr += "}\n";
+        var /** @type {?} */ kfElm = document.createElement('style');
+        kfElm.innerHTML = keyframeStr;
+        return kfElm;
+    };
+    /**
+     * @param {?} element
+     * @param {?} keyframes
+     * @param {?} duration
+     * @param {?} delay
+     * @param {?} easing
+     * @param {?=} previousPlayers
+     * @param {?=} scrubberAccessRequested
+     * @return {?}
+     */
+    CssKeyframesDriver.prototype.animate = /**
+     * @param {?} element
+     * @param {?} keyframes
+     * @param {?} duration
+     * @param {?} delay
+     * @param {?} easing
+     * @param {?=} previousPlayers
+     * @param {?=} scrubberAccessRequested
+     * @return {?}
+     */
+    function (element, keyframes, duration, delay, easing, previousPlayers, scrubberAccessRequested) {
+        if (previousPlayers === void 0) { previousPlayers = []; }
+        if (scrubberAccessRequested) {
+            this._notifyFaultyScrubber();
+        }
+        var /** @type {?} */ previousCssKeyframePlayers = /** @type {?} */ (previousPlayers.filter(function (player) { return player instanceof CssKeyframesPlayer; }));
+        var /** @type {?} */ previousStyles = {};
+        if (allowPreviousPlayerStylesMerge(duration, delay)) {
+            previousCssKeyframePlayers.forEach(function (player) {
+                var /** @type {?} */ styles = player.currentSnapshot;
+                Object.keys(styles).forEach(function (prop) { return previousStyles[prop] = styles[prop]; });
+            });
+        }
+        keyframes = balancePreviousStylesIntoKeyframes(element, keyframes, previousStyles);
+        var /** @type {?} */ finalStyles = flattenKeyframesIntoStyles(keyframes);
+        // if there is no animation then there is no point in applying
+        // styles and waiting for an event to get fired. This causes lag.
+        // It's better to just directly apply the styles to the element
+        // via the direct styling animation player.
+        if (duration == 0) {
+            return new DirectStylePlayer(element, finalStyles);
+        }
+        var /** @type {?} */ animationName = "" + KEYFRAMES_NAME_PREFIX + this._count++;
+        var /** @type {?} */ kfElm = this.buildKeyframeElement(element, animationName, keyframes); /** @type {?} */
+        ((document.querySelector('head'))).appendChild(kfElm);
+        var /** @type {?} */ player = new CssKeyframesPlayer(element, keyframes, animationName, duration, delay, easing, finalStyles);
+        player.onDestroy(function () { return removeElement(kfElm); });
+        return player;
+    };
+    /**
+     * @return {?}
+     */
+    CssKeyframesDriver.prototype._notifyFaultyScrubber = /**
+     * @return {?}
+     */
+    function () {
+        if (!this._warningIssued) {
+            console.warn('@angular/animations: please load the web-animations.js polyfill to allow programmatic access...\n', '  visit http://bit.ly/IWukam to learn more about using the web-animation-js polyfill.');
+            this._warningIssued = true;
+        }
+    };
+    return CssKeyframesDriver;
+}());
+/**
+ * @param {?} keyframes
+ * @return {?}
+ */
+function flattenKeyframesIntoStyles(keyframes) {
+    var /** @type {?} */ flatKeyframes = {};
+    if (keyframes) {
+        var /** @type {?} */ kfs = Array.isArray(keyframes) ? keyframes : [keyframes];
+        kfs.forEach(function (kf) {
+            Object.keys(kf).forEach(function (prop) {
+                if (prop == 'offset' || prop == 'easing')
+                    return;
+                flatKeyframes[prop] = kf[prop];
+            });
+        });
+    }
+    return flatKeyframes;
+}
+/**
+ * @param {?} object
+ * @return {?}
+ */
+function hypenatePropsObject(object) {
+    var /** @type {?} */ newObj = {};
+    Object.keys(object).forEach(function (prop) {
+        var /** @type {?} */ newProp = prop.replace(/([a-z])([A-Z])/g, '$1-$2');
+        newObj[newProp] = object[prop];
+    });
+    return newObj;
+}
+/**
+ * @param {?} node
+ * @return {?}
+ */
+function removeElement(node) {
+    node.parentNode.removeChild(node);
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+var WebAnimationsPlayer = /** @class */ (function () {
+    function WebAnimationsPlayer(element, keyframes, options) {
         this.element = element;
         this.keyframes = keyframes;
         this.options = options;
-        this.previousPlayers = previousPlayers;
         this._onDoneFns = [];
         this._onStartFns = [];
         this._onDestroyFns = [];
@@ -5739,17 +6547,10 @@ var WebAnimationsPlayer = /** @class */ (function () {
         this._destroyed = false;
         this.time = 0;
         this.parentPlayer = null;
-        this.previousStyles = {};
         this.currentSnapshot = {};
         this._duration = /** @type {?} */ (options['duration']);
         this._delay = /** @type {?} */ (options['delay']) || 0;
         this.time = this._duration + this._delay;
-        if (allowPreviousPlayerStylesMerge(this._duration, this._delay)) {
-            previousPlayers.forEach(function (player) {
-                var /** @type {?} */ styles = player.currentSnapshot;
-                Object.keys(styles).forEach(function (prop) { return _this.previousStyles[prop] = styles[prop]; });
-            });
-        }
     }
     /**
      * @return {?}
@@ -5785,31 +6586,7 @@ var WebAnimationsPlayer = /** @class */ (function () {
         if (this._initialized)
             return;
         this._initialized = true;
-        var /** @type {?} */ keyframes = this.keyframes.map(function (styles) { return copyStyles(styles, false); });
-        var /** @type {?} */ previousStyleProps = Object.keys(this.previousStyles);
-        if (previousStyleProps.length && keyframes.length) {
-            var /** @type {?} */ startingKeyframe_1 = keyframes[0];
-            var /** @type {?} */ missingStyleProps_1 = [];
-            previousStyleProps.forEach(function (prop) {
-                if (!startingKeyframe_1.hasOwnProperty(prop)) {
-                    missingStyleProps_1.push(prop);
-                }
-                startingKeyframe_1[prop] = _this.previousStyles[prop];
-            });
-            if (missingStyleProps_1.length) {
-                var /** @type {?} */ self_1 = this;
-                var _loop_1 = function () {
-                    var /** @type {?} */ kf = keyframes[i];
-                    missingStyleProps_1.forEach(function (prop) {
-                        kf[prop] = _computeStyle(self_1.element, prop);
-                    });
-                };
-                // tslint:disable-next-line
-                for (var /** @type {?} */ i = 1; i < keyframes.length; i++) {
-                    _loop_1();
-                }
-            }
-        }
+        var /** @type {?} */ keyframes = this.keyframes;
         (/** @type {?} */ (this)).domPlayer =
             this._triggerWebAnimation(this.element, keyframes, this.options);
         this._finalKeyframe = keyframes.length ? keyframes[keyframes.length - 1] : {};
@@ -6005,7 +6782,7 @@ var WebAnimationsPlayer = /** @class */ (function () {
             Object.keys(this._finalKeyframe).forEach(function (prop) {
                 if (prop != 'offset') {
                     styles[prop] =
-                        _this._finished ? _this._finalKeyframe[prop] : _computeStyle(_this.element, prop);
+                        _this._finished ? _this._finalKeyframe[prop] : computeStyle(_this.element, prop);
                 }
             });
         }
@@ -6027,14 +6804,6 @@ var WebAnimationsPlayer = /** @class */ (function () {
     };
     return WebAnimationsPlayer;
 }());
-/**
- * @param {?} element
- * @param {?} prop
- * @return {?}
- */
-function _computeStyle(element, prop) {
-    return (/** @type {?} */ (window.getComputedStyle(element)))[prop];
-}
 
 /**
  * @fileoverview added by tsickle
@@ -6042,6 +6811,8 @@ function _computeStyle(element, prop) {
  */
 var WebAnimationsDriver = /** @class */ (function () {
     function WebAnimationsDriver() {
+        this._isNativeImpl = /\{\s*\[native\s+code\]\s*\}/.test(getElementAnimateFn().toString());
+        this._cssKeyframesDriver = new CssKeyframesDriver();
     }
     /**
      * @param {?} prop
@@ -6107,12 +6878,22 @@ var WebAnimationsDriver = /** @class */ (function () {
         return /** @type {?} */ ((/** @type {?} */ (window.getComputedStyle(element)))[prop]);
     };
     /**
+     * @param {?} supported
+     * @return {?}
+     */
+    WebAnimationsDriver.prototype.overrideWebAnimationsSupport = /**
+     * @param {?} supported
+     * @return {?}
+     */
+    function (supported) { this._isNativeImpl = supported; };
+    /**
      * @param {?} element
      * @param {?} keyframes
      * @param {?} duration
      * @param {?} delay
      * @param {?} easing
      * @param {?=} previousPlayers
+     * @param {?=} scrubberAccessRequested
      * @return {?}
      */
     WebAnimationsDriver.prototype.animate = /**
@@ -6122,10 +6903,15 @@ var WebAnimationsDriver = /** @class */ (function () {
      * @param {?} delay
      * @param {?} easing
      * @param {?=} previousPlayers
+     * @param {?=} scrubberAccessRequested
      * @return {?}
      */
-    function (element, keyframes, duration, delay, easing, previousPlayers) {
+    function (element, keyframes, duration, delay, easing, previousPlayers, scrubberAccessRequested) {
         if (previousPlayers === void 0) { previousPlayers = []; }
+        var /** @type {?} */ useKeyframes = !scrubberAccessRequested && !this._isNativeImpl;
+        if (useKeyframes) {
+            return this._cssKeyframesDriver.animate(element, keyframes, duration, delay, easing, previousPlayers);
+        }
         var /** @type {?} */ fill = delay == 0 ? 'both' : 'forwards';
         var /** @type {?} */ playerOptions = { duration: duration, delay: delay, fill: fill };
         // we check for this to avoid having a null|undefined value be present
@@ -6133,8 +6919,17 @@ var WebAnimationsDriver = /** @class */ (function () {
         if (easing) {
             playerOptions['easing'] = easing;
         }
+        var /** @type {?} */ previousStyles = {};
         var /** @type {?} */ previousWebAnimationPlayers = /** @type {?} */ (previousPlayers.filter(function (player) { return player instanceof WebAnimationsPlayer; }));
-        return new WebAnimationsPlayer(element, keyframes, playerOptions, previousWebAnimationPlayers);
+        if (allowPreviousPlayerStylesMerge(duration, delay)) {
+            previousWebAnimationPlayers.forEach(function (player) {
+                var /** @type {?} */ styles = player.currentSnapshot;
+                Object.keys(styles).forEach(function (prop) { return previousStyles[prop] = styles[prop]; });
+            });
+        }
+        keyframes = keyframes.map(function (styles) { return copyStyles(styles, false); });
+        keyframes = balancePreviousStylesIntoKeyframes(element, keyframes, previousStyles);
+        return new WebAnimationsPlayer(element, keyframes, playerOptions);
     };
     return WebAnimationsDriver;
 }());
@@ -6142,7 +6937,13 @@ var WebAnimationsDriver = /** @class */ (function () {
  * @return {?}
  */
 function supportsWebAnimations() {
-    return typeof Element !== 'undefined' && typeof (/** @type {?} */ (Element)).prototype['animate'] === 'function';
+    return typeof getElementAnimateFn() === 'function';
+}
+/**
+ * @return {?}
+ */
+function getElementAnimateFn() {
+    return (typeof Element !== 'undefined' && (/** @type {?} */ (Element)).prototype['animate']) || {};
 }
 
 exports.AnimationDriver = AnimationDriver;
@@ -6152,6 +6953,8 @@ exports.ɵNoopAnimationStyleNormalizer = NoopAnimationStyleNormalizer;
 exports.ɵWebAnimationsStyleNormalizer = WebAnimationsStyleNormalizer;
 exports.ɵNoopAnimationDriver = NoopAnimationDriver;
 exports.ɵAnimationEngine = AnimationEngine;
+exports.ɵCssKeyframesDriver = CssKeyframesDriver;
+exports.ɵCssKeyframesPlayer = CssKeyframesPlayer;
 exports.ɵWebAnimationsDriver = WebAnimationsDriver;
 exports.ɵsupportsWebAnimations = supportsWebAnimations;
 exports.ɵWebAnimationsPlayer = WebAnimationsPlayer;
