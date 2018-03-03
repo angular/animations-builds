@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.2.0-2717a3e
+ * @license Angular v6.0.0-beta.6-371ec91
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -34,8 +34,8 @@ import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
 
 /**
  * @param {?} e
- * @param {?=} phaseName
- * @param {?=} totalTime
+ * @param {?} phaseName
+ * @param {?} player
  * @return {?}
  */
 
@@ -46,6 +46,7 @@ import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
  * @param {?} toState
  * @param {?=} phaseName
  * @param {?=} totalTime
+ * @param {?=} disabled
  * @return {?}
  */
 
@@ -243,9 +244,22 @@ function allowPreviousPlayerStylesMerge(duration, delay) {
     return duration === 0 || delay === 0;
 }
 /**
+ * @param {?} element
+ * @param {?} keyframes
+ * @param {?} previousStyles
+ * @return {?}
+ */
+
+/**
  * @param {?} visitor
  * @param {?} node
  * @param {?} context
+ * @return {?}
+ */
+
+/**
+ * @param {?} element
+ * @param {?} prop
  * @return {?}
  */
 
@@ -323,7 +337,7 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
      * @param {?} previousPlayers
      */
     constructor(element, keyframes, duration, delay, easing, previousPlayers) {
-        super();
+        super(duration, delay);
         this.element = element;
         this.keyframes = keyframes;
         this.duration = duration;
@@ -343,7 +357,6 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
                 }
             });
         }
-        this.totalTime = delay + duration;
     }
     /**
      * @param {?} fn

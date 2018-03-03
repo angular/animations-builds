@@ -7,15 +7,18 @@
  */
 import { AnimationPlayer, ɵStyleData } from '@angular/animations';
 import { AnimationDriver } from '../animation_driver';
-export declare class WebAnimationsDriver implements AnimationDriver {
-    private _isNativeImpl;
-    private _cssKeyframesDriver;
+export declare class CssKeyframesDriver implements AnimationDriver {
+    private _count;
+    private readonly _head;
+    private _warningIssued;
     validateStyleProperty(prop: string): boolean;
     matchesElement(element: any, selector: string): boolean;
     containsElement(elm1: any, elm2: any): boolean;
     query(element: any, selector: string, multi: boolean): any[];
     computeStyle(element: any, prop: string, defaultValue?: string): string;
-    overrideWebAnimationsSupport(supported: boolean): void;
+    buildKeyframeElement(element: any, name: string, keyframes: {
+        [key: string]: any;
+    }[]): any;
     animate(element: any, keyframes: ɵStyleData[], duration: number, delay: number, easing: string, previousPlayers?: AnimationPlayer[], scrubberAccessRequested?: boolean): AnimationPlayer;
+    private _notifyFaultyScrubber();
 }
-export declare function supportsWebAnimations(): boolean;

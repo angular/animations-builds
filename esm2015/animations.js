@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.2.0-2717a3e
+ * @license Angular v6.0.0-beta.6-371ec91
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -263,7 +263,7 @@ const AUTO_STYLE = '*';
  * The `\@childAnimation` trigger will not animate because `\@.disabled` prevents it from happening
  * (when true).
  *
- * Note that `\@.disbled` will only disable all animations (this means any animations running on
+ * Note that `\@.disabled` will only disable all animations (this means any animations running on
  * the same element will also be disabled).
  *
  * ### Disabling Animations Application-wide
@@ -290,6 +290,13 @@ const AUTO_STYLE = '*';
  * elements located in disabled areas of the template and still animate them as it sees fit. This is
  * also the case for when a sub animation is queried by a parent and then later animated using {\@link
  * animateChild animateChild}.
+ * ### Detecting when an animation is disabled
+ * If a region of the DOM (or the entire application) has its animations disabled, then animation
+ * trigger callbacks will still fire just as normal (only for zero seconds).
+ *
+ * When a trigger callback fires it will provide an instance of an {\@link AnimationEvent}. If
+ * animations
+ * are disabled then the `.disabled` flag on the event will be true.
  *
  * \@experimental Animation support is experimental.
  * @param {?} name
@@ -1159,7 +1166,11 @@ function scheduleMicroTask(cb) {
  * \@experimental Animation support is experimental.
  */
 class NoopAnimationPlayer {
-    constructor() {
+    /**
+     * @param {?=} duration
+     * @param {?=} delay
+     */
+    constructor(duration = 0, delay = 0) {
         this._onDoneFns = [];
         this._onStartFns = [];
         this._onDestroyFns = [];
@@ -1167,7 +1178,7 @@ class NoopAnimationPlayer {
         this._destroyed = false;
         this._finished = false;
         this.parentPlayer = null;
-        this.totalTime = 0;
+        this.totalTime = duration + delay;
     }
     /**
      * @return {?}

@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.2.0-2717a3e
+ * @license Angular v6.0.0-beta.6-371ec91
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v5.2.0-2717a3e
+ * @license Angular v6.0.0-beta.6-371ec91
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -69,8 +69,8 @@ function __extends(d, b) {
 
 /**
  * @param {?} e
- * @param {?=} phaseName
- * @param {?=} totalTime
+ * @param {?} phaseName
+ * @param {?} player
  * @return {?}
  */
 
@@ -81,6 +81,7 @@ function __extends(d, b) {
  * @param {?} toState
  * @param {?=} phaseName
  * @param {?=} totalTime
+ * @param {?=} disabled
  * @return {?}
  */
 
@@ -280,9 +281,22 @@ function allowPreviousPlayerStylesMerge(duration, delay) {
     return duration === 0 || delay === 0;
 }
 /**
+ * @param {?} element
+ * @param {?} keyframes
+ * @param {?} previousStyles
+ * @return {?}
+ */
+
+/**
  * @param {?} visitor
  * @param {?} node
  * @param {?} context
+ * @return {?}
+ */
+
+/**
+ * @param {?} element
+ * @param {?} prop
  * @return {?}
  */
 
@@ -392,7 +406,7 @@ var MockAnimationDriver = /** @class */ (function () {
 var MockAnimationPlayer = /** @class */ (function (_super) {
     __extends(MockAnimationPlayer, _super);
     function MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers) {
-        var _this = _super.call(this) || this;
+        var _this = _super.call(this, duration, delay) || this;
         _this.element = element;
         _this.keyframes = keyframes;
         _this.duration = duration;
@@ -412,7 +426,6 @@ var MockAnimationPlayer = /** @class */ (function (_super) {
                 }
             });
         }
-        _this.totalTime = delay + duration;
         return _this;
     }
     /* @internal */

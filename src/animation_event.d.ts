@@ -43,4 +43,5 @@ export interface AnimationEvent {
     phaseName: string;
     element: any;
     triggerName: string;
+    disabled: boolean;
 }
