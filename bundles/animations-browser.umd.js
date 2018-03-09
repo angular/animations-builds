@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.7-b26a905
+ * @license Angular v6.0.0-beta.7-1e6cc42
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v6.0.0-beta.7-b26a905
+ * @license Angular v6.0.0-beta.7-1e6cc42
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -6951,13 +6951,19 @@ exports.ɵAnimation = Animation;
 exports.ɵAnimationStyleNormalizer = AnimationStyleNormalizer;
 exports.ɵNoopAnimationStyleNormalizer = NoopAnimationStyleNormalizer;
 exports.ɵWebAnimationsStyleNormalizer = WebAnimationsStyleNormalizer;
+exports.ɵAnimationDriver = AnimationDriver;
 exports.ɵNoopAnimationDriver = NoopAnimationDriver;
 exports.ɵAnimationEngine = AnimationEngine;
 exports.ɵCssKeyframesDriver = CssKeyframesDriver;
 exports.ɵCssKeyframesPlayer = CssKeyframesPlayer;
+exports.ɵcontainsElement = containsElement;
+exports.ɵinvokeQuery = invokeQuery;
+exports.ɵmatchesElement = matchesElement;
+exports.ɵvalidateStyleProperty = validateStyleProperty;
 exports.ɵWebAnimationsDriver = WebAnimationsDriver;
 exports.ɵsupportsWebAnimations = supportsWebAnimations;
 exports.ɵWebAnimationsPlayer = WebAnimationsPlayer;
+exports.ɵallowPreviousPlayerStylesMerge = allowPreviousPlayerStylesMerge;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

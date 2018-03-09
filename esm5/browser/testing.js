@@ -1,270 +1,11 @@
 /**
- * @license Angular v6.0.0-beta.7-b26a905
+ * @license Angular v6.0.0-beta.7-1e6cc42
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 import { __extends } from 'tslib';
 import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * @param {?} players
- * @return {?}
- */
-
-/**
- * @param {?} driver
- * @param {?} normalizer
- * @param {?} element
- * @param {?} keyframes
- * @param {?=} preStyles
- * @param {?=} postStyles
- * @return {?}
- */
-
-/**
- * @param {?} player
- * @param {?} eventName
- * @param {?} event
- * @param {?} callback
- * @return {?}
- */
-
-/**
- * @param {?} e
- * @param {?} phaseName
- * @param {?} player
- * @return {?}
- */
-
-/**
- * @param {?} element
- * @param {?} triggerName
- * @param {?} fromState
- * @param {?} toState
- * @param {?=} phaseName
- * @param {?=} totalTime
- * @param {?=} disabled
- * @return {?}
- */
-
-/**
- * @param {?} map
- * @param {?} key
- * @param {?} defaultValue
- * @return {?}
- */
-
-/**
- * @param {?} command
- * @return {?}
- */
-
-var _contains = function (elm1, elm2) { return false; };
-var _matches = function (element, selector) {
-    return false;
-};
-var _query = function (element, selector, multi) {
-    return [];
-};
-if (typeof Element != 'undefined') {
-    // this is well supported in all browsers
-    _contains = function (elm1, elm2) { return /** @type {?} */ (elm1.contains(elm2)); };
-    if (Element.prototype.matches) {
-        _matches = function (element, selector) { return element.matches(selector); };
-    }
-    else {
-        var /** @type {?} */ proto = /** @type {?} */ (Element.prototype);
-        var /** @type {?} */ fn_1 = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
-            proto.oMatchesSelector || proto.webkitMatchesSelector;
-        if (fn_1) {
-            _matches = function (element, selector) { return fn_1.apply(element, [selector]); };
-        }
-    }
-    _query = function (element, selector, multi) {
-        var /** @type {?} */ results = [];
-        if (multi) {
-            results.push.apply(results, element.querySelectorAll(selector));
-        }
-        else {
-            var /** @type {?} */ elm = element.querySelector(selector);
-            if (elm) {
-                results.push(elm);
-            }
-        }
-        return results;
-    };
-}
-/**
- * @param {?} prop
- * @return {?}
- */
-function containsVendorPrefix(prop) {
-    // Webkit is the only real popular vendor prefix nowadays
-    // cc: http://shouldiprefix.com/
-    return prop.substring(1, 6) == 'ebkit'; // webkit or Webkit
-}
-var _CACHED_BODY = null;
-var _IS_WEBKIT = false;
-/**
- * @param {?} prop
- * @return {?}
- */
-function validateStyleProperty(prop) {
-    if (!_CACHED_BODY) {
-        _CACHED_BODY = getBodyNode() || {};
-        _IS_WEBKIT = /** @type {?} */ ((_CACHED_BODY)).style ? ('WebkitAppearance' in /** @type {?} */ ((_CACHED_BODY)).style) : false;
-    }
-    var /** @type {?} */ result = true;
-    if (/** @type {?} */ ((_CACHED_BODY)).style && !containsVendorPrefix(prop)) {
-        result = prop in /** @type {?} */ ((_CACHED_BODY)).style;
-        if (!result && _IS_WEBKIT) {
-            var /** @type {?} */ camelProp = 'Webkit' + prop.charAt(0).toUpperCase() + prop.substr(1);
-            result = camelProp in /** @type {?} */ ((_CACHED_BODY)).style;
-        }
-    }
-    return result;
-}
-/**
- * @return {?}
- */
-function getBodyNode() {
-    if (typeof document != 'undefined') {
-        return document.body;
-    }
-    return null;
-}
-var matchesElement = _matches;
-var containsElement = _contains;
-var invokeQuery = _query;
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-
-
-
-
-
-
-
-
-
-
-
-/**
- * @param {?} value
- * @return {?}
- */
-
-/**
- * @param {?} timings
- * @param {?} errors
- * @param {?=} allowNegativeValues
- * @return {?}
- */
-
-/**
- * @param {?} obj
- * @param {?=} destination
- * @return {?}
- */
-
-/**
- * @param {?} styles
- * @return {?}
- */
-
-/**
- * @param {?} styles
- * @param {?} readPrototype
- * @param {?=} destination
- * @return {?}
- */
-
-/**
- * @param {?} element
- * @param {?} styles
- * @return {?}
- */
-
-/**
- * @param {?} element
- * @param {?} styles
- * @return {?}
- */
-
-/**
- * @param {?} steps
- * @return {?}
- */
-
-/**
- * @param {?} value
- * @param {?} options
- * @param {?} errors
- * @return {?}
- */
-
-/**
- * @param {?} value
- * @return {?}
- */
-
-/**
- * @param {?} value
- * @param {?} params
- * @param {?} errors
- * @return {?}
- */
-
-/**
- * @param {?} iterator
- * @return {?}
- */
-
-/**
- * @param {?} source
- * @param {?} destination
- * @return {?}
- */
-
-/**
- * @param {?} input
- * @return {?}
- */
-
-/**
- * @param {?} duration
- * @param {?} delay
- * @return {?}
- */
-function allowPreviousPlayerStylesMerge(duration, delay) {
-    return duration === 0 || delay === 0;
-}
-/**
- * @param {?} element
- * @param {?} keyframes
- * @param {?} previousStyles
- * @return {?}
- */
-
-/**
- * @param {?} visitor
- * @param {?} node
- * @param {?} context
- * @return {?}
- */
-
-/**
- * @param {?} element
- * @param {?} prop
- * @return {?}
- */
+import { ɵallowPreviousPlayerStylesMerge, ɵcontainsElement, ɵinvokeQuery, ɵmatchesElement, ɵvalidateStyleProperty } from '@angular/animations/browser';
 
 /**
  * @fileoverview added by tsickle
@@ -284,7 +25,7 @@ var MockAnimationDriver = /** @class */ (function () {
      * @param {?} prop
      * @return {?}
      */
-    function (prop) { return validateStyleProperty(prop); };
+    function (prop) { return ɵvalidateStyleProperty(prop); };
     /**
      * @param {?} element
      * @param {?} selector
@@ -296,7 +37,7 @@ var MockAnimationDriver = /** @class */ (function () {
      * @return {?}
      */
     function (element, selector) {
-        return matchesElement(element, selector);
+        return ɵmatchesElement(element, selector);
     };
     /**
      * @param {?} elm1
@@ -308,7 +49,7 @@ var MockAnimationDriver = /** @class */ (function () {
      * @param {?} elm2
      * @return {?}
      */
-    function (elm1, elm2) { return containsElement(elm1, elm2); };
+    function (elm1, elm2) { return ɵcontainsElement(elm1, elm2); };
     /**
      * @param {?} element
      * @param {?} selector
@@ -322,7 +63,7 @@ var MockAnimationDriver = /** @class */ (function () {
      * @return {?}
      */
     function (element, selector, multi) {
-        return invokeQuery(element, selector, multi);
+        return ɵinvokeQuery(element, selector, multi);
     };
     /**
      * @param {?} element
@@ -384,7 +125,7 @@ var MockAnimationPlayer = /** @class */ (function (_super) {
         _this.previousStyles = {};
         _this._onInitFns = [];
         _this.currentSnapshot = {};
-        if (allowPreviousPlayerStylesMerge(duration, delay)) {
+        if (ɵallowPreviousPlayerStylesMerge(duration, delay)) {
             previousPlayers.forEach(function (player) {
                 if (player instanceof MockAnimationPlayer) {
                     var /** @type {?} */ styles_1 = player.currentSnapshot;
