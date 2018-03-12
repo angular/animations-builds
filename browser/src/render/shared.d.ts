@@ -11,8 +11,8 @@ import { AnimationDriver } from '../../src/render/animation_driver';
 export declare function optimizeGroupPlayer(players: AnimationPlayer[]): AnimationPlayer;
 export declare function normalizeKeyframes(driver: AnimationDriver, normalizer: AnimationStyleNormalizer, element: any, keyframes: ɵStyleData[], preStyles?: ɵStyleData, postStyles?: ɵStyleData): ɵStyleData[];
 export declare function listenOnPlayer(player: AnimationPlayer, eventName: string, event: AnimationEvent | undefined, callback: (event: any) => any): void;
-export declare function copyAnimationEvent(e: AnimationEvent, phaseName?: string, totalTime?: number): AnimationEvent;
-export declare function makeAnimationEvent(element: any, triggerName: string, fromState: string, toState: string, phaseName?: string, totalTime?: number): AnimationEvent;
+export declare function copyAnimationEvent(e: AnimationEvent, phaseName: string, player: AnimationPlayer): AnimationEvent;
+export declare function makeAnimationEvent(element: any, triggerName: string, fromState: string, toState: string, phaseName?: string, totalTime?: number, disabled?: boolean): AnimationEvent;
 export declare function getOrSetAsInMap(map: Map<any, any> | {
     [key: string]: any;
 }, key: any, defaultValue: any): any;

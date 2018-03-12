@@ -34,8 +34,8 @@ export declare class NoopAnimationPlayer implements AnimationPlayer {
     private _destroyed;
     private _finished;
     parentPlayer: AnimationPlayer | null;
-    totalTime: number;
-    constructor();
+    readonly totalTime: number;
+    constructor(duration?: number, delay?: number);
     private _onFinish();
     onStart(fn: () => void): void;
     onDone(fn: () => void): void;
