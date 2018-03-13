@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.7-db56836
+ * @license Angular v6.0.0-beta.7-58b94e6
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2909,15 +2909,19 @@ var AnimationTransitionFactory = /** @class */ (function () {
     /**
      * @param {?} currentState
      * @param {?} nextState
+     * @param {?} element
+     * @param {?} params
      * @return {?}
      */
     AnimationTransitionFactory.prototype.match = /**
      * @param {?} currentState
      * @param {?} nextState
+     * @param {?} element
+     * @param {?} params
      * @return {?}
      */
-    function (currentState, nextState) {
-        return oneOrMoreTransitionsMatch(this.ast.matchers, currentState, nextState);
+    function (currentState, nextState, element, params) {
+        return oneOrMoreTransitionsMatch(this.ast.matchers, currentState, nextState, element, params);
     };
     /**
      * @param {?} stateName
@@ -2998,10 +3002,12 @@ var AnimationTransitionFactory = /** @class */ (function () {
  * @param {?} matchFns
  * @param {?} currentState
  * @param {?} nextState
+ * @param {?} element
+ * @param {?} params
  * @return {?}
  */
-function oneOrMoreTransitionsMatch(matchFns, currentState, nextState) {
-    return matchFns.some(function (fn) { return fn(currentState, nextState); });
+function oneOrMoreTransitionsMatch(matchFns, currentState, nextState, element, params) {
+    return matchFns.some(function (fn) { return fn(currentState, nextState, element, params); });
 }
 var AnimationStateStyles = /** @class */ (function () {
     function AnimationStateStyles(styles, defaultParams) {
@@ -3089,15 +3095,19 @@ var AnimationTrigger = /** @class */ (function () {
     /**
      * @param {?} currentState
      * @param {?} nextState
+     * @param {?} element
+     * @param {?} params
      * @return {?}
      */
     AnimationTrigger.prototype.matchTransition = /**
      * @param {?} currentState
      * @param {?} nextState
+     * @param {?} element
+     * @param {?} params
      * @return {?}
      */
-    function (currentState, nextState) {
-        var /** @type {?} */ entry = this.transitionFactories.find(function (f) { return f.match(currentState, nextState); });
+    function (currentState, nextState, element, params) {
+        var /** @type {?} */ entry = this.transitionFactories.find(function (f) { return f.match(currentState, nextState, element, params); });
         return entry || null;
     };
     /**
@@ -3611,7 +3621,7 @@ var AnimationTransitionNamespace = /** @class */ (function () {
                 player.destroy();
             }
         });
-        var /** @type {?} */ transition = trigger.matchTransition(fromState.value, toState.value);
+        var /** @type {?} */ transition = trigger.matchTransition(fromState.value, toState.value, element, toState.params);
         var /** @type {?} */ isFallbackTransition = false;
         if (!transition) {
             if (!defaultToFallback)

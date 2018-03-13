@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.7-db56836
+ * @license Angular v6.0.0-beta.7-58b94e6
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2501,10 +2501,12 @@ class AnimationTransitionFactory {
     /**
      * @param {?} currentState
      * @param {?} nextState
+     * @param {?} element
+     * @param {?} params
      * @return {?}
      */
-    match(currentState, nextState) {
-        return oneOrMoreTransitionsMatch(this.ast.matchers, currentState, nextState);
+    match(currentState, nextState, element, params) {
+        return oneOrMoreTransitionsMatch(this.ast.matchers, currentState, nextState, element, params);
     }
     /**
      * @param {?} stateName
@@ -2566,10 +2568,12 @@ class AnimationTransitionFactory {
  * @param {?} matchFns
  * @param {?} currentState
  * @param {?} nextState
+ * @param {?} element
+ * @param {?} params
  * @return {?}
  */
-function oneOrMoreTransitionsMatch(matchFns, currentState, nextState) {
-    return matchFns.some(fn => fn(currentState, nextState));
+function oneOrMoreTransitionsMatch(matchFns, currentState, nextState, element, params) {
+    return matchFns.some(fn => fn(currentState, nextState, element, params));
 }
 class AnimationStateStyles {
     /**
@@ -2654,10 +2658,12 @@ class AnimationTrigger {
     /**
      * @param {?} currentState
      * @param {?} nextState
+     * @param {?} element
+     * @param {?} params
      * @return {?}
      */
-    matchTransition(currentState, nextState) {
-        const /** @type {?} */ entry = this.transitionFactories.find(f => f.match(currentState, nextState));
+    matchTransition(currentState, nextState, element, params) {
+        const /** @type {?} */ entry = this.transitionFactories.find(f => f.match(currentState, nextState, element, params));
         return entry || null;
     }
     /**
@@ -3096,7 +3102,7 @@ class AnimationTransitionNamespace {
                 player.destroy();
             }
         });
-        let /** @type {?} */ transition = trigger.matchTransition(fromState.value, toState.value);
+        let /** @type {?} */ transition = trigger.matchTransition(fromState.value, toState.value, element, toState.params);
         let /** @type {?} */ isFallbackTransition = false;
         if (!transition) {
             if (!defaultToFallback)
