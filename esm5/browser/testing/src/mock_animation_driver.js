@@ -1,16 +1,10 @@
 /**
- * @license Angular v6.0.0-beta.7-f258ec6
- * (c) 2010-2018 Google, Inc. https://angular.io/
- * License: MIT
- */
-import { __extends } from 'tslib';
-import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
-import { ɵallowPreviousPlayerStylesMerge, ɵcontainsElement, ɵinvokeQuery, ɵmatchesElement, ɵvalidateStyleProperty } from '@angular/animations/browser';
-
-/**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+import * as tslib_1 from "tslib";
+import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
+import { ɵallowPreviousPlayerStylesMerge as allowPreviousPlayerStylesMerge, ɵcontainsElement as containsElement, ɵinvokeQuery as invokeQuery, ɵmatchesElement as matchesElement, ɵvalidateStyleProperty as validateStyleProperty } from '@angular/animations/browser';
 /**
  * \@experimental Animation support is experimental.
  */
@@ -25,7 +19,7 @@ var MockAnimationDriver = /** @class */ (function () {
      * @param {?} prop
      * @return {?}
      */
-    function (prop) { return ɵvalidateStyleProperty(prop); };
+    function (prop) { return validateStyleProperty(prop); };
     /**
      * @param {?} element
      * @param {?} selector
@@ -37,7 +31,7 @@ var MockAnimationDriver = /** @class */ (function () {
      * @return {?}
      */
     function (element, selector) {
-        return ɵmatchesElement(element, selector);
+        return matchesElement(element, selector);
     };
     /**
      * @param {?} elm1
@@ -49,7 +43,7 @@ var MockAnimationDriver = /** @class */ (function () {
      * @param {?} elm2
      * @return {?}
      */
-    function (elm1, elm2) { return ɵcontainsElement(elm1, elm2); };
+    function (elm1, elm2) { return containsElement(elm1, elm2); };
     /**
      * @param {?} element
      * @param {?} selector
@@ -63,7 +57,7 @@ var MockAnimationDriver = /** @class */ (function () {
      * @return {?}
      */
     function (element, selector, multi) {
-        return ɵinvokeQuery(element, selector, multi);
+        return invokeQuery(element, selector, multi);
     };
     /**
      * @param {?} element
@@ -107,11 +101,19 @@ var MockAnimationDriver = /** @class */ (function () {
     MockAnimationDriver.log = [];
     return MockAnimationDriver;
 }());
+export { MockAnimationDriver };
+function MockAnimationDriver_tsickle_Closure_declarations() {
+    /** @type {?} */
+    MockAnimationDriver.log;
+}
 /**
  * \@experimental Animation support is experimental.
  */
-var MockAnimationPlayer = /** @class */ (function (_super) {
-    __extends(MockAnimationPlayer, _super);
+var /**
+ * \@experimental Animation support is experimental.
+ */
+MockAnimationPlayer = /** @class */ (function (_super) {
+    tslib_1.__extends(MockAnimationPlayer, _super);
     function MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers) {
         var _this = _super.call(this, duration, delay) || this;
         _this.element = element;
@@ -125,7 +127,7 @@ var MockAnimationPlayer = /** @class */ (function (_super) {
         _this.previousStyles = {};
         _this._onInitFns = [];
         _this.currentSnapshot = {};
-        if (ɵallowPreviousPlayerStylesMerge(duration, delay)) {
+        if (allowPreviousPlayerStylesMerge(duration, delay)) {
             previousPlayers.forEach(function (player) {
                 if (player instanceof MockAnimationPlayer) {
                     var /** @type {?} */ styles_1 = player.currentSnapshot;
@@ -230,36 +232,32 @@ var MockAnimationPlayer = /** @class */ (function (_super) {
     };
     return MockAnimationPlayer;
 }(NoopAnimationPlayer));
-
 /**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * \@experimental Animation support is experimental.
  */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * Generated bundle index. Do not edit.
- */
-
-export { MockAnimationDriver, MockAnimationPlayer };
-//# sourceMappingURL=testing.js.map
+export { MockAnimationPlayer };
+function MockAnimationPlayer_tsickle_Closure_declarations() {
+    /** @type {?} */
+    MockAnimationPlayer.prototype.__finished;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.__started;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.previousStyles;
+    /** @type {?} */
+    MockAnimationPlayer.prototype._onInitFns;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.currentSnapshot;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.element;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.keyframes;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.duration;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.delay;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.easing;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.previousPlayers;
+}
+//# sourceMappingURL=mock_animation_driver.js.map
