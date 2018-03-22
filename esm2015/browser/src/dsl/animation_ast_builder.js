@@ -63,7 +63,7 @@ export class AnimationAstBuilderVisitor {
             if (def.type == 0 /* State */) {
                 const /** @type {?} */ stateDef = /** @type {?} */ (def);
                 const /** @type {?} */ name = stateDef.name;
-                name.split(/\s*,\s*/).forEach(n => {
+                name.toString().split(/\s*,\s*/).forEach(n => {
                     stateDef.name = n;
                     states.push(this.visitState(stateDef, context));
                 });

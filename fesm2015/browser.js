@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.0-d77bb46
+ * @license Angular v6.0.0-rc.0-99711b1
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -811,7 +811,7 @@ class AnimationAstBuilderVisitor {
             if (def.type == 0 /* State */) {
                 const /** @type {?} */ stateDef = /** @type {?} */ (def);
                 const /** @type {?} */ name = stateDef.name;
-                name.split(/\s*,\s*/).forEach(n => {
+                name.toString().split(/\s*,\s*/).forEach(n => {
                     stateDef.name = n;
                     states.push(this.visitState(stateDef, context));
                 });

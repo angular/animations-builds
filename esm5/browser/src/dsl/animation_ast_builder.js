@@ -75,7 +75,7 @@ var AnimationAstBuilderVisitor = /** @class */ (function () {
             if (def.type == 0 /* State */) {
                 var /** @type {?} */ stateDef_1 = /** @type {?} */ (def);
                 var /** @type {?} */ name_1 = stateDef_1.name;
-                name_1.split(/\s*,\s*/).forEach(function (n) {
+                name_1.toString().split(/\s*,\s*/).forEach(function (n) {
                     stateDef_1.name = n;
                     states.push(_this.visitState(stateDef_1, context));
                 });
