@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.2.9-a846abb
+ * @license Angular v5.2.9-641cc49
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.2.9-a846abb
+ * @license Angular v5.2.9-641cc49
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4187,7 +4187,16 @@ var TransitionAnimationEngine = /** @class */ (function () {
         // code does not contain any animation code in it, but it is
         // just being called so that the node is marked as being inserted
         if (namespaceId) {
-            this._fetchNamespace(namespaceId).insertNode(element, parent);
+            var /** @type {?} */ ns = this._fetchNamespace(namespaceId);
+            // This if-statement is a workaround for router issue #21947.
+            // The router sometimes hits a race condition where while a route
+            // is being instantiated a new navigation arrives, triggering leave
+            // animation of DOM that has not been fully initialized, until this
+            // is resolved, we need to handle the scenario when DOM is not in a
+            // consistent state during the animation.
+            if (ns) {
+                ns.insertNode(element, parent);
+            }
         }
         // only *directives and host elements are inserted before
         if (insertBefore) {
