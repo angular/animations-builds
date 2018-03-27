@@ -222,7 +222,7 @@ export function interpolateParams(value, params, errors) {
     const /** @type {?} */ original = value.toString();
     const /** @type {?} */ str = original.replace(PARAM_REGEX, (_, varName) => {
         let /** @type {?} */ localVal = params[varName];
-        // this means that the value was never overridden by the data passed in by the user
+        // this means that the value was never overidden by the data passed in by the user
         if (!params.hasOwnProperty(varName)) {
             errors.push(`Please provide a value for the animation param ${varName}`);
             localVal = '';

@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.0-0ebdb3d
+ * @license Angular v6.0.0-rc.0-f739f75
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v6.0.0-rc.0-0ebdb3d
+ * @license Angular v6.0.0-rc.0-f739f75
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -619,7 +619,7 @@ function interpolateParams(value, params, errors) {
     var /** @type {?} */ original = value.toString();
     var /** @type {?} */ str = original.replace(PARAM_REGEX, function (_, varName) {
         var /** @type {?} */ localVal = params[varName];
-        // this means that the value was never overridden by the data passed in by the user
+        // this means that the value was never overidden by the data passed in by the user
         if (!params.hasOwnProperty(varName)) {
             errors.push("Please provide a value for the animation param " + varName);
             localVal = '';
@@ -3860,7 +3860,7 @@ var AnimationTransitionNamespace = /** @class */ (function () {
             var /** @type {?} */ currentPlayers = engine.players.length ? engine.playersByQueriedElement.get(element) : [];
             // when this `if statement` does not continue forward it means that
             // a previous animation query has selected the current element and
-            // is animating it. In this situation want to continue forwards and
+            // is animating it. In this situation want to continue fowards and
             // allow the element to be queued up for animation later.
             if (currentPlayers && currentPlayers.length) {
                 containsPotentialParentTransition = true;
