@@ -1,6 +1,6 @@
 /**
- * @license Angular v5.1.0-5a0076f
- * (c) 2010-2017 Google, Inc. https://angular.io/
+ * @license Angular v6.0.0-rc.3-5992fe6
+ * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 (function (global, factory) {
@@ -10,8 +10,8 @@
 }(this, (function (exports) { 'use strict';
 
 /**
- * @license Angular v5.1.0-5a0076f
- * (c) 2010-2017 Google, Inc. https://angular.io/
+ * @license Angular v6.0.0-rc.3-5992fe6
+ * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 /**
@@ -249,6 +249,38 @@ var AUTO_STYLE = '*';
  * <div [\@myAnimationTrigger]="myStatusExp">...</div>
  * ```
  *
+ * ### Using an inline function
+ * The `transition` animation method also supports reading an inline function which can decide
+ * if its associated animation should be run.
+ *
+ * ```
+ * // this method will be run each time the `myAnimationTrigger`
+ * // trigger value changes...
+ * function myInlineMatcherFn(fromState: string, toState: string, element: any, params: {[key:
+ * string]: any}): boolean {
+ *   // notice that `element` and `params` are also available here
+ *   return toState == 'yes-please-animate';
+ * }
+ *
+ * \@Component({
+ *   selector: 'my-component',
+ *   templateUrl: 'my-component-tpl.html',
+ *   animations: [
+ *     trigger('myAnimationTrigger', [
+ *       transition(myInlineMatcherFn, [
+ *         // the animation sequence code
+ *       ]),
+ *     ])
+ *   ]
+ * })
+ * class MyComponent {
+ *   myStatusExp = "yes-please-animate";
+ * }
+ * ```
+ *
+ * The inline method will be run each time the trigger
+ * value changes
+ *
  * ## Disable Animations
  * A special animation control binding called `\@.disabled` can be placed on an element which will
  * then disable animations for any inner animation triggers situated within the element as well as
@@ -280,7 +312,7 @@ var AUTO_STYLE = '*';
  * The `\@childAnimation` trigger will not animate because `\@.disabled` prevents it from happening
  * (when true).
  *
- * Note that `\@.disbled` will only disable all animations (this means any animations running on
+ * Note that `\@.disabled` will only disable all animations (this means any animations running on
  * the same element will also be disabled).
  *
  * ### Disabling Animations Application-wide
@@ -307,6 +339,13 @@ var AUTO_STYLE = '*';
  * elements located in disabled areas of the template and still animate them as it sees fit. This is
  * also the case for when a sub animation is queried by a parent and then later animated using {\@link
  * animateChild animateChild}.
+ * ### Detecting when an animation is disabled
+ * If a region of the DOM (or the entire application) has its animations disabled, then animation
+ * trigger callbacks will still fire just as normal (only for zero seconds).
+ *
+ * When a trigger callback fires it will provide an instance of an {\@link AnimationEvent}. If
+ * animations
+ * are disabled then the `.disabled` flag on the event will be true.
  *
  * \@experimental Animation support is experimental.
  * @param {?} name
@@ -565,7 +604,7 @@ function state(name, styles, options) {
  * destination, keyframes can describe how each style entry is applied and at what point within the
  * animation arc (much like CSS Keyframe Animations do).
  *
- * For each `style()` entry an `offset` value can be set. Doing so allows to specifiy at what
+ * For each `style()` entry an `offset` value can be set. Doing so allows to specify at what
  * percentage of the animate time the styles will be applied.
  *
  * ```typescript
@@ -750,9 +789,9 @@ function keyframes(steps) {
  *     <button (click)="next()">Next</button>
  *     <hr>
  *     <div [\@bannerAnimation]="selectedIndex" class="banner-container">
- *       <div class="banner"> {{ banner }} </div>
+ *       <div class="banner" *ngFor="let banner of banners"> {{ banner }} </div>
  *     </div>
- *   `
+ *   `,
  *   animations: [
  *     trigger('bannerAnimation', [
  *       transition(":increment", group([
@@ -772,7 +811,7 @@ function keyframes(steps) {
  *         query(':leave', [
  *           animate('0.5s ease-out', style({ left: '100%' }))
  *         ])
- *       ])),
+ *       ]))
  *     ])
  *   ]
  * })
@@ -976,7 +1015,7 @@ function useAnimation(animation, options) {
  *
  * ### Usage
  *
- * query() is designed to collect mutiple elements and works internally by using
+ * query() is designed to collect multiple elements and works internally by using
  * `element.querySelectorAll`. An additional options object can be provided which
  * can be used to limit the total amount of items to be collected.
  *
@@ -1172,13 +1211,6 @@ function scheduleMicroTask(cb) {
  * @suppress {checkTypes} checked by tsc
  */
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * AnimationPlayer controls an animation sequence that was produced from a programmatic animation.
  * (see {\@link AnimationBuilder AnimationBuilder} for more information on how to create programmatic
  * animations.)
@@ -1191,7 +1223,9 @@ function scheduleMicroTask(cb) {
  * \@experimental Animation support is experimental.
  */
 var NoopAnimationPlayer = /** @class */ (function () {
-    function NoopAnimationPlayer() {
+    function NoopAnimationPlayer(duration, delay) {
+        if (duration === void 0) { duration = 0; }
+        if (delay === void 0) { delay = 0; }
         this._onDoneFns = [];
         this._onStartFns = [];
         this._onDestroyFns = [];
@@ -1199,7 +1233,7 @@ var NoopAnimationPlayer = /** @class */ (function () {
         this._destroyed = false;
         this._finished = false;
         this.parentPlayer = null;
-        this.totalTime = 0;
+        this.totalTime = duration + delay;
     }
     /**
      * @return {?}
@@ -1400,17 +1434,17 @@ var AnimationGroupPlayer = /** @class */ (function () {
         else {
             this.players.forEach(function (player) {
                 player.onDone(function () {
-                    if (++doneCount >= total) {
+                    if (++doneCount == total) {
                         _this._onFinish();
                     }
                 });
                 player.onDestroy(function () {
-                    if (++destroyCount >= total) {
+                    if (++destroyCount == total) {
                         _this._onDestroy();
                     }
                 });
                 player.onStart(function () {
-                    if (++startCount >= total) {
+                    if (++startCount == total) {
                         _this._onStart();
                     }
                 });
@@ -1455,9 +1489,9 @@ var AnimationGroupPlayer = /** @class */ (function () {
      */
     function () {
         if (!this.hasStarted()) {
+            this._started = true;
             this._onStartFns.forEach(function (fn) { return fn(); });
             this._onStartFns = [];
-            this._started = true;
         }
     };
     /**
@@ -1618,13 +1652,6 @@ var AnimationGroupPlayer = /** @class */ (function () {
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
  */
 var ɵPRE_STYLE = '!';
 

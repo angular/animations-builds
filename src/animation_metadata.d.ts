@@ -122,7 +122,9 @@ export interface AnimationStateMetadata extends AnimationMetadata {
  * @experimental Animation support is experimental.
  */
 export interface AnimationTransitionMetadata extends AnimationMetadata {
-    expr: string | ((fromState: string, toState: string) => boolean);
+    expr: string | ((fromState: string, toState: string, element?: any, params?: {
+        [key: string]: any;
+    }) => boolean);
     animation: AnimationMetadata | AnimationMetadata[];
     options: AnimationOptions | null;
 }
@@ -293,6 +295,38 @@ export interface AnimationStaggerMetadata extends AnimationMetadata {
  * <div [@myAnimationTrigger]="myStatusExp">...</div>
  * ```
  *
+ * ### Using an inline function
+ * The `transition` animation method also supports reading an inline function which can decide
+ * if its associated animation should be run.
+ *
+ * ```
+ * // this method will be run each time the `myAnimationTrigger`
+ * // trigger value changes...
+ * function myInlineMatcherFn(fromState: string, toState: string, element: any, params: {[key:
+ string]: any}): boolean {
+ *   // notice that `element` and `params` are also available here
+ *   return toState == 'yes-please-animate';
+ * }
+ *
+ * @Component({
+ *   selector: 'my-component',
+ *   templateUrl: 'my-component-tpl.html',
+ *   animations: [
+ *     trigger('myAnimationTrigger', [
+ *       transition(myInlineMatcherFn, [
+ *         // the animation sequence code
+ *       ]),
+ *     ])
+ *   ]
+ * })
+ * class MyComponent {
+ *   myStatusExp = "yes-please-animate";
+ * }
+ * ```
+ *
+ * The inline method will be run each time the trigger
+ * value changes
+ *
  * ## Disable Animations
  * A special animation control binding called `@.disabled` can be placed on an element which will
  then disable animations for any inner animation triggers situated within the element as well as
@@ -324,7 +358,7 @@ export interface AnimationStaggerMetadata extends AnimationMetadata {
  * The `@childAnimation` trigger will not animate because `@.disabled` prevents it from happening
  (when true).
  *
- * Note that `@.disbled` will only disable all animations (this means any animations running on
+ * Note that `@.disabled` will only disable all animations (this means any animations running on
  * the same element will also be disabled).
  *
  * ### Disabling Animations Application-wide
@@ -351,6 +385,14 @@ export interface AnimationStaggerMetadata extends AnimationMetadata {
  elements located in disabled areas of the template and still animate them as it sees fit. This is
  also the case for when a sub animation is queried by a parent and then later animated using {@link
  animateChild animateChild}.
+
+ * ### Detecting when an animation is disabled
+ * If a region of the DOM (or the entire application) has its animations disabled, then animation
+ * trigger callbacks will still fire just as normal (only for zero seconds).
+ *
+ * When a trigger callback fires it will provide an instance of an {@link AnimationEvent}. If
+ animations
+ * are disabled then the `.disabled` flag on the event will be true.
  *
  * @experimental Animation support is experimental.
  */
@@ -584,7 +626,7 @@ export declare function state(name: string, styles: AnimationStyleMetadata, opti
  * destination, keyframes can describe how each style entry is applied and at what point within the
  * animation arc (much like CSS Keyframe Animations do).
  *
- * For each `style()` entry an `offset` value can be set. Doing so allows to specifiy at what
+ * For each `style()` entry an `offset` value can be set. Doing so allows to specify at what
  * percentage of the animate time the styles will be applied.
  *
  * ```typescript
@@ -765,9 +807,9 @@ export declare function keyframes(steps: AnimationStyleMetadata[]): AnimationKey
  *     <button (click)="next()">Next</button>
  *     <hr>
  *     <div [@bannerAnimation]="selectedIndex" class="banner-container">
- *       <div class="banner"> {{ banner }} </div>
+ *       <div class="banner" *ngFor="let banner of banners"> {{ banner }} </div>
  *     </div>
- *   `
+ *   `,
  *   animations: [
  *     trigger('bannerAnimation', [
  *       transition(":increment", group([
@@ -787,7 +829,7 @@ export declare function keyframes(steps: AnimationStyleMetadata[]): AnimationKey
  *         query(':leave', [
  *           animate('0.5s ease-out', style({ left: '100%' }))
  *         ])
- *       ])),
+ *       ]))
  *     ])
  *   ]
  * })
@@ -813,7 +855,9 @@ export declare function keyframes(steps: AnimationStyleMetadata[]): AnimationKey
  *
  * @experimental Animation support is experimental.
  */
-export declare function transition(stateChangeExpr: string | ((fromState: string, toState: string) => boolean), steps: AnimationMetadata | AnimationMetadata[], options?: AnimationOptions | null): AnimationTransitionMetadata;
+export declare function transition(stateChangeExpr: string | ((fromState: string, toState: string, element?: any, params?: {
+    [key: string]: any;
+}) => boolean), steps: AnimationMetadata | AnimationMetadata[], options?: AnimationOptions | null): AnimationTransitionMetadata;
 /**
  * `animation` is an animation-specific function that is designed to be used inside of Angular's
  * animation DSL language.
@@ -967,7 +1011,7 @@ export declare function useAnimation(animation: AnimationReferenceMetadata, opti
  *
  * ### Usage
  *
- * query() is designed to collect mutiple elements and works internally by using
+ * query() is designed to collect multiple elements and works internally by using
  * `element.querySelectorAll`. An additional options object can be provided which
  * can be used to limit the total amount of items to be collected.
  *
