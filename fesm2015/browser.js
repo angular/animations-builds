@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.5-5a1ddee
+ * @license Angular v6.0.0-rc.5-7be7abd
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5076,17 +5076,6 @@ function countChars(value, char) {
  */
 const DEFAULT_FILL_MODE = 'forwards';
 const DEFAULT_EASING = 'linear';
-/** @enum {number} */
-const AnimatorControlState = {
-    INITIALIZED: 1,
-    STARTED: 2,
-    FINISHED: 3,
-    DESTROYED: 4,
-};
-AnimatorControlState[AnimatorControlState.INITIALIZED] = "INITIALIZED";
-AnimatorControlState[AnimatorControlState.STARTED] = "STARTED";
-AnimatorControlState[AnimatorControlState.FINISHED] = "FINISHED";
-AnimatorControlState[AnimatorControlState.DESTROYED] = "DESTROYED";
 class CssKeyframesPlayer {
     /**
      * @param {?} element
@@ -5109,7 +5098,7 @@ class CssKeyframesPlayer {
         this._onDestroyFns = [];
         this._started = false;
         this.currentSnapshot = {};
-        this.state = 0;
+        this._state = 0;
         this.easing = easing || DEFAULT_EASING;
         this.totalTime = _duration + _delay;
         this._buildStyler();
@@ -5134,9 +5123,9 @@ class CssKeyframesPlayer {
      */
     destroy() {
         this.init();
-        if (this.state >= AnimatorControlState.DESTROYED)
+        if (this._state >= 4 /* DESTROYED */)
             return;
-        this.state = AnimatorControlState.DESTROYED;
+        this._state = 4 /* DESTROYED */;
         this._styler.destroy();
         this._flushStartFns();
         this._flushDoneFns();
@@ -5162,9 +5151,9 @@ class CssKeyframesPlayer {
      */
     finish() {
         this.init();
-        if (this.state >= AnimatorControlState.FINISHED)
+        if (this._state >= 3 /* FINISHED */)
             return;
-        this.state = AnimatorControlState.FINISHED;
+        this._state = 3 /* FINISHED */;
         this._styler.finish();
         this._flushStartFns();
         this._flushDoneFns();
@@ -5181,14 +5170,14 @@ class CssKeyframesPlayer {
     /**
      * @return {?}
      */
-    hasStarted() { return this.state >= AnimatorControlState.STARTED; }
+    hasStarted() { return this._state >= 2 /* STARTED */; }
     /**
      * @return {?}
      */
     init() {
-        if (this.state >= AnimatorControlState.INITIALIZED)
+        if (this._state >= 1 /* INITIALIZED */)
             return;
-        this.state = AnimatorControlState.INITIALIZED;
+        this._state = 1 /* INITIALIZED */;
         const /** @type {?} */ elm = this.element;
         this._styler.apply();
         if (this._delay) {
@@ -5202,7 +5191,7 @@ class CssKeyframesPlayer {
         this.init();
         if (!this.hasStarted()) {
             this._flushStartFns();
-            this.state = AnimatorControlState.STARTED;
+            this._state = 2 /* STARTED */;
         }
         this._styler.resume();
     }
@@ -5250,7 +5239,7 @@ class CssKeyframesPlayer {
         this.init();
         const /** @type {?} */ styles = {};
         if (this.hasStarted()) {
-            const /** @type {?} */ finished = this.state >= AnimatorControlState.FINISHED;
+            const /** @type {?} */ finished = this._state >= 3;
             Object.keys(this._finalStyles).forEach(prop => {
                 if (prop != 'offset') {
                     styles[prop] = finished ? this._finalStyles[prop] : computeStyle(this.element, prop);

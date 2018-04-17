@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { AnimationPlayer } from '@angular/animations';
-export declare enum AnimatorControlState {
+export declare const enum AnimatorControlState {
     INITIALIZED = 1,
     STARTED = 2,
     FINISHED = 3,
@@ -32,7 +32,7 @@ export declare class CssKeyframesPlayer implements AnimationPlayer {
     currentSnapshot: {
         [key: string]: string;
     };
-    state: number;
+    private _state;
     constructor(element: any, keyframes: {
         [key: string]: string | number;
     }[], animationName: string, _duration: number, _delay: number, easing: string, _finalStyles: {

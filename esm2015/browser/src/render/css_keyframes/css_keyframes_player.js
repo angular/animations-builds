@@ -8,17 +8,8 @@ const /** @type {?} */ DEFAULT_FILL_MODE = 'forwards';
 const /** @type {?} */ DEFAULT_EASING = 'linear';
 const /** @type {?} */ ANIMATION_END_EVENT = 'animationend';
 /** @enum {number} */
-const AnimatorControlState = {
-    INITIALIZED: 1,
-    STARTED: 2,
-    FINISHED: 3,
-    DESTROYED: 4,
-};
+const AnimatorControlState = { INITIALIZED: 1, STARTED: 2, FINISHED: 3, DESTROYED: 4, };
 export { AnimatorControlState };
-AnimatorControlState[AnimatorControlState.INITIALIZED] = "INITIALIZED";
-AnimatorControlState[AnimatorControlState.STARTED] = "STARTED";
-AnimatorControlState[AnimatorControlState.FINISHED] = "FINISHED";
-AnimatorControlState[AnimatorControlState.DESTROYED] = "DESTROYED";
 export class CssKeyframesPlayer {
     /**
      * @param {?} element
@@ -41,7 +32,7 @@ export class CssKeyframesPlayer {
         this._onDestroyFns = [];
         this._started = false;
         this.currentSnapshot = {};
-        this.state = 0;
+        this._state = 0;
         this.easing = easing || DEFAULT_EASING;
         this.totalTime = _duration + _delay;
         this._buildStyler();
@@ -66,9 +57,9 @@ export class CssKeyframesPlayer {
      */
     destroy() {
         this.init();
-        if (this.state >= AnimatorControlState.DESTROYED)
+        if (this._state >= 4 /* DESTROYED */)
             return;
-        this.state = AnimatorControlState.DESTROYED;
+        this._state = 4 /* DESTROYED */;
         this._styler.destroy();
         this._flushStartFns();
         this._flushDoneFns();
@@ -94,9 +85,9 @@ export class CssKeyframesPlayer {
      */
     finish() {
         this.init();
-        if (this.state >= AnimatorControlState.FINISHED)
+        if (this._state >= 3 /* FINISHED */)
             return;
-        this.state = AnimatorControlState.FINISHED;
+        this._state = 3 /* FINISHED */;
         this._styler.finish();
         this._flushStartFns();
         this._flushDoneFns();
@@ -113,14 +104,14 @@ export class CssKeyframesPlayer {
     /**
      * @return {?}
      */
-    hasStarted() { return this.state >= AnimatorControlState.STARTED; }
+    hasStarted() { return this._state >= 2 /* STARTED */; }
     /**
      * @return {?}
      */
     init() {
-        if (this.state >= AnimatorControlState.INITIALIZED)
+        if (this._state >= 1 /* INITIALIZED */)
             return;
-        this.state = AnimatorControlState.INITIALIZED;
+        this._state = 1 /* INITIALIZED */;
         const /** @type {?} */ elm = this.element;
         this._styler.apply();
         if (this._delay) {
@@ -134,7 +125,7 @@ export class CssKeyframesPlayer {
         this.init();
         if (!this.hasStarted()) {
             this._flushStartFns();
-            this.state = AnimatorControlState.STARTED;
+            this._state = 2 /* STARTED */;
         }
         this._styler.resume();
     }
@@ -182,7 +173,7 @@ export class CssKeyframesPlayer {
         this.init();
         const /** @type {?} */ styles = {};
         if (this.hasStarted()) {
-            const /** @type {?} */ finished = this.state >= AnimatorControlState.FINISHED;
+            const /** @type {?} */ finished = this._state >= 3 /* FINISHED */;
             Object.keys(this._finalStyles).forEach(prop => {
                 if (prop != 'offset') {
                     styles[prop] = finished ? this._finalStyles[prop] : computeStyle(this.element, prop);
@@ -212,7 +203,7 @@ function CssKeyframesPlayer_tsickle_Closure_declarations() {
     /** @type {?} */
     CssKeyframesPlayer.prototype.currentSnapshot;
     /** @type {?} */
-    CssKeyframesPlayer.prototype.state;
+    CssKeyframesPlayer.prototype._state;
     /** @type {?} */
     CssKeyframesPlayer.prototype.element;
     /** @type {?} */
