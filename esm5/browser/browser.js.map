@@ -1,1 +1,0 @@
-{"version":3,"file":"browser.js","sourceRoot":"","sources":["../../../../../packages/animations/browser/browser.ts"],"names":[],"mappings":";;;;;;;AAIA,uZAAc,cAAc,CAAC","sourcesContent":["/**\n * Generated bundle index. Do not edit.\n */\n\nexport * from './public_api';\n"]}
