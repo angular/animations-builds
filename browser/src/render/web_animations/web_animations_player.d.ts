@@ -18,7 +18,6 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     private _onDoneFns;
     private _onStartFns;
     private _onDestroyFns;
-    private _player;
     private _duration;
     private _delay;
     private _initialized;
@@ -26,19 +25,21 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     private _started;
     private _destroyed;
     private _finalKeyframe;
+    readonly domPlayer: DOMAnimation;
     time: number;
-    parentPlayer: AnimationPlayer;
-    previousStyles: {
+    parentPlayer: AnimationPlayer | null;
+    currentSnapshot: {
         [styleName: string]: string | number;
     };
     constructor(element: any, keyframes: {
         [key: string]: string | number;
     }[], options: {
         [key: string]: string | number;
-    }, previousPlayers?: WebAnimationsPlayer[]);
+    });
     private _onFinish();
     init(): void;
-    readonly domPlayer: DOMAnimation;
+    private _buildPlayer();
+    private _preparePlayerBeforeStart();
     onStart(fn: () => void): void;
     onDone(fn: () => void): void;
     onDestroy(fn: () => void): void;
@@ -52,5 +53,6 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     destroy(): void;
     setPosition(p: number): void;
     getPosition(): number;
-    private _captureStyles();
+    readonly totalTime: number;
+    beforeDestroy(): void;
 }

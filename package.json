@@ -1,18 +1,48 @@
 {
   "name": "@angular/animations",
-  "version": "4.0.0-rc.5-ea49a95",
+  "version": "6.0.0-rc.5+76.sha-b1d03fe",
   "description": "Angular - animations integration with web-animationss",
   "main": "./bundles/animations.umd.js",
-  "module": "./@angular/animations.es5.js",
-  "es2015": "./@angular/animations.js",
+  "module": "./fesm5/animations.js",
+  "es2015": "./fesm2015/animations.js",
+  "esm5": "./esm5/animations.js",
+  "esm2015": "./esm2015/animations.js",
+  "fesm5": "./fesm5/animations.js",
+  "fesm2015": "./fesm2015/animations.js",
   "typings": "./animations.d.ts",
   "author": "angular",
   "license": "MIT",
+  "dependencies": {
+    "tslib": "^1.9.0"
+  },
   "peerDependencies": {
-    "@angular/core": "4.0.0-rc.5-ea49a95"
+    "@angular/core": "6.0.0-rc.5+76.sha-b1d03fe"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/angular/angular.git"
-  }
+  },
+  "ng-update": {
+    "packageGroup": [
+      "@angular/core",
+      "@angular/bazel",
+      "@angular/common",
+      "@angular/compiler",
+      "@angular/compiler-cli",
+      "@angular/animations",
+      "@angular/elements",
+      "@angular/platform-browser",
+      "@angular/platform-browser-dynamic",
+      "@angular/forms",
+      "@angular/http",
+      "@angular/platform-server",
+      "@angular/platform-webworker",
+      "@angular/platform-webworker-dynamic",
+      "@angular/upgrade",
+      "@angular/router",
+      "@angular/language-service",
+      "@angular/service-worker"
+    ]
+  },
+  "sideEffects": false
 }
