@@ -22,3 +22,8 @@ export declare function getBodyNode(): any | null;
 export declare const matchesElement: (element: any, selector: string) => boolean;
 export declare const containsElement: (elm1: any, elm2: any) => boolean;
 export declare const invokeQuery: (element: any, selector: string, multi: boolean) => any[];
+export declare function hypenatePropsObject(object: {
+    [key: string]: any;
+}): {
+    [key: string]: any;
+};
