@@ -3,7 +3,7 @@
  * @suppress {checkTypes} checked by tsc
  */
 import { allowPreviousPlayerStylesMerge, balancePreviousStylesIntoKeyframes } from '../../util';
-import { containsElement, invokeQuery, matchesElement, validateStyleProperty } from '../shared';
+import { containsElement, hypenatePropsObject, invokeQuery, matchesElement, validateStyleProperty } from '../shared';
 import { CssKeyframesPlayer } from './css_keyframes_player';
 import { DirectStylePlayer } from './direct_style_player';
 var /** @type {?} */ KEYFRAMES_NAME_PREFIX = 'gen_css_kf_';
@@ -209,18 +209,6 @@ function flattenKeyframesIntoStyles(keyframes) {
         });
     }
     return flatKeyframes;
-}
-/**
- * @param {?} object
- * @return {?}
- */
-function hypenatePropsObject(object) {
-    var /** @type {?} */ newObj = {};
-    Object.keys(object).forEach(function (prop) {
-        var /** @type {?} */ newProp = prop.replace(/([a-z])([A-Z])/g, '$1-$2');
-        newObj[newProp] = object[prop];
-    });
-    return newObj;
 }
 /**
  * @param {?} node

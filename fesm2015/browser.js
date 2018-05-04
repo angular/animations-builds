@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-4ddeb03
+ * @license Angular v6.0.0-3824e3f
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -230,6 +230,18 @@ function getBodyNode() {
 const matchesElement = _matches;
 const containsElement = _contains;
 const invokeQuery = _query;
+/**
+ * @param {?} object
+ * @return {?}
+ */
+function hypenatePropsObject(object) {
+    const /** @type {?} */ newObj = {};
+    Object.keys(object).forEach(prop => {
+        const /** @type {?} */ newProp = prop.replace(/([a-z])([A-Z])/g, '$1-$2');
+        newObj[newProp] = object[prop];
+    });
+    return newObj;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -2889,13 +2901,15 @@ const STAR_SELECTOR = '.ng-star-inserted';
 const EMPTY_PLAYER_ARRAY = [];
 const NULL_REMOVAL_STATE = {
     namespaceId: '',
-    setForRemoval: null,
+    setForRemoval: false,
+    setForMove: false,
     hasAnimation: false,
     removedBeforeQueried: false
 };
 const NULL_REMOVED_QUERIED_STATE = {
     namespaceId: '',
-    setForRemoval: null,
+    setForMove: false,
+    setForRemoval: false,
     hasAnimation: false,
     removedBeforeQueried: true
 };
@@ -3573,6 +3587,11 @@ class TransitionAnimationEngine {
         const /** @type {?} */ details = /** @type {?} */ (element[REMOVAL_FLAG]);
         if (details && details.setForRemoval) {
             details.setForRemoval = false;
+            details.setForMove = true;
+            const /** @type {?} */ index = this.collectedLeaveElements.indexOf(element);
+            if (index >= 0) {
+                this.collectedLeaveElements.splice(index, 1);
+            }
         }
         // in the event that the namespaceId is blank then the caller
         // code does not contain any animation code in it, but it is
@@ -3893,8 +3912,16 @@ class TransitionAnimationEngine {
             const /** @type {?} */ ns = this._namespaceList[i];
             ns.drainQueuedTransitions(microtaskId).forEach(entry => {
                 const /** @type {?} */ player = entry.player;
-                allPlayers.push(player);
                 const /** @type {?} */ element = entry.element;
+                allPlayers.push(player);
+                if (this.collectedEnterElements.length) {
+                    const /** @type {?} */ details = /** @type {?} */ (element[REMOVAL_FLAG]);
+                    // move animations are currently not supported...
+                    if (details && details.setForMove) {
+                        player.destroy();
+                        return;
+                    }
+                }
                 if (!bodyNode || !this.driver.containsElement(bodyNode, element)) {
                     player.destroy();
                     return;
@@ -5268,14 +5295,14 @@ class CssKeyframesPlayer {
 class DirectStylePlayer extends NoopAnimationPlayer {
     /**
      * @param {?} element
-     * @param {?} _styles
+     * @param {?} styles
      */
-    constructor(element, _styles) {
+    constructor(element, styles) {
         super();
         this.element = element;
-        this._styles = _styles;
         this._startingStyles = {};
         this.__initialized = false;
+        this._styles = hypenatePropsObject(styles);
     }
     /**
      * @return {?}
@@ -5296,7 +5323,8 @@ class DirectStylePlayer extends NoopAnimationPlayer {
         if (!this._startingStyles)
             return;
         this.init();
-        Object.keys(this._styles).forEach(prop => { this.element.style[prop] = this._styles[prop]; });
+        Object.keys(this._styles)
+            .forEach(prop => this.element.style.setProperty(prop, this._styles[prop]));
         super.play();
     }
     /**
@@ -5308,7 +5336,7 @@ class DirectStylePlayer extends NoopAnimationPlayer {
         Object.keys(this._startingStyles).forEach(prop => {
             const /** @type {?} */ value = /** @type {?} */ ((this._startingStyles))[prop];
             if (value) {
-                this.element.style[prop] = value;
+                this.element.style.setProperty(prop, value);
             }
             else {
                 this.element.style.removeProperty(prop);
@@ -5470,18 +5498,6 @@ function flattenKeyframesIntoStyles(keyframes) {
         });
     }
     return flatKeyframes;
-}
-/**
- * @param {?} object
- * @return {?}
- */
-function hypenatePropsObject(object) {
-    const /** @type {?} */ newObj = {};
-    Object.keys(object).forEach(prop => {
-        const /** @type {?} */ newProp = prop.replace(/([a-z])([A-Z])/g, '$1-$2');
-        newObj[newProp] = object[prop];
-    });
-    return newObj;
 }
 /**
  * @param {?} node

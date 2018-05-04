@@ -226,5 +226,17 @@ export function getBodyNode() {
 export const /** @type {?} */ matchesElement = _matches;
 export const /** @type {?} */ containsElement = _contains;
 export const /** @type {?} */ invokeQuery = _query;
+/**
+ * @param {?} object
+ * @return {?}
+ */
+export function hypenatePropsObject(object) {
+    const /** @type {?} */ newObj = {};
+    Object.keys(object).forEach(prop => {
+        const /** @type {?} */ newProp = prop.replace(/([a-z])([A-Z])/g, '$1-$2');
+        newObj[newProp] = object[prop];
+    });
+    return newObj;
+}
 export { ɵ0, ɵ1, ɵ2 };
 //# sourceMappingURL=shared.js.map

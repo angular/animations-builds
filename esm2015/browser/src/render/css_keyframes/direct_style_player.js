@@ -3,17 +3,18 @@
  * @suppress {checkTypes} checked by tsc
  */
 import { NoopAnimationPlayer } from '@angular/animations';
+import { hypenatePropsObject } from '../shared';
 export class DirectStylePlayer extends NoopAnimationPlayer {
     /**
      * @param {?} element
-     * @param {?} _styles
+     * @param {?} styles
      */
-    constructor(element, _styles) {
+    constructor(element, styles) {
         super();
         this.element = element;
-        this._styles = _styles;
         this._startingStyles = {};
         this.__initialized = false;
+        this._styles = hypenatePropsObject(styles);
     }
     /**
      * @return {?}
@@ -34,7 +35,8 @@ export class DirectStylePlayer extends NoopAnimationPlayer {
         if (!this._startingStyles)
             return;
         this.init();
-        Object.keys(this._styles).forEach(prop => { this.element.style[prop] = this._styles[prop]; });
+        Object.keys(this._styles)
+            .forEach(prop => this.element.style.setProperty(prop, this._styles[prop]));
         super.play();
     }
     /**
@@ -46,7 +48,7 @@ export class DirectStylePlayer extends NoopAnimationPlayer {
         Object.keys(this._startingStyles).forEach(prop => {
             const /** @type {?} */ value = /** @type {?} */ ((this._startingStyles))[prop];
             if (value) {
-                this.element.style[prop] = value;
+                this.element.style.setProperty(prop, value);
             }
             else {
                 this.element.style.removeProperty(prop);
@@ -62,8 +64,8 @@ function DirectStylePlayer_tsickle_Closure_declarations() {
     /** @type {?} */
     DirectStylePlayer.prototype.__initialized;
     /** @type {?} */
-    DirectStylePlayer.prototype.element;
-    /** @type {?} */
     DirectStylePlayer.prototype._styles;
+    /** @type {?} */
+    DirectStylePlayer.prototype.element;
 }
 //# sourceMappingURL=direct_style_player.js.map

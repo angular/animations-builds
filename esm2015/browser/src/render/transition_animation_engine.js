@@ -15,13 +15,15 @@ const /** @type {?} */ STAR_SELECTOR = '.ng-star-inserted';
 const /** @type {?} */ EMPTY_PLAYER_ARRAY = [];
 const /** @type {?} */ NULL_REMOVAL_STATE = {
     namespaceId: '',
-    setForRemoval: null,
+    setForRemoval: false,
+    setForMove: false,
     hasAnimation: false,
     removedBeforeQueried: false
 };
 const /** @type {?} */ NULL_REMOVED_QUERIED_STATE = {
     namespaceId: '',
-    setForRemoval: null,
+    setForMove: false,
+    setForRemoval: false,
     hasAnimation: false,
     removedBeforeQueried: true
 };
@@ -65,6 +67,8 @@ export function ElementAnimationState() { }
 function ElementAnimationState_tsickle_Closure_declarations() {
     /** @type {?} */
     ElementAnimationState.prototype.setForRemoval;
+    /** @type {?} */
+    ElementAnimationState.prototype.setForMove;
     /** @type {?} */
     ElementAnimationState.prototype.hasAnimation;
     /** @type {?} */
@@ -771,6 +775,11 @@ export class TransitionAnimationEngine {
         const /** @type {?} */ details = /** @type {?} */ (element[REMOVAL_FLAG]);
         if (details && details.setForRemoval) {
             details.setForRemoval = false;
+            details.setForMove = true;
+            const /** @type {?} */ index = this.collectedLeaveElements.indexOf(element);
+            if (index >= 0) {
+                this.collectedLeaveElements.splice(index, 1);
+            }
         }
         // in the event that the namespaceId is blank then the caller
         // code does not contain any animation code in it, but it is
@@ -1091,8 +1100,16 @@ export class TransitionAnimationEngine {
             const /** @type {?} */ ns = this._namespaceList[i];
             ns.drainQueuedTransitions(microtaskId).forEach(entry => {
                 const /** @type {?} */ player = entry.player;
-                allPlayers.push(player);
                 const /** @type {?} */ element = entry.element;
+                allPlayers.push(player);
+                if (this.collectedEnterElements.length) {
+                    const /** @type {?} */ details = /** @type {?} */ (element[REMOVAL_FLAG]);
+                    // move animations are currently not supported...
+                    if (details && details.setForMove) {
+                        player.destroy();
+                        return;
+                    }
+                }
                 if (!bodyNode || !this.driver.containsElement(bodyNode, element)) {
                     player.destroy();
                     return;

@@ -4,14 +4,15 @@
  */
 import * as tslib_1 from "tslib";
 import { NoopAnimationPlayer } from '@angular/animations';
+import { hypenatePropsObject } from '../shared';
 var DirectStylePlayer = /** @class */ (function (_super) {
     tslib_1.__extends(DirectStylePlayer, _super);
-    function DirectStylePlayer(element, _styles) {
+    function DirectStylePlayer(element, styles) {
         var _this = _super.call(this) || this;
         _this.element = element;
-        _this._styles = _styles;
         _this._startingStyles = {};
         _this.__initialized = false;
+        _this._styles = hypenatePropsObject(styles);
         return _this;
     }
     /**
@@ -41,7 +42,8 @@ var DirectStylePlayer = /** @class */ (function (_super) {
         if (!this._startingStyles)
             return;
         this.init();
-        Object.keys(this._styles).forEach(function (prop) { _this.element.style[prop] = _this._styles[prop]; });
+        Object.keys(this._styles)
+            .forEach(function (prop) { return _this.element.style.setProperty(prop, _this._styles[prop]); });
         _super.prototype.play.call(this);
     };
     /**
@@ -57,7 +59,7 @@ var DirectStylePlayer = /** @class */ (function (_super) {
         Object.keys(this._startingStyles).forEach(function (prop) {
             var /** @type {?} */ value = /** @type {?} */ ((_this._startingStyles))[prop];
             if (value) {
-                _this.element.style[prop] = value;
+                _this.element.style.setProperty(prop, value);
             }
             else {
                 _this.element.style.removeProperty(prop);
@@ -75,8 +77,8 @@ function DirectStylePlayer_tsickle_Closure_declarations() {
     /** @type {?} */
     DirectStylePlayer.prototype.__initialized;
     /** @type {?} */
-    DirectStylePlayer.prototype.element;
-    /** @type {?} */
     DirectStylePlayer.prototype._styles;
+    /** @type {?} */
+    DirectStylePlayer.prototype.element;
 }
 //# sourceMappingURL=direct_style_player.js.map

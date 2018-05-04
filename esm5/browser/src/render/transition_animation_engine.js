@@ -16,13 +16,15 @@ var /** @type {?} */ STAR_SELECTOR = '.ng-star-inserted';
 var /** @type {?} */ EMPTY_PLAYER_ARRAY = [];
 var /** @type {?} */ NULL_REMOVAL_STATE = {
     namespaceId: '',
-    setForRemoval: null,
+    setForRemoval: false,
+    setForMove: false,
     hasAnimation: false,
     removedBeforeQueried: false
 };
 var /** @type {?} */ NULL_REMOVED_QUERIED_STATE = {
     namespaceId: '',
-    setForRemoval: null,
+    setForMove: false,
+    setForRemoval: false,
     hasAnimation: false,
     removedBeforeQueried: true
 };
@@ -66,6 +68,8 @@ export function ElementAnimationState() { }
 function ElementAnimationState_tsickle_Closure_declarations() {
     /** @type {?} */
     ElementAnimationState.prototype.setForRemoval;
+    /** @type {?} */
+    ElementAnimationState.prototype.setForMove;
     /** @type {?} */
     ElementAnimationState.prototype.hasAnimation;
     /** @type {?} */
@@ -915,6 +919,11 @@ var TransitionAnimationEngine = /** @class */ (function () {
         var /** @type {?} */ details = /** @type {?} */ (element[REMOVAL_FLAG]);
         if (details && details.setForRemoval) {
             details.setForRemoval = false;
+            details.setForMove = true;
+            var /** @type {?} */ index = this.collectedLeaveElements.indexOf(element);
+            if (index >= 0) {
+                this.collectedLeaveElements.splice(index, 1);
+            }
         }
         // in the event that the namespaceId is blank then the caller
         // code does not contain any animation code in it, but it is
@@ -1310,8 +1319,16 @@ var TransitionAnimationEngine = /** @class */ (function () {
             var /** @type {?} */ ns = this._namespaceList[i_3];
             ns.drainQueuedTransitions(microtaskId).forEach(function (entry) {
                 var /** @type {?} */ player = entry.player;
-                allPlayers.push(player);
                 var /** @type {?} */ element = entry.element;
+                allPlayers.push(player);
+                if (_this.collectedEnterElements.length) {
+                    var /** @type {?} */ details = /** @type {?} */ (element[REMOVAL_FLAG]);
+                    // move animations are currently not supported...
+                    if (details && details.setForMove) {
+                        player.destroy();
+                        return;
+                    }
+                }
                 if (!bodyNode || !_this.driver.containsElement(bodyNode, element)) {
                     player.destroy();
                     return;

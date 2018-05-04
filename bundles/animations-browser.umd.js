@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-4ddeb03
+ * @license Angular v6.0.0-3824e3f
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v6.0.0-4ddeb03
+ * @license Angular v6.0.0-3824e3f
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -278,6 +278,18 @@ function getBodyNode() {
 var matchesElement = _matches;
 var containsElement = _contains;
 var invokeQuery = _query;
+/**
+ * @param {?} object
+ * @return {?}
+ */
+function hypenatePropsObject(object) {
+    var /** @type {?} */ newObj = {};
+    Object.keys(object).forEach(function (prop) {
+        var /** @type {?} */ newProp = prop.replace(/([a-z])([A-Z])/g, '$1-$2');
+        newObj[newProp] = object[prop];
+    });
+    return newObj;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -3419,13 +3431,15 @@ var STAR_SELECTOR = '.ng-star-inserted';
 var EMPTY_PLAYER_ARRAY = [];
 var NULL_REMOVAL_STATE = {
     namespaceId: '',
-    setForRemoval: null,
+    setForRemoval: false,
+    setForMove: false,
     hasAnimation: false,
     removedBeforeQueried: false
 };
 var NULL_REMOVED_QUERIED_STATE = {
     namespaceId: '',
-    setForRemoval: null,
+    setForMove: false,
+    setForRemoval: false,
     hasAnimation: false,
     removedBeforeQueried: true
 };
@@ -4244,6 +4258,11 @@ var TransitionAnimationEngine = /** @class */ (function () {
         var /** @type {?} */ details = /** @type {?} */ (element[REMOVAL_FLAG]);
         if (details && details.setForRemoval) {
             details.setForRemoval = false;
+            details.setForMove = true;
+            var /** @type {?} */ index = this.collectedLeaveElements.indexOf(element);
+            if (index >= 0) {
+                this.collectedLeaveElements.splice(index, 1);
+            }
         }
         // in the event that the namespaceId is blank then the caller
         // code does not contain any animation code in it, but it is
@@ -4639,8 +4658,16 @@ var TransitionAnimationEngine = /** @class */ (function () {
             var /** @type {?} */ ns = this._namespaceList[i_3];
             ns.drainQueuedTransitions(microtaskId).forEach(function (entry) {
                 var /** @type {?} */ player = entry.player;
-                allPlayers.push(player);
                 var /** @type {?} */ element = entry.element;
+                allPlayers.push(player);
+                if (_this.collectedEnterElements.length) {
+                    var /** @type {?} */ details = /** @type {?} */ (element[REMOVAL_FLAG]);
+                    // move animations are currently not supported...
+                    if (details && details.setForMove) {
+                        player.destroy();
+                        return;
+                    }
+                }
                 if (!bodyNode || !_this.driver.containsElement(bodyNode, element)) {
                     player.destroy();
                     return;
@@ -6266,12 +6293,12 @@ var CssKeyframesPlayer = /** @class */ (function () {
  */
 var DirectStylePlayer = /** @class */ (function (_super) {
     __extends(DirectStylePlayer, _super);
-    function DirectStylePlayer(element, _styles) {
+    function DirectStylePlayer(element, styles) {
         var _this = _super.call(this) || this;
         _this.element = element;
-        _this._styles = _styles;
         _this._startingStyles = {};
         _this.__initialized = false;
+        _this._styles = hypenatePropsObject(styles);
         return _this;
     }
     /**
@@ -6301,7 +6328,8 @@ var DirectStylePlayer = /** @class */ (function (_super) {
         if (!this._startingStyles)
             return;
         this.init();
-        Object.keys(this._styles).forEach(function (prop) { _this.element.style[prop] = _this._styles[prop]; });
+        Object.keys(this._styles)
+            .forEach(function (prop) { return _this.element.style.setProperty(prop, _this._styles[prop]); });
         _super.prototype.play.call(this);
     };
     /**
@@ -6317,7 +6345,7 @@ var DirectStylePlayer = /** @class */ (function (_super) {
         Object.keys(this._startingStyles).forEach(function (prop) {
             var /** @type {?} */ value = /** @type {?} */ ((_this._startingStyles))[prop];
             if (value) {
-                _this.element.style[prop] = value;
+                _this.element.style.setProperty(prop, value);
             }
             else {
                 _this.element.style.removeProperty(prop);
@@ -6527,18 +6555,6 @@ function flattenKeyframesIntoStyles(keyframes) {
         });
     }
     return flatKeyframes;
-}
-/**
- * @param {?} object
- * @return {?}
- */
-function hypenatePropsObject(object) {
-    var /** @type {?} */ newObj = {};
-    Object.keys(object).forEach(function (prop) {
-        var /** @type {?} */ newProp = prop.replace(/([a-z])([A-Z])/g, '$1-$2');
-        newObj[newProp] = object[prop];
-    });
-    return newObj;
 }
 /**
  * @param {?} node
