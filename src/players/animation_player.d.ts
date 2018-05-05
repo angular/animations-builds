@@ -17,7 +17,7 @@ export interface AnimationPlayer {
     finish(): void;
     destroy(): void;
     reset(): void;
-    setPosition(position: number): void;
+    setPosition(p: any): void;
     getPosition(): number;
     parentPlayer: AnimationPlayer | null;
     readonly totalTime: number;
@@ -49,6 +49,6 @@ export declare class NoopAnimationPlayer implements AnimationPlayer {
     finish(): void;
     destroy(): void;
     reset(): void;
-    setPosition(position: number): void;
+    setPosition(p: number): void;
     getPosition(): number;
 }
