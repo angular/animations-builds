@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.5+136.sha-7e9649b
+ * @license Angular v6.0.0-rc.5+138.sha-e351896
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -83,15 +83,14 @@ var AUTO_STYLE = '*';
  * Triggers are registered within the component annotation data under the
  * {@link Component#animations animations section}. An animation trigger can be placed on an element
  * within a template by referencing the name of the trigger followed by the expression value that
- the
- * trigger is bound to (in the form of `[@triggerName]="expression"`.
+ * the trigger is bound to (in the form of `[@triggerName]="expression"`.
  *
  * Animation trigger bindings strigify values and then match the previous and current values against
  * any linked transitions. If a boolean value is provided into the trigger binding then it will both
  * be represented as `1` or `true` and `0` or `false` for a true and false boolean values
  * respectively.
  *
- * ### Usage
+ * **Usage**
  *
  * `trigger` will create an animation trigger reference based on the provided `name` value. The
  * provided `animation` value is expected to be an array consisting of {@link state state} and
@@ -116,22 +115,27 @@ var AUTO_STYLE = '*';
  * ```
  *
  * The template associated with this component will make use of the `myAnimationTrigger` animation
- trigger by binding to an element within its template code.
+ * trigger by binding to an element within its template code.
  *
  * ```html
  * <!-- somewhere inside of my-component-tpl.html -->
  * <div [@myAnimationTrigger]="myStatusExp">...</div>
  * ```
  *
- * ### Using an inline function
+ * **Using an inline function**
+ *
  * The `transition` animation method also supports reading an inline function which can decide
  * if its associated animation should be run.
  *
  * ```
  * // this method will be run each time the `myAnimationTrigger`
  * // trigger value changes...
- * function myInlineMatcherFn(fromState: string, toState: string, element: any, params: {[key:
- string]: any}): boolean {
+ * function myInlineMatcherFn(
+ *   fromState: string,
+ *   toState: string,
+ *   element: any,
+ *   params: {[key: string]: any}
+ * ): boolean {
  *   // notice that `element` and `params` are also available here
  *   return toState == 'yes-please-animate';
  * }
@@ -155,13 +159,14 @@ var AUTO_STYLE = '*';
  * The inline method will be run each time the trigger
  * value changes
  *
- * ## Disable Animations
+ * **Disable Animations**
+ *
  * A special animation control binding called `@.disabled` can be placed on an element which will
- then disable animations for any inner animation triggers situated within the element as well as
- any animations on the element itself.
+ * then disable animations for any inner animation triggers situated within the element as well as
+ * any animations on the element itself.
  *
  * When true, the `@.disabled` binding will prevent all animations from rendering. The example
- below shows how to use this feature:
+ * below shows how to use this feature:
  *
  * ```ts
  * @Component({
@@ -184,16 +189,17 @@ var AUTO_STYLE = '*';
  * ```
  *
  * The `@childAnimation` trigger will not animate because `@.disabled` prevents it from happening
- (when true).
+ * (when true).
  *
  * Note that `@.disabled` will only disable all animations (this means any animations running on
  * the same element will also be disabled).
  *
- * ### Disabling Animations Application-wide
+ * **Disabling Animations Application-wide**
+ *
  * When an area of the template is set to have animations disabled, **all** inner components will
- also have their animations disabled as well. This means that all animations for an angular
- application can be disabled by placing a host binding set on `@.disabled` on the topmost Angular
- component.
+ * also have their animations disabled as well. This means that all animations for an angular
+ * application can be disabled by placing a host binding set on `@.disabled` on the topmost Angular
+ * component.
  *
  * ```ts
  * import {Component, HostBinding} from '@angular/core';
@@ -208,19 +214,20 @@ var AUTO_STYLE = '*';
  * }
  * ```
  *
- * ### What about animations that us `query()` and `animateChild()`?
- * Despite inner animations being disabled, a parent animation can {@link query query} for inner
- elements located in disabled areas of the template and still animate them as it sees fit. This is
- also the case for when a sub animation is queried by a parent and then later animated using {@link
- animateChild animateChild}.
-
- * ### Detecting when an animation is disabled
+ * **What about animations that use `query()` and `animateChild()`?**
+ *
+ * Despite inner animations being disabled, a parent animation can `query` for inner
+ * elements located in disabled areas of the template and still animate them as it sees fit. This is
+ * also the case for when a sub animation is queried by a parent and then later animated using
+ * animateChild`.
+ *
+ * **Detecting when an animation is disabled**
+ *
  * If a region of the DOM (or the entire application) has its animations disabled, then animation
  * trigger callbacks will still fire just as normal (only for zero seconds).
  *
  * When a trigger callback fires it will provide an instance of an {@link AnimationEvent}. If
- animations
- * are disabled then the `.disabled` flag on the event will be true.
+ * animations are disabled then the `.disabled` flag on the event will be true.
  *
  * @experimental Animation support is experimental.
  */
@@ -229,8 +236,8 @@ function trigger(name, definitions) {
 }
 /**
  * `animate` is an animation-specific function that is designed to be used inside of Angular's
- * animation DSL language. If this information is new, please navigate to the {@link
- * Component#animations component animations metadata page} to gain a better understanding of
+ * animation DSL language. If this information is new, please navigate to the
+ * {@link Component#animations component animations metadata page} to gain a better understanding of
  * how animations in Angular are used.
  *
  * `animate` specifies an animation step that will apply the provided `styles` data for a given
@@ -238,7 +245,8 @@ function trigger(name, definitions) {
  * to be used within {@link sequence an animation sequence}, {@link group group}, or {@link
  * transition transition}.
  *
- * ### Usage
+ * {@a usage}
+ * **Usage**
  *
  * The `animate` function accepts two input parameters: `timing` and `styles`:
  *
@@ -289,7 +297,7 @@ function animate(timings, styles) {
  * transition} and it will only continue to the next instruction once all of the inner animation
  * steps have completed.
  *
- * ### Usage
+ * **Usage**
  *
  * The `steps` data that is passed into the `group` animation function can either consist of {@link
  * style style} or {@link animate animate} function calls. Each call to `style()` or `animate()`
@@ -327,7 +335,7 @@ function group(steps, options) {
  * To perform animation styling in parallel with other animation steps then have a look at the
  * {@link group group} animation function.
  *
- * ### Usage
+ * **Usage**
  *
  * The `steps` data that is passed into the `sequence` animation function can either consist of
  * {@link style style} or {@link animate animate} function calls. A call to `style()` will apply the
@@ -351,15 +359,15 @@ function sequence(steps, options) {
 }
 /**
  * `style` is an animation-specific function that is designed to be used inside of Angular's
- * animation DSL language. If this information is new, please navigate to the {@link
- * Component#animations component animations metadata page} to gain a better understanding of
+ * animation DSL language. If this information is new, please navigate to the
+ * {@link Component#animations component animations metadata page} to gain a better understanding of
  * how animations in Angular are used.
  *
  * `style` declares a key/value object containing CSS properties/styles that can then be used for
  * {@link state animation states}, within an {@link sequence animation sequence}, or as styling data
  * for both {@link animate animate} and {@link keyframes keyframes}.
  *
- * ### Usage
+ * **Usage**
  *
  * `style` takes in a key/value string map as data and expects one or more CSS property/value pairs
  * to be defined.
@@ -372,7 +380,7 @@ function sequence(steps, options) {
  * style({ width: 100, height: 0 })
  * ```
  *
- * #### Auto-styles (using `*`)
+ * **Auto-styles (using `*`)**
  *
  * When an asterix (`*`) character is used as a value then it will be detected from the element
  * being animated and applied as animation data when the animation starts.
@@ -408,18 +416,18 @@ function style(tokens) {
  * function. To register states to an animation trigger please have a look at the {@link trigger
  * trigger} function.
  *
- * #### The `void` state
+ * **The `void` state**
  *
  * The `void` state value is a reserved word that angular uses to determine when the element is not
  * apart of the application anymore (e.g. when an `ngIf` evaluates to false then the state of the
  * associated element is void).
  *
- * #### The `*` (default) state
+ * **The `*` (default) state**
  *
  * The `*` state (when styled) is a fallback state that will be used if the state that is being
  * animated is not declared within the trigger.
  *
- * ### Usage
+ * **Usage**
  *
  * `state` will declare an animation state with its associated styles
  * within the given trigger.
@@ -447,14 +455,14 @@ function state(name, styles, options) {
 }
 /**
  * `keyframes` is an animation-specific function that is designed to be used inside of Angular's
- * animation DSL language. If this information is new, please navigate to the {@link
- * Component#animations component animations metadata page} to gain a better understanding of
- * how animations in Angular are used.
+ * animation DSL language. If this information is new, please navigate to the
+ * {@link Component#animations component animations metadata page} to gain a better understanding
+ * of how animations in Angular are used.
  *
  * `keyframes` specifies a collection of {@link style style} entries each optionally characterized
  * by an `offset` value.
  *
- * ### Usage
+ * **Usage**
  *
  * The `keyframes` animation function is designed to be used alongside the {@link animate animate}
  * animation function. Instead of applying animations from where they are currently to their
@@ -512,7 +520,7 @@ function keyframes(steps) {
  * to animate to a state value and persist its styles then one or more {@link state animation
  * states} is expected to be defined.
  *
- * ### Usage
+ * **Usage**
  *
  * An animation transition is kicked off the `stateChangeExpr` predicate evaluates to true based on
  * what the previous state is and what the current state has become. In other words, if a transition
@@ -563,7 +571,8 @@ function keyframes(steps) {
  * <div [@myAnimationTrigger]="myStatusExp">...</div>
  * ```
  *
- * #### The final `animate` call
+ * {@a the-final-animate-call}
+ * **The final `animate` call**
  *
  * If the final step within the transition steps is a call to `animate()` that **only** uses a
  * timing value with **no style data** then it will be automatically used as the final animation arc
@@ -580,7 +589,7 @@ function keyframes(steps) {
  * ])
  * ```
  *
- * ### Using :enter and :leave
+ * **Using :enter and :leave**
  *
  * Given that enter (insertion) and leave (removal) animations are so common, the `transition`
  * function accepts both `:enter` and `:leave` values which are aliases for the `void => *` and `*
@@ -596,7 +605,8 @@ function keyframes(steps) {
  * ])
  * ```
  *
- * ### Boolean values
+ * **Boolean values**
+ *
  * if a trigger binding value is a boolean value then it can be matched using a transition
  * expression that compares `true` and `false` or `1` and `0`.
  *
@@ -612,7 +622,8 @@ function keyframes(steps) {
  * ])
  * ```
  *
- * ### Using :increment and :decrement
+ * **Using :increment and :decrement**
+ *
  * In addition to the :enter and :leave transition aliases, the :increment and :decrement aliases
  * can be used to kick off a transition when a numeric value has increased or decreased in value.
  *
@@ -815,7 +826,8 @@ function animation(steps, options) {
  *
  * Now each of the sub animations start off with respect to the `100ms` staggering step.
  *
- * ## The first frame of child animations
+ * **The first frame of child animations**
+ *
  * When sub animations are executed using `animateChild` the animation engine will always apply the
  * first frame of every sub animation immediately at the start of the animation sequence. This way
  * the parent animation does not need to set any initial styling data on the sub elements before the
@@ -856,7 +868,7 @@ function useAnimation(animation, options) {
  * to the queried element (by default, an array is provided, then this will be
  * treated as an animation sequence).
  *
- * ### Usage
+ * **Usage**
  *
  * query() is designed to collect multiple elements and works internally by using
  * `element.querySelectorAll`. An additional options object can be provided which
@@ -879,7 +891,8 @@ function useAnimation(animation, options) {
  * ], { optional: true })
  * ```
  *
- * ### Special Selector Values
+ * **Special Selector Values**
+ *
  *
  * The selector value within a query can collect elements that contain angular-specific
  * characteristics
@@ -901,7 +914,8 @@ function useAnimation(animation, options) {
  *  query(':self, .record:enter, .record:leave, @subTrigger', [...])
  *  ```
  *
- * ### Demo
+ * **Demo**
+ *
  *
  * ```
  * @Component({
@@ -948,7 +962,7 @@ function query(selector, animation, options) {
  * animation DSL language. It is designed to be used inside of an animation {@link query query()}
  * and works by issuing a timing gap between after each queried item is animated.
  *
- * ### Usage
+ * **Usage**
  *
  * In the example below there is a container element that wraps a list of items stamped out
  * by an ngFor. The container element contains an animation trigger that will later be set
@@ -1097,7 +1111,7 @@ var NoopAnimationPlayer = /** @class */ (function () {
         }
     };
     NoopAnimationPlayer.prototype.reset = function () { };
-    NoopAnimationPlayer.prototype.setPosition = function (p) { };
+    NoopAnimationPlayer.prototype.setPosition = function (position) { };
     NoopAnimationPlayer.prototype.getPosition = function () { return 0; };
     /* @internal */
     /* @internal */
