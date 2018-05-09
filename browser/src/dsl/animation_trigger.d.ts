@@ -25,7 +25,9 @@ export declare class AnimationTrigger {
     };
     constructor(name: string, ast: TriggerAst);
     readonly containsQueries: boolean;
-    matchTransition(currentState: any, nextState: any): AnimationTransitionFactory | null;
+    matchTransition(currentState: any, nextState: any, element: any, params: {
+        [key: string]: any;
+    }): AnimationTransitionFactory | null;
     matchStyles(currentState: any, params: {
         [key: string]: any;
     }, errors: any[]): ɵStyleData;

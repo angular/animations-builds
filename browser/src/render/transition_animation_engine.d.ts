@@ -22,7 +22,8 @@ export interface QueueInstruction {
 }
 export declare const REMOVAL_FLAG = "__ng_removed";
 export interface ElementAnimationState {
-    setForRemoval: any;
+    setForRemoval: boolean;
+    setForMove: boolean;
     hasAnimation: boolean;
     namespaceId: string;
     removedBeforeQueried: boolean;
@@ -134,10 +135,13 @@ export declare class TransitionAnimationPlayer implements AnimationPlayer {
     readonly destroyed: boolean;
     parentPlayer: AnimationPlayer;
     markedForDestroy: boolean;
+    disabled: boolean;
     readonly queued: boolean;
+    readonly totalTime: number;
     constructor(namespaceId: string, triggerName: string, element: any);
     setRealPlayer(player: AnimationPlayer): void;
     getRealPlayer(): AnimationPlayer;
+    overrideTotalTime(totalTime: number): void;
     syncPlayerEvents(player: AnimationPlayer): void;
     private _queueEvent(name, callback);
     onDone(fn: () => void): void;
@@ -153,5 +157,4 @@ export declare class TransitionAnimationPlayer implements AnimationPlayer {
     reset(): void;
     setPosition(p: any): void;
     getPosition(): number;
-    readonly totalTime: number;
 }
