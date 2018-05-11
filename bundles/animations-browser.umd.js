@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.5+170.sha-474dbf0
+ * @license Angular v6.0.0-rc.5+171.sha-d2a8687
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2867,8 +2867,11 @@ var TransitionAnimationEngine = /** @class */ (function () {
     };
     TransitionAnimationEngine.prototype.trigger = function (namespaceId, element, name, value) {
         if (isElementNode(element)) {
-            this._fetchNamespace(namespaceId).trigger(element, name, value);
-            return true;
+            var ns = this._fetchNamespace(namespaceId);
+            if (ns) {
+                ns.trigger(element, name, value);
+                return true;
+            }
         }
         return false;
     };
