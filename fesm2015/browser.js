@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0+54.sha-56be337
+ * @license Angular v6.0.0+55.sha-752b83a
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3568,8 +3568,11 @@ class TransitionAnimationEngine {
      */
     trigger(namespaceId, element, name, value) {
         if (isElementNode(element)) {
-            this._fetchNamespace(namespaceId).trigger(element, name, value);
-            return true;
+            const /** @type {?} */ ns = this._fetchNamespace(namespaceId);
+            if (ns) {
+                ns.trigger(element, name, value);
+                return true;
+            }
         }
         return false;
     }
