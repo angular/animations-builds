@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.5+184.sha-e5e5c24
+ * @license Angular v6.0.0-rc.5+185.sha-5cf82f8
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -306,8 +306,6 @@ class NoopAnimationDriver {
 NoopAnimationDriver.decorators = [
     { type: Injectable }
 ];
-/** @nocollapse */
-NoopAnimationDriver.ctorParameters = () => [];
 /**
  * \@experimental
  * @abstract
@@ -352,7 +350,7 @@ function _convertTimeValueToMS(value, unit) {
     switch (unit) {
         case 's':
             return value * ONE_SECOND;
-        default:
+        default: // ms or something else
             // ms or something else
             return value;
     }
@@ -1942,7 +1940,7 @@ class AnimationTimelineContext {
         if (includeSelf) {
             results.push(this.element);
         }
-        if (selector.length > 0) {
+        if (selector.length > 0) { // if :self is only used then the selector is empty
             // if :self is only used then the selector is empty
             selector = selector.replace(ENTER_TOKEN_REGEX, '.' + this._enterClassName);
             selector = selector.replace(LEAVE_TOKEN_REGEX, '.' + this._leaveClassName);
@@ -4620,15 +4618,15 @@ function buildRootMap(roots, nodes) {
         if (root)
             return root;
         const /** @type {?} */ parent = node.parentNode;
-        if (rootMap.has(parent)) {
+        if (rootMap.has(parent)) { // ngIf inside @trigger
             // ngIf inside @trigger
             root = parent;
         }
-        else if (nodeSet.has(parent)) {
+        else if (nodeSet.has(parent)) { // ngIf inside ngIf
             // ngIf inside ngIf
             root = NULL_NODE;
         }
-        else {
+        else { // recurse upwards
             // recurse upwards
             root = getRoot(parent);
         }
