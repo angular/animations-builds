@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.5+78.sha-e1c4930
+ * @license Angular v6.0.0-rc.5+215.sha-23a98b9
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -177,6 +177,14 @@ function getBodyNode() {
 var matchesElement = _matches;
 var containsElement = _contains;
 var invokeQuery = _query;
+function hypenatePropsObject(object) {
+    var newObj = {};
+    Object.keys(object).forEach(function (prop) {
+        var newProp = prop.replace(/([a-z])([A-Z])/g, '$1-$2');
+        newObj[newProp] = object[prop];
+    });
+    return newObj;
+}
 
 /**
  * @experimental
@@ -202,8 +210,6 @@ var NoopAnimationDriver = /** @class */ (function () {
     NoopAnimationDriver.decorators = [
         { type: Injectable }
     ];
-    /** @nocollapse */
-    NoopAnimationDriver.ctorParameters = function () { return []; };
     return NoopAnimationDriver;
 }());
 /**
@@ -239,7 +245,7 @@ function _convertTimeValueToMS(value, unit) {
     switch (unit) {
         case 's':
             return value * ONE_SECOND;
-        default:
+        default: // ms or something else
             // ms or something else
             return value;
     }
@@ -1540,7 +1546,7 @@ var AnimationTimelineContext = /** @class */ (function () {
         if (includeSelf) {
             results.push(this.element);
         }
-        if (selector.length > 0) {
+        if (selector.length > 0) { // if :self is only used then the selector is empty
             // if :self is only used then the selector is empty
             selector = selector.replace(ENTER_TOKEN_REGEX, '.' + this._enterClassName);
             selector = selector.replace(LEAVE_TOKEN_REGEX, '.' + this._leaveClassName);
@@ -2232,13 +2238,15 @@ var STAR_SELECTOR = '.ng-star-inserted';
 var EMPTY_PLAYER_ARRAY = [];
 var NULL_REMOVAL_STATE = {
     namespaceId: '',
-    setForRemoval: null,
+    setForRemoval: false,
+    setForMove: false,
     hasAnimation: false,
     removedBeforeQueried: false
 };
 var NULL_REMOVED_QUERIED_STATE = {
     namespaceId: '',
-    setForRemoval: null,
+    setForMove: false,
+    setForRemoval: false,
     hasAnimation: false,
     removedBeforeQueried: true
 };
@@ -2773,8 +2781,11 @@ var TransitionAnimationEngine = /** @class */ (function () {
     };
     TransitionAnimationEngine.prototype.trigger = function (namespaceId, element, name, value) {
         if (isElementNode(element)) {
-            this._fetchNamespace(namespaceId).trigger(element, name, value);
-            return true;
+            var ns = this._fetchNamespace(namespaceId);
+            if (ns) {
+                ns.trigger(element, name, value);
+                return true;
+            }
         }
         return false;
     };
@@ -2786,6 +2797,11 @@ var TransitionAnimationEngine = /** @class */ (function () {
         var details = element[REMOVAL_FLAG];
         if (details && details.setForRemoval) {
             details.setForRemoval = false;
+            details.setForMove = true;
+            var index = this.collectedLeaveElements.indexOf(element);
+            if (index >= 0) {
+                this.collectedLeaveElements.splice(index, 1);
+            }
         }
         // in the event that the namespaceId is blank then the caller
         // code does not contain any animation code in it, but it is
@@ -3043,8 +3059,16 @@ var TransitionAnimationEngine = /** @class */ (function () {
             var ns = this._namespaceList[i_3];
             ns.drainQueuedTransitions(microtaskId).forEach(function (entry) {
                 var player = entry.player;
-                allPlayers.push(player);
                 var element = entry.element;
+                allPlayers.push(player);
+                if (_this.collectedEnterElements.length) {
+                    var details = element[REMOVAL_FLAG];
+                    // move animations are currently not supported...
+                    if (details && details.setForMove) {
+                        player.destroy();
+                        return;
+                    }
+                }
                 if (!bodyNode || !_this.driver.containsElement(bodyNode, element)) {
                     player.destroy();
                     return;
@@ -3618,15 +3642,15 @@ function buildRootMap(roots, nodes) {
         if (root)
             return root;
         var parent = node.parentNode;
-        if (rootMap.has(parent)) {
+        if (rootMap.has(parent)) { // ngIf inside @trigger
             // ngIf inside @trigger
             root = parent;
         }
-        else if (nodeSet.has(parent)) {
+        else if (nodeSet.has(parent)) { // ngIf inside ngIf
             // ngIf inside ngIf
             root = NULL_NODE;
         }
-        else {
+        else { // recurse upwards
             // recurse upwards
             root = getRoot(parent);
         }
@@ -4036,12 +4060,12 @@ var CssKeyframesPlayer = /** @class */ (function () {
 
 var DirectStylePlayer = /** @class */ (function (_super) {
     __extends(DirectStylePlayer, _super);
-    function DirectStylePlayer(element, _styles) {
+    function DirectStylePlayer(element, styles) {
         var _this = _super.call(this) || this;
         _this.element = element;
-        _this._styles = _styles;
         _this._startingStyles = {};
         _this.__initialized = false;
+        _this._styles = hypenatePropsObject(styles);
         return _this;
     }
     DirectStylePlayer.prototype.init = function () {
@@ -4059,7 +4083,8 @@ var DirectStylePlayer = /** @class */ (function (_super) {
         if (!this._startingStyles)
             return;
         this.init();
-        Object.keys(this._styles).forEach(function (prop) { _this.element.style[prop] = _this._styles[prop]; });
+        Object.keys(this._styles)
+            .forEach(function (prop) { return _this.element.style.setProperty(prop, _this._styles[prop]); });
         _super.prototype.play.call(this);
     };
     DirectStylePlayer.prototype.destroy = function () {
@@ -4069,7 +4094,7 @@ var DirectStylePlayer = /** @class */ (function (_super) {
         Object.keys(this._startingStyles).forEach(function (prop) {
             var value = _this._startingStyles[prop];
             if (value) {
-                _this.element.style[prop] = value;
+                _this.element.style.setProperty(prop, value);
             }
             else {
                 _this.element.style.removeProperty(prop);
@@ -4181,14 +4206,6 @@ function flattenKeyframesIntoStyles(keyframes) {
         });
     }
     return flatKeyframes;
-}
-function hypenatePropsObject(object) {
-    var newObj = {};
-    Object.keys(object).forEach(function (prop) {
-        var newProp = prop.replace(/([a-z])([A-Z])/g, '$1-$2');
-        newObj[newProp] = object[prop];
-    });
-    return newObj;
 }
 function removeElement(node) {
     node.parentNode.removeChild(node);

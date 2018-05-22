@@ -22,7 +22,8 @@ export interface QueueInstruction {
 }
 export declare const REMOVAL_FLAG = "__ng_removed";
 export interface ElementAnimationState {
-    setForRemoval: any;
+    setForRemoval: boolean;
+    setForMove: boolean;
     hasAnimation: boolean;
     namespaceId: string;
     removedBeforeQueried: boolean;
