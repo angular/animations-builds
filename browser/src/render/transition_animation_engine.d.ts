@@ -22,7 +22,8 @@ export interface QueueInstruction {
 }
 export declare const REMOVAL_FLAG = "__ng_removed";
 export interface ElementAnimationState {
-    setForRemoval: any;
+    setForRemoval: boolean;
+    setForMove: boolean;
     hasAnimation: boolean;
     namespaceId: string;
     removedBeforeQueried: boolean;
@@ -107,7 +108,7 @@ export declare class TransitionAnimationEngine {
     removeNode(namespaceId: string, element: any, context: any): void;
     markElementAsRemoved(namespaceId: string, element: any, hasAnimation?: boolean, context?: any): void;
     listen(namespaceId: string, element: any, name: string, phase: string, callback: (event: any) => boolean): () => any;
-    private _buildInstruction(entry, subTimelines);
+    private _buildInstruction(entry, subTimelines, enterClassName, leaveClassName);
     destroyInnerAnimations(containerElement: any): void;
     destroyActiveAnimationsForElement(element: any): void;
     finishActiveQueriedAnimationOnElement(element: any): void;
@@ -134,10 +135,14 @@ export declare class TransitionAnimationPlayer implements AnimationPlayer {
     readonly destroyed: boolean;
     parentPlayer: AnimationPlayer;
     markedForDestroy: boolean;
-    constructor(namespaceId: string, triggerName: string, element: any);
+    disabled: boolean;
     readonly queued: boolean;
+    readonly totalTime: number;
+    constructor(namespaceId: string, triggerName: string, element: any);
     setRealPlayer(player: AnimationPlayer): void;
     getRealPlayer(): AnimationPlayer;
+    overrideTotalTime(totalTime: number): void;
+    syncPlayerEvents(player: AnimationPlayer): void;
     private _queueEvent(name, callback);
     onDone(fn: () => void): void;
     onStart(fn: () => void): void;
@@ -152,5 +157,4 @@ export declare class TransitionAnimationPlayer implements AnimationPlayer {
     reset(): void;
     setPosition(p: any): void;
     getPosition(): number;
-    readonly totalTime: number;
 }

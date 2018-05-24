@@ -42,5 +42,13 @@ export declare function iteratorToArray(iterator: any): any[];
 export declare function mergeAnimationOptions(source: AnimationOptions, destination: AnimationOptions): AnimationOptions;
 export declare function dashCaseToCamelCase(input: string): string;
 export declare function allowPreviousPlayerStylesMerge(duration: number, delay: number): boolean;
+export declare function balancePreviousStylesIntoKeyframes(element: any, keyframes: {
+    [key: string]: any;
+}[], previousStyles: {
+    [key: string]: any;
+}): {
+    [key: string]: any;
+}[];
 export declare function visitDslNode(visitor: AnimationDslVisitor, node: AnimationMetadata, context: any): any;
 export declare function visitDslNode(visitor: AnimationAstVisitor, node: AnimationAst<AnimationMetadataType>, context: any): any;
+export declare function computeStyle(element: any, prop: string): string;
