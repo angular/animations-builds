@@ -17,7 +17,9 @@ export declare class AnimationTransitionFactory {
     constructor(_triggerName: string, ast: TransitionAst, _stateStyles: {
         [stateName: string]: AnimationStateStyles;
     });
-    match(currentState: any, nextState: any): boolean;
+    match(currentState: any, nextState: any, element: any, params: {
+        [key: string]: any;
+    }): boolean;
     buildStyles(stateName: string, params: {
         [key: string]: any;
     }, errors: any[]): ɵStyleData;
