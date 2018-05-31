@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.5+274.sha-b99ef2b
+ * @license Angular v6.0.0-rc.5+275.sha-b492b9e
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -8,6 +8,9 @@ import { AUTO_STYLE, NoopAnimationPlayer, sequence, style, ɵAnimationGroupPlaye
 import { Injectable } from '@angular/core';
 import { __assign, __extends, __read, __spread, __values } from 'tslib';
 
+function isBrowser() {
+    return (typeof window !== 'undefined' && typeof window.document !== 'undefined');
+}
 function optimizeGroupPlayer(players) {
     switch (players.length) {
         case 0:
@@ -118,7 +121,7 @@ var _matches = function (element, selector) {
 var _query = function (element, selector, multi) {
     return [];
 };
-if (typeof Element != 'undefined') {
+if (isBrowser()) {
     // this is well supported in all browsers
     _contains = function (elm1, elm2) { return elm1.contains(elm2); };
     if (Element.prototype.matches) {
@@ -4394,7 +4397,7 @@ function supportsWebAnimations() {
     return typeof getElementAnimateFn() === 'function';
 }
 function getElementAnimateFn() {
-    return (typeof Element !== 'undefined' && Element.prototype['animate']) || {};
+    return (isBrowser() && Element.prototype['animate']) || {};
 }
 
 /**
