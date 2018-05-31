@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.3+35.sha-a634a5a
+ * @license Angular v6.0.3+36.sha-c9eb491
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -11,6 +11,12 @@ import { Injectable } from '@angular/core';
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+/**
+ * @return {?}
+ */
+function isBrowser() {
+    return (typeof window !== 'undefined' && typeof window.document !== 'undefined');
+}
 /**
  * @param {?} players
  * @return {?}
@@ -161,7 +167,7 @@ let _matches = (element, selector) => false;
 let _query = (element, selector, multi) => {
     return [];
 };
-if (typeof Element != 'undefined') {
+if (isBrowser()) {
     // this is well supported in all browsers
     _contains = (elm1, elm2) => { return /** @type {?} */ (elm1.contains(elm2)); };
     if (Element.prototype.matches) {
@@ -5810,7 +5816,7 @@ function supportsWebAnimations() {
  * @return {?}
  */
 function getElementAnimateFn() {
-    return (typeof Element !== 'undefined' && (/** @type {?} */ (Element)).prototype['animate']) || {};
+    return (isBrowser() && (/** @type {?} */ (Element)).prototype['animate']) || {};
 }
 
 /**
