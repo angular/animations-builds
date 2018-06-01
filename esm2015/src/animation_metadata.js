@@ -359,7 +359,7 @@ function AnimationStaggerMetadata_tsickle_Closure_declarations() {
  *   templateUrl: 'app.component.html',
  * })
  * class AppComponent {
- *   \@HostBinding('\@.disabled')
+ * \@HostBinding('@.disabled')
  *   public animationsDisabled = true;
  * }
  * ```
