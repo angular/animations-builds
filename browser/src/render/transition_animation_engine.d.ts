@@ -40,7 +40,6 @@ export declare class StateValue {
 }
 export declare const VOID_VALUE = "void";
 export declare const DEFAULT_STATE_VALUE: StateValue;
-export declare const DELETED_STATE_VALUE: StateValue;
 export declare class AnimationTransitionNamespace {
     id: string;
     hostElement: any;
