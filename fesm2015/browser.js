@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.3+64.sha-dc3e8aa
+ * @license Angular v6.0.3+65.sha-19deca1
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2971,7 +2971,6 @@ class StateValue {
 }
 const VOID_VALUE = 'void';
 const DEFAULT_STATE_VALUE = new StateValue(VOID_VALUE);
-const DELETED_STATE_VALUE = new StateValue('DELETED');
 class AnimationTransitionNamespace {
     /**
      * @param {?} id
@@ -3081,9 +3080,6 @@ class AnimationTransitionNamespace {
         triggersWithStates[triggerName] = toState;
         if (!fromState) {
             fromState = DEFAULT_STATE_VALUE;
-        }
-        else if (fromState === DELETED_STATE_VALUE) {
-            return player;
         }
         const /** @type {?} */ isRemoval = toState.value === VOID_VALUE;
         // normally this isn't reached by here, however, if an object expression
@@ -3731,10 +3727,6 @@ class TransitionAnimationEngine {
                     player.destroy();
                 }
             });
-        }
-        const /** @type {?} */ stateMap = this.statesByElement.get(element);
-        if (stateMap) {
-            Object.keys(stateMap).forEach(triggerName => stateMap[triggerName] = DELETED_STATE_VALUE);
         }
     }
     /**
