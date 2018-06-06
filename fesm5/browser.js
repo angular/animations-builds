@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.5+320.sha-9367e91
+ * @license Angular v6.0.0-rc.5+322.sha-86b13cc
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2347,7 +2347,6 @@ var StateValue = /** @class */ (function () {
 }());
 var VOID_VALUE = 'void';
 var DEFAULT_STATE_VALUE = new StateValue(VOID_VALUE);
-var DELETED_STATE_VALUE = new StateValue('DELETED');
 var AnimationTransitionNamespace = /** @class */ (function () {
     function AnimationTransitionNamespace(id, hostElement, _engine) {
         this.id = id;
@@ -2432,9 +2431,6 @@ var AnimationTransitionNamespace = /** @class */ (function () {
         triggersWithStates[triggerName] = toState;
         if (!fromState) {
             fromState = DEFAULT_STATE_VALUE;
-        }
-        else if (fromState === DELETED_STATE_VALUE) {
-            return player;
         }
         var isRemoval = toState.value === VOID_VALUE;
         // normally this isn't reached by here, however, if an object expression
@@ -2941,10 +2937,6 @@ var TransitionAnimationEngine = /** @class */ (function () {
                     player.destroy();
                 }
             });
-        }
-        var stateMap = this.statesByElement.get(element);
-        if (stateMap) {
-            Object.keys(stateMap).forEach(function (triggerName) { return stateMap[triggerName] = DELETED_STATE_VALUE; });
         }
     };
     TransitionAnimationEngine.prototype.finishActiveQueriedAnimationOnElement = function (element) {
