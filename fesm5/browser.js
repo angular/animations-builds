@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.0+27.sha-49c5234
+ * @license Angular v6.1.0-beta.0+29.sha-dc4a3d0
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2019,7 +2019,7 @@ var AnimationTransitionFactory = /** @class */ (function () {
         var backupStyles = backupStateStyler ? backupStateStyler.buildStyles(params, errors) : {};
         return stateStyler ? stateStyler.buildStyles(params, errors) : backupStyles;
     };
-    AnimationTransitionFactory.prototype.build = function (driver, element, currentState, nextState, enterClassName, leaveClassName, currentOptions, nextOptions, subInstructions) {
+    AnimationTransitionFactory.prototype.build = function (driver, element, currentState, nextState, enterClassName, leaveClassName, currentOptions, nextOptions, subInstructions, skipAstBuild) {
         var errors = [];
         var transitionAnimationParams = this.ast.options && this.ast.options.params || EMPTY_OBJECT;
         var currentAnimationParams = currentOptions && currentOptions.params || EMPTY_OBJECT;
@@ -2031,7 +2031,7 @@ var AnimationTransitionFactory = /** @class */ (function () {
         var postStyleMap = new Map();
         var isRemoval = nextState === 'void';
         var animationOptions = { params: __assign({}, transitionAnimationParams, nextAnimationParams) };
-        var timelines = buildAnimationTimelines(driver, element, this.ast.animation, enterClassName, leaveClassName, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
+        var timelines = skipAstBuild ? [] : buildAnimationTimelines(driver, element, this.ast.animation, enterClassName, leaveClassName, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
         var totalTime = 0;
         timelines.forEach(function (tl) { totalTime = Math.max(tl.duration + tl.delay, totalTime); });
         if (errors.length) {
@@ -2911,8 +2911,8 @@ var TransitionAnimationEngine = /** @class */ (function () {
         }
         return function () { };
     };
-    TransitionAnimationEngine.prototype._buildInstruction = function (entry, subTimelines, enterClassName, leaveClassName) {
-        return entry.transition.build(this.driver, entry.element, entry.fromState.value, entry.toState.value, enterClassName, leaveClassName, entry.fromState.options, entry.toState.options, subTimelines);
+    TransitionAnimationEngine.prototype._buildInstruction = function (entry, subTimelines, enterClassName, leaveClassName, skipBuildAst) {
+        return entry.transition.build(this.driver, entry.element, entry.fromState.value, entry.toState.value, enterClassName, leaveClassName, entry.fromState.options, entry.toState.options, subTimelines, skipBuildAst);
     };
     TransitionAnimationEngine.prototype.destroyInnerAnimations = function (containerElement) {
         var _this = this;
@@ -3113,15 +3113,22 @@ var TransitionAnimationEngine = /** @class */ (function () {
                         return;
                     }
                 }
-                if (!bodyNode || !_this.driver.containsElement(bodyNode, element)) {
-                    player.destroy();
-                    return;
-                }
+                var nodeIsOrphaned = !bodyNode || !_this.driver.containsElement(bodyNode, element);
                 var leaveClassName = leaveNodeMapIds.get(element);
                 var enterClassName = enterNodeMapIds.get(element);
-                var instruction = _this._buildInstruction(entry, subTimelines, enterClassName, leaveClassName);
+                var instruction = _this._buildInstruction(entry, subTimelines, enterClassName, leaveClassName, nodeIsOrphaned);
                 if (instruction.errors && instruction.errors.length) {
                     erroneousTransitions.push(instruction);
+                    return;
+                }
+                // even though the element may not be apart of the DOM, it may
+                // still be added at a later point (due to the mechanics of content
+                // projection and/or dynamic component insertion) therefore it's
+                // important we still style the element.
+                if (nodeIsOrphaned) {
+                    player.onStart(function () { return eraseStyles(element, instruction.fromStyles); });
+                    player.onDestroy(function () { return setStyles(element, instruction.toStyles); });
+                    skippedPlayers.push(player);
                     return;
                 }
                 // if a unmatched transition is queued to go then it SHOULD NOT render

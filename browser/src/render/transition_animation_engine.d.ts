@@ -107,7 +107,7 @@ export declare class TransitionAnimationEngine {
     removeNode(namespaceId: string, element: any, context: any): void;
     markElementAsRemoved(namespaceId: string, element: any, hasAnimation?: boolean, context?: any): void;
     listen(namespaceId: string, element: any, name: string, phase: string, callback: (event: any) => boolean): () => any;
-    private _buildInstruction(entry, subTimelines, enterClassName, leaveClassName);
+    private _buildInstruction(entry, subTimelines, enterClassName, leaveClassName, skipBuildAst?);
     destroyInnerAnimations(containerElement: any): void;
     destroyActiveAnimationsForElement(element: any): void;
     finishActiveQueriedAnimationOnElement(element: any): void;
