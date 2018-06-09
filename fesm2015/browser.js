@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.0+28.sha-8aa70c2
+ * @license Angular v6.1.0-beta.0+29.sha-dc4a3d0
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1936,7 +1936,7 @@ class AnimationTransitionFactory {
         const backupStyles = backupStateStyler ? backupStateStyler.buildStyles(params, errors) : {};
         return stateStyler ? stateStyler.buildStyles(params, errors) : backupStyles;
     }
-    build(driver, element, currentState, nextState, enterClassName, leaveClassName, currentOptions, nextOptions, subInstructions) {
+    build(driver, element, currentState, nextState, enterClassName, leaveClassName, currentOptions, nextOptions, subInstructions, skipAstBuild) {
         const errors = [];
         const transitionAnimationParams = this.ast.options && this.ast.options.params || EMPTY_OBJECT;
         const currentAnimationParams = currentOptions && currentOptions.params || EMPTY_OBJECT;
@@ -1948,7 +1948,7 @@ class AnimationTransitionFactory {
         const postStyleMap = new Map();
         const isRemoval = nextState === 'void';
         const animationOptions = { params: Object.assign({}, transitionAnimationParams, nextAnimationParams) };
-        const timelines = buildAnimationTimelines(driver, element, this.ast.animation, enterClassName, leaveClassName, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
+        const timelines = skipAstBuild ? [] : buildAnimationTimelines(driver, element, this.ast.animation, enterClassName, leaveClassName, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
         let totalTime = 0;
         timelines.forEach(tl => { totalTime = Math.max(tl.duration + tl.delay, totalTime); });
         if (errors.length) {
@@ -2795,8 +2795,8 @@ class TransitionAnimationEngine {
         }
         return () => { };
     }
-    _buildInstruction(entry, subTimelines, enterClassName, leaveClassName) {
-        return entry.transition.build(this.driver, entry.element, entry.fromState.value, entry.toState.value, enterClassName, leaveClassName, entry.fromState.options, entry.toState.options, subTimelines);
+    _buildInstruction(entry, subTimelines, enterClassName, leaveClassName, skipBuildAst) {
+        return entry.transition.build(this.driver, entry.element, entry.fromState.value, entry.toState.value, enterClassName, leaveClassName, entry.fromState.options, entry.toState.options, subTimelines, skipBuildAst);
     }
     destroyInnerAnimations(containerElement) {
         let elements = this.driver.query(containerElement, NG_TRIGGER_SELECTOR, true);
@@ -2991,15 +2991,22 @@ class TransitionAnimationEngine {
                         return;
                     }
                 }
-                if (!bodyNode || !this.driver.containsElement(bodyNode, element)) {
-                    player.destroy();
-                    return;
-                }
+                const nodeIsOrphaned = !bodyNode || !this.driver.containsElement(bodyNode, element);
                 const leaveClassName = leaveNodeMapIds.get(element);
                 const enterClassName = enterNodeMapIds.get(element);
-                const instruction = this._buildInstruction(entry, subTimelines, enterClassName, leaveClassName);
+                const instruction = this._buildInstruction(entry, subTimelines, enterClassName, leaveClassName, nodeIsOrphaned);
                 if (instruction.errors && instruction.errors.length) {
                     erroneousTransitions.push(instruction);
+                    return;
+                }
+                // even though the element may not be apart of the DOM, it may
+                // still be added at a later point (due to the mechanics of content
+                // projection and/or dynamic component insertion) therefore it's
+                // important we still style the element.
+                if (nodeIsOrphaned) {
+                    player.onStart(() => eraseStyles(element, instruction.fromStyles));
+                    player.onDestroy(() => setStyles(element, instruction.toStyles));
+                    skippedPlayers.push(player);
                     return;
                 }
                 // if a unmatched transition is queued to go then it SHOULD NOT render
