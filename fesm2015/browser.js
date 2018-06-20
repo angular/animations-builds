@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.1+32.sha-f3625e4
+ * @license Angular v6.1.0-beta.1+42.sha-e8354ed
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2069,7 +2069,8 @@ function balanceProperties(obj, key1, key2) {
  */
 const EMPTY_INSTRUCTION_MAP = new ElementInstructionMap();
 class TimelineAnimationEngine {
-    constructor(_driver, _normalizer) {
+    constructor(bodyNode, _driver, _normalizer) {
+        this.bodyNode = bodyNode;
         this._driver = _driver;
         this._normalizer = _normalizer;
         this._animations = {};
@@ -2586,7 +2587,8 @@ class AnimationTransitionNamespace {
     }
 }
 class TransitionAnimationEngine {
-    constructor(driver, _normalizer) {
+    constructor(bodyNode, driver, _normalizer) {
+        this.bodyNode = bodyNode;
         this.driver = driver;
         this._normalizer = _normalizer;
         this.players = [];
@@ -2927,7 +2929,7 @@ class TransitionAnimationEngine {
                 disabledElementsSet.add(nodesThatAreDisabled[i]);
             }
         });
-        const bodyNode = getBodyNode();
+        const bodyNode = this.bodyNode;
         const allTriggerElements = Array.from(this.statesByElement.keys());
         const enterNodeMap = buildRootMap(allTriggerElements, this.collectedEnterElements);
         // this must occur before the instructions are built below such that
@@ -3640,13 +3642,14 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
 }
 
 class AnimationEngine {
-    constructor(_driver, normalizer) {
+    constructor(bodyNode, _driver, normalizer) {
+        this.bodyNode = bodyNode;
         this._driver = _driver;
         this._triggerCache = {};
         // this method is designed to be overridden by the code that uses this engine
         this.onRemovalComplete = (element, context) => { };
-        this._transitionEngine = new TransitionAnimationEngine(_driver, normalizer);
-        this._timelineEngine = new TimelineAnimationEngine(_driver, normalizer);
+        this._transitionEngine = new TransitionAnimationEngine(bodyNode, _driver, normalizer);
+        this._timelineEngine = new TimelineAnimationEngine(bodyNode, _driver, normalizer);
         this._transitionEngine.onRemovalComplete = (element, context) => this.onRemovalComplete(element, context);
     }
     registerTrigger(componentId, namespaceId, hostElement, name, metadata) {
