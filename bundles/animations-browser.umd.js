@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.1+32.sha-f3625e4
+ * @license Angular v6.1.0-beta.1+42.sha-e8354ed
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2244,7 +2244,8 @@ function balanceProperties(obj, key1, key2) {
  */
 var EMPTY_INSTRUCTION_MAP = new ElementInstructionMap();
 var TimelineAnimationEngine = /** @class */ (function () {
-    function TimelineAnimationEngine(_driver, _normalizer) {
+    function TimelineAnimationEngine(bodyNode, _driver, _normalizer) {
+        this.bodyNode = bodyNode;
         this._driver = _driver;
         this._normalizer = _normalizer;
         this._animations = {};
@@ -2781,7 +2782,8 @@ var AnimationTransitionNamespace = /** @class */ (function () {
     return AnimationTransitionNamespace;
 }());
 var TransitionAnimationEngine = /** @class */ (function () {
-    function TransitionAnimationEngine(driver, _normalizer) {
+    function TransitionAnimationEngine(bodyNode, driver, _normalizer) {
+        this.bodyNode = bodyNode;
         this.driver = driver;
         this._normalizer = _normalizer;
         this.players = [];
@@ -3133,7 +3135,7 @@ var TransitionAnimationEngine = /** @class */ (function () {
                 disabledElementsSet.add(nodesThatAreDisabled[i_1]);
             }
         });
-        var bodyNode = getBodyNode();
+        var bodyNode = this.bodyNode;
         var allTriggerElements = Array.from(this.statesByElement.keys());
         var enterNodeMap = buildRootMap(allTriggerElements, this.collectedEnterElements);
         // this must occur before the instructions are built below such that
@@ -3866,14 +3868,15 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
 }
 
 var AnimationEngine = /** @class */ (function () {
-    function AnimationEngine(_driver, normalizer) {
+    function AnimationEngine(bodyNode, _driver, normalizer) {
         var _this = this;
+        this.bodyNode = bodyNode;
         this._driver = _driver;
         this._triggerCache = {};
         // this method is designed to be overridden by the code that uses this engine
         this.onRemovalComplete = function (element, context) { };
-        this._transitionEngine = new TransitionAnimationEngine(_driver, normalizer);
-        this._timelineEngine = new TimelineAnimationEngine(_driver, normalizer);
+        this._transitionEngine = new TransitionAnimationEngine(bodyNode, _driver, normalizer);
+        this._timelineEngine = new TimelineAnimationEngine(bodyNode, _driver, normalizer);
         this._transitionEngine.onRemovalComplete = function (element, context) {
             return _this.onRemovalComplete(element, context);
         };

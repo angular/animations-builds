@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.1+32.sha-f3625e4
+ * @license Angular v6.1.0-beta.1+42.sha-e8354ed
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2736,10 +2736,12 @@ function balanceProperties(obj, key1, key2) {
 const EMPTY_INSTRUCTION_MAP = new ElementInstructionMap();
 class TimelineAnimationEngine {
     /**
+     * @param {?} bodyNode
      * @param {?} _driver
      * @param {?} _normalizer
      */
-    constructor(_driver, _normalizer) {
+    constructor(bodyNode, _driver, _normalizer) {
+        this.bodyNode = bodyNode;
         this._driver = _driver;
         this._normalizer = _normalizer;
         this._animations = {};
@@ -3391,10 +3393,12 @@ class AnimationTransitionNamespace {
 
 class TransitionAnimationEngine {
     /**
+     * @param {?} bodyNode
      * @param {?} driver
      * @param {?} _normalizer
      */
-    constructor(driver, _normalizer) {
+    constructor(bodyNode, driver, _normalizer) {
+        this.bodyNode = bodyNode;
         this.driver = driver;
         this._normalizer = _normalizer;
         this.players = [];
@@ -3860,7 +3864,7 @@ class TransitionAnimationEngine {
                 disabledElementsSet.add(nodesThatAreDisabled[i]);
             }
         });
-        const /** @type {?} */ bodyNode = getBodyNode();
+        const /** @type {?} */ bodyNode = this.bodyNode;
         const /** @type {?} */ allTriggerElements = Array.from(this.statesByElement.keys());
         const /** @type {?} */ enterNodeMap = buildRootMap(allTriggerElements, this.collectedEnterElements);
         // this must occur before the instructions are built below such that
@@ -4760,15 +4764,17 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
  */
 class AnimationEngine {
     /**
+     * @param {?} bodyNode
      * @param {?} _driver
      * @param {?} normalizer
      */
-    constructor(_driver, normalizer) {
+    constructor(bodyNode, _driver, normalizer) {
+        this.bodyNode = bodyNode;
         this._driver = _driver;
         this._triggerCache = {};
         this.onRemovalComplete = (element, context) => { };
-        this._transitionEngine = new TransitionAnimationEngine(_driver, normalizer);
-        this._timelineEngine = new TimelineAnimationEngine(_driver, normalizer);
+        this._transitionEngine = new TransitionAnimationEngine(bodyNode, _driver, normalizer);
+        this._timelineEngine = new TimelineAnimationEngine(bodyNode, _driver, normalizer);
         this._transitionEngine.onRemovalComplete = (element, context) => this.onRemovalComplete(element, context);
     }
     /**
