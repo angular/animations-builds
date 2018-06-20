@@ -71,6 +71,7 @@ export interface QueuedTransition {
     player: TransitionAnimationPlayer;
 }
 export declare class TransitionAnimationEngine {
+    bodyNode: any;
     driver: AnimationDriver;
     private _normalizer;
     players: TransitionAnimationPlayer[];
@@ -91,7 +92,7 @@ export declare class TransitionAnimationEngine {
     collectedEnterElements: any[];
     collectedLeaveElements: any[];
     onRemovalComplete: (element: any, context: any) => void;
-    constructor(driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
+    constructor(bodyNode: any, driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
     readonly queuedPlayers: TransitionAnimationPlayer[];
     createNamespace(namespaceId: string, hostElement: any): AnimationTransitionNamespace;
     private _balanceNamespaceList(ns, hostElement);

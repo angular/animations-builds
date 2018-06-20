@@ -9,12 +9,13 @@ import { AnimationPlayer, AnimationTriggerMetadata } from '@angular/animations';
 import { AnimationStyleNormalizer } from '../dsl/style_normalization/animation_style_normalizer';
 import { AnimationDriver } from './animation_driver';
 export declare class AnimationEngine {
+    private bodyNode;
     private _driver;
     private _transitionEngine;
     private _timelineEngine;
     private _triggerCache;
     onRemovalComplete: (element: any, context: any) => void;
-    constructor(_driver: AnimationDriver, normalizer: AnimationStyleNormalizer);
+    constructor(bodyNode: any, _driver: AnimationDriver, normalizer: AnimationStyleNormalizer);
     registerTrigger(componentId: string, namespaceId: string, hostElement: any, name: string, metadata: AnimationTriggerMetadata): void;
     register(namespaceId: string, hostElement: any): void;
     destroy(namespaceId: string, context: any): void;
