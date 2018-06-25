@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.2+25.sha-941d2cd
+ * @license Angular v6.1.0-beta.2+27.sha-2a68ba4
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -253,7 +253,7 @@ function trigger(name, definitions) {
  * @returns An object that encapsulates the animation step.
  *
  * @usageNotes
- * Call within an animation `sequence()`, `group()`, or
+ * Call within an animation `sequence()`, `{@link animations/group group()}`, or
  * `transition()` call to specify an animation step
  * that applies given style data to the parent animation for a given amount of time.
  *
@@ -347,9 +347,9 @@ function group(steps, options) {
  * @usageNotes
  * When you pass an array of steps to a
  * `transition()` call, the steps run sequentially by default.
- * Compare this to the `group()` call, which runs animation steps in parallel.
+ * Compare this to the `{@link animations/group group()}` call, which runs animation steps in parallel.
  *
- * When a sequence is used within a `group()` or a `transition()` call,
+ * When a sequence is used within a `{@link animations/group group()}` or a `transition()` call,
  * execution continues to the next instruction only after each of the inner animation
  * steps have completed.
  *
@@ -526,7 +526,7 @@ function keyframes(steps) {
  *  ...]
  * ```
  *
- * Note that when you call the `sequence()` function within a `group()`
+ * Note that when you call the `sequence()` function within a `{@link animations/group group()}`
  * or a `transition()` call, execution does not continue to the next instruction
  * until each of the inner animation steps have completed.
  *
