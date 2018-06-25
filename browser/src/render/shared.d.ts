@@ -9,6 +9,7 @@ import { AnimationEvent, AnimationPlayer, ɵStyleData } from '@angular/animation
 import { AnimationStyleNormalizer } from '../../src/dsl/style_normalization/animation_style_normalizer';
 import { AnimationDriver } from '../../src/render/animation_driver';
 export declare function isBrowser(): boolean;
+export declare function isNode(): boolean;
 export declare function optimizeGroupPlayer(players: AnimationPlayer[]): AnimationPlayer;
 export declare function normalizeKeyframes(driver: AnimationDriver, normalizer: AnimationStyleNormalizer, element: any, keyframes: ɵStyleData[], preStyles?: ɵStyleData, postStyles?: ɵStyleData): ɵStyleData[];
 export declare function listenOnPlayer(player: AnimationPlayer, eventName: string, event: AnimationEvent | undefined, callback: (event: any) => any): void;
