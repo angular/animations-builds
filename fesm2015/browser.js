@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.2+10.sha-7b2b1af
+ * @license Angular v6.1.0-beta.2+22.sha-f229449
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -17,6 +17,9 @@ import { Injectable } from '@angular/core';
  */
 function isBrowser() {
     return (typeof window !== 'undefined' && typeof window.document !== 'undefined');
+}
+function isNode() {
+    return (typeof process !== 'undefined');
 }
 function optimizeGroupPlayer(players) {
     switch (players.length) {
@@ -122,10 +125,13 @@ let _matches = (element, selector) => false;
 let _query = (element, selector, multi) => {
     return [];
 };
-if (isBrowser()) {
+// Define utility methods for browsers and platform-server(domino) where Element
+// and utility methods exist.
+const _isNode = isNode();
+if (_isNode || typeof Element !== 'undefined') {
     // this is well supported in all browsers
     _contains = (elm1, elm2) => { return elm1.contains(elm2); };
-    if (Element.prototype.matches) {
+    if (_isNode || Element.prototype.matches) {
         _matches = (element, selector) => element.matches(selector);
     }
     else {
@@ -334,12 +340,46 @@ function copyStyles(styles, readPrototype, destination = {}) {
     }
     return destination;
 }
+function getStyleAttributeString(element, key, value) {
+    // Return the key-value pair string to be added to the style attribute for the
+    // given CSS style key.
+    if (value) {
+        return key + ':' + value + ';';
+    }
+    else {
+        return '';
+    }
+}
+function writeStyleAttribute(element) {
+    // Read the style property of the element and manually reflect it to the
+    // style attribute. This is needed because Domino on platform-server doesn't
+    // understand the full set of allowed CSS properties and doesn't reflect some
+    // of them automatically.
+    let styleAttrValue = '';
+    for (let i = 0; i < element.style.length; i++) {
+        const key = element.style.item(i);
+        styleAttrValue += getStyleAttributeString(element, key, element.style.getPropertyValue(key));
+    }
+    for (const key in element.style) {
+        // Skip internal Domino properties that don't need to be reflected.
+        if (!element.style.hasOwnProperty(key) || key.startsWith('_')) {
+            continue;
+        }
+        const dashKey = camelCaseToDashCase(key);
+        styleAttrValue += getStyleAttributeString(element, dashKey, element.style[key]);
+    }
+    element.setAttribute('style', styleAttrValue);
+}
 function setStyles(element, styles) {
     if (element['style']) {
         Object.keys(styles).forEach(prop => {
             const camelProp = dashCaseToCamelCase(prop);
             element.style[camelProp] = styles[prop];
         });
+        // On the server set the 'style' attribute since it's not automatically reflected.
+        if (isNode()) {
+            writeStyleAttribute(element);
+        }
     }
 }
 function eraseStyles(element, styles) {
@@ -348,6 +388,10 @@ function eraseStyles(element, styles) {
             const camelProp = dashCaseToCamelCase(prop);
             element.style[camelProp] = '';
         });
+        // On the server set the 'style' attribute since it's not automatically reflected.
+        if (isNode()) {
+            writeStyleAttribute(element);
+        }
     }
 }
 function normalizeAnimationEntry(steps) {
@@ -409,6 +453,9 @@ function iteratorToArray(iterator) {
 const DASH_CASE_REGEXP = /-+([a-z0-9])/g;
 function dashCaseToCamelCase(input) {
     return input.replace(DASH_CASE_REGEXP, (...m) => m[1].toUpperCase());
+}
+function camelCaseToDashCase(input) {
+    return input.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 }
 function allowPreviousPlayerStylesMerge(duration, delay) {
     return duration === 0 || delay === 0;
