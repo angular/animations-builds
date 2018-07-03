@@ -1,6 +1,6 @@
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 import { NoopAnimationPlayer } from '@angular/animations';
 import { Injectable } from '@angular/core';
@@ -70,7 +70,7 @@ NoopAnimationDriver.decorators = [
 export class AnimationDriver {
 }
 AnimationDriver.NOOP = new NoopAnimationDriver();
-if (false) {
+function AnimationDriver_tsickle_Closure_declarations() {
     /** @type {?} */
     AnimationDriver.NOOP;
     /**

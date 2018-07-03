@@ -10,7 +10,7 @@ export declare const enum AnimatorControlState {
     INITIALIZED = 1,
     STARTED = 2,
     FINISHED = 3,
-    DESTROYED = 4
+    DESTROYED = 4,
 }
 export declare class CssKeyframesPlayer implements AnimationPlayer {
     readonly element: any;
@@ -42,8 +42,8 @@ export declare class CssKeyframesPlayer implements AnimationPlayer {
     onDone(fn: () => void): void;
     onDestroy(fn: () => void): void;
     destroy(): void;
-    private _flushDoneFns;
-    private _flushStartFns;
+    private _flushDoneFns();
+    private _flushStartFns();
     finish(): void;
     setPosition(value: number): void;
     getPosition(): number;
@@ -53,6 +53,6 @@ export declare class CssKeyframesPlayer implements AnimationPlayer {
     pause(): void;
     restart(): void;
     reset(): void;
-    private _buildStyler;
+    private _buildStyler();
     beforeDestroy(): void;
 }

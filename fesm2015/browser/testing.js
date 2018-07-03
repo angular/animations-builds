@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+30.sha-e3064d5
+ * @license Angular v6.1.0-beta.3+29.sha-0c3738a
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -9,7 +9,7 @@ import { ɵallowPreviousPlayerStylesMerge, ɵcontainsElement, ɵinvokeQuery, ɵm
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * \@experimental Animation support is experimental.
@@ -62,8 +62,7 @@ class MockAnimationDriver {
      * @return {?}
      */
     animate(element, keyframes, duration, delay, easing, previousPlayers = []) {
-        /** @type {?} */
-        const player = new MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers);
+        const /** @type {?} */ player = new MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers);
         MockAnimationDriver.log.push(/** @type {?} */ (player));
         return player;
     }
@@ -97,8 +96,7 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         if (ɵallowPreviousPlayerStylesMerge(duration, delay)) {
             previousPlayers.forEach(player => {
                 if (player instanceof MockAnimationPlayer) {
-                    /** @type {?} */
-                    const styles = player.currentSnapshot;
+                    const /** @type {?} */ styles = player.currentSnapshot;
                     Object.keys(styles).forEach(prop => this.previousStyles[prop] = styles[prop]);
                 }
             });
@@ -150,8 +148,7 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
      * @return {?}
      */
     beforeDestroy() {
-        /** @type {?} */
-        const captures = {};
+        const /** @type {?} */ captures = {};
         Object.keys(this.previousStyles).forEach(prop => {
             captures[prop] = this.previousStyles[prop];
         });
@@ -173,12 +170,12 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
@@ -195,7 +192,7 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license

@@ -1,12 +1,12 @@
 /**
- * @license Angular v6.1.0-beta.3+30.sha-e3064d5
+ * @license Angular v6.1.0-beta.3+29.sha-0c3738a
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * AnimationBuilder is an injectable service that is available when the {\@link
@@ -62,7 +62,7 @@ class AnimationFactory {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
@@ -76,9 +76,9 @@ class AnimationFactory {
  * @record
  */
 
-/** *
+/**
  * Specifies automatic styling.
-  @type {?} */
+ */
 const AUTO_STYLE = '*';
 /**
  * Base for animation data structures.
@@ -982,7 +982,7 @@ function stagger(timings, animation) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
@@ -999,7 +999,7 @@ function scheduleMicroTask(cb) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * AnimationPlayer controls an animation sequence that was produced from a programmatic animation.
@@ -1126,8 +1126,7 @@ class NoopAnimationPlayer {
      * @return {?}
      */
     triggerCallback(phaseName) {
-        /** @type {?} */
-        const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
+        const /** @type {?} */ methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
         methods.forEach(fn => fn());
         methods.length = 0;
     }
@@ -1135,7 +1134,7 @@ class NoopAnimationPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
@@ -1158,14 +1157,10 @@ class AnimationGroupPlayer {
         this.parentPlayer = null;
         this.totalTime = 0;
         this.players = _players;
-        /** @type {?} */
-        let doneCount = 0;
-        /** @type {?} */
-        let destroyCount = 0;
-        /** @type {?} */
-        let startCount = 0;
-        /** @type {?} */
-        const total = this.players.length;
+        let /** @type {?} */ doneCount = 0;
+        let /** @type {?} */ destroyCount = 0;
+        let /** @type {?} */ startCount = 0;
+        const /** @type {?} */ total = this.players.length;
         if (total == 0) {
             scheduleMicroTask(() => this._onFinish());
         }
@@ -1288,11 +1283,9 @@ class AnimationGroupPlayer {
      * @return {?}
      */
     setPosition(p) {
-        /** @type {?} */
-        const timeAtPosition = p * this.totalTime;
+        const /** @type {?} */ timeAtPosition = p * this.totalTime;
         this.players.forEach(player => {
-            /** @type {?} */
-            const position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
+            const /** @type {?} */ position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
             player.setPosition(position);
         });
     }
@@ -1300,11 +1293,9 @@ class AnimationGroupPlayer {
      * @return {?}
      */
     getPosition() {
-        /** @type {?} */
-        let min = 0;
+        let /** @type {?} */ min = 0;
         this.players.forEach(player => {
-            /** @type {?} */
-            const p = player.getPosition();
+            const /** @type {?} */ p = player.getPosition();
             min = Math.min(p, min);
         });
         return min;
@@ -1324,8 +1315,7 @@ class AnimationGroupPlayer {
      * @return {?}
      */
     triggerCallback(phaseName) {
-        /** @type {?} */
-        const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
+        const /** @type {?} */ methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
         methods.forEach(fn => fn());
         methods.length = 0;
     }
@@ -1333,14 +1323,13 @@ class AnimationGroupPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
-/** @type {?} */
 const ɵPRE_STYLE = '!';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
@@ -1352,7 +1341,7 @@ const ɵPRE_STYLE = '!';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
@@ -1369,7 +1358,7 @@ const ɵPRE_STYLE = '!';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
