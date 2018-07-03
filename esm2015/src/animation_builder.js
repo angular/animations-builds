@@ -1,6 +1,6 @@
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * AnimationBuilder is an injectable service that is available when the {\@link
@@ -44,7 +44,7 @@
  */
 export class AnimationBuilder {
 }
-function AnimationBuilder_tsickle_Closure_declarations() {
+if (false) {
     /**
      * @abstract
      * @param {?} animation
@@ -61,7 +61,7 @@ function AnimationBuilder_tsickle_Closure_declarations() {
  */
 export class AnimationFactory {
 }
-function AnimationFactory_tsickle_Closure_declarations() {
+if (false) {
     /**
      * @abstract
      * @param {?} element
