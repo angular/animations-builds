@@ -17,10 +17,10 @@ export declare class TimelineAnimationEngine {
     players: AnimationPlayer[];
     constructor(bodyNode: any, _driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
     register(id: string, metadata: AnimationMetadata | AnimationMetadata[]): void;
-    private _buildPlayer;
+    private _buildPlayer(i, preStyles, postStyles?);
     create(id: string, element: any, options?: AnimationOptions): AnimationPlayer;
     destroy(id: string): void;
-    private _getPlayer;
+    private _getPlayer(id);
     listen(id: string, element: string, eventName: string, callback: (event: any) => any): () => void;
     command(id: string, element: any, command: string, args: any[]): void;
 }
