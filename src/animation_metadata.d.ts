@@ -53,7 +53,7 @@ export declare type AnimateTimings = {
  * Programmatic animations built using the `AnimationBuilder` service also
  * make use of `AnimationOptions`.
  */
-export interface AnimationOptions {
+export declare interface AnimationOptions {
     /**
      * Sets a time-delay for initiating an animation action.
      * A number and optional time unit, such as "1s" or "10ms" for one second
@@ -75,7 +75,7 @@ export interface AnimationOptions {
  *
  * @see `animateChild()`
  */
-export interface AnimateChildOptions extends AnimationOptions {
+export declare interface AnimateChildOptions extends AnimationOptions {
     duration?: number | string;
 }
 /**
@@ -149,7 +149,7 @@ export declare const enum AnimationMetadataType {
      * Contains data for staggering an animation sequence.
      * See `stagger()`
      */
-    Stagger = 12,
+    Stagger = 12
 }
 /**
  * Specifies automatic styling.
@@ -372,7 +372,7 @@ export interface AnimationGroupMetadata extends AnimationMetadata {
  * Encapsulates animation query options.
  * Passed to the `query()` function.
  */
-export interface AnimationQueryOptions extends AnimationOptions {
+export declare interface AnimationQueryOptions extends AnimationOptions {
     /**
      * True if this query is optional, false if it is required. Default is false.
      * A required query throws an error if no elements are retrieved when
