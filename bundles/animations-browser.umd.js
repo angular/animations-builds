@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+28.sha-0922228
+ * @license Angular v6.1.0-beta.3+35.sha-b6af870
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3544,6 +3544,7 @@ var TransitionAnimationEngine = /** @class */ (function () {
         return players;
     };
     TransitionAnimationEngine.prototype._beforeAnimationBuild = function (namespaceId, instruction, allPreviousPlayersMap) {
+        var e_1, _a;
         var triggerName = instruction.triggerName;
         var rootElement = instruction.element;
         // when a removal animation occurs, ALL previous players are collected
@@ -3566,22 +3567,21 @@ var TransitionAnimationEngine = /** @class */ (function () {
         };
         var this_1 = this;
         try {
-            for (var _a = __values(instruction.timelines), _b = _a.next(); !_b.done; _b = _a.next()) {
-                var timelineInstruction = _b.value;
+            for (var _b = __values(instruction.timelines), _c = _b.next(); !_c.done; _c = _b.next()) {
+                var timelineInstruction = _c.value;
                 _loop_1(timelineInstruction);
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
             }
             finally { if (e_1) throw e_1.error; }
         }
         // this needs to be done so that the PRE/POST styles can be
         // computed properly without interfering with the previous animation
         eraseStyles(rootElement, instruction.fromStyles);
-        var e_1, _c;
     };
     TransitionAnimationEngine.prototype._buildAnimation = function (namespaceId, instruction, allPreviousPlayersMap, skippedPlayersMap, preStylesMap, postStylesMap) {
         var _this = this;
