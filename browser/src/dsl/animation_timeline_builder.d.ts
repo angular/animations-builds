@@ -18,11 +18,11 @@ export declare class AnimationTimelineBuilderVisitor implements AstVisitor {
     visitTransition(ast: TransitionAst, context: AnimationTimelineContext): any;
     visitAnimateChild(ast: AnimateChildAst, context: AnimationTimelineContext): any;
     visitAnimateRef(ast: AnimateRefAst, context: AnimationTimelineContext): any;
-    private _visitSubInstructions(instructions, context, options);
+    private _visitSubInstructions;
     visitReference(ast: ReferenceAst, context: AnimationTimelineContext): void;
     visitSequence(ast: SequenceAst, context: AnimationTimelineContext): void;
     visitGroup(ast: GroupAst, context: AnimationTimelineContext): void;
-    private _visitTiming(ast, context);
+    private _visitTiming;
     visitAnimate(ast: AnimateAst, context: AnimationTimelineContext): void;
     visitStyle(ast: StyleAst, context: AnimationTimelineContext): void;
     visitKeyframes(ast: KeyframesAst, context: AnimationTimelineContext): void;
@@ -55,7 +55,7 @@ export declare class AnimationTimelineContext {
         [name: string]: any;
     } | undefined;
     updateOptions(options: AnimationOptions | null, skipIfExists?: boolean): void;
-    private _copyOptions();
+    private _copyOptions;
     createSubContext(options?: AnimationOptions | null, element?: any, newTime?: number): AnimationTimelineContext;
     transformIntoNewTimeline(newTime?: number): TimelineBuilder;
     appendInstructionToTimeline(instruction: AnimationTimelineInstruction, duration: number | null, delay: number | null): AnimateTimings;
@@ -67,7 +67,7 @@ export declare class TimelineBuilder {
     private _driver;
     element: any;
     startTime: number;
-    private _elementTimelineStylesLookup;
+    private _elementTimelineStylesLookup?;
     duration: number;
     easing: string | null;
     private _previousKeyframe;
@@ -85,10 +85,10 @@ export declare class TimelineBuilder {
     readonly currentTime: number;
     delayNextStep(delay: number): void;
     fork(element: any, currentTime?: number): TimelineBuilder;
-    private _loadKeyframe();
+    private _loadKeyframe;
     forwardFrame(): void;
     forwardTime(time: number): void;
-    private _updateStyle(prop, value);
+    private _updateStyle;
     allowOnlyTimelineStyles(): boolean;
     applyEmptyStep(easing: string | null): void;
     setStyles(input: (ɵStyleData | string)[], easing: string | null, errors: any[], options?: AnimationOptions): void;

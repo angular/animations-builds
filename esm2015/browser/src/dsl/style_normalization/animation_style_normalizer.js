@@ -1,6 +1,6 @@
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -15,7 +15,7 @@
  */
 export class AnimationStyleNormalizer {
 }
-function AnimationStyleNormalizer_tsickle_Closure_declarations() {
+if (false) {
     /**
      * @abstract
      * @param {?} propertyName

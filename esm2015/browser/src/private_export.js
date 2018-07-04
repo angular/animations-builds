@@ -1,6 +1,6 @@
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 export { Animation as ɵAnimation } from './dsl/animation';
 export { AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer } from './dsl/style_normalization/animation_style_normalizer';

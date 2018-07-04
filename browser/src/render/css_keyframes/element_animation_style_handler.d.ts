@@ -17,7 +17,7 @@ export declare class ElementAnimationStyleHandler {
     resume(): void;
     setPosition(position: number): void;
     getPosition(): number;
-    private _handleCallback(event);
+    private _handleCallback;
     finish(): void;
     destroy(): void;
 }
