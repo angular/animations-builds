@@ -1,10 +1,10 @@
 /**
- * @license Angular v6.1.0-beta.3+45.sha-fddd2af
+ * @license Angular v6.1.0-beta.3+47.sha-1e74ea9
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { AUTO_STYLE, NoopAnimationPlayer, sequence, style, ɵAnimationGroupPlayer, ɵPRE_STYLE } from '@angular/animations';
+import { AUTO_STYLE, NoopAnimationPlayer, ɵAnimationGroupPlayer, ɵPRE_STYLE, sequence, style } from '@angular/animations';
 import { Injectable } from '@angular/core';
 
 /**
@@ -377,10 +377,6 @@ const ENTER_CLASSNAME = 'ng-enter';
 /** @type {?} */
 const LEAVE_CLASSNAME = 'ng-leave';
 /** @type {?} */
-
-/** @type {?} */
-
-/** @type {?} */
 const NG_TRIGGER_CLASSNAME = 'ng-trigger';
 /** @type {?} */
 const NG_TRIGGER_SELECTOR = '.ng-trigger';
@@ -690,12 +686,6 @@ function iteratorToArray(iterator) {
     }
     return arr;
 }
-/**
- * @param {?} source
- * @param {?} destination
- * @return {?}
- */
-
 /** @type {?} */
 const DASH_CASE_REGEXP = /-+([a-z0-9])/g;
 /**
@@ -1567,10 +1557,6 @@ function makeTimingAst(duration, delay, easing) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
-/**
- * @record
- */
-
 /**
  * @param {?} element
  * @param {?} keyframes
@@ -2777,10 +2763,6 @@ function makeBooleanMap(keys) {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
- * @record
- */
-
-/**
  * @param {?} element
  * @param {?} triggerName
  * @param {?} fromState
@@ -3295,16 +3277,8 @@ const NULL_REMOVED_QUERIED_STATE = {
     hasAnimation: false,
     removedBeforeQueried: true
 };
-/**
- * @record
- */
-
 /** @type {?} */
 const REMOVAL_FLAG = '__ng_removed';
-/**
- * @record
- */
-
 class StateValue {
     /**
      * @param {?} input
@@ -3813,10 +3787,6 @@ class AnimationTransitionNamespace {
         return containsData;
     }
 }
-/**
- * @record
- */
-
 class TransitionAnimationEngine {
     /**
      * @param {?} bodyNode
@@ -5853,7 +5823,7 @@ class CssKeyframesPlayer {
         const styles = {};
         if (this.hasStarted()) {
             /** @type {?} */
-            const finished = this._state >= 3;
+            const finished = this._state >= 3 /* FINISHED */;
             Object.keys(this._finalStyles).forEach(prop => {
                 if (prop != 'offset') {
                     styles[prop] = finished ? this._finalStyles[prop] : computeStyle(this.element, prop);
@@ -6420,46 +6390,16 @@ function getElementAnimateFn() {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-// This file is not used to build this module. It is only used during editing
-// by the TypeScript language service and during build for verifcation. `ngc`
-// replaces this file with production index.ts when it rewrites private symbol
-// names.
 
 /**
  * Generated bundle index. Do not edit.
