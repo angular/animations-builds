@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+46.sha-f62876b
+ * @license Angular v6.1.0-beta.3+61.sha-3980640
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -64,107 +64,10 @@ class AnimationFactory {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * Represents a set of CSS styles for use in an animation style.
- * @record
- */
-
 /** *
  * Specifies automatic styling.
   @type {?} */
 const AUTO_STYLE = '*';
-/**
- * Base for animation data structures.
- * @record
- */
-
-/**
- * Contains an animation trigger. Instantiated and returned by the
- * `trigger()` function.
- * @record
- */
-
-/**
- * Encapsulates an animation state by associating a state name with a set of CSS styles.
- * Instantiated and returned by the `state()` function.
- * @record
- */
-
-/**
- * Encapsulates an animation transition. Instantiated and returned by the
- * `transition()` function.
- * @record
- */
-
-/**
- * Encapsulates a reusable animation, which is a collection of individual animation steps.
- * Instantiated and returned by the `animation()` function, and
- * passed to the `useAnimation()` function.
- * @record
- */
-
-/**
- * Encapsulates an animation query. Instantiated and returned by
- * the `query()` function.
- * @record
- */
-
-/**
- * Encapsulates a keyframes sequence. Instantiated and returned by
- * the `keyframes()` function.
- * @record
- */
-
-/**
- * Encapsulates an animation style. Instantiated and returned by
- * the `style()` function.
- * @record
- */
-
-/**
- * Encapsulates an animation step. Instantiated and returned by
- * the `animate()` function.
- * @record
- */
-
-/**
- * Encapsulates a child animation, that can be run explicitly when the parent is run.
- * Instantiated and returned by the `animateChild` function.
- * @record
- */
-
-/**
- * Encapsulates a reusable animation.
- * Instantiated and returned by the `useAnimation()` function.
- * @record
- */
-
-/**
- * Encapsulates an animation sequence.
- * Instantiated and returned by the `sequence()` function.
- * @record
- */
-
-/**
- * Encapsulates an animation group.
- * Instantiated and returned by the `{\@link animations/group group()}` function.
- * @record
- */
-
-/**
- * Encapsulates parameters for staggering the start times of a set of animation steps.
- * Instantiated and returned by the `stagger()` function.
- *
- * @record
- */
-
 /**
  * Creates a named animation trigger, containing a  list of `state()`
  * and `transition()` entries to be evaluated when the expression
@@ -1002,15 +905,6 @@ function scheduleMicroTask(cb) {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
- * AnimationPlayer controls an animation sequence that was produced from a programmatic animation.
- * (see {\@link AnimationBuilder AnimationBuilder} for more information on how to create programmatic
- * animations.)
- *
- * \@experimental Animation support is experimental.
- * @record
- */
-
-/**
  * \@experimental Animation support is experimental.
  */
 class NoopAnimationPlayer {
@@ -1136,13 +1030,6 @@ class NoopAnimationPlayer {
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
  */
 class AnimationGroupPlayer {
     /**
@@ -1342,46 +1229,16 @@ const ɵPRE_STYLE = '!';
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-// This file is not used to build this module. It is only used during editing
-// by the TypeScript language service and during build for verification. `ngc`
-// replaces this file with production index.ts when it rewrites private symbol
-// names.
 
 /**
  * Generated bundle index. Do not edit.
