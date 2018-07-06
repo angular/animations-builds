@@ -1,20 +1,13 @@
 /**
- * @license Angular v6.1.0-beta.3+46.sha-f62876b
+ * @license Angular v6.1.0-beta.3+61.sha-3980640
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __assign, __decorate, __extends, __read, __spread, __values } from 'tslib';
-import { AUTO_STYLE, NoopAnimationPlayer, sequence, style, ɵAnimationGroupPlayer, ɵPRE_STYLE } from '@angular/animations';
+import { __decorate, __read, __extends, __spread, __assign, __values } from 'tslib';
+import { AUTO_STYLE, NoopAnimationPlayer, ɵAnimationGroupPlayer, ɵPRE_STYLE, sequence, style } from '@angular/animations';
 import { Injectable } from '@angular/core';
 
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 function isBrowser() {
     return (typeof window !== 'undefined' && typeof window.document !== 'undefined');
 }
@@ -203,13 +196,6 @@ function hypenatePropsObject(object) {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * @experimental
  */
 var NoopAnimationDriver = /** @class */ (function () {
@@ -257,8 +243,6 @@ var SUBSTITUTION_EXPR_START = '{{';
 var SUBSTITUTION_EXPR_END = '}}';
 var ENTER_CLASSNAME = 'ng-enter';
 var LEAVE_CLASSNAME = 'ng-leave';
-
-
 var NG_TRIGGER_CLASSNAME = 'ng-trigger';
 var NG_TRIGGER_SELECTOR = '.ng-trigger';
 var NG_ANIMATING_CLASSNAME = 'ng-animating';
@@ -464,7 +448,6 @@ function iteratorToArray(iterator) {
     }
     return arr;
 }
-
 var DASH_CASE_REGEXP = /-+([a-z0-9])/g;
 function dashCaseToCamelCase(input) {
     return input.replace(DASH_CASE_REGEXP, function () {
@@ -621,13 +604,6 @@ function makeLambdaFromStates(lhs, rhs) {
     };
 }
 
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 var SELF_TOKEN = ':self';
 var SELF_TOKEN_REGEX = new RegExp("s*" + SELF_TOKEN + "s*,?", 'g');
 /*
@@ -1157,13 +1133,6 @@ var ElementInstructionMap = /** @class */ (function () {
     return ElementInstructionMap;
 }());
 
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 var ONE_FRAME_IN_MILLISECONDS = 1;
 var ENTER_TOKEN = ':enter';
 var ENTER_TOKEN_REGEX = new RegExp(ENTER_TOKEN, 'g');
@@ -1990,13 +1959,6 @@ var NoopAnimationStyleNormalizer = /** @class */ (function () {
     return NoopAnimationStyleNormalizer;
 }());
 
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 var WebAnimationsStyleNormalizer = /** @class */ (function (_super) {
     __extends(WebAnimationsStyleNormalizer, _super);
     function WebAnimationsStyleNormalizer() {
@@ -2327,13 +2289,6 @@ var TimelineAnimationEngine = /** @class */ (function () {
     return TimelineAnimationEngine;
 }());
 
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 var QUEUED_CLASSNAME = 'ng-animate-queued';
 var QUEUED_SELECTOR = '.ng-animate-queued';
 var DISABLED_CLASSNAME = 'ng-animate-disabled';
@@ -4140,7 +4095,7 @@ var CssKeyframesPlayer = /** @class */ (function () {
         this.init();
         var styles = {};
         if (this.hasStarted()) {
-            var finished_1 = this._state >= 3;
+            var finished_1 = this._state >= 3 /* FINISHED */;
             Object.keys(this._finalStyles).forEach(function (prop) {
                 if (prop != 'offset') {
                     styles[prop] = finished_1 ? _this._finalStyles[prop] : computeStyle(_this.element, prop);
@@ -4152,13 +4107,6 @@ var CssKeyframesPlayer = /** @class */ (function () {
     return CssKeyframesPlayer;
 }());
 
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 var DirectStylePlayer = /** @class */ (function (_super) {
     __extends(DirectStylePlayer, _super);
     function DirectStylePlayer(element, styles) {
@@ -4509,10 +4457,13 @@ function getElementAnimateFn() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+
 /**
- * @module
- * @description
- * Entry point for all animation APIs of the animation browser package.
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
 
 /**
@@ -4522,23 +4473,6 @@ function getElementAnimateFn() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-// This file is not used to build this module. It is only used during editing
-// by the TypeScript language service and during build for verifcation. `ngc`
-// replaces this file with production index.ts when it rewrites private symbol
-// names.
 
 export { AnimationDriver, Animation as ɵAnimation, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, AnimationDriver as ɵAnimationDriver, NoopAnimationDriver as ɵNoopAnimationDriver, AnimationEngine as ɵAnimationEngine, CssKeyframesDriver as ɵCssKeyframesDriver, CssKeyframesPlayer as ɵCssKeyframesPlayer, containsElement as ɵcontainsElement, invokeQuery as ɵinvokeQuery, matchesElement as ɵmatchesElement, validateStyleProperty as ɵvalidateStyleProperty, WebAnimationsDriver as ɵWebAnimationsDriver, supportsWebAnimations as ɵsupportsWebAnimations, WebAnimationsPlayer as ɵWebAnimationsPlayer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge };
 //# sourceMappingURL=browser.js.map
