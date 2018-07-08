@@ -36,10 +36,10 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     }[], options: {
         [key: string]: string | number;
     });
-    private _onFinish();
+    private _onFinish;
     init(): void;
-    private _buildPlayer();
-    private _preparePlayerBeforeStart();
+    private _buildPlayer;
+    private _preparePlayerBeforeStart;
     onStart(fn: () => void): void;
     onDone(fn: () => void): void;
     onDestroy(fn: () => void): void;
@@ -47,7 +47,7 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     pause(): void;
     finish(): void;
     reset(): void;
-    private _resetDomPlayerState();
+    private _resetDomPlayerState;
     restart(): void;
     hasStarted(): boolean;
     destroy(): void;

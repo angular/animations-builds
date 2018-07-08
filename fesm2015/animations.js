@@ -1,12 +1,12 @@
 /**
- * @license Angular v6.1.0-beta.1+46.sha-a5799e6
+ * @license Angular v6.1.0-beta.3+80.sha-6c604bd
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * AnimationBuilder is an injectable service that is available when the {\@link
@@ -62,109 +62,12 @@ class AnimationFactory {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * Represents a set of CSS styles for use in an animation style.
- * @record
- */
-
-/**
+/** *
  * Specifies automatic styling.
- */
+  @type {?} */
 const AUTO_STYLE = '*';
-/**
- * Base for animation data structures.
- * @record
- */
-
-/**
- * Contains an animation trigger. Instantiated and returned by the
- * `trigger()` function.
- * @record
- */
-
-/**
- * Encapsulates an animation state by associating a state name with a set of CSS styles.
- * Instantiated and returned by the `state()` function.
- * @record
- */
-
-/**
- * Encapsulates an animation transition. Instantiated and returned by the
- * `transition()` function.
- * @record
- */
-
-/**
- * Encapsulates a reusable animation, which is a collection of individual animation steps.
- * Instantiated and returned by the `animation()` function, and
- * passed to the `useAnimation()` function.
- * @record
- */
-
-/**
- * Encapsulates an animation query. Instantiated and returned by
- * the `query()` function.
- * @record
- */
-
-/**
- * Encapsulates a keyframes sequence. Instantiated and returned by
- * the `keyframes()` function.
- * @record
- */
-
-/**
- * Encapsulates an animation style. Instantiated and returned by
- * the `style()` function.
- * @record
- */
-
-/**
- * Encapsulates an animation step. Instantiated and returned by
- * the `animate()` function.
- * @record
- */
-
-/**
- * Encapsulates a child animation, that can be run explicitly when the parent is run.
- * Instantiated and returned by the `animateChild` function.
- * @record
- */
-
-/**
- * Encapsulates a reusable animation.
- * Instantiated and returned by the `useAnimation()` function.
- * @record
- */
-
-/**
- * Encapsulates an animation sequence.
- * Instantiated and returned by the `sequence()` function.
- * @record
- */
-
-/**
- * Encapsulates an animation group.
- * Instantiated and returned by the `group()` function.
- * @record
- */
-
-/**
- * Encapsulates parameters for staggering the start times of a set of animation steps.
- * Instantiated and returned by the `stagger()` function.
- *
- * @record
- */
-
 /**
  * Creates a named animation trigger, containing a  list of `state()`
  * and `transition()` entries to be evaluated when the expression
@@ -320,7 +223,7 @@ function trigger(name, definitions) {
  * Defines an animation step that combines styling information with timing information.
  *
  * \@usageNotes
- * Call within an animation `sequence()`, `group()`, or
+ * Call within an animation `sequence()`, `{\@link animations/group group()}`, or
  * `transition()` call to specify an animation step
  * that applies given style data to the parent animation for a given amount of time.
  *
@@ -415,9 +318,9 @@ function group(steps, options = null) {
  * \@usageNotes
  * When you pass an array of steps to a
  * `transition()` call, the steps run sequentially by default.
- * Compare this to the `group()` call, which runs animation steps in parallel.
+ * Compare this to the `{\@link animations/group group()}` call, which runs animation steps in parallel.
  *
- * When a sequence is used within a `group()` or a `transition()` call,
+ * When a sequence is used within a `{\@link animations/group group()}` or a `transition()` call,
  * execution continues to the next instruction only after each of the inner animation
  * steps have completed.
  *
@@ -589,7 +492,7 @@ function keyframes(steps) {
  *  ...]
  * ```
  *
- * Note that when you call the `sequence()` function within a `group()`
+ * Note that when you call the `sequence()` function within a `{\@link animations/group group()}`
  * or a `transition()` call, execution does not continue to the next instruction
  * until each of the inner animation steps have completed.
  *
@@ -982,7 +885,7 @@ function stagger(timings, animation) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -999,17 +902,8 @@ function scheduleMicroTask(cb) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
-/**
- * AnimationPlayer controls an animation sequence that was produced from a programmatic animation.
- * (see {\@link AnimationBuilder AnimationBuilder} for more information on how to create programmatic
- * animations.)
- *
- * \@experimental Animation support is experimental.
- * @record
- */
-
 /**
  * \@experimental Animation support is experimental.
  */
@@ -1126,7 +1020,8 @@ class NoopAnimationPlayer {
      * @return {?}
      */
     triggerCallback(phaseName) {
-        const /** @type {?} */ methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
+        /** @type {?} */
+        const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
         methods.forEach(fn => fn());
         methods.length = 0;
     }
@@ -1134,14 +1029,7 @@ class NoopAnimationPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 class AnimationGroupPlayer {
     /**
@@ -1157,10 +1045,14 @@ class AnimationGroupPlayer {
         this.parentPlayer = null;
         this.totalTime = 0;
         this.players = _players;
-        let /** @type {?} */ doneCount = 0;
-        let /** @type {?} */ destroyCount = 0;
-        let /** @type {?} */ startCount = 0;
-        const /** @type {?} */ total = this.players.length;
+        /** @type {?} */
+        let doneCount = 0;
+        /** @type {?} */
+        let destroyCount = 0;
+        /** @type {?} */
+        let startCount = 0;
+        /** @type {?} */
+        const total = this.players.length;
         if (total == 0) {
             scheduleMicroTask(() => this._onFinish());
         }
@@ -1283,9 +1175,11 @@ class AnimationGroupPlayer {
      * @return {?}
      */
     setPosition(p) {
-        const /** @type {?} */ timeAtPosition = p * this.totalTime;
+        /** @type {?} */
+        const timeAtPosition = p * this.totalTime;
         this.players.forEach(player => {
-            const /** @type {?} */ position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
+            /** @type {?} */
+            const position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
             player.setPosition(position);
         });
     }
@@ -1293,9 +1187,11 @@ class AnimationGroupPlayer {
      * @return {?}
      */
     getPosition() {
-        let /** @type {?} */ min = 0;
+        /** @type {?} */
+        let min = 0;
         this.players.forEach(player => {
-            const /** @type {?} */ p = player.getPosition();
+            /** @type {?} */
+            const p = player.getPosition();
             min = Math.min(p, min);
         });
         return min;
@@ -1315,7 +1211,8 @@ class AnimationGroupPlayer {
      * @return {?}
      */
     triggerCallback(phaseName) {
-        const /** @type {?} */ methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
+        /** @type {?} */
+        const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
         methods.forEach(fn => fn());
         methods.length = 0;
     }
@@ -1323,54 +1220,25 @@ class AnimationGroupPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+/** @type {?} */
 const ɵPRE_STYLE = '!';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-// This file is not used to build this module. It is only used during editing
-// by the TypeScript language service and during build for verification. `ngc`
-// replaces this file with production index.ts when it rewrites private symbol
-// names.
 
 /**
  * Generated bundle index. Do not edit.

@@ -14,7 +14,7 @@ export declare class AnimationAstBuilderVisitor implements AnimationDslVisitor {
     private _driver;
     constructor(_driver: AnimationDriver);
     build(metadata: AnimationMetadata | AnimationMetadata[], errors: any[]): Ast<AnimationMetadataType>;
-    private _resetContextStyleTimingState(context);
+    private _resetContextStyleTimingState;
     visitTrigger(metadata: AnimationTriggerMetadata, context: AnimationAstBuilderContext): TriggerAst;
     visitState(metadata: AnimationStateMetadata, context: AnimationAstBuilderContext): StateAst;
     visitTransition(metadata: AnimationTransitionMetadata, context: AnimationAstBuilderContext): TransitionAst;
@@ -22,8 +22,8 @@ export declare class AnimationAstBuilderVisitor implements AnimationDslVisitor {
     visitGroup(metadata: AnimationGroupMetadata, context: AnimationAstBuilderContext): GroupAst;
     visitAnimate(metadata: AnimationAnimateMetadata, context: AnimationAstBuilderContext): AnimateAst;
     visitStyle(metadata: AnimationStyleMetadata, context: AnimationAstBuilderContext): StyleAst;
-    private _makeStyleAst(metadata, context);
-    private _validateStyleAst(ast, context);
+    private _makeStyleAst;
+    private _validateStyleAst;
     visitKeyframes(metadata: AnimationKeyframesSequenceMetadata, context: AnimationAstBuilderContext): KeyframesAst;
     visitReference(metadata: AnimationReferenceMetadata, context: AnimationAstBuilderContext): ReferenceAst;
     visitAnimateChild(metadata: AnimationAnimateChildMetadata, context: AnimationAstBuilderContext): AnimateChildAst;

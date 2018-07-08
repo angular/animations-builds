@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.1+46.sha-a5799e6
+ * @license Angular v6.1.0-beta.3+80.sha-6c604bd
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -9,7 +9,7 @@ import { ɵallowPreviousPlayerStylesMerge, ɵcontainsElement, ɵinvokeQuery, ɵm
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * \@experimental Animation support is experimental.
@@ -62,7 +62,8 @@ class MockAnimationDriver {
      * @return {?}
      */
     animate(element, keyframes, duration, delay, easing, previousPlayers = []) {
-        const /** @type {?} */ player = new MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers);
+        /** @type {?} */
+        const player = new MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers);
         MockAnimationDriver.log.push(/** @type {?} */ (player));
         return player;
     }
@@ -96,7 +97,8 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         if (ɵallowPreviousPlayerStylesMerge(duration, delay)) {
             previousPlayers.forEach(player => {
                 if (player instanceof MockAnimationPlayer) {
-                    const /** @type {?} */ styles = player.currentSnapshot;
+                    /** @type {?} */
+                    const styles = player.currentSnapshot;
                     Object.keys(styles).forEach(prop => this.previousStyles[prop] = styles[prop]);
                 }
             });
@@ -148,7 +150,8 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
      * @return {?}
      */
     beforeDestroy() {
-        const /** @type {?} */ captures = {};
+        /** @type {?} */
+        const captures = {};
         Object.keys(this.previousStyles).forEach(prop => {
             captures[prop] = this.previousStyles[prop];
         });
@@ -170,41 +173,18 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-// This file is not used to build this module. It is only used during editing
-// by the TypeScript language service and during build for verifcation. `ngc`
-// replaces this file with production index.ts when it rewrites private symbol
-// names.
 
 /**
  * Generated bundle index. Do not edit.
