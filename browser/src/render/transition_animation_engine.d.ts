@@ -52,11 +52,11 @@ export declare class AnimationTransitionNamespace {
     constructor(id: string, hostElement: any, _engine: TransitionAnimationEngine);
     listen(element: any, name: string, phase: string, callback: (event: any) => boolean): () => any;
     register(name: string, ast: AnimationTrigger): boolean;
-    private _getTrigger(name);
+    private _getTrigger;
     trigger(element: any, triggerName: string, value: any, defaultToFallback?: boolean): TransitionAnimationPlayer | undefined;
     deregister(name: string): void;
     clearElementCache(element: any): void;
-    private _signalRemovalForInnerTriggers(rootElement, context, animate?);
+    private _signalRemovalForInnerTriggers;
     triggerLeaveAnimation(element: any, context: any, destroyAfterComplete?: boolean, defaultToFallback?: boolean): boolean;
     prepareLeaveAnimationListeners(element: any): void;
     removeNode(element: any, context: any): void;
@@ -71,6 +71,7 @@ export interface QueuedTransition {
     player: TransitionAnimationPlayer;
 }
 export declare class TransitionAnimationEngine {
+    bodyNode: any;
     driver: AnimationDriver;
     private _normalizer;
     players: TransitionAnimationPlayer[];
@@ -91,14 +92,14 @@ export declare class TransitionAnimationEngine {
     collectedEnterElements: any[];
     collectedLeaveElements: any[];
     onRemovalComplete: (element: any, context: any) => void;
-    constructor(driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
+    constructor(bodyNode: any, driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
     readonly queuedPlayers: TransitionAnimationPlayer[];
     createNamespace(namespaceId: string, hostElement: any): AnimationTransitionNamespace;
-    private _balanceNamespaceList(ns, hostElement);
+    private _balanceNamespaceList;
     register(namespaceId: string, hostElement: any): AnimationTransitionNamespace;
     registerTrigger(namespaceId: string, name: string, trigger: AnimationTrigger): void;
     destroy(namespaceId: string, context: any): void;
-    private _fetchNamespace(id);
+    private _fetchNamespace;
     fetchNamespacesByElement(element: any): Set<AnimationTransitionNamespace>;
     trigger(namespaceId: string, element: any, name: string, value: any): boolean;
     insertNode(namespaceId: string, element: any, parent: any, insertBefore: boolean): void;
@@ -107,7 +108,7 @@ export declare class TransitionAnimationEngine {
     removeNode(namespaceId: string, element: any, context: any): void;
     markElementAsRemoved(namespaceId: string, element: any, hasAnimation?: boolean, context?: any): void;
     listen(namespaceId: string, element: any, name: string, phase: string, callback: (event: any) => boolean): () => any;
-    private _buildInstruction(entry, subTimelines, enterClassName, leaveClassName, skipBuildAst?);
+    private _buildInstruction;
     destroyInnerAnimations(containerElement: any): void;
     destroyActiveAnimationsForElement(element: any): void;
     finishActiveQueriedAnimationOnElement(element: any): void;
@@ -115,14 +116,14 @@ export declare class TransitionAnimationEngine {
     processLeaveNode(element: any): void;
     flush(microtaskId?: number): void;
     reportError(errors: string[]): void;
-    private _flushAnimations(cleanupFns, microtaskId);
+    private _flushAnimations;
     elementContainsData(namespaceId: string, element: any): boolean;
     afterFlush(callback: () => any): void;
     afterFlushAnimationsDone(callback: () => any): void;
-    private _getPreviousPlayers(element, isQueriedElement, namespaceId?, triggerName?, toStateValue?);
-    private _beforeAnimationBuild(namespaceId, instruction, allPreviousPlayersMap);
-    private _buildAnimation(namespaceId, instruction, allPreviousPlayersMap, skippedPlayersMap, preStylesMap, postStylesMap);
-    private _buildPlayer(instruction, keyframes, previousPlayers);
+    private _getPreviousPlayers;
+    private _beforeAnimationBuild;
+    private _buildAnimation;
+    private _buildPlayer;
 }
 export declare class TransitionAnimationPlayer implements AnimationPlayer {
     namespaceId: string;
@@ -142,7 +143,7 @@ export declare class TransitionAnimationPlayer implements AnimationPlayer {
     getRealPlayer(): AnimationPlayer;
     overrideTotalTime(totalTime: number): void;
     syncPlayerEvents(player: AnimationPlayer): void;
-    private _queueEvent(name, callback);
+    private _queueEvent;
     onDone(fn: () => void): void;
     onStart(fn: () => void): void;
     onDestroy(fn: () => void): void;

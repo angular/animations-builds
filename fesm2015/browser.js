@@ -1,11 +1,11 @@
 /**
- * @license Angular v6.1.0-beta.1+46.sha-a5799e6
+ * @license Angular v6.1.0-beta.3+80.sha-6c604bd
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
+import { AUTO_STYLE, NoopAnimationPlayer, ɵAnimationGroupPlayer, ɵPRE_STYLE, sequence, style } from '@angular/animations';
 import { __decorate } from 'tslib';
-import { AUTO_STYLE, NoopAnimationPlayer, sequence, style, ɵAnimationGroupPlayer, ɵPRE_STYLE } from '@angular/animations';
 import { Injectable } from '@angular/core';
 
 /**
@@ -17,6 +17,9 @@ import { Injectable } from '@angular/core';
  */
 function isBrowser() {
     return (typeof window !== 'undefined' && typeof window.document !== 'undefined');
+}
+function isNode() {
+    return (typeof process !== 'undefined');
 }
 function optimizeGroupPlayer(players) {
     switch (players.length) {
@@ -122,10 +125,13 @@ let _matches = (element, selector) => false;
 let _query = (element, selector, multi) => {
     return [];
 };
-if (isBrowser()) {
+// Define utility methods for browsers and platform-server(domino) where Element
+// and utility methods exist.
+const _isNode = isNode();
+if (_isNode || typeof Element !== 'undefined') {
     // this is well supported in all browsers
     _contains = (elm1, elm2) => { return elm1.contains(elm2); };
-    if (Element.prototype.matches) {
+    if (_isNode || Element.prototype.matches) {
         _matches = (element, selector) => element.matches(selector);
     }
     else {
@@ -191,13 +197,6 @@ function hypenatePropsObject(object) {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * @experimental
  */
 let NoopAnimationDriver = class NoopAnimationDriver {
@@ -238,8 +237,6 @@ const SUBSTITUTION_EXPR_START = '{{';
 const SUBSTITUTION_EXPR_END = '}}';
 const ENTER_CLASSNAME = 'ng-enter';
 const LEAVE_CLASSNAME = 'ng-leave';
-
-
 const NG_TRIGGER_CLASSNAME = 'ng-trigger';
 const NG_TRIGGER_SELECTOR = '.ng-trigger';
 const NG_ANIMATING_CLASSNAME = 'ng-animating';
@@ -334,12 +331,46 @@ function copyStyles(styles, readPrototype, destination = {}) {
     }
     return destination;
 }
+function getStyleAttributeString(element, key, value) {
+    // Return the key-value pair string to be added to the style attribute for the
+    // given CSS style key.
+    if (value) {
+        return key + ':' + value + ';';
+    }
+    else {
+        return '';
+    }
+}
+function writeStyleAttribute(element) {
+    // Read the style property of the element and manually reflect it to the
+    // style attribute. This is needed because Domino on platform-server doesn't
+    // understand the full set of allowed CSS properties and doesn't reflect some
+    // of them automatically.
+    let styleAttrValue = '';
+    for (let i = 0; i < element.style.length; i++) {
+        const key = element.style.item(i);
+        styleAttrValue += getStyleAttributeString(element, key, element.style.getPropertyValue(key));
+    }
+    for (const key in element.style) {
+        // Skip internal Domino properties that don't need to be reflected.
+        if (!element.style.hasOwnProperty(key) || key.startsWith('_')) {
+            continue;
+        }
+        const dashKey = camelCaseToDashCase(key);
+        styleAttrValue += getStyleAttributeString(element, dashKey, element.style[key]);
+    }
+    element.setAttribute('style', styleAttrValue);
+}
 function setStyles(element, styles) {
     if (element['style']) {
         Object.keys(styles).forEach(prop => {
             const camelProp = dashCaseToCamelCase(prop);
             element.style[camelProp] = styles[prop];
         });
+        // On the server set the 'style' attribute since it's not automatically reflected.
+        if (isNode()) {
+            writeStyleAttribute(element);
+        }
     }
 }
 function eraseStyles(element, styles) {
@@ -348,6 +379,10 @@ function eraseStyles(element, styles) {
             const camelProp = dashCaseToCamelCase(prop);
             element.style[camelProp] = '';
         });
+        // On the server set the 'style' attribute since it's not automatically reflected.
+        if (isNode()) {
+            writeStyleAttribute(element);
+        }
     }
 }
 function normalizeAnimationEntry(steps) {
@@ -405,10 +440,12 @@ function iteratorToArray(iterator) {
     }
     return arr;
 }
-
 const DASH_CASE_REGEXP = /-+([a-z0-9])/g;
 function dashCaseToCamelCase(input) {
     return input.replace(DASH_CASE_REGEXP, (...m) => m[1].toUpperCase());
+}
+function camelCaseToDashCase(input) {
+    return input.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 }
 function allowPreviousPlayerStylesMerge(duration, delay) {
     return duration === 0 || delay === 0;
@@ -2069,7 +2106,8 @@ function balanceProperties(obj, key1, key2) {
  */
 const EMPTY_INSTRUCTION_MAP = new ElementInstructionMap();
 class TimelineAnimationEngine {
-    constructor(_driver, _normalizer) {
+    constructor(bodyNode, _driver, _normalizer) {
+        this.bodyNode = bodyNode;
         this._driver = _driver;
         this._normalizer = _normalizer;
         this._animations = {};
@@ -2586,7 +2624,8 @@ class AnimationTransitionNamespace {
     }
 }
 class TransitionAnimationEngine {
-    constructor(driver, _normalizer) {
+    constructor(bodyNode, driver, _normalizer) {
+        this.bodyNode = bodyNode;
         this.driver = driver;
         this._normalizer = _normalizer;
         this.players = [];
@@ -2927,7 +2966,7 @@ class TransitionAnimationEngine {
                 disabledElementsSet.add(nodesThatAreDisabled[i]);
             }
         });
-        const bodyNode = getBodyNode();
+        const bodyNode = this.bodyNode;
         const allTriggerElements = Array.from(this.statesByElement.keys());
         const enterNodeMap = buildRootMap(allTriggerElements, this.collectedEnterElements);
         // this must occur before the instructions are built below such that
@@ -3640,13 +3679,14 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
 }
 
 class AnimationEngine {
-    constructor(_driver, normalizer) {
+    constructor(bodyNode, _driver, normalizer) {
+        this.bodyNode = bodyNode;
         this._driver = _driver;
         this._triggerCache = {};
         // this method is designed to be overridden by the code that uses this engine
         this.onRemovalComplete = (element, context) => { };
-        this._transitionEngine = new TransitionAnimationEngine(_driver, normalizer);
-        this._timelineEngine = new TimelineAnimationEngine(_driver, normalizer);
+        this._transitionEngine = new TransitionAnimationEngine(bodyNode, _driver, normalizer);
+        this._timelineEngine = new TimelineAnimationEngine(bodyNode, _driver, normalizer);
         this._transitionEngine.onRemovalComplete = (element, context) => this.onRemovalComplete(element, context);
     }
     registerTrigger(componentId, namespaceId, hostElement, name, metadata) {
@@ -3933,7 +3973,7 @@ class CssKeyframesPlayer {
         this.init();
         const styles = {};
         if (this.hasStarted()) {
-            const finished = this._state >= 3;
+            const finished = this._state >= 3 /* FINISHED */;
             Object.keys(this._finalStyles).forEach(prop => {
                 if (prop != 'offset') {
                     styles[prop] = finished ? this._finalStyles[prop] : computeStyle(this.element, prop);
@@ -4284,10 +4324,13 @@ function getElementAnimateFn() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+
 /**
- * @module
- * @description
- * Entry point for all animation APIs of the animation browser package.
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
 
 /**
@@ -4297,23 +4340,6 @@ function getElementAnimateFn() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-// This file is not used to build this module. It is only used during editing
-// by the TypeScript language service and during build for verifcation. `ngc`
-// replaces this file with production index.ts when it rewrites private symbol
-// names.
 
 export { AnimationDriver, Animation as ɵAnimation, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, AnimationDriver as ɵAnimationDriver, NoopAnimationDriver as ɵNoopAnimationDriver, AnimationEngine as ɵAnimationEngine, CssKeyframesDriver as ɵCssKeyframesDriver, CssKeyframesPlayer as ɵCssKeyframesPlayer, containsElement as ɵcontainsElement, invokeQuery as ɵinvokeQuery, matchesElement as ɵmatchesElement, validateStyleProperty as ɵvalidateStyleProperty, WebAnimationsDriver as ɵWebAnimationsDriver, supportsWebAnimations as ɵsupportsWebAnimations, WebAnimationsPlayer as ɵWebAnimationsPlayer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge };
 //# sourceMappingURL=browser.js.map
