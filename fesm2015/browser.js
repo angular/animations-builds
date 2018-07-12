@@ -1,10 +1,10 @@
 /**
- * @license Angular v6.0.7+21.sha-0437598
+ * @license Angular v6.0.8+4.sha-48415ed
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { AUTO_STYLE, NoopAnimationPlayer, sequence, style, ɵAnimationGroupPlayer, ɵPRE_STYLE } from '@angular/animations';
+import { AUTO_STYLE, NoopAnimationPlayer, ɵAnimationGroupPlayer, ɵPRE_STYLE, sequence, style } from '@angular/animations';
 import { Injectable } from '@angular/core';
 
 /**
@@ -168,14 +168,14 @@ function parseTimelineCommand(command) {
     const /** @type {?} */ action = command.substr(separatorPos + 1);
     return [id, action];
 }
-let _contains = (elm1, elm2) => false;
-let _matches = (element, selector) => false;
-let _query = (element, selector, multi) => {
+let /** @type {?} */ _contains = (elm1, elm2) => false;
+let /** @type {?} */ _matches = (element, selector) => false;
+let /** @type {?} */ _query = (element, selector, multi) => {
     return [];
 };
 // Define utility methods for browsers and platform-server(domino) where Element
 // and utility methods exist.
-const _isNode = isNode();
+const /** @type {?} */ _isNode = isNode();
 if (_isNode || typeof Element !== 'undefined') {
     // this is well supported in all browsers
     _contains = (elm1, elm2) => { return /** @type {?} */ (elm1.contains(elm2)); };
@@ -213,8 +213,8 @@ function containsVendorPrefix(prop) {
     // cc: http://shouldiprefix.com/
     return prop.substring(1, 6) == 'ebkit'; // webkit or Webkit
 }
-let _CACHED_BODY = null;
-let _IS_WEBKIT = false;
+let /** @type {?} */ _CACHED_BODY = null;
+let /** @type {?} */ _IS_WEBKIT = false;
 /**
  * @param {?} prop
  * @return {?}
@@ -243,9 +243,9 @@ function getBodyNode() {
     }
     return null;
 }
-const matchesElement = _matches;
-const containsElement = _contains;
-const invokeQuery = _query;
+const /** @type {?} */ matchesElement = _matches;
+const /** @type {?} */ containsElement = _contains;
+const /** @type {?} */ invokeQuery = _query;
 /**
  * @param {?} object
  * @return {?}
@@ -333,17 +333,15 @@ AnimationDriver.NOOP = new NoopAnimationDriver();
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-const ONE_SECOND = 1000;
-const SUBSTITUTION_EXPR_START = '{{';
-const SUBSTITUTION_EXPR_END = '}}';
-const ENTER_CLASSNAME = 'ng-enter';
-const LEAVE_CLASSNAME = 'ng-leave';
-
-
-const NG_TRIGGER_CLASSNAME = 'ng-trigger';
-const NG_TRIGGER_SELECTOR = '.ng-trigger';
-const NG_ANIMATING_CLASSNAME = 'ng-animating';
-const NG_ANIMATING_SELECTOR = '.ng-animating';
+const /** @type {?} */ ONE_SECOND = 1000;
+const /** @type {?} */ SUBSTITUTION_EXPR_START = '{{';
+const /** @type {?} */ SUBSTITUTION_EXPR_END = '}}';
+const /** @type {?} */ ENTER_CLASSNAME = 'ng-enter';
+const /** @type {?} */ LEAVE_CLASSNAME = 'ng-leave';
+const /** @type {?} */ NG_TRIGGER_CLASSNAME = 'ng-trigger';
+const /** @type {?} */ NG_TRIGGER_SELECTOR = '.ng-trigger';
+const /** @type {?} */ NG_ANIMATING_CLASSNAME = 'ng-animating';
+const /** @type {?} */ NG_ANIMATING_SELECTOR = '.ng-animating';
 /**
  * @param {?} value
  * @return {?}
@@ -573,7 +571,7 @@ function validateStyleParams(value, options, errors) {
         });
     }
 }
-const PARAM_REGEX = new RegExp(`${SUBSTITUTION_EXPR_START}\\s*(.+?)\\s*${SUBSTITUTION_EXPR_END}`, 'g');
+const /** @type {?} */ PARAM_REGEX = new RegExp(`${SUBSTITUTION_EXPR_START}\\s*(.+?)\\s*${SUBSTITUTION_EXPR_END}`, 'g');
 /**
  * @param {?} value
  * @return {?}
@@ -623,13 +621,7 @@ function iteratorToArray(iterator) {
     }
     return arr;
 }
-/**
- * @param {?} source
- * @param {?} destination
- * @return {?}
- */
-
-const DASH_CASE_REGEXP = /-+([a-z0-9])/g;
+const /** @type {?} */ DASH_CASE_REGEXP = /-+([a-z0-9])/g;
 /**
  * @param {?} input
  * @return {?}
@@ -737,7 +729,7 @@ function computeStyle(element, prop) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const ANY_STATE = '*';
+const /** @type {?} */ ANY_STATE = '*';
 /**
  * @param {?} transitionValue
  * @param {?} errors
@@ -808,8 +800,8 @@ function parseAnimationAlias(alias, errors) {
 // with the values intact (closure compiler for some reason
 // removes follow-up lines that add the values outside of
 // the constructor...
-const TRUE_BOOLEAN_VALUES = new Set(['true', '1']);
-const FALSE_BOOLEAN_VALUES = new Set(['false', '0']);
+const /** @type {?} */ TRUE_BOOLEAN_VALUES = new Set(['true', '1']);
+const /** @type {?} */ FALSE_BOOLEAN_VALUES = new Set(['false', '0']);
 /**
  * @param {?} lhs
  * @param {?} rhs
@@ -835,8 +827,8 @@ function makeLambdaFromStates(lhs, rhs) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-const SELF_TOKEN = ':self';
-const SELF_TOKEN_REGEX = new RegExp(`\s*${SELF_TOKEN}\s*,?`, 'g');
+const /** @type {?} */ SELF_TOKEN = ':self';
+const /** @type {?} */ SELF_TOKEN_REGEX = new RegExp(`\s*${SELF_TOKEN}\s*,?`, 'g');
 /**
  * @param {?} driver
  * @param {?} metadata
@@ -846,7 +838,7 @@ const SELF_TOKEN_REGEX = new RegExp(`\s*${SELF_TOKEN}\s*,?`, 'g');
 function buildAnimationAst(driver, metadata, errors) {
     return new AnimationAstBuilderVisitor(driver).build(metadata, errors);
 }
-const ROOT_SELECTOR = '';
+const /** @type {?} */ ROOT_SELECTOR = '';
 class AnimationAstBuilderVisitor {
     /**
      * @param {?} _driver
@@ -1412,10 +1404,6 @@ function makeTimingAst(duration, delay, easing) {
  * @suppress {checkTypes} checked by tsc
  */
 /**
- * @record
- */
-
-/**
  * @param {?} element
  * @param {?} keyframes
  * @param {?} preStyleProps
@@ -1488,11 +1476,11 @@ class ElementInstructionMap {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-const ONE_FRAME_IN_MILLISECONDS = 1;
-const ENTER_TOKEN = ':enter';
-const ENTER_TOKEN_REGEX = new RegExp(ENTER_TOKEN, 'g');
-const LEAVE_TOKEN = ':leave';
-const LEAVE_TOKEN_REGEX = new RegExp(LEAVE_TOKEN, 'g');
+const /** @type {?} */ ONE_FRAME_IN_MILLISECONDS = 1;
+const /** @type {?} */ ENTER_TOKEN = ':enter';
+const /** @type {?} */ ENTER_TOKEN_REGEX = new RegExp(ENTER_TOKEN, 'g');
+const /** @type {?} */ LEAVE_TOKEN = ':leave';
+const /** @type {?} */ LEAVE_TOKEN_REGEX = new RegExp(LEAVE_TOKEN, 'g');
 /**
  * @param {?} driver
  * @param {?} rootElement
@@ -1855,7 +1843,7 @@ class AnimationTimelineBuilderVisitor {
             (tl.currentTime - startingTime) + (tl.startTime - parentContext.currentTimeline.startTime);
     }
 }
-const DEFAULT_NOOP_PREVIOUS_NODE = /** @type {?} */ ({});
+const /** @type {?} */ DEFAULT_NOOP_PREVIOUS_NODE = /** @type {?} */ ({});
 class AnimationTimelineContext {
     /**
      * @param {?} _driver
@@ -2508,7 +2496,7 @@ class WebAnimationsStyleNormalizer extends AnimationStyleNormalizer {
         return strVal + unit;
     }
 }
-const DIMENSIONAL_PROP_MAP = makeBooleanMap('width,height,minWidth,minHeight,maxWidth,maxHeight,left,top,bottom,right,fontSize,outlineWidth,outlineOffset,paddingTop,paddingLeft,paddingBottom,paddingRight,marginTop,marginLeft,marginBottom,marginRight,borderRadius,borderWidth,borderTopWidth,borderLeftWidth,borderRightWidth,borderBottomWidth,textIndent,perspective'
+const /** @type {?} */ DIMENSIONAL_PROP_MAP = makeBooleanMap('width,height,minWidth,minHeight,maxWidth,maxHeight,left,top,bottom,right,fontSize,outlineWidth,outlineOffset,paddingTop,paddingLeft,paddingBottom,paddingRight,marginTop,marginLeft,marginBottom,marginRight,borderRadius,borderWidth,borderTopWidth,borderLeftWidth,borderRightWidth,borderBottomWidth,textIndent,perspective'
     .split(','));
 /**
  * @param {?} keys
@@ -2524,10 +2512,6 @@ function makeBooleanMap(keys) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
- * @record
- */
-
 /**
  * @param {?} element
  * @param {?} triggerName
@@ -2567,7 +2551,7 @@ function createTransitionInstruction(element, triggerName, fromState, toState, i
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-const EMPTY_OBJECT = {};
+const /** @type {?} */ EMPTY_OBJECT = {};
 class AnimationTransitionFactory {
     /**
      * @param {?} _triggerName
@@ -2797,7 +2781,7 @@ function balanceProperties(obj, key1, key2) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-const EMPTY_INSTRUCTION_MAP = new ElementInstructionMap();
+const /** @type {?} */ EMPTY_INSTRUCTION_MAP = new ElementInstructionMap();
 class TimelineAnimationEngine {
     /**
      * @param {?} bodyNode
@@ -2964,36 +2948,28 @@ class TimelineAnimationEngine {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-const QUEUED_CLASSNAME = 'ng-animate-queued';
-const QUEUED_SELECTOR = '.ng-animate-queued';
-const DISABLED_CLASSNAME = 'ng-animate-disabled';
-const DISABLED_SELECTOR = '.ng-animate-disabled';
-const STAR_CLASSNAME = 'ng-star-inserted';
-const STAR_SELECTOR = '.ng-star-inserted';
-const EMPTY_PLAYER_ARRAY = [];
-const NULL_REMOVAL_STATE = {
+const /** @type {?} */ QUEUED_CLASSNAME = 'ng-animate-queued';
+const /** @type {?} */ QUEUED_SELECTOR = '.ng-animate-queued';
+const /** @type {?} */ DISABLED_CLASSNAME = 'ng-animate-disabled';
+const /** @type {?} */ DISABLED_SELECTOR = '.ng-animate-disabled';
+const /** @type {?} */ STAR_CLASSNAME = 'ng-star-inserted';
+const /** @type {?} */ STAR_SELECTOR = '.ng-star-inserted';
+const /** @type {?} */ EMPTY_PLAYER_ARRAY = [];
+const /** @type {?} */ NULL_REMOVAL_STATE = {
     namespaceId: '',
     setForRemoval: false,
     setForMove: false,
     hasAnimation: false,
     removedBeforeQueried: false
 };
-const NULL_REMOVED_QUERIED_STATE = {
+const /** @type {?} */ NULL_REMOVED_QUERIED_STATE = {
     namespaceId: '',
     setForMove: false,
     setForRemoval: false,
     hasAnimation: false,
     removedBeforeQueried: true
 };
-/**
- * @record
- */
-
-const REMOVAL_FLAG = '__ng_removed';
-/**
- * @record
- */
-
+const /** @type {?} */ REMOVAL_FLAG = '__ng_removed';
 class StateValue {
     /**
      * @param {?} input
@@ -3036,8 +3012,8 @@ class StateValue {
         }
     }
 }
-const VOID_VALUE = 'void';
-const DEFAULT_STATE_VALUE = new StateValue(VOID_VALUE);
+const /** @type {?} */ VOID_VALUE = 'void';
+const /** @type {?} */ DEFAULT_STATE_VALUE = new StateValue(VOID_VALUE);
 class AnimationTransitionNamespace {
     /**
      * @param {?} id
@@ -3451,10 +3427,6 @@ class AnimationTransitionNamespace {
         return containsData;
     }
 }
-/**
- * @record
- */
-
 class TransitionAnimationEngine {
     /**
      * @param {?} bodyNode
@@ -4716,7 +4688,7 @@ function buildRootMap(roots, nodes) {
     });
     return rootMap;
 }
-const CLASSES_CACHE_KEY = '$$classes';
+const /** @type {?} */ CLASSES_CACHE_KEY = '$$classes';
 /**
  * @param {?} element
  * @param {?} className
@@ -4968,10 +4940,10 @@ class AnimationEngine {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const ELAPSED_TIME_MAX_DECIMAL_PLACES = 3;
-const ANIMATION_PROP = 'animation';
-const ANIMATIONEND_EVENT = 'animationend';
-const ONE_SECOND$1 = 1000;
+const /** @type {?} */ ELAPSED_TIME_MAX_DECIMAL_PLACES = 3;
+const /** @type {?} */ ANIMATION_PROP = 'animation';
+const /** @type {?} */ ANIMATIONEND_EVENT = 'animationend';
+const /** @type {?} */ ONE_SECOND$1 = 1000;
 class ElementAnimationStyleHandler {
     /**
      * @param {?} _element
@@ -5180,8 +5152,8 @@ function countChars(value, char) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-const DEFAULT_FILL_MODE = 'forwards';
-const DEFAULT_EASING = 'linear';
+const /** @type {?} */ DEFAULT_FILL_MODE = 'forwards';
+const /** @type {?} */ DEFAULT_EASING = 'linear';
 /** @enum {number} */
 const AnimatorControlState = {
     INITIALIZED: 1,
@@ -5430,8 +5402,8 @@ class DirectStylePlayer extends NoopAnimationPlayer {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-const KEYFRAMES_NAME_PREFIX = 'gen_css_kf_';
-const TAB_SPACE = ' ';
+const /** @type {?} */ KEYFRAMES_NAME_PREFIX = 'gen_css_kf_';
+const /** @type {?} */ TAB_SPACE = ' ';
 class CssKeyframesDriver {
     constructor() {
         this._count = 0;
@@ -5897,46 +5869,16 @@ function getElementAnimateFn() {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-// This file is not used to build this module. It is only used during editing
-// by the TypeScript language service and during build for verifcation. `ngc`
-// replaces this file with production index.ts when it rewrites private symbol
-// names.
 
 /**
  * Generated bundle index. Do not edit.
