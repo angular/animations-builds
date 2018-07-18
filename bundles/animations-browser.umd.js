@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+121.sha-23dc9a9
+ * @license Angular v6.1.0-beta.3+122.sha-d76531d
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3661,7 +3661,7 @@
             }
         };
         TransitionAnimationPlayer.prototype.getPosition = function () { return this.queued ? 0 : this._player.getPosition(); };
-        /* @internal */
+        /** @internal */
         TransitionAnimationPlayer.prototype.triggerCallback = function (phaseName) {
             var p = this._player;
             if (p.triggerCallback) {
@@ -4152,7 +4152,7 @@
             var _this = this;
             this._styler = new ElementAnimationStyleHandler(this.element, this.animationName, this._duration, this._delay, this.easing, DEFAULT_FILL_MODE, function () { return _this.finish(); });
         };
-        /* @internal */
+        /** @internal */
         CssKeyframesPlayer.prototype.triggerCallback = function (phaseName) {
             var methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
             methods.forEach(function (fn) { return fn(); });
@@ -4450,7 +4450,7 @@
             }
             this.currentSnapshot = styles;
         };
-        /* @internal */
+        /** @internal */
         WebAnimationsPlayer.prototype.triggerCallback = function (phaseName) {
             var methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
             methods.forEach(function (fn) { return fn(); });
