@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+117.sha-c8ad965
+ * @license Angular v6.1.0-beta.3+122.sha-d76531d
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -927,7 +927,7 @@ class NoopAnimationPlayer {
         }
         this._started = true;
     }
-    /* @internal */
+    /** @internal */
     triggerMicrotask() { scheduleMicroTask(() => this._onFinish()); }
     _onStart() {
         this._onStartFns.forEach(fn => fn());
@@ -950,7 +950,7 @@ class NoopAnimationPlayer {
     reset() { }
     setPosition(p) { }
     getPosition() { return 0; }
-    /* @internal */
+    /** @internal */
     triggerCallback(phaseName) {
         const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
         methods.forEach(fn => fn());
@@ -1074,7 +1074,7 @@ class AnimationGroupPlayer {
             }
         });
     }
-    /* @internal */
+    /** @internal */
     triggerCallback(phaseName) {
         const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
         methods.forEach(fn => fn());
