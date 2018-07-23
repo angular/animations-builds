@@ -19,7 +19,7 @@ export declare class NoopAnimationDriver implements AnimationDriver {
     animate(element: any, keyframes: {
         [key: string]: string | number;
     }[], duration: number, delay: number, easing: string, previousPlayers?: any[], scrubberAccessRequested?: boolean): AnimationPlayer;
-    static ngInjectableDef: i0.InjectableDef<NoopAnimationDriver>;
+    static ngInjectableDef: i0.ɵInjectableDef<NoopAnimationDriver>;
 }
 /**
  * @experimental
