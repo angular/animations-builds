@@ -1,10 +1,10 @@
 /**
- * @license Angular v6.1.0-beta.3+142.sha-082c994
+ * @license Angular v6.1.0-rc.3+70.sha-8a7b0e9
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __read, __spread, __extends, __assign, __values } from 'tslib';
+import { __read, __extends, __spread, __assign, __values } from 'tslib';
 import { AUTO_STYLE, NoopAnimationPlayer, ɵAnimationGroupPlayer, ɵPRE_STYLE, sequence, style } from '@angular/animations';
 import { defineInjectable } from '@angular/core';
 
@@ -3591,7 +3591,7 @@ var TransitionAnimationPlayer = /** @class */ (function () {
         }
     };
     TransitionAnimationPlayer.prototype.getPosition = function () { return this.queued ? 0 : this._player.getPosition(); };
-    /* @internal */
+    /** @internal */
     TransitionAnimationPlayer.prototype.triggerCallback = function (phaseName) {
         var p = this._player;
         if (p.triggerCallback) {
@@ -4082,7 +4082,7 @@ var CssKeyframesPlayer = /** @class */ (function () {
         var _this = this;
         this._styler = new ElementAnimationStyleHandler(this.element, this.animationName, this._duration, this._delay, this.easing, DEFAULT_FILL_MODE, function () { return _this.finish(); });
     };
-    /* @internal */
+    /** @internal */
     CssKeyframesPlayer.prototype.triggerCallback = function (phaseName) {
         var methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
         methods.forEach(function (fn) { return fn(); });
@@ -4380,7 +4380,7 @@ var WebAnimationsPlayer = /** @class */ (function () {
         }
         this.currentSnapshot = styles;
     };
-    /* @internal */
+    /** @internal */
     WebAnimationsPlayer.prototype.triggerCallback = function (phaseName) {
         var methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
         methods.forEach(function (fn) { return fn(); });
