@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+142.sha-082c994
+ * @license Angular v6.1.0-rc.3+70.sha-8a7b0e9
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4982,6 +4982,7 @@ class TransitionAnimationPlayer {
      */
     getPosition() { return this.queued ? 0 : this._player.getPosition(); }
     /**
+     * \@internal
      * @param {?} phaseName
      * @return {?}
      */
@@ -5805,6 +5806,7 @@ class CssKeyframesPlayer {
         this._styler = new ElementAnimationStyleHandler(this.element, this.animationName, this._duration, this._delay, this.easing, DEFAULT_FILL_MODE, () => this.finish());
     }
     /**
+     * \@internal
      * @param {?} phaseName
      * @return {?}
      */
@@ -6265,6 +6267,7 @@ class WebAnimationsPlayer {
         this.currentSnapshot = styles;
     }
     /**
+     * \@internal
      * @param {?} phaseName
      * @return {?}
      */

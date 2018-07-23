@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+142.sha-082c994
+ * @license Angular v6.1.0-rc.3+70.sha-8a7b0e9
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -949,7 +949,7 @@
             }
             this._started = true;
         };
-        /* @internal */
+        /** @internal */
         NoopAnimationPlayer.prototype.triggerMicrotask = function () {
             var _this = this;
             scheduleMicroTask(function () { return _this._onFinish(); });
@@ -975,7 +975,7 @@
         NoopAnimationPlayer.prototype.reset = function () { };
         NoopAnimationPlayer.prototype.setPosition = function (p) { };
         NoopAnimationPlayer.prototype.getPosition = function () { return 0; };
-        /* @internal */
+        /** @internal */
         NoopAnimationPlayer.prototype.triggerCallback = function (phaseName) {
             var methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
             methods.forEach(function (fn) { return fn(); });
@@ -1101,7 +1101,7 @@
                 }
             });
         };
-        /* @internal */
+        /** @internal */
         AnimationGroupPlayer.prototype.triggerCallback = function (phaseName) {
             var methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
             methods.forEach(function (fn) { return fn(); });
