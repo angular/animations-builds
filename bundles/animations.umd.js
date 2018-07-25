@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-rc.3+64.sha-1ceddb6
+ * @license Angular v6.1.0-rc.3+75.sha-e1c6fd5
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -15,7 +15,7 @@
      * BrowserAnimationsModule BrowserAnimationsModule} or {@link NoopAnimationsModule
      * NoopAnimationsModule} modules are used within an application.
      *
-     * The purpose if this service is to produce an animation sequence programmatically within an
+     * The purpose of this service is to produce an animation sequence programmatically within an
      * angular component or directive.
      *
      * Programmatic animations are first built and then a player is created when the build animation is
