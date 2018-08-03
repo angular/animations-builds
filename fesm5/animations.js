@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0+8.sha-3169edd
+ * @license Angular v6.1.0+100.sha-183757d
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -967,7 +967,7 @@ var NoopAnimationPlayer = /** @class */ (function () {
         }
     };
     NoopAnimationPlayer.prototype.reset = function () { };
-    NoopAnimationPlayer.prototype.setPosition = function (p) { };
+    NoopAnimationPlayer.prototype.setPosition = function (position) { };
     NoopAnimationPlayer.prototype.getPosition = function () { return 0; };
     /** @internal */
     NoopAnimationPlayer.prototype.triggerCallback = function (phaseName) {
