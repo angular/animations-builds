@@ -8,6 +8,8 @@
 import { AnimationEvent, AnimationPlayer, ɵStyleData } from '@angular/animations';
 import { AnimationStyleNormalizer } from '../../src/dsl/style_normalization/animation_style_normalizer';
 import { AnimationDriver } from '../../src/render/animation_driver';
+export declare function isBrowser(): boolean;
+export declare function isNode(): boolean;
 export declare function optimizeGroupPlayer(players: AnimationPlayer[]): AnimationPlayer;
 export declare function normalizeKeyframes(driver: AnimationDriver, normalizer: AnimationStyleNormalizer, element: any, keyframes: ɵStyleData[], preStyles?: ɵStyleData, postStyles?: ɵStyleData): ɵStyleData[];
 export declare function listenOnPlayer(player: AnimationPlayer, eventName: string, event: AnimationEvent | undefined, callback: (event: any) => any): void;
@@ -22,3 +24,8 @@ export declare function getBodyNode(): any | null;
 export declare const matchesElement: (element: any, selector: string) => boolean;
 export declare const containsElement: (elm1: any, elm2: any) => boolean;
 export declare const invokeQuery: (element: any, selector: string, multi: boolean) => any[];
+export declare function hypenatePropsObject(object: {
+    [key: string]: any;
+}): {
+    [key: string]: any;
+};

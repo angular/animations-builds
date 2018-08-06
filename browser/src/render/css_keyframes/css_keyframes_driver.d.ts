@@ -20,5 +20,5 @@ export declare class CssKeyframesDriver implements AnimationDriver {
         [key: string]: any;
     }[]): any;
     animate(element: any, keyframes: ɵStyleData[], duration: number, delay: number, easing: string, previousPlayers?: AnimationPlayer[], scrubberAccessRequested?: boolean): AnimationPlayer;
-    private _notifyFaultyScrubber();
+    private _notifyFaultyScrubber;
 }

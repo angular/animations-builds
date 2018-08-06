@@ -17,11 +17,13 @@ export declare class AnimationTransitionFactory {
     constructor(_triggerName: string, ast: TransitionAst, _stateStyles: {
         [stateName: string]: AnimationStateStyles;
     });
-    match(currentState: any, nextState: any): boolean;
+    match(currentState: any, nextState: any, element: any, params: {
+        [key: string]: any;
+    }): boolean;
     buildStyles(stateName: string, params: {
         [key: string]: any;
     }, errors: any[]): ɵStyleData;
-    build(driver: AnimationDriver, element: any, currentState: any, nextState: any, enterClassName: string, leaveClassName: string, currentOptions?: AnimationOptions, nextOptions?: AnimationOptions, subInstructions?: ElementInstructionMap): AnimationTransitionInstruction;
+    build(driver: AnimationDriver, element: any, currentState: any, nextState: any, enterClassName: string, leaveClassName: string, currentOptions?: AnimationOptions, nextOptions?: AnimationOptions, subInstructions?: ElementInstructionMap, skipAstBuild?: boolean): AnimationTransitionInstruction;
 }
 export declare class AnimationStateStyles {
     private styles;

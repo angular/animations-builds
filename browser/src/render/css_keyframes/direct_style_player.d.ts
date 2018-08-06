@@ -8,10 +8,10 @@
 import { NoopAnimationPlayer } from '@angular/animations';
 export declare class DirectStylePlayer extends NoopAnimationPlayer {
     element: any;
-    private _styles;
     private _startingStyles;
     private __initialized;
-    constructor(element: any, _styles: {
+    private _styles;
+    constructor(element: any, styles: {
         [key: string]: any;
     });
     init(): void;
