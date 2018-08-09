@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0+66.sha-26adee9
+ * @license Angular v7.0.0-beta.1+40.sha-99b2e7e
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -973,7 +973,7 @@
             }
         };
         NoopAnimationPlayer.prototype.reset = function () { };
-        NoopAnimationPlayer.prototype.setPosition = function (p) { };
+        NoopAnimationPlayer.prototype.setPosition = function (position) { };
         NoopAnimationPlayer.prototype.getPosition = function () { return 0; };
         /** @internal */
         NoopAnimationPlayer.prototype.triggerCallback = function (phaseName) {
