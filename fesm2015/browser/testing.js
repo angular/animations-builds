@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.1+12.sha-9c92a6f
+ * @license Angular v7.0.0-beta.1+18.sha-7058072
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -8,38 +8,79 @@ import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
 import { ɵallowPreviousPlayerStylesMerge, ɵcontainsElement, ɵinvokeQuery, ɵmatchesElement, ɵvalidateStyleProperty } from '@angular/animations/browser';
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
- * @experimental Animation support is experimental.
+ * \@experimental Animation support is experimental.
  */
 class MockAnimationDriver {
+    /**
+     * @param {?} prop
+     * @return {?}
+     */
     validateStyleProperty(prop) { return ɵvalidateStyleProperty(prop); }
+    /**
+     * @param {?} element
+     * @param {?} selector
+     * @return {?}
+     */
     matchesElement(element, selector) {
         return ɵmatchesElement(element, selector);
     }
+    /**
+     * @param {?} elm1
+     * @param {?} elm2
+     * @return {?}
+     */
     containsElement(elm1, elm2) { return ɵcontainsElement(elm1, elm2); }
+    /**
+     * @param {?} element
+     * @param {?} selector
+     * @param {?} multi
+     * @return {?}
+     */
     query(element, selector, multi) {
         return ɵinvokeQuery(element, selector, multi);
     }
+    /**
+     * @param {?} element
+     * @param {?} prop
+     * @param {?=} defaultValue
+     * @return {?}
+     */
     computeStyle(element, prop, defaultValue) {
         return defaultValue || '';
     }
+    /**
+     * @param {?} element
+     * @param {?} keyframes
+     * @param {?} duration
+     * @param {?} delay
+     * @param {?} easing
+     * @param {?=} previousPlayers
+     * @return {?}
+     */
     animate(element, keyframes, duration, delay, easing, previousPlayers = []) {
+        /** @type {?} */
         const player = new MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers);
-        MockAnimationDriver.log.push(player);
+        MockAnimationDriver.log.push(/** @type {?} */ (player));
         return player;
     }
 }
 MockAnimationDriver.log = [];
 /**
- * @experimental Animation support is experimental.
+ * \@experimental Animation support is experimental.
  */
 class MockAnimationPlayer extends NoopAnimationPlayer {
+    /**
+     * @param {?} element
+     * @param {?} keyframes
+     * @param {?} duration
+     * @param {?} delay
+     * @param {?} easing
+     * @param {?} previousPlayers
+     */
     constructor(element, keyframes, duration, delay, easing, previousPlayers) {
         super(duration, delay);
         this.element = element;
@@ -56,36 +97,60 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         if (ɵallowPreviousPlayerStylesMerge(duration, delay)) {
             previousPlayers.forEach(player => {
                 if (player instanceof MockAnimationPlayer) {
+                    /** @type {?} */
                     const styles = player.currentSnapshot;
                     Object.keys(styles).forEach(prop => this.previousStyles[prop] = styles[prop]);
                 }
             });
         }
     }
-    /* @internal */
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
     onInit(fn) { this._onInitFns.push(fn); }
-    /* @internal */
+    /**
+     * @return {?}
+     */
     init() {
         super.init();
         this._onInitFns.forEach(fn => fn());
         this._onInitFns = [];
     }
+    /**
+     * @return {?}
+     */
     finish() {
         super.finish();
         this.__finished = true;
     }
+    /**
+     * @return {?}
+     */
     destroy() {
         super.destroy();
         this.__finished = true;
     }
-    /* @internal */
+    /**
+     * @return {?}
+     */
     triggerMicrotask() { }
+    /**
+     * @return {?}
+     */
     play() {
         super.play();
         this.__started = true;
     }
+    /**
+     * @return {?}
+     */
     hasStarted() { return this.__started; }
+    /**
+     * @return {?}
+     */
     beforeDestroy() {
+        /** @type {?} */
         const captures = {};
         Object.keys(this.previousStyles).forEach(prop => {
             captures[prop] = this.previousStyles[prop];
@@ -107,27 +172,18 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
 export { MockAnimationDriver, MockAnimationPlayer };

@@ -1,12 +1,16 @@
 /**
- * @license Angular v7.0.0-beta.1+12.sha-9c92a6f
+ * @license Angular v7.0.0-beta.1+18.sha-7058072
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 /**
- * AnimationBuilder is an injectable service that is available when the {@link
- * BrowserAnimationsModule BrowserAnimationsModule} or {@link NoopAnimationsModule
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
+/**
+ * AnimationBuilder is an injectable service that is available when the {\@link
+ * BrowserAnimationsModule BrowserAnimationsModule} or {\@link NoopAnimationsModule
  * NoopAnimationsModule} modules are used within an application.
  *
  * The purpose of this service is to produce an animation sequence programmatically within an
@@ -17,7 +21,7 @@
  *
  * ```ts
  * // remember to include the BrowserAnimationsModule module for this to work...
- * import {AnimationBuilder} from '@angular/animations';
+ * import {AnimationBuilder} from '\@angular/animations';
  *
  * class MyCmp {
  *   constructor(private _builder: AnimationBuilder) {}
@@ -37,51 +41,44 @@
  * }
  * ```
  *
- * When an animation is built an instance of {@link AnimationFactory AnimationFactory} will be
- * returned. Using that an {@link AnimationPlayer AnimationPlayer} can be created which can then be
+ * When an animation is built an instance of {\@link AnimationFactory AnimationFactory} will be
+ * returned. Using that an {\@link AnimationPlayer AnimationPlayer} can be created which can then be
  * used to start the animation.
  *
- * @experimental Animation support is experimental.
+ * \@experimental Animation support is experimental.
+ * @abstract
  */
 class AnimationBuilder {
 }
 /**
- * An instance of `AnimationFactory` is returned from {@link AnimationBuilder#build
+ * An instance of `AnimationFactory` is returned from {\@link AnimationBuilder#build
  * AnimationBuilder.build}.
  *
- * @experimental Animation support is experimental.
+ * \@experimental Animation support is experimental.
+ * @abstract
  */
 class AnimationFactory {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
-/**
+/** *
  * Specifies automatic styling.
- */
+  @type {?} */
 const AUTO_STYLE = '*';
 /**
  * Creates a named animation trigger, containing a  list of `state()`
  * and `transition()` entries to be evaluated when the expression
  * bound to the trigger changes.
  *
- * @param name An identifying string.
- * @param definitions  An animation definition object, containing an array of `state()`
- * and `transition()` declarations.
- *
- * @return An object that encapsulates the trigger data.
- *
- * @usageNotes
- * Define an animation trigger in the `animations` section of `@Component` metadata.
+ * \@usageNotes
+ * Define an animation trigger in the `animations` section of `\@Component` metadata.
  * In the template, reference the trigger by name and bind it to a trigger expression that
  * evaluates to a defined animation state, using the following format:
  *
- * `[@triggerName]="expression"`
+ * `[\@triggerName]="expression"`
  *
  * Animation trigger bindings convert all values to strings, and then match the
  * previous and current values against any linked transitions.
@@ -95,7 +92,7 @@ const AUTO_STYLE = '*';
  * transition declarations.
  *
  * ```typescript
- * @Component({
+ * \@Component({
  *   selector: "my-component",
  *   templateUrl: "my-component-tpl.html",
  *   animations: [
@@ -117,7 +114,7 @@ const AUTO_STYLE = '*';
  *
  * ```html
  * <!-- somewhere inside of my-component-tpl.html -->
- * <div [@myAnimationTrigger]="myStatusExp">...</div>
+ * <div [\@myAnimationTrigger]="myStatusExp">...</div>
  * ```
  *
  * ### Using an inline function
@@ -127,12 +124,12 @@ const AUTO_STYLE = '*';
  * ```typescript
  * // this method is run each time the `myAnimationTrigger` trigger value changes.
  * function myInlineMatcherFn(fromState: string, toState: string, element: any, params: {[key:
- string]: any}): boolean {
+ * string]: any}): boolean {
  *   // notice that `element` and `params` are also available here
  *   return toState == 'yes-please-animate';
  * }
  *
- * @Component({
+ * \@Component({
  *   selector: 'my-component',
  *   templateUrl: 'my-component-tpl.html',
  *   animations: [
@@ -149,20 +146,20 @@ const AUTO_STYLE = '*';
  * ```
  *
  * ### Disabling Animations
- * When true, the special animation control binding `@.disabled` binding prevents
+ * When true, the special animation control binding `\@.disabled` binding prevents
  * all animations from rendering.
- * Place the  `@.disabled` binding on an element to disable
+ * Place the  `\@.disabled` binding on an element to disable
  * animations on the element itself, as well as any inner animation triggers
  * within the element.
  *
  * The following example shows how to use this feature:
  *
  * ```typescript
- * @Component({
+ * \@Component({
  *   selector: 'my-component',
  *   template: `
- *     <div [@.disabled]="isDisabled">
- *       <div [@childAnimation]="exp"></div>
+ *     <div [\@.disabled]="isDisabled">
+ *       <div [\@childAnimation]="exp"></div>
  *     </div>
  *   `,
  *   animations: [
@@ -177,24 +174,24 @@ const AUTO_STYLE = '*';
  * }
  * ```
  *
- * When `@.disabled` is true, it prevents the `@childAnimation` trigger from animating,
+ * When `\@.disabled` is true, it prevents the `\@childAnimation` trigger from animating,
  * along with any inner animations.
  *
  * ### Disable animations application-wide
  * When an area of the template is set to have animations disabled,
  * **all** inner components have their animations disabled as well.
  * This means that you can disable all animations for an app
- * by placing a host binding set on `@.disabled` on the topmost Angular component.
+ * by placing a host binding set on `\@.disabled` on the topmost Angular component.
  *
  * ```typescript
- * import {Component, HostBinding} from '@angular/core';
+ * import {Component, HostBinding} from '\@angular/core';
  *
- * @Component({
+ * \@Component({
  *   selector: 'app-component',
  *   templateUrl: 'app.component.html',
  * })
  * class AppComponent {
- *   @HostBinding('@.disabled')
+ * \@HostBinding('@.disabled')
  *   public animationsDisabled = true;
  * }
  * ```
@@ -211,7 +208,13 @@ const AUTO_STYLE = '*';
  * an instance of an `AnimationEvent`. If animations are disabled,
  * the `.disabled` flag on the event is true.
  *
- * @experimental Animation support is experimental.
+ * \@experimental Animation support is experimental.
+ * @param {?} name An identifying string.
+ * @param {?} definitions  An animation definition object, containing an array of `state()`
+ * and `transition()` declarations.
+ *
+ * @return {?} An object that encapsulates the trigger data.
+ *
  */
 function trigger(name, definitions) {
     return { type: 7 /* Trigger */, name, definitions, options: {} };
@@ -219,29 +222,8 @@ function trigger(name, definitions) {
 /**
  * Defines an animation step that combines styling information with timing information.
  *
- * @param timings Sets `AnimateTimings` for the parent animation.
- * A string in the format "duration [delay] [easing]".
- *  - Duration and delay are expressed as a number and optional time unit,
- * such as "1s" or "10ms" for one second and 10 milliseconds, respectively.
- * The default unit is milliseconds.
- *  - The easing value controls how the animation accelerates and decelerates
- * during its runtime. Value is one of  `ease`, `ease-in`, `ease-out`,
- * `ease-in-out`, or a `cubic-bezier()` function call.
- * If not supplied, no easing is applied.
- *
- * For example, the string "1s 100ms ease-out" specifies a duration of
- * 1000 milliseconds, and delay of 100 ms, and the "ease-out" easing style,
- * which decelerates near the end of the duration.
- * @param styles Sets AnimationStyles for the parent animation.
- * A function call to either `style()` or `keyframes()`
- * that returns a collection of CSS style entries to be applied to the parent animation.
- * When null, uses the styles from the destination state.
- * This is useful when describing an animation step that will complete an animation;
- * see "Animating to the final state" in `transitions()`.
- * @returns An object that encapsulates the animation step.
- *
- * @usageNotes
- * Call within an animation `sequence()`, `{@link animations/group group()}`, or
+ * \@usageNotes
+ * Call within an animation `sequence()`, `{\@link animations/group group()}`, or
  * `transition()` call to specify an animation step
  * that applies given style data to the parent animation for a given amount of time.
  *
@@ -271,14 +253,42 @@ function trigger(name, definitions) {
  *   style({ background: "red" }))
  *  ])
  * ```
+ * @param {?} timings Sets `AnimateTimings` for the parent animation.
+ * A string in the format "duration [delay] [easing]".
+ *  - Duration and delay are expressed as a number and optional time unit,
+ * such as "1s" or "10ms" for one second and 10 milliseconds, respectively.
+ * The default unit is milliseconds.
+ *  - The easing value controls how the animation accelerates and decelerates
+ * during its runtime. Value is one of  `ease`, `ease-in`, `ease-out`,
+ * `ease-in-out`, or a `cubic-bezier()` function call.
+ * If not supplied, no easing is applied.
+ *
+ * For example, the string "1s 100ms ease-out" specifies a duration of
+ * 1000 milliseconds, and delay of 100 ms, and the "ease-out" easing style,
+ * which decelerates near the end of the duration.
+ * @param {?=} styles Sets AnimationStyles for the parent animation.
+ * A function call to either `style()` or `keyframes()`
+ * that returns a collection of CSS style entries to be applied to the parent animation.
+ * When null, uses the styles from the destination state.
+ * This is useful when describing an animation step that will complete an animation;
+ * see "Animating to the final state" in `transitions()`.
+ * @return {?} An object that encapsulates the animation step.
+ *
  */
 function animate(timings, styles = null) {
     return { type: 4 /* Animate */, styles, timings };
 }
 /**
- * @description Defines a list of animation steps to be run in parallel.
+ * \@description Defines a list of animation steps to be run in parallel.
  *
- * @param steps An array of animation step objects.
+ * \@usageNotes
+ * Grouped animations are useful when a series of styles must be
+ * animated at different starting times and closed off at different ending times.
+ *
+ * When called within a `sequence()` or a
+ * `transition()` call, does not continue to the next
+ * instruction until all of the inner animation steps have completed.
+ * @param {?} steps An array of animation step objects.
  * - When steps are defined by `style()` or `animate()`
  * function calls, each call within the group is executed instantly.
  * - To specify offset styles to be applied at a later time, define steps with
@@ -292,19 +302,12 @@ function animate(timings, styles = null) {
  * ])
  * ```
  *
- * @param options An options object containing a delay and
+ * @param {?=} options An options object containing a delay and
  * developer-defined parameters that provide styling defaults and
  * can be overridden on invocation.
  *
- * @return An object that encapsulates the group data.
+ * @return {?} An object that encapsulates the group data.
  *
- * @usageNotes
- * Grouped animations are useful when a series of styles must be
- * animated at different starting times and closed off at different ending times.
- *
- * When called within a `sequence()` or a
- * `transition()` call, does not continue to the next
- * instruction until all of the inner animation steps have completed.
  */
 function group(steps, options = null) {
     return { type: 3 /* Group */, steps, options };
@@ -312,7 +315,17 @@ function group(steps, options = null) {
 /**
  * Defines a list of animation steps to be run sequentially, one by one.
  *
- * @param steps An array of animation step objects.
+ * \@usageNotes
+ * When you pass an array of steps to a
+ * `transition()` call, the steps run sequentially by default.
+ * Compare this to the `{\@link animations/group group()}` call, which runs animation steps in parallel.
+ *
+ * When a sequence is used within a `{\@link animations/group group()}` or a `transition()` call,
+ * execution continues to the next instruction only after each of the inner animation
+ * steps have completed.
+ *
+ *
+ * @param {?} steps An array of animation step objects.
  * - Steps defined by `style()` calls apply the styling data immediately.
  * - Steps defined by `animate()` calls apply the styling data over time
  *   as specified by the timing data.
@@ -324,22 +337,13 @@ function group(steps, options = null) {
  * ])
  * ```
  *
- * @param options An options object containing a delay and
+ * @param {?=} options An options object containing a delay and
  * developer-defined parameters that provide styling defaults and
  * can be overridden on invocation.
  *
- * @return An object that encapsulates the sequence data.
+ * @return {?} An object that encapsulates the sequence data.
  *
- * @usageNotes
- * When you pass an array of steps to a
- * `transition()` call, the steps run sequentially by default.
- * Compare this to the `{@link animations/group group()}` call, which runs animation steps in parallel.
- *
- * When a sequence is used within a `{@link animations/group group()}` or a `transition()` call,
- * execution continues to the next instruction only after each of the inner animation
- * steps have completed.
- *
- **/
+ */
 function sequence(steps, options = null) {
     return { type: 2 /* Sequence */, steps, options };
 }
@@ -348,19 +352,7 @@ function sequence(steps, options = null) {
  * can then be used for an animation `state`, within an animation `sequence`,
  * or as styling data for calls to `animate()` and `keyframes()`.
  *
- * @param tokens A set of CSS styles or HTML styles associated with an animation state.
- * The value can be any of the following:
- * - A key-value style pair associating a CSS property with a value.
- * - An array of key-value style pairs.
- * - An asterisk (*), to use auto-styling, where styles are derived from the element
- * being animated and applied to the animation when it starts.
- *
- * Auto-styling can be used to define a state that depends on layout or other
- * environmental factors.
- *
- * @return An object that encapsulates the style data.
- *
- * @usageNotes
+ * \@usageNotes
  * The following examples create animation styles that collect a set of
  * CSS property values:
  *
@@ -380,14 +372,33 @@ function sequence(steps, options = null) {
  * animate("1s", style({ height: "*" }))
  * ```
  *
- **/
+ *
+ * @param {?} tokens A set of CSS styles or HTML styles associated with an animation state.
+ * The value can be any of the following:
+ * - A key-value style pair associating a CSS property with a value.
+ * - An array of key-value style pairs.
+ * - An asterisk (*), to use auto-styling, where styles are derived from the element
+ * being animated and applied to the animation when it starts.
+ *
+ * Auto-styling can be used to define a state that depends on layout or other
+ * environmental factors.
+ *
+ * @return {?} An object that encapsulates the style data.
+ *
+ */
 function style(tokens) {
     return { type: 6 /* Style */, styles: tokens, offset: null };
 }
 /**
  * Declares an animation state within a trigger attached to an element.
  *
- * @param name One or more names for the defined state in a comma-separated string.
+ * \@usageNotes
+ * Use the `trigger()` function to register states to an animation trigger.
+ * Use the `transition()` function to animate between states.
+ * When a state is active within a component, its associated styles persist on the element,
+ * even when the animation ends.
+ *
+ * @param {?} name One or more names for the defined state in a comma-separated string.
  * The following reserved state names can be supplied to define a style for specific use
  * cases:
  *
@@ -398,31 +409,21 @@ function style(tokens) {
  * to be used as the fallback when the state that is being animated is not declared
  * within the trigger.
  *
- * @param styles A set of CSS styles associated with this state, created using the
+ * @param {?} styles A set of CSS styles associated with this state, created using the
  * `style()` function.
  * This set of styles persists on the element once the state has been reached.
- * @param options Parameters that can be passed to the state when it is invoked.
+ * @param {?=} options Parameters that can be passed to the state when it is invoked.
  * 0 or more key-value pairs.
- * @return An object that encapsulates the new state data.
+ * @return {?} An object that encapsulates the new state data.
  *
- * @usageNotes
- * Use the `trigger()` function to register states to an animation trigger.
- * Use the `transition()` function to animate between states.
- * When a state is active within a component, its associated styles persist on the element,
- * even when the animation ends.
- **/
+ */
 function state(name, styles, options) {
     return { type: 0 /* State */, name, styles, options };
 }
 /**
  * Defines a set of animation styles, associating each style with an optional `offset` value.
  *
- * @param steps A set of animation styles with optional offset data.
- * The optional `offset` value for a style specifies a percentage of the total animation
- * time at which that style is applied.
- * @returns An object that encapsulates the keyframes data.
- *
- * @usageNotes
+ * \@usageNotes
  * Use with the `animate()` call. Instead of applying animations
  * from the current state
  * to the destination state, keyframes describe how each style entry is applied and at what point
@@ -455,7 +456,12 @@ function state(name, styles, options) {
  *   style({ backgroundColor: "orange" }) // offset = 0.66
  *   style({ backgroundColor: "black" }) // offset = 1
  * ]))
- *```
+ * ```
+ * @param {?} steps A set of animation styles with optional offset data.
+ * The optional `offset` value for a style specifies a percentage of the total animation
+ * time at which that style is applied.
+ * @return {?} An object that encapsulates the keyframes data.
+ *
  */
 function keyframes(steps) {
     return { type: 5 /* Keyframes */, steps };
@@ -467,37 +473,12 @@ function keyframes(steps) {
  * When the state criteria of a defined transition are met, the associated animation is
  * triggered.
  *
- * @param stateChangeExpr A Boolean expression or function that compares the previous and current
- * animation states, and returns true if this transition should occur. Note that  "true" and "false"
- * match 1 and 0, respectively. An expression is evaluated each time a state change occurs in the
- * animation trigger element.
- * The animation steps run when the expression evaluates to true.
- *
- * - A state-change string takes the form "state1 => state2", where each side is a defined animation
- * state, or an asterix (*) to refer to a dynamic start or end state.
- *   - The expression string can contain multiple comma-separated statements;
- * for example "state1 => state2, state3 => state4".
- *   - Special values `:enter` and `:leave` initiate a transition on the entry and exit states,
- * equivalent to  "void => *"  and "* => void".
- *   - Special values `:increment` and `:decrement` initiate a transition when a numeric value has
- * increased or decreased in value.
- * - A function is executed each time a state change occurs in the animation trigger element.
- * The animation steps run when the function returns true.
- *
- * @param steps One or more animation objects, as returned by the `animate()` or
- * `sequence()` function, that form a transformation from one state to another.
- * A sequence is used by default when you pass an array.
- * @param options An options object that can contain a delay value for the start of the animation,
- * and additional developer-defined parameters. Provided values for additional parameters are used
- * as defaults, and override values can be passed to the caller on invocation.
- * @returns An object that encapsulates the transition data.
- *
- * @usageNotes
+ * \@usageNotes
  * The template associated with a component binds an animation trigger to an element.
  *
  * ```HTML
  * <!-- somewhere inside of my-component-tpl.html -->
- * <div [@myAnimationTrigger]="myStatusExp">...</div>
+ * <div [\@myAnimationTrigger]="myStatusExp">...</div>
  * ```
  *
  * All transitions are defined within an animation trigger,
@@ -511,7 +492,7 @@ function keyframes(steps) {
  *  ...]
  * ```
  *
- * Note that when you call the `sequence()` function within a `{@link animations/group group()}`
+ * Note that when you call the `sequence()` function within a `{\@link animations/group group()}`
  * or a `transition()` call, execution does not continue to the next instruction
  * until each of the inner animation steps have completed.
  *
@@ -617,7 +598,7 @@ function keyframes(steps) {
  *
  * ```
  * // in the template
- * <div [@openClose]="open ? true : false">...</div>
+ * <div [\@openClose]="open ? true : false">...</div>
  * // in the component metadata
  * trigger('openClose', [
  *   state('true', style({ height: '*' })),
@@ -625,7 +606,33 @@ function keyframes(steps) {
  *   transition('false <=> true', animate(500))
  * ])
  * ```
- **/
+ *
+ * @param {?} stateChangeExpr A Boolean expression or function that compares the previous and current
+ * animation states, and returns true if this transition should occur. Note that  "true" and "false"
+ * match 1 and 0, respectively. An expression is evaluated each time a state change occurs in the
+ * animation trigger element.
+ * The animation steps run when the expression evaluates to true.
+ *
+ * - A state-change string takes the form "state1 => state2", where each side is a defined animation
+ * state, or an asterix (*) to refer to a dynamic start or end state.
+ *   - The expression string can contain multiple comma-separated statements;
+ * for example "state1 => state2, state3 => state4".
+ *   - Special values `:enter` and `:leave` initiate a transition on the entry and exit states,
+ * equivalent to  "void => *"  and "* => void".
+ *   - Special values `:increment` and `:decrement` initiate a transition when a numeric value has
+ * increased or decreased in value.
+ * - A function is executed each time a state change occurs in the animation trigger element.
+ * The animation steps run when the function returns true.
+ *
+ * @param {?} steps One or more animation objects, as returned by the `animate()` or
+ * `sequence()` function, that form a transformation from one state to another.
+ * A sequence is used by default when you pass an array.
+ * @param {?=} options An options object that can contain a delay value for the start of the animation,
+ * and additional developer-defined parameters. Provided values for additional parameters are used
+ * as defaults, and override values can be passed to the caller on invocation.
+ * @return {?} An object that encapsulates the transition data.
+ *
+ */
 function transition(stateChangeExpr, steps, options = null) {
     return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, options };
 }
@@ -633,16 +640,7 @@ function transition(stateChangeExpr, steps, options = null) {
  * Produces a reusable animation that can be invoked in another animation or sequence,
  * by calling the `useAnimation()` function.
  *
- * @param steps One or more animation objects, as returned by the `animate()`
- * or `sequence()` function, that form a transformation from one state to another.
- * A sequence is used by default when you pass an array.
- * @param options An options object that can contain a delay value for the start of the
- * animation, and additional developer-defined parameters.
- * Provided values for additional parameters are used as defaults,
- * and override values can be passed to the caller on invocation.
- * @returns An object that encapsulates the animation data.
- *
- * @usageNotes
+ * \@usageNotes
  * The following example defines a reusable animation, providing some default parameter
  * values.
  *
@@ -671,6 +669,15 @@ function transition(stateChangeExpr, steps, options = null) {
  * If any of the passed-in parameter values are missing from this call,
  * the default values are used. If one or more parameter values are missing before a step is
  * animated, `useAnimation()` throws an error.
+ * @param {?} steps One or more animation objects, as returned by the `animate()`
+ * or `sequence()` function, that form a transformation from one state to another.
+ * A sequence is used by default when you pass an array.
+ * @param {?=} options An options object that can contain a delay value for the start of the
+ * animation, and additional developer-defined parameters.
+ * Provided values for additional parameters are used as defaults,
+ * and override values can be passed to the caller on invocation.
+ * @return {?} An object that encapsulates the animation data.
+ *
  */
 function animation(steps, options = null) {
     return { type: 8 /* Reference */, animation: steps, options };
@@ -678,11 +685,7 @@ function animation(steps, options = null) {
 /**
  * Executes a queried inner animation element within an animation sequence.
  *
- * @param options An options object that can contain a delay value for the start of the
- * animation, and additional override values for developer-defined parameters.
- * @return An object that encapsulates the child animation data.
- *
- * @usageNotes
+ * \@usageNotes
  * Each time an animation is triggered in Angular, the parent animation
  * has priority and any child animations are blocked. In order
  * for a child animation to run, the parent animation must query each of the elements
@@ -691,6 +694,10 @@ function animation(steps, options = null) {
  * Note that this feature designed to be used with `query()` and it will only work
  * with animations that are assigned using the Angular animation library. CSS keyframes
  * and transitions are not handled by this API.
+ * @param {?=} options An options object that can contain a delay value for the start of the
+ * animation, and additional override values for developer-defined parameters.
+ * @return {?} An object that encapsulates the child animation data.
+ *
  */
 function animateChild(options = null) {
     return { type: 9 /* AnimateChild */, options };
@@ -698,10 +705,10 @@ function animateChild(options = null) {
 /**
  * Starts a reusable animation that is created using the `animation()` function.
  *
- * @param animation The reusable animation to start.
- * @param options An options object that can contain a delay value for the start of
+ * @param {?} animation The reusable animation to start.
+ * @param {?=} options An options object that can contain a delay value for the start of
  * the animation, and additional override values for developer-defined parameters.
- * @return An object that contains the animation parameters.
+ * @return {?} An object that contains the animation parameters.
  */
 function useAnimation(animation, options = null) {
     return { type: 10 /* AnimateRef */, animation, options };
@@ -710,25 +717,11 @@ function useAnimation(animation, options = null) {
  * Finds one or more inner elements within the current element that is
  * being animated within a sequence. Use with `animateChild()`.
  *
- * @param selector The element to query, or a set of elements that contain Angular-specific
- * characteristics, specified with one or more of the following tokens.
- *  - `query(":enter")` or `query(":leave")` : Query for newly inserted/removed elements.
- *  - `query(":animating")` : Query all currently animating elements.
- *  - `query("@triggerName")` : Query elements that contain an animation trigger.
- *  - `query("@*")` : Query all elements that contain an animation triggers.
- *  - `query(":self")` : Include the current element into the animation sequence.
- *
- * @param animation One or more animation steps to apply to the queried element or elements.
- * An array is treated as an animation sequence.
- * @param options An options object. Use the 'limit' field to limit the total number of
- * items to collect.
- * @return An object that encapsulates the query data.
- *
- * @usageNotes
+ * \@usageNotes
  * Tokens can be merged into a combined query selector string. For example:
  *
  * ```typescript
- *  query(':self, .record:enter, .record:leave, @subTrigger', [...])
+ *  query(':self, .record:enter, .record:leave, \@subTrigger', [...])
  * ```
  *
  * The `query()` function collects multiple elements and works internally by using
@@ -758,10 +751,10 @@ function useAnimation(animation, options = null) {
  * individually using `animateChild()`.
  *
  * ```typescript
- * @Component({
+ * \@Component({
  *   selector: 'inner',
  *   template: `
- *     <div [@queryAnimation]="exp">
+ *     <div [\@queryAnimation]="exp">
  *       <h1>Title</h1>
  *       <div class="content">
  *         Blah blah blah
@@ -790,6 +783,20 @@ function useAnimation(animation, options = null) {
  *   }
  * }
  * ```
+ * @param {?} selector The element to query, or a set of elements that contain Angular-specific
+ * characteristics, specified with one or more of the following tokens.
+ *  - `query(":enter")` or `query(":leave")` : Query for newly inserted/removed elements.
+ *  - `query(":animating")` : Query all currently animating elements.
+ *  - `query("\@triggerName")` : Query elements that contain an animation trigger.
+ *  - `query("\@*")` : Query all elements that contain an animation triggers.
+ *  - `query(":self")` : Include the current element into the animation sequence.
+ *
+ * @param {?} animation One or more animation steps to apply to the queried element or elements.
+ * An array is treated as an animation sequence.
+ * @param {?=} options An options object. Use the 'limit' field to limit the total number of
+ * items to collect.
+ * @return {?} An object that encapsulates the query data.
+ *
  */
 function query(selector, animation, options = null) {
     return { type: 11 /* Query */, selector, animation, options };
@@ -798,11 +805,7 @@ function query(selector, animation, options = null) {
  * Use within an animation `query()` call to issue a timing gap after
  * each queried item is animated.
  *
- * @param timings A delay value.
- * @param animation One ore more animation steps.
- * @returns An object that encapsulates the stagger data.
- *
- * @usageNotes
+ * \@usageNotes
  * In the following example, a container element wraps a list of items stamped out
  * by an `ngFor`. The container element contains an animation trigger that will later be set
  * to query for each of the inner items.
@@ -816,7 +819,7 @@ function query(selector, animation, options = null) {
  * <!-- list.component.html -->
  * <button (click)="toggle()">Show / Hide Items</button>
  * <hr />
- * <div [@listAnimation]="items.length">
+ * <div [\@listAnimation]="items.length">
  *   <div *ngFor="let item of items">
  *     {{ item }}
  *   </div>
@@ -826,8 +829,8 @@ function query(selector, animation, options = null) {
  * Here is the component code:
  *
  * ```typescript
- * import {trigger, transition, style, animate, query, stagger} from '@angular/animations';
- * @Component({
+ * import {trigger, transition, style, animate, query, stagger} from '\@angular/animations';
+ * \@Component({
  *   templateUrl: 'list.component.html',
  *   animations: [
  *     trigger('listAnimation', [
@@ -871,33 +874,44 @@ function query(selector, animation, options = null) {
  *   ])
  * ])
  * ```
+ * @param {?} timings A delay value.
+ * @param {?} animation One ore more animation steps.
+ * @return {?} An object that encapsulates the stagger data.
+ *
  */
 function stagger(timings, animation) {
     return { type: 12 /* Stagger */, timings, animation };
 }
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
+ * @param {?} cb
+ * @return {?}
  */
 function scheduleMicroTask(cb) {
     Promise.resolve(null).then(cb);
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
- * @experimental Animation support is experimental.
+ * \@experimental Animation support is experimental.
  */
 class NoopAnimationPlayer {
+    /**
+     * @param {?=} duration
+     * @param {?=} delay
+     */
     constructor(duration = 0, delay = 0) {
         this._onDoneFns = [];
         this._onStartFns = [];
@@ -908,6 +922,9 @@ class NoopAnimationPlayer {
         this.parentPlayer = null;
         this.totalTime = duration + delay;
     }
+    /**
+     * @return {?}
+     */
     _onFinish() {
         if (!this._finished) {
             this._finished = true;
@@ -915,11 +932,32 @@ class NoopAnimationPlayer {
             this._onDoneFns = [];
         }
     }
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
     onStart(fn) { this._onStartFns.push(fn); }
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
     onDone(fn) { this._onDoneFns.push(fn); }
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
     onDestroy(fn) { this._onDestroyFns.push(fn); }
+    /**
+     * @return {?}
+     */
     hasStarted() { return this._started; }
+    /**
+     * @return {?}
+     */
     init() { }
+    /**
+     * @return {?}
+     */
     play() {
         if (!this.hasStarted()) {
             this._onStart();
@@ -927,15 +965,33 @@ class NoopAnimationPlayer {
         }
         this._started = true;
     }
-    /** @internal */
+    /**
+     * \@internal
+     * @return {?}
+     */
     triggerMicrotask() { scheduleMicroTask(() => this._onFinish()); }
+    /**
+     * @return {?}
+     */
     _onStart() {
         this._onStartFns.forEach(fn => fn());
         this._onStartFns = [];
     }
+    /**
+     * @return {?}
+     */
     pause() { }
+    /**
+     * @return {?}
+     */
     restart() { }
+    /**
+     * @return {?}
+     */
     finish() { this._onFinish(); }
+    /**
+     * @return {?}
+     */
     destroy() {
         if (!this._destroyed) {
             this._destroyed = true;
@@ -947,11 +1003,26 @@ class NoopAnimationPlayer {
             this._onDestroyFns = [];
         }
     }
+    /**
+     * @return {?}
+     */
     reset() { }
+    /**
+     * @param {?} position
+     * @return {?}
+     */
     setPosition(position) { }
+    /**
+     * @return {?}
+     */
     getPosition() { return 0; }
-    /** @internal */
+    /**
+     * \@internal
+     * @param {?} phaseName
+     * @return {?}
+     */
     triggerCallback(phaseName) {
+        /** @type {?} */
         const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
         methods.forEach(fn => fn());
         methods.length = 0;
@@ -959,13 +1030,13 @@ class NoopAnimationPlayer {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 class AnimationGroupPlayer {
+    /**
+     * @param {?} _players
+     */
     constructor(_players) {
         this._onDoneFns = [];
         this._onStartFns = [];
@@ -976,9 +1047,13 @@ class AnimationGroupPlayer {
         this.parentPlayer = null;
         this.totalTime = 0;
         this.players = _players;
+        /** @type {?} */
         let doneCount = 0;
+        /** @type {?} */
         let destroyCount = 0;
+        /** @type {?} */
         let startCount = 0;
+        /** @type {?} */
         const total = this.players.length;
         if (total == 0) {
             scheduleMicroTask(() => this._onFinish());
@@ -1004,6 +1079,9 @@ class AnimationGroupPlayer {
         }
         this.totalTime = this.players.reduce((time, player) => Math.max(time, player.totalTime), 0);
     }
+    /**
+     * @return {?}
+     */
     _onFinish() {
         if (!this._finished) {
             this._finished = true;
@@ -1011,8 +1089,18 @@ class AnimationGroupPlayer {
             this._onDoneFns = [];
         }
     }
+    /**
+     * @return {?}
+     */
     init() { this.players.forEach(player => player.init()); }
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
     onStart(fn) { this._onStartFns.push(fn); }
+    /**
+     * @return {?}
+     */
     _onStart() {
         if (!this.hasStarted()) {
             this._started = true;
@@ -1020,9 +1108,23 @@ class AnimationGroupPlayer {
             this._onStartFns = [];
         }
     }
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
     onDone(fn) { this._onDoneFns.push(fn); }
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
     onDestroy(fn) { this._onDestroyFns.push(fn); }
+    /**
+     * @return {?}
+     */
     hasStarted() { return this._started; }
+    /**
+     * @return {?}
+     */
     play() {
         if (!this.parentPlayer) {
             this.init();
@@ -1030,13 +1132,28 @@ class AnimationGroupPlayer {
         this._onStart();
         this.players.forEach(player => player.play());
     }
+    /**
+     * @return {?}
+     */
     pause() { this.players.forEach(player => player.pause()); }
+    /**
+     * @return {?}
+     */
     restart() { this.players.forEach(player => player.restart()); }
+    /**
+     * @return {?}
+     */
     finish() {
         this._onFinish();
         this.players.forEach(player => player.finish());
     }
+    /**
+     * @return {?}
+     */
     destroy() { this._onDestroy(); }
+    /**
+     * @return {?}
+     */
     _onDestroy() {
         if (!this._destroyed) {
             this._destroyed = true;
@@ -1046,27 +1163,44 @@ class AnimationGroupPlayer {
             this._onDestroyFns = [];
         }
     }
+    /**
+     * @return {?}
+     */
     reset() {
         this.players.forEach(player => player.reset());
         this._destroyed = false;
         this._finished = false;
         this._started = false;
     }
+    /**
+     * @param {?} p
+     * @return {?}
+     */
     setPosition(p) {
+        /** @type {?} */
         const timeAtPosition = p * this.totalTime;
         this.players.forEach(player => {
+            /** @type {?} */
             const position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
             player.setPosition(position);
         });
     }
+    /**
+     * @return {?}
+     */
     getPosition() {
+        /** @type {?} */
         let min = 0;
         this.players.forEach(player => {
+            /** @type {?} */
             const p = player.getPosition();
             min = Math.min(p, min);
         });
         return min;
     }
+    /**
+     * @return {?}
+     */
     beforeDestroy() {
         this.players.forEach(player => {
             if (player.beforeDestroy) {
@@ -1074,8 +1208,13 @@ class AnimationGroupPlayer {
             }
         });
     }
-    /** @internal */
+    /**
+     * \@internal
+     * @param {?} phaseName
+     * @return {?}
+     */
     triggerCallback(phaseName) {
+        /** @type {?} */
         const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
         methods.forEach(fn => fn());
         methods.length = 0;
@@ -1083,37 +1222,26 @@ class AnimationGroupPlayer {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+/** @type {?} */
 const ɵPRE_STYLE = '!';
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
-export { AnimationBuilder, AnimationFactory, AUTO_STYLE, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, NoopAnimationPlayer, ɵPRE_STYLE, AnimationGroupPlayer as ɵAnimationGroupPlayer };
+export { AnimationBuilder, AnimationFactory, AUTO_STYLE, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, NoopAnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
 //# sourceMappingURL=animations.js.map
