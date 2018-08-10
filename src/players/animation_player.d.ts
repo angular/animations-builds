@@ -17,7 +17,7 @@ export interface AnimationPlayer {
     finish(): void;
     destroy(): void;
     reset(): void;
-    setPosition(p: any): void;
+    setPosition(position: any /** TODO #9100 */): void;
     getPosition(): number;
     parentPlayer: AnimationPlayer | null;
     readonly totalTime: number;
@@ -36,19 +36,19 @@ export declare class NoopAnimationPlayer implements AnimationPlayer {
     parentPlayer: AnimationPlayer | null;
     readonly totalTime: number;
     constructor(duration?: number, delay?: number);
-    private _onFinish();
+    private _onFinish;
     onStart(fn: () => void): void;
     onDone(fn: () => void): void;
     onDestroy(fn: () => void): void;
     hasStarted(): boolean;
     init(): void;
     play(): void;
-    private _onStart();
+    private _onStart;
     pause(): void;
     restart(): void;
     finish(): void;
     destroy(): void;
     reset(): void;
-    setPosition(p: number): void;
+    setPosition(position: number): void;
     getPosition(): number;
 }

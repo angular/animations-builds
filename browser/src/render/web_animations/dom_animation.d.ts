@@ -13,7 +13,7 @@
  *
  * @see https://developer.mozilla.org/de/docs/Web/API/Animation
  */
-export interface DOMAnimation {
+export declare interface DOMAnimation {
     cancel(): void;
     play(): void;
     pause(): void;
