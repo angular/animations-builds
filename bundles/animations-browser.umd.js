@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.1+10.sha-b64fed1
+ * @license Angular v7.0.0-beta.1+52.sha-1f11039
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -272,6 +272,13 @@
     }
 
     /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    /**
      * @experimental
      */
     var NoopAnimationDriver = /** @class */ (function () {
@@ -292,7 +299,7 @@
             if (previousPlayers === void 0) { previousPlayers = []; }
             return new animations.NoopAnimationPlayer(duration, delay);
         };
-        NoopAnimationDriver.ngInjectableDef = i0.defineInjectable({ token: NoopAnimationDriver, factory: function NoopAnimationDriver_Factory() { return new NoopAnimationDriver(); }, providedIn: null });
+        NoopAnimationDriver.ngInjectableDef = i0.defineInjectable({ token: NoopAnimationDriver, factory: function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); }, providedIn: null });
         return NoopAnimationDriver;
     }());
     /**

@@ -1,29 +1,44 @@
 /**
- * AnimationBuilder is an injectable service that is available when the {@link
- * BrowserAnimationsModule BrowserAnimationsModule} or {@link NoopAnimationsModule
- * NoopAnimationsModule} modules are used within an application.
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
+/**
+ * An injectable service that produces an animation sequence programmatically within an
+ * Angular component or directive.
+ * Provided by the `BrowserAnimationsModule` or `NoopAnimationsModule`.
  *
- * The purpose of this service is to produce an animation sequence programmatically within an
- * angular component or directive.
+ * \@usageNotes
  *
- * Programmatic animations are first built and then a player is created when the build animation is
- * attached to an element.
+ * To use this service, add it to your component or directive as a dependency.
+ * The service is instantiated along with your component.
+ *
+ * Apps do not typically need to create their own animation players, but if you
+ * do need to, follow these steps:
+ *
+ * 1. Use the `build()` method to create a programmatic animation using the
+ * `animate()` function. The method returns an `AnimationFactory` instance.
+ *
+ * 2. Use the factory object to create an `AnimationPlayer` and attach it to a DOM element.
+ *
+ * 3. Use the player object to control the animation programmatically.
+ *
+ * For example:
  *
  * ```ts
- * // remember to include the BrowserAnimationsModule module for this to work...
- * import {AnimationBuilder} from '@angular/animations';
- *
+ * // import the service from BrowserAnimationsModule
+ * import {AnimationBuilder} from '\@angular/animations';
+ * // require the service as a dependency
  * class MyCmp {
  *   constructor(private _builder: AnimationBuilder) {}
  *
  *   makeAnimation(element: any) {
- *     // first build the animation
+ *     // first define a reusable animation
  *     const myAnimation = this._builder.build([
  *       style({ width: 0 }),
  *       animate(1000, style({ width: '100px' }))
  *     ]);
  *
- *     // then create a player from it
+ *     // use the returned factory object to create a player
  *     const player = myAnimation.create(element);
  *
  *     player.play();
@@ -31,21 +46,39 @@
  * }
  * ```
  *
- * When an animation is built an instance of {@link AnimationFactory AnimationFactory} will be
- * returned. Using that an {@link AnimationPlayer AnimationPlayer} can be created which can then be
- * used to start the animation.
- *
- * @experimental Animation support is experimental.
+ * @abstract
  */
 export class AnimationBuilder {
 }
+if (false) {
+    /**
+     * Builds a factory for producing a defined animation.
+     * @see `animate()`
+     * @abstract
+     * @param {?} animation A reusable animation definition.
+     * @return {?} A factory object that can create a player for the defined animation.
+     */
+    AnimationBuilder.prototype.build = function (animation) { };
+}
 /**
- * An instance of `AnimationFactory` is returned from {@link AnimationBuilder#build
- * AnimationBuilder.build}.
+ * A factory object returned from the `AnimationBuilder`.`build()` method.
  *
- * @experimental Animation support is experimental.
+ * @abstract
  */
 export class AnimationFactory {
 }
+if (false) {
+    /**
+     * Creates an `AnimationPlayer` instance for the reusable animation defined by
+     * the `AnimationBuilder`.`build()` method that created this factory.
+     * Attaches the new player a DOM element.
+     * @abstract
+     * @param {?} element The DOM element to which to attach the animation.
+     * @param {?=} options A set of options that can include a time delay and
+     * additional developer-defined parameters.
+     * @return {?}
+     */
+    AnimationFactory.prototype.create = function (element, options) { };
+}
 
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYW5pbWF0aW9uX2J1aWxkZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9hbmltYXRpb25zL3NyYy9hbmltYXRpb25fYnVpbGRlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFVQTs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7R0FzQ0c7QUFDSCxNQUFNO0NBRUw7QUFFRDs7Ozs7R0FLRztBQUNILE1BQU07Q0FFTCIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgSW5jLiBBbGwgUmlnaHRzIFJlc2VydmVkLlxuICpcbiAqIFVzZSBvZiB0aGlzIHNvdXJjZSBjb2RlIGlzIGdvdmVybmVkIGJ5IGFuIE1JVC1zdHlsZSBsaWNlbnNlIHRoYXQgY2FuIGJlXG4gKiBmb3VuZCBpbiB0aGUgTElDRU5TRSBmaWxlIGF0IGh0dHBzOi8vYW5ndWxhci5pby9saWNlbnNlXG4gKi9cbmltcG9ydCB7QW5pbWF0aW9uTWV0YWRhdGEsIEFuaW1hdGlvbk9wdGlvbnN9IGZyb20gJy4vYW5pbWF0aW9uX21ldGFkYXRhJztcbmltcG9ydCB7QW5pbWF0aW9uUGxheWVyfSBmcm9tICcuL3BsYXllcnMvYW5pbWF0aW9uX3BsYXllcic7XG5cbi8qKlxuICogQW5pbWF0aW9uQnVpbGRlciBpcyBhbiBpbmplY3RhYmxlIHNlcnZpY2UgdGhhdCBpcyBhdmFpbGFibGUgd2hlbiB0aGUge0BsaW5rXG4gKiBCcm93c2VyQW5pbWF0aW9uc01vZHVsZSBCcm93c2VyQW5pbWF0aW9uc01vZHVsZX0gb3Ige0BsaW5rIE5vb3BBbmltYXRpb25zTW9kdWxlXG4gKiBOb29wQW5pbWF0aW9uc01vZHVsZX0gbW9kdWxlcyBhcmUgdXNlZCB3aXRoaW4gYW4gYXBwbGljYXRpb24uXG4gKlxuICogVGhlIHB1cnBvc2Ugb2YgdGhpcyBzZXJ2aWNlIGlzIHRvIHByb2R1Y2UgYW4gYW5pbWF0aW9uIHNlcXVlbmNlIHByb2dyYW1tYXRpY2FsbHkgd2l0aGluIGFuXG4gKiBhbmd1bGFyIGNvbXBvbmVudCBvciBkaXJlY3RpdmUuXG4gKlxuICogUHJvZ3JhbW1hdGljIGFuaW1hdGlvbnMgYXJlIGZpcnN0IGJ1aWx0IGFuZCB0aGVuIGEgcGxheWVyIGlzIGNyZWF0ZWQgd2hlbiB0aGUgYnVpbGQgYW5pbWF0aW9uIGlzXG4gKiBhdHRhY2hlZCB0byBhbiBlbGVtZW50LlxuICpcbiAqIGBgYHRzXG4gKiAvLyByZW1lbWJlciB0byBpbmNsdWRlIHRoZSBCcm93c2VyQW5pbWF0aW9uc01vZHVsZSBtb2R1bGUgZm9yIHRoaXMgdG8gd29yay4uLlxuICogaW1wb3J0IHtBbmltYXRpb25CdWlsZGVyfSBmcm9tICdAYW5ndWxhci9hbmltYXRpb25zJztcbiAqXG4gKiBjbGFzcyBNeUNtcCB7XG4gKiAgIGNvbnN0cnVjdG9yKHByaXZhdGUgX2J1aWxkZXI6IEFuaW1hdGlvbkJ1aWxkZXIpIHt9XG4gKlxuICogICBtYWtlQW5pbWF0aW9uKGVsZW1lbnQ6IGFueSkge1xuICogICAgIC8vIGZpcnN0IGJ1aWxkIHRoZSBhbmltYXRpb25cbiAqICAgICBjb25zdCBteUFuaW1hdGlvbiA9IHRoaXMuX2J1aWxkZXIuYnVpbGQoW1xuICogICAgICAgc3R5bGUoeyB3aWR0aDogMCB9KSxcbiAqICAgICAgIGFuaW1hdGUoMTAwMCwgc3R5bGUoeyB3aWR0aDogJzEwMHB4JyB9KSlcbiAqICAgICBdKTtcbiAqXG4gKiAgICAgLy8gdGhlbiBjcmVhdGUgYSBwbGF5ZXIgZnJvbSBpdFxuICogICAgIGNvbnN0IHBsYXllciA9IG15QW5pbWF0aW9uLmNyZWF0ZShlbGVtZW50KTtcbiAqXG4gKiAgICAgcGxheWVyLnBsYXkoKTtcbiAqICAgfVxuICogfVxuICogYGBgXG4gKlxuICogV2hlbiBhbiBhbmltYXRpb24gaXMgYnVpbHQgYW4gaW5zdGFuY2Ugb2Yge0BsaW5rIEFuaW1hdGlvbkZhY3RvcnkgQW5pbWF0aW9uRmFjdG9yeX0gd2lsbCBiZVxuICogcmV0dXJuZWQuIFVzaW5nIHRoYXQgYW4ge0BsaW5rIEFuaW1hdGlvblBsYXllciBBbmltYXRpb25QbGF5ZXJ9IGNhbiBiZSBjcmVhdGVkIHdoaWNoIGNhbiB0aGVuIGJlXG4gKiB1c2VkIHRvIHN0YXJ0IHRoZSBhbmltYXRpb24uXG4gKlxuICogQGV4cGVyaW1lbnRhbCBBbmltYXRpb24gc3VwcG9ydCBpcyBleHBlcmltZW50YWwuXG4gKi9cbmV4cG9ydCBhYnN0cmFjdCBjbGFzcyBBbmltYXRpb25CdWlsZGVyIHtcbiAgYWJzdHJhY3QgYnVpbGQoYW5pbWF0aW9uOiBBbmltYXRpb25NZXRhZGF0YXxBbmltYXRpb25NZXRhZGF0YVtdKTogQW5pbWF0aW9uRmFjdG9yeTtcbn1cblxuLyoqXG4gKiBBbiBpbnN0YW5jZSBvZiBgQW5pbWF0aW9uRmFjdG9yeWAgaXMgcmV0dXJuZWQgZnJvbSB7QGxpbmsgQW5pbWF0aW9uQnVpbGRlciNidWlsZFxuICogQW5pbWF0aW9uQnVpbGRlci5idWlsZH0uXG4gKlxuICogQGV4cGVyaW1lbnRhbCBBbmltYXRpb24gc3VwcG9ydCBpcyBleHBlcmltZW50YWwuXG4gKi9cbmV4cG9ydCBhYnN0cmFjdCBjbGFzcyBBbmltYXRpb25GYWN0b3J5IHtcbiAgYWJzdHJhY3QgY3JlYXRlKGVsZW1lbnQ6IGFueSwgb3B0aW9ucz86IEFuaW1hdGlvbk9wdGlvbnMpOiBBbmltYXRpb25QbGF5ZXI7XG59XG4iXX0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYW5pbWF0aW9uX2J1aWxkZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9hbmltYXRpb25zL3NyYy9hbmltYXRpb25fYnVpbGRlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQXVEQSxNQUFNO0NBUUw7Ozs7Ozs7Ozs7Ozs7Ozs7QUFNRCxNQUFNO0NBVUwiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIEBsaWNlbnNlXG4gKiBDb3B5cmlnaHQgR29vZ2xlIEluYy4gQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5pbXBvcnQge0FuaW1hdGlvbk1ldGFkYXRhLCBBbmltYXRpb25PcHRpb25zfSBmcm9tICcuL2FuaW1hdGlvbl9tZXRhZGF0YSc7XG5pbXBvcnQge0FuaW1hdGlvblBsYXllcn0gZnJvbSAnLi9wbGF5ZXJzL2FuaW1hdGlvbl9wbGF5ZXInO1xuXG4vKipcbiAqIEFuIGluamVjdGFibGUgc2VydmljZSB0aGF0IHByb2R1Y2VzIGFuIGFuaW1hdGlvbiBzZXF1ZW5jZSBwcm9ncmFtbWF0aWNhbGx5IHdpdGhpbiBhblxuICogQW5ndWxhciBjb21wb25lbnQgb3IgZGlyZWN0aXZlLlxuICogUHJvdmlkZWQgYnkgdGhlIGBCcm93c2VyQW5pbWF0aW9uc01vZHVsZWAgb3IgYE5vb3BBbmltYXRpb25zTW9kdWxlYC5cbiAqXG4gKiBAdXNhZ2VOb3Rlc1xuICpcbiAqIFRvIHVzZSB0aGlzIHNlcnZpY2UsIGFkZCBpdCB0byB5b3VyIGNvbXBvbmVudCBvciBkaXJlY3RpdmUgYXMgYSBkZXBlbmRlbmN5LlxuICogVGhlIHNlcnZpY2UgaXMgaW5zdGFudGlhdGVkIGFsb25nIHdpdGggeW91ciBjb21wb25lbnQuXG4gKlxuICogQXBwcyBkbyBub3QgdHlwaWNhbGx5IG5lZWQgdG8gY3JlYXRlIHRoZWlyIG93biBhbmltYXRpb24gcGxheWVycywgYnV0IGlmIHlvdVxuICogZG8gbmVlZCB0bywgZm9sbG93IHRoZXNlIHN0ZXBzOlxuICpcbiAqIDEuIFVzZSB0aGUgYGJ1aWxkKClgIG1ldGhvZCB0byBjcmVhdGUgYSBwcm9ncmFtbWF0aWMgYW5pbWF0aW9uIHVzaW5nIHRoZVxuICogYGFuaW1hdGUoKWAgZnVuY3Rpb24uIFRoZSBtZXRob2QgcmV0dXJucyBhbiBgQW5pbWF0aW9uRmFjdG9yeWAgaW5zdGFuY2UuXG4gKlxuICogMi4gVXNlIHRoZSBmYWN0b3J5IG9iamVjdCB0byBjcmVhdGUgYW4gYEFuaW1hdGlvblBsYXllcmAgYW5kIGF0dGFjaCBpdCB0byBhIERPTSBlbGVtZW50LlxuICpcbiAqIDMuIFVzZSB0aGUgcGxheWVyIG9iamVjdCB0byBjb250cm9sIHRoZSBhbmltYXRpb24gcHJvZ3JhbW1hdGljYWxseS5cbiAqXG4gKiBGb3IgZXhhbXBsZTpcbiAqXG4gKiBgYGB0c1xuICogLy8gaW1wb3J0IHRoZSBzZXJ2aWNlIGZyb20gQnJvd3NlckFuaW1hdGlvbnNNb2R1bGVcbiAqIGltcG9ydCB7QW5pbWF0aW9uQnVpbGRlcn0gZnJvbSAnQGFuZ3VsYXIvYW5pbWF0aW9ucyc7XG4gKiAvLyByZXF1aXJlIHRoZSBzZXJ2aWNlIGFzIGEgZGVwZW5kZW5jeVxuICogY2xhc3MgTXlDbXAge1xuICogICBjb25zdHJ1Y3Rvcihwcml2YXRlIF9idWlsZGVyOiBBbmltYXRpb25CdWlsZGVyKSB7fVxuICpcbiAqICAgbWFrZUFuaW1hdGlvbihlbGVtZW50OiBhbnkpIHtcbiAqICAgICAvLyBmaXJzdCBkZWZpbmUgYSByZXVzYWJsZSBhbmltYXRpb25cbiAqICAgICBjb25zdCBteUFuaW1hdGlvbiA9IHRoaXMuX2J1aWxkZXIuYnVpbGQoW1xuICogICAgICAgc3R5bGUoeyB3aWR0aDogMCB9KSxcbiAqICAgICAgIGFuaW1hdGUoMTAwMCwgc3R5bGUoeyB3aWR0aDogJzEwMHB4JyB9KSlcbiAqICAgICBdKTtcbiAqXG4gKiAgICAgLy8gdXNlIHRoZSByZXR1cm5lZCBmYWN0b3J5IG9iamVjdCB0byBjcmVhdGUgYSBwbGF5ZXJcbiAqICAgICBjb25zdCBwbGF5ZXIgPSBteUFuaW1hdGlvbi5jcmVhdGUoZWxlbWVudCk7XG4gKlxuICogICAgIHBsYXllci5wbGF5KCk7XG4gKiAgIH1cbiAqIH1cbiAqIGBgYFxuICpcbiAqL1xuZXhwb3J0IGFic3RyYWN0IGNsYXNzIEFuaW1hdGlvbkJ1aWxkZXIge1xuICAvKipcbiAgICogQnVpbGRzIGEgZmFjdG9yeSBmb3IgcHJvZHVjaW5nIGEgZGVmaW5lZCBhbmltYXRpb24uIFxuICAgKiBAcGFyYW0gYW5pbWF0aW9uIEEgcmV1c2FibGUgYW5pbWF0aW9uIGRlZmluaXRpb24uXG4gICAqIEByZXR1cm5zIEEgZmFjdG9yeSBvYmplY3QgdGhhdCBjYW4gY3JlYXRlIGEgcGxheWVyIGZvciB0aGUgZGVmaW5lZCBhbmltYXRpb24uXG4gICAqIEBzZWUgYGFuaW1hdGUoKWBcbiAgICovXG4gIGFic3RyYWN0IGJ1aWxkKGFuaW1hdGlvbjogQW5pbWF0aW9uTWV0YWRhdGF8QW5pbWF0aW9uTWV0YWRhdGFbXSk6IEFuaW1hdGlvbkZhY3Rvcnk7XG59XG5cbi8qKlxuICogQSBmYWN0b3J5IG9iamVjdCByZXR1cm5lZCBmcm9tIHRoZSBgQW5pbWF0aW9uQnVpbGRlcmAuYGJ1aWxkKClgIG1ldGhvZC5cbiAqXG4gKi9cbmV4cG9ydCBhYnN0cmFjdCBjbGFzcyBBbmltYXRpb25GYWN0b3J5IHtcbiAgLyoqXG4gICAqIENyZWF0ZXMgYW4gYEFuaW1hdGlvblBsYXllcmAgaW5zdGFuY2UgZm9yIHRoZSByZXVzYWJsZSBhbmltYXRpb24gZGVmaW5lZCBieVxuICAgKiB0aGUgYEFuaW1hdGlvbkJ1aWxkZXJgLmBidWlsZCgpYCBtZXRob2QgdGhhdCBjcmVhdGVkIHRoaXMgZmFjdG9yeS5cbiAgICogQXR0YWNoZXMgdGhlIG5ldyBwbGF5ZXIgYSBET00gZWxlbWVudC5cbiAgICogQHBhcmFtIGVsZW1lbnQgVGhlIERPTSBlbGVtZW50IHRvIHdoaWNoIHRvIGF0dGFjaCB0aGUgYW5pbWF0aW9uLlxuICAgKiBAcGFyYW0gb3B0aW9ucyBBIHNldCBvZiBvcHRpb25zIHRoYXQgY2FuIGluY2x1ZGUgYSB0aW1lIGRlbGF5IGFuZFxuICAgKiBhZGRpdGlvbmFsIGRldmVsb3Blci1kZWZpbmVkIHBhcmFtZXRlcnMuXG4gICAqL1xuICBhYnN0cmFjdCBjcmVhdGUoZWxlbWVudDogYW55LCBvcHRpb25zPzogQW5pbWF0aW9uT3B0aW9ucyk6IEFuaW1hdGlvblBsYXllcjtcbn1cbiJdfQ==

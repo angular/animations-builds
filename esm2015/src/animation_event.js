@@ -1,9 +1,82 @@
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/**
+ * An instance of this class is returned as an event parameter when an animation
+ * callback is captured for an animation either during the start or done phase.
+ *
+ * ```typescript
+ * \@Component({
+ *   host: {
+ *     '[\@myAnimationTrigger]': 'someExpression',
+ *     '(\@myAnimationTrigger.start)': 'captureStartEvent($event)',
+ *     '(\@myAnimationTrigger.done)': 'captureDoneEvent($event)',
+ *   },
+ *   animations: [
+ *     trigger("myAnimationTrigger", [
+ *        // ...
+ *     ])
+ *   ]
+ * })
+ * class MyComponent {
+ *   someExpression: any = false;
+ *   captureStartEvent(event: AnimationEvent) {
+ *     // the toState, fromState and totalTime data is accessible from the event variable
+ *   }
+ *
+ *   captureDoneEvent(event: AnimationEvent) {
+ *     // the toState, fromState and totalTime data is accessible from the event variable
+ *   }
+ * }
+ * ```
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+export function AnimationEvent() { }
+/**
+ * The name of the state from which the animation is triggered.
+ * @type {?}
+ */
+AnimationEvent.prototype.fromState;
+/**
+ * The name of the state in which the animation completes.
+ * @type {?}
+ */
+AnimationEvent.prototype.toState;
+/**
+ * The time it takes the animation to complete, in milliseconds.
+ * @type {?}
+ */
+AnimationEvent.prototype.totalTime;
+/**
+ * The animation phase in which the callback was invoked, one of
+ * "start" or "done".
+ * @type {?}
+ */
+AnimationEvent.prototype.phaseName;
+/**
+ * The element to which the animation is attached.
+ * @type {?}
+ */
+AnimationEvent.prototype.element;
+/**
+ * Internal.
+ * @type {?}
+ */
+AnimationEvent.prototype.triggerName;
+/**
+ * Internal.
+ * @type {?}
+ */
+AnimationEvent.prototype.disabled;
 
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYW5pbWF0aW9uX2V2ZW50LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vLi4vcGFja2FnZXMvYW5pbWF0aW9ucy9zcmMvYW5pbWF0aW9uX2V2ZW50LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOzs7Ozs7R0FNRyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgSW5jLiBBbGwgUmlnaHRzIFJlc2VydmVkLlxuICpcbiAqIFVzZSBvZiB0aGlzIHNvdXJjZSBjb2RlIGlzIGdvdmVybmVkIGJ5IGFuIE1JVC1zdHlsZSBsaWNlbnNlIHRoYXQgY2FuIGJlXG4gKiBmb3VuZCBpbiB0aGUgTElDRU5TRSBmaWxlIGF0IGh0dHBzOi8vYW5ndWxhci5pby9saWNlbnNlXG4gKi9cblxuLyoqXG4gKiBBbiBpbnN0YW5jZSBvZiB0aGlzIGNsYXNzIGlzIHJldHVybmVkIGFzIGFuIGV2ZW50IHBhcmFtZXRlciB3aGVuIGFuIGFuaW1hdGlvblxuICogY2FsbGJhY2sgaXMgY2FwdHVyZWQgZm9yIGFuIGFuaW1hdGlvbiBlaXRoZXIgZHVyaW5nIHRoZSBzdGFydCBvciBkb25lIHBoYXNlLlxuICpcbiAqIGBgYHR5cGVzY3JpcHRcbiAqIEBDb21wb25lbnQoe1xuICogICBob3N0OiB7XG4gKiAgICAgJ1tAbXlBbmltYXRpb25UcmlnZ2VyXSc6ICdzb21lRXhwcmVzc2lvbicsXG4gKiAgICAgJyhAbXlBbmltYXRpb25UcmlnZ2VyLnN0YXJ0KSc6ICdjYXB0dXJlU3RhcnRFdmVudCgkZXZlbnQpJyxcbiAqICAgICAnKEBteUFuaW1hdGlvblRyaWdnZXIuZG9uZSknOiAnY2FwdHVyZURvbmVFdmVudCgkZXZlbnQpJyxcbiAqICAgfSxcbiAqICAgYW5pbWF0aW9uczogW1xuICogICAgIHRyaWdnZXIoXCJteUFuaW1hdGlvblRyaWdnZXJcIiwgW1xuICogICAgICAgIC8vIC4uLlxuICogICAgIF0pXG4gKiAgIF1cbiAqIH0pXG4gKiBjbGFzcyBNeUNvbXBvbmVudCB7XG4gKiAgIHNvbWVFeHByZXNzaW9uOiBhbnkgPSBmYWxzZTtcbiAqICAgY2FwdHVyZVN0YXJ0RXZlbnQoZXZlbnQ6IEFuaW1hdGlvbkV2ZW50KSB7XG4gKiAgICAgLy8gdGhlIHRvU3RhdGUsIGZyb21TdGF0ZSBhbmQgdG90YWxUaW1lIGRhdGEgaXMgYWNjZXNzaWJsZSBmcm9tIHRoZSBldmVudCB2YXJpYWJsZVxuICogICB9XG4gKlxuICogICBjYXB0dXJlRG9uZUV2ZW50KGV2ZW50OiBBbmltYXRpb25FdmVudCkge1xuICogICAgIC8vIHRoZSB0b1N0YXRlLCBmcm9tU3RhdGUgYW5kIHRvdGFsVGltZSBkYXRhIGlzIGFjY2Vzc2libGUgZnJvbSB0aGUgZXZlbnQgdmFyaWFibGVcbiAqICAgfVxuICogfVxuICogYGBgXG4gKlxuICogQGV4cGVyaW1lbnRhbCBBbmltYXRpb24gc3VwcG9ydCBpcyBleHBlcmltZW50YWwuXG4gKi9cbmV4cG9ydCBpbnRlcmZhY2UgQW5pbWF0aW9uRXZlbnQge1xuICBmcm9tU3RhdGU6IHN0cmluZztcbiAgdG9TdGF0ZTogc3RyaW5nO1xuICB0b3RhbFRpbWU6IG51bWJlcjtcbiAgcGhhc2VOYW1lOiBzdHJpbmc7XG4gIGVsZW1lbnQ6IGFueTtcbiAgdHJpZ2dlck5hbWU6IHN0cmluZztcbiAgZGlzYWJsZWQ6IGJvb2xlYW47XG59XG4iXX0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYW5pbWF0aW9uX2V2ZW50LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vLi4vcGFja2FnZXMvYW5pbWF0aW9ucy9zcmMvYW5pbWF0aW9uX2V2ZW50LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiIiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIEBsaWNlbnNlXG4gKiBDb3B5cmlnaHQgR29vZ2xlIEluYy4gQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbi8qKlxuICogQW4gaW5zdGFuY2Ugb2YgdGhpcyBjbGFzcyBpcyByZXR1cm5lZCBhcyBhbiBldmVudCBwYXJhbWV0ZXIgd2hlbiBhbiBhbmltYXRpb25cbiAqIGNhbGxiYWNrIGlzIGNhcHR1cmVkIGZvciBhbiBhbmltYXRpb24gZWl0aGVyIGR1cmluZyB0aGUgc3RhcnQgb3IgZG9uZSBwaGFzZS5cbiAqXG4gKiBgYGB0eXBlc2NyaXB0XG4gKiBAQ29tcG9uZW50KHtcbiAqICAgaG9zdDoge1xuICogICAgICdbQG15QW5pbWF0aW9uVHJpZ2dlcl0nOiAnc29tZUV4cHJlc3Npb24nLFxuICogICAgICcoQG15QW5pbWF0aW9uVHJpZ2dlci5zdGFydCknOiAnY2FwdHVyZVN0YXJ0RXZlbnQoJGV2ZW50KScsXG4gKiAgICAgJyhAbXlBbmltYXRpb25UcmlnZ2VyLmRvbmUpJzogJ2NhcHR1cmVEb25lRXZlbnQoJGV2ZW50KScsXG4gKiAgIH0sXG4gKiAgIGFuaW1hdGlvbnM6IFtcbiAqICAgICB0cmlnZ2VyKFwibXlBbmltYXRpb25UcmlnZ2VyXCIsIFtcbiAqICAgICAgICAvLyAuLi5cbiAqICAgICBdKVxuICogICBdXG4gKiB9KVxuICogY2xhc3MgTXlDb21wb25lbnQge1xuICogICBzb21lRXhwcmVzc2lvbjogYW55ID0gZmFsc2U7XG4gKiAgIGNhcHR1cmVTdGFydEV2ZW50KGV2ZW50OiBBbmltYXRpb25FdmVudCkge1xuICogICAgIC8vIHRoZSB0b1N0YXRlLCBmcm9tU3RhdGUgYW5kIHRvdGFsVGltZSBkYXRhIGlzIGFjY2Vzc2libGUgZnJvbSB0aGUgZXZlbnQgdmFyaWFibGVcbiAqICAgfVxuICpcbiAqICAgY2FwdHVyZURvbmVFdmVudChldmVudDogQW5pbWF0aW9uRXZlbnQpIHtcbiAqICAgICAvLyB0aGUgdG9TdGF0ZSwgZnJvbVN0YXRlIGFuZCB0b3RhbFRpbWUgZGF0YSBpcyBhY2Nlc3NpYmxlIGZyb20gdGhlIGV2ZW50IHZhcmlhYmxlXG4gKiAgIH1cbiAqIH1cbiAqIGBgYFxuICpcbiAqIEBleHBlcmltZW50YWwgQW5pbWF0aW9uIHN1cHBvcnQgaXMgZXhwZXJpbWVudGFsLlxuICovXG5leHBvcnQgaW50ZXJmYWNlIEFuaW1hdGlvbkV2ZW50IHtcbiAgLyoqXG4gICAqIFRoZSBuYW1lIG9mIHRoZSBzdGF0ZSBmcm9tIHdoaWNoIHRoZSBhbmltYXRpb24gaXMgdHJpZ2dlcmVkLlxuICAgKi9cbiAgZnJvbVN0YXRlOiBzdHJpbmc7XG4gIC8qKlxuICAgKiBUaGUgbmFtZSBvZiB0aGUgc3RhdGUgaW4gd2hpY2ggdGhlIGFuaW1hdGlvbiBjb21wbGV0ZXMuXG4gICAqL1xuICB0b1N0YXRlOiBzdHJpbmc7XG4gIC8qKlxuICAgKiBUaGUgdGltZSBpdCB0YWtlcyB0aGUgYW5pbWF0aW9uIHRvIGNvbXBsZXRlLCBpbiBtaWxsaXNlY29uZHMuXG4gICAqL1xuICB0b3RhbFRpbWU6IG51bWJlcjtcbiAgLyoqXG4gICAqIFRoZSBhbmltYXRpb24gcGhhc2UgaW4gd2hpY2ggdGhlIGNhbGxiYWNrIHdhcyBpbnZva2VkLCBvbmUgb2ZcbiAgICogXCJzdGFydFwiIG9yIFwiZG9uZVwiLlxuICAgKi9cbiAgcGhhc2VOYW1lOiBzdHJpbmc7XG4gIC8qKlxuICAgKiBUaGUgZWxlbWVudCB0byB3aGljaCB0aGUgYW5pbWF0aW9uIGlzIGF0dGFjaGVkLlxuICAgKi9cbiAgZWxlbWVudDogYW55O1xuICAvKipcbiAgICogSW50ZXJuYWwuXG4gICAqL1xuICB0cmlnZ2VyTmFtZTogc3RyaW5nO1xuICAvKipcbiAgICogSW50ZXJuYWwuXG4gICAqL1xuICBkaXNhYmxlZDogYm9vbGVhbjtcbn1cbiJdfQ==

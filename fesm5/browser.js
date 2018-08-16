@@ -1,10 +1,10 @@
 /**
- * @license Angular v7.0.0-beta.1+10.sha-b64fed1
+ * @license Angular v7.0.0-beta.1+52.sha-1f11039
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __extends, __spread, __read, __assign, __values } from 'tslib';
+import { __spread, __extends, __read, __assign, __values } from 'tslib';
 import { AUTO_STYLE, NoopAnimationPlayer, ɵAnimationGroupPlayer, ɵPRE_STYLE, sequence, style } from '@angular/animations';
 import { defineInjectable } from '@angular/core';
 
@@ -196,6 +196,13 @@ function hypenatePropsObject(object) {
 }
 
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * @experimental
  */
 var NoopAnimationDriver = /** @class */ (function () {
@@ -216,7 +223,7 @@ var NoopAnimationDriver = /** @class */ (function () {
         if (previousPlayers === void 0) { previousPlayers = []; }
         return new NoopAnimationPlayer(duration, delay);
     };
-    NoopAnimationDriver.ngInjectableDef = defineInjectable({ token: NoopAnimationDriver, factory: function NoopAnimationDriver_Factory() { return new NoopAnimationDriver(); }, providedIn: null });
+    NoopAnimationDriver.ngInjectableDef = defineInjectable({ token: NoopAnimationDriver, factory: function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); }, providedIn: null });
     return NoopAnimationDriver;
 }());
 /**
