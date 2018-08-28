@@ -3,7 +3,7 @@
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @enum {number} */
-const AnimationTransitionInstructionType = {
+var AnimationTransitionInstructionType = {
     TransitionAnimation: 0, TimelineAnimation: 1,
 };
 export { AnimationTransitionInstructionType };
