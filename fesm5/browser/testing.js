@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.5+217.sha-5dafa1a
+ * @license Angular v7.0.0-beta.3+76.sha-693c387
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -63,13 +63,9 @@ var MockAnimationPlayer = /** @class */ (function (_super) {
         return _this;
     }
     /* @internal */
+    MockAnimationPlayer.prototype.onInit = function (fn) { this._onInitFns.push(fn); };
     /* @internal */
-    MockAnimationPlayer.prototype.onInit = /* @internal */
-    function (fn) { this._onInitFns.push(fn); };
-    /* @internal */
-    /* @internal */
-    MockAnimationPlayer.prototype.init = /* @internal */
-    function () {
+    MockAnimationPlayer.prototype.init = function () {
         _super.prototype.init.call(this);
         this._onInitFns.forEach(function (fn) { return fn(); });
         this._onInitFns = [];
@@ -83,9 +79,7 @@ var MockAnimationPlayer = /** @class */ (function (_super) {
         this.__finished = true;
     };
     /* @internal */
-    /* @internal */
-    MockAnimationPlayer.prototype.triggerMicrotask = /* @internal */
-    function () { };
+    MockAnimationPlayer.prototype.triggerMicrotask = function () { };
     MockAnimationPlayer.prototype.play = function () {
         _super.prototype.play.call(this);
         this.__started = true;
@@ -113,6 +107,14 @@ var MockAnimationPlayer = /** @class */ (function (_super) {
     };
     return MockAnimationPlayer;
 }(NoopAnimationPlayer));
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 
 /**
  * @license
