@@ -1,10 +1,10 @@
 /**
- * @license Angular v6.1.10+12.sha-81724f5
+ * @license Angular v6.1.10+13.sha-2b00c17
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __extends, __read, __spread, __assign, __values } from 'tslib';
+import { __read, __extends, __spread, __assign, __values } from 'tslib';
 import { AUTO_STYLE, NoopAnimationPlayer, ɵAnimationGroupPlayer, ɵPRE_STYLE, sequence, style } from '@angular/animations';
 import { defineInjectable } from '@angular/core';
 
