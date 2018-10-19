@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0+32.sha-3f94759
+ * @license Angular v7.0.0+52.sha-778e1c2
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -203,7 +203,7 @@ function hypenatePropsObject(object) {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * @experimental
+ * @publicApi
  */
 var NoopAnimationDriver = /** @class */ (function () {
     function NoopAnimationDriver() {
@@ -227,7 +227,7 @@ var NoopAnimationDriver = /** @class */ (function () {
     return NoopAnimationDriver;
 }());
 /**
- * @experimental
+ * @publicApi
  */
 var AnimationDriver = /** @class */ (function () {
     function AnimationDriver() {
@@ -1944,7 +1944,7 @@ var Animation = /** @class */ (function () {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * @experimental Animation support is experimental.
+ * @publicApi
  */
 var AnimationStyleNormalizer = /** @class */ (function () {
     function AnimationStyleNormalizer() {
@@ -1952,7 +1952,7 @@ var AnimationStyleNormalizer = /** @class */ (function () {
     return AnimationStyleNormalizer;
 }());
 /**
- * @experimental Animation support is experimental.
+ * @publicApi
  */
 var NoopAnimationStyleNormalizer = /** @class */ (function () {
     function NoopAnimationStyleNormalizer() {
@@ -2101,13 +2101,13 @@ var AnimationStateStyles = /** @class */ (function () {
 }());
 
 /**
- * @experimental Animation support is experimental.
+ * @publicApi
  */
 function buildTrigger(name, ast) {
     return new AnimationTrigger(name, ast);
 }
 /**
-* @experimental Animation support is experimental.
+* @publicApi
 */
 var AnimationTrigger = /** @class */ (function () {
     function AnimationTrigger(name, ast) {
