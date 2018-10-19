@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-rc.1+118.sha-31022cb
+ * @license Angular v7.0.0-rc.1+137.sha-4c2ce4e
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -12,7 +12,7 @@ import { ɵallowPreviousPlayerStylesMerge, ɵcontainsElement, ɵinvokeQuery, ɵm
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
- * \@experimental Animation support is experimental.
+ * \@publicApi
  */
 class MockAnimationDriver {
     /**
@@ -70,7 +70,7 @@ class MockAnimationDriver {
 }
 MockAnimationDriver.log = [];
 /**
- * \@experimental Animation support is experimental.
+ * \@publicApi
  */
 class MockAnimationPlayer extends NoopAnimationPlayer {
     /**
