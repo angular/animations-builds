@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0+32.sha-3f94759
+ * @license Angular v7.0.0+52.sha-778e1c2
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -48,12 +48,14 @@
  * }
  * ```
  *
+ * @publicApi
  */
 class AnimationBuilder {
 }
 /**
  * A factory object returned from the `AnimationBuilder`.`build()` method.
  *
+ * @publicApi
  */
 class AnimationFactory {
 }
@@ -67,6 +69,8 @@ class AnimationFactory {
  */
 /**
  * Specifies automatic styling.
+ *
+ * @publicApi
  */
 const AUTO_STYLE = '*';
 /**
@@ -215,7 +219,7 @@ const AUTO_STYLE = '*';
  * an instance of an `AnimationEvent`. If animations are disabled,
  * the `.disabled` flag on the event is true.
  *
- * @experimental Animation support is experimental.
+ * @publicApi
  */
 function trigger(name, definitions) {
     return { type: 7 /* Trigger */, name, definitions, options: {} };
@@ -275,6 +279,8 @@ function trigger(name, definitions) {
  *   style({ background: "red" }))
  *  ])
  * ```
+ *
+ * @publicApi
  */
 function animate(timings, styles = null) {
     return { type: 4 /* Animate */, styles, timings };
@@ -309,6 +315,8 @@ function animate(timings, styles = null) {
  * When called within a `sequence()` or a
  * `transition()` call, does not continue to the next
  * instruction until all of the inner animation steps have completed.
+ *
+ * @publicApi
  */
 function group(steps, options = null) {
     return { type: 3 /* Group */, steps, options };
@@ -343,6 +351,7 @@ function group(steps, options = null) {
  * execution continues to the next instruction only after each of the inner animation
  * steps have completed.
  *
+ * @publicApi
  **/
 function sequence(steps, options = null) {
     return { type: 2 /* Sequence */, steps, options };
@@ -384,6 +393,7 @@ function sequence(steps, options = null) {
  * animate("1s", style({ height: "*" }))
  * ```
  *
+ * @publicApi
  **/
 function style(tokens) {
     return { type: 6 /* Style */, styles: tokens, offset: null };
@@ -414,6 +424,8 @@ function style(tokens) {
  * Use the `transition()` function to animate between states.
  * When a state is active within a component, its associated styles persist on the element,
  * even when the animation ends.
+ *
+ * @publicApi
  **/
 function state(name, styles, options) {
     return { type: 0 /* State */, name, styles, options };
@@ -460,6 +472,8 @@ function state(name, styles, options) {
  *   style({ backgroundColor: "black" }) // offset = 1
  * ]))
  *```
+
+ * @publicApi
  */
 function keyframes(steps) {
     return { type: 5 /* Keyframes */, steps };
@@ -629,6 +643,8 @@ function keyframes(steps) {
  *   transition('false <=> true', animate(500))
  * ])
  * ```
+ *
+ * @publicApi
  **/
 function transition(stateChangeExpr, steps, options = null) {
     return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, options };
@@ -675,6 +691,8 @@ function transition(stateChangeExpr, steps, options = null) {
  * If any of the passed-in parameter values are missing from this call,
  * the default values are used. If one or more parameter values are missing before a step is
  * animated, `useAnimation()` throws an error.
+ *
+ * @publicApi
  */
 function animation(steps, options = null) {
     return { type: 8 /* Reference */, animation: steps, options };
@@ -695,6 +713,8 @@ function animation(steps, options = null) {
  * Note that this feature designed to be used with `query()` and it will only work
  * with animations that are assigned using the Angular animation library. CSS keyframes
  * and transitions are not handled by this API.
+ *
+ * @publicApi
  */
 function animateChild(options = null) {
     return { type: 9 /* AnimateChild */, options };
@@ -706,6 +726,8 @@ function animateChild(options = null) {
  * @param options An options object that can contain a delay value for the start of
  * the animation, and additional override values for developer-defined parameters.
  * @return An object that contains the animation parameters.
+ *
+ * @publicApi
  */
 function useAnimation(animation, options = null) {
     return { type: 10 /* AnimateRef */, animation, options };
@@ -794,6 +816,8 @@ function useAnimation(animation, options = null) {
  *   }
  * }
  * ```
+ *
+ * @publicApi
  */
 function query(selector, animation, options = null) {
     return { type: 11 /* Query */, selector, animation, options };
@@ -875,6 +899,8 @@ function query(selector, animation, options = null) {
  *   ])
  * ])
  * ```
+ *
+ * @publicApi
  */
 function stagger(timings, animation) {
     return { type: 12 /* Stagger */, timings, animation };
@@ -907,6 +933,7 @@ function scheduleMicroTask(cb) {
  * @see `AnimationPlayer`
  * @see `GroupPlayer`
  *
+ * @publicApi
  */
 class NoopAnimationPlayer {
     constructor(duration = 0, delay = 0) {
