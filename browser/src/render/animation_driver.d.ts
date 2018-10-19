@@ -8,7 +8,7 @@ import * as i0 from '@angular/core';
  */
 import { AnimationPlayer } from '@angular/animations';
 /**
- * @experimental
+ * @publicApi
  */
 export declare class NoopAnimationDriver implements AnimationDriver {
     validateStyleProperty(prop: string): boolean;
@@ -22,7 +22,7 @@ export declare class NoopAnimationDriver implements AnimationDriver {
     static ngInjectableDef: i0.ɵInjectableDef<NoopAnimationDriver>;
 }
 /**
- * @experimental
+ * @publicApi
  */
 export declare abstract class AnimationDriver {
     static NOOP: AnimationDriver;
