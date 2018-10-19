@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-rc.1+118.sha-31022cb
+ * @license Angular v7.0.0-rc.1+137.sha-4c2ce4e
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -197,7 +197,7 @@ function hypenatePropsObject(object) {
 }
 
 /**
- * @experimental
+ * @publicApi
  */
 let NoopAnimationDriver = class NoopAnimationDriver {
     validateStyleProperty(prop) { return validateStyleProperty(prop); }
@@ -219,7 +219,7 @@ NoopAnimationDriver = __decorate([
     Injectable()
 ], NoopAnimationDriver);
 /**
- * @experimental
+ * @publicApi
  */
 class AnimationDriver {
 }
@@ -1888,12 +1888,12 @@ class Animation {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * @experimental Animation support is experimental.
+ * @publicApi
  */
 class AnimationStyleNormalizer {
 }
 /**
- * @experimental Animation support is experimental.
+ * @publicApi
  */
 class NoopAnimationStyleNormalizer {
     normalizePropertyName(propertyName, errors) { return propertyName; }
@@ -2039,13 +2039,13 @@ class AnimationStateStyles {
 }
 
 /**
- * @experimental Animation support is experimental.
+ * @publicApi
  */
 function buildTrigger(name, ast) {
     return new AnimationTrigger(name, ast);
 }
 /**
-* @experimental Animation support is experimental.
+* @publicApi
 */
 class AnimationTrigger {
     constructor(name, ast) {

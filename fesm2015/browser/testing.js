@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-rc.1+118.sha-31022cb
+ * @license Angular v7.0.0-rc.1+137.sha-4c2ce4e
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -15,7 +15,7 @@ import { ɵallowPreviousPlayerStylesMerge, ɵcontainsElement, ɵinvokeQuery, ɵm
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * @experimental Animation support is experimental.
+ * @publicApi
  */
 class MockAnimationDriver {
     validateStyleProperty(prop) { return ɵvalidateStyleProperty(prop); }
@@ -37,7 +37,7 @@ class MockAnimationDriver {
 }
 MockAnimationDriver.log = [];
 /**
- * @experimental Animation support is experimental.
+ * @publicApi
  */
 class MockAnimationPlayer extends NoopAnimationPlayer {
     constructor(element, keyframes, duration, delay, easing, previousPlayers) {
