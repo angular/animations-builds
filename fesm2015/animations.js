@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-rc.1+111.sha-5b4cf38
+ * @license Angular v7.0.0-rc.1+178.sha-ee0b857.with-local-changes
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -52,6 +52,7 @@
  * }
  * ```
  *
+ * \@publicApi
  * @abstract
  */
 class AnimationBuilder {
@@ -59,6 +60,7 @@ class AnimationBuilder {
 /**
  * A factory object returned from the `AnimationBuilder`.`build()` method.
  *
+ * \@publicApi
  * @abstract
  */
 class AnimationFactory {
@@ -70,6 +72,8 @@ class AnimationFactory {
  */
 /** *
  * Specifies automatic styling.
+ *
+ * \@publicApi
   @type {?} */
 const AUTO_STYLE = '*';
 /**
@@ -212,7 +216,7 @@ const AUTO_STYLE = '*';
  * an instance of an `AnimationEvent`. If animations are disabled,
  * the `.disabled` flag on the event is true.
  *
- * \@experimental Animation support is experimental.
+ * \@publicApi
  * @param {?} name An identifying string.
  * @param {?} definitions  An animation definition object, containing an array of `state()`
  * and `transition()` declarations.
@@ -257,6 +261,8 @@ function trigger(name, definitions) {
  *   style({ background: "red" }))
  *  ])
  * ```
+ *
+ * \@publicApi
  * @param {?} timings Sets `AnimateTimings` for the parent animation.
  * A string in the format "duration [delay] [easing]".
  *  - Duration and delay are expressed as a number and optional time unit,
@@ -292,6 +298,8 @@ function animate(timings, styles = null) {
  * When called within a `sequence()` or a
  * `transition()` call, does not continue to the next
  * instruction until all of the inner animation steps have completed.
+ *
+ * \@publicApi
  * @param {?} steps An array of animation step objects.
  * - When steps are defined by `style()` or `animate()`
  * function calls, each call within the group is executed instantly.
@@ -328,6 +336,7 @@ function group(steps, options = null) {
  * execution continues to the next instruction only after each of the inner animation
  * steps have completed.
  *
+ * \@publicApi
  *
  * @param {?} steps An array of animation step objects.
  * - Steps defined by `style()` calls apply the styling data immediately.
@@ -376,6 +385,7 @@ function sequence(steps, options = null) {
  * animate("1s", style({ height: "*" }))
  * ```
  *
+ * \@publicApi
  *
  * @param {?} tokens A set of CSS styles or HTML styles associated with an animation state.
  * The value can be any of the following:
@@ -401,6 +411,8 @@ function style(tokens) {
  * Use the `transition()` function to animate between states.
  * When a state is active within a component, its associated styles persist on the element,
  * even when the animation ends.
+ *
+ * \@publicApi
  *
  * @param {?} name One or more names for the defined state in a comma-separated string.
  * The following reserved state names can be supplied to define a style for specific use
@@ -461,6 +473,7 @@ function state(name, styles, options) {
  *   style({ backgroundColor: "black" }) // offset = 1
  * ]))
  * ```
+ * \@publicApi
  * @param {?} steps A set of animation styles with optional offset data.
  * The optional `offset` value for a style specifies a percentage of the total animation
  * time at which that style is applied.
@@ -611,6 +624,8 @@ function keyframes(steps) {
  * ])
  * ```
  *
+ * \@publicApi
+ *
  * @param {?} stateChangeExpr A Boolean expression or function that compares the previous and current
  * animation states, and returns true if this transition should occur. Note that  "true" and "false"
  * match 1 and 0, respectively. An expression is evaluated each time a state change occurs in the
@@ -673,6 +688,8 @@ function transition(stateChangeExpr, steps, options = null) {
  * If any of the passed-in parameter values are missing from this call,
  * the default values are used. If one or more parameter values are missing before a step is
  * animated, `useAnimation()` throws an error.
+ *
+ * \@publicApi
  * @param {?} steps One or more animation objects, as returned by the `animate()`
  * or `sequence()` function, that form a transformation from one state to another.
  * A sequence is used by default when you pass an array.
@@ -698,6 +715,8 @@ function animation(steps, options = null) {
  * Note that this feature designed to be used with `query()` and it will only work
  * with animations that are assigned using the Angular animation library. CSS keyframes
  * and transitions are not handled by this API.
+ *
+ * \@publicApi
  * @param {?=} options An options object that can contain a delay value for the start of the
  * animation, and additional override values for developer-defined parameters.
  * @return {?} An object that encapsulates the child animation data.
@@ -709,10 +728,12 @@ function animateChild(options = null) {
 /**
  * Starts a reusable animation that is created using the `animation()` function.
  *
+ * \@publicApi
  * @param {?} animation The reusable animation to start.
  * @param {?=} options An options object that can contain a delay value for the start of
  * the animation, and additional override values for developer-defined parameters.
  * @return {?} An object that contains the animation parameters.
+ *
  */
 function useAnimation(animation, options = null) {
     return { type: 10 /* AnimateRef */, animation, options };
@@ -787,6 +808,8 @@ function useAnimation(animation, options = null) {
  *   }
  * }
  * ```
+ *
+ * \@publicApi
  * @param {?} selector The element to query, or a set of elements that contain Angular-specific
  * characteristics, specified with one or more of the following tokens.
  *  - `query(":enter")` or `query(":leave")` : Query for newly inserted/removed elements.
@@ -878,6 +901,8 @@ function query(selector, animation, options = null) {
  *   ])
  * ])
  * ```
+ *
+ * \@publicApi
  * @param {?} timings A delay value.
  * @param {?} animation One ore more animation steps.
  * @return {?} An object that encapsulates the stagger data.
@@ -917,6 +942,7 @@ function scheduleMicroTask(cb) {
  * @see `AnimationPlayer`
  * @see `GroupPlayer`
  *
+ * \@publicApi
  */
 class NoopAnimationPlayer {
     /**

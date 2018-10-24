@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-rc.1+111.sha-5b4cf38
+ * @license Angular v7.0.0-rc.1+178.sha-ee0b857.with-local-changes
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -297,7 +297,7 @@ function hypenatePropsObject(object) {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
- * \@experimental
+ * \@publicApi
  */
 class NoopAnimationDriver {
     /**
@@ -356,7 +356,7 @@ NoopAnimationDriver.decorators = [
 ];
 NoopAnimationDriver.ngInjectableDef = defineInjectable({ token: NoopAnimationDriver, factory: function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); }, providedIn: null });
 /**
- * \@experimental
+ * \@publicApi
  * @abstract
  */
 class AnimationDriver {
@@ -2678,13 +2678,13 @@ class Animation {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@experimental Animation support is experimental.
+ * \@publicApi
  * @abstract
  */
 class AnimationStyleNormalizer {
 }
 /**
- * \@experimental Animation support is experimental.
+ * \@publicApi
  */
 class NoopAnimationStyleNormalizer {
     /**
@@ -2962,7 +2962,7 @@ class AnimationStateStyles {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
- * \@experimental Animation support is experimental.
+ * \@publicApi
  * @param {?} name
  * @param {?} ast
  * @return {?}
@@ -2971,7 +2971,7 @@ function buildTrigger(name, ast) {
     return new AnimationTrigger(name, ast);
 }
 /**
- * \@experimental Animation support is experimental.
+ * \@publicApi
  */
 class AnimationTrigger {
     /**
