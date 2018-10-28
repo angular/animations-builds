@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-rc.1+51.sha-e814bfa
+ * @license Angular v7.1.0-beta.0+45.sha-064f0d0
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -9,7 +9,7 @@ import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
 import { ɵallowPreviousPlayerStylesMerge, ɵcontainsElement, ɵinvokeQuery, ɵmatchesElement, ɵvalidateStyleProperty } from '@angular/animations/browser';
 
 /**
- * @experimental Animation support is experimental.
+ * @publicApi
  */
 var MockAnimationDriver = /** @class */ (function () {
     function MockAnimationDriver() {
@@ -35,7 +35,7 @@ var MockAnimationDriver = /** @class */ (function () {
     return MockAnimationDriver;
 }());
 /**
- * @experimental Animation support is experimental.
+ * @publicApi
  */
 var MockAnimationPlayer = /** @class */ (function (_super) {
     __extends(MockAnimationPlayer, _super);
