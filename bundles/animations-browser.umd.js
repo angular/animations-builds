@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0-beta.1+6.sha-4e9f2e5
+ * @license Angular v7.1.0-beta.1+14.sha-2e7b5c5
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -302,6 +302,9 @@
         NoopAnimationDriver.ngInjectableDef = i0.defineInjectable({ token: NoopAnimationDriver, factory: function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); }, providedIn: null });
         return NoopAnimationDriver;
     }());
+    /*@__PURE__*/ i0.ɵsetClassMetadata(NoopAnimationDriver, [{
+            type: i0.Injectable
+        }], null, null);
     /**
      * @publicApi
      */

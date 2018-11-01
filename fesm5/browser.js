@@ -1,12 +1,12 @@
 /**
- * @license Angular v7.1.0-beta.1+6.sha-4e9f2e5
+ * @license Angular v7.1.0-beta.1+14.sha-2e7b5c5
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 import { __extends, __read, __spread, __assign, __values } from 'tslib';
 import { AUTO_STYLE, NoopAnimationPlayer, ɵAnimationGroupPlayer, ɵPRE_STYLE, sequence, style } from '@angular/animations';
-import { defineInjectable } from '@angular/core';
+import { Injectable, defineInjectable, ɵsetClassMetadata } from '@angular/core';
 
 function isBrowser() {
     return (typeof window !== 'undefined' && typeof window.document !== 'undefined');
@@ -226,6 +226,9 @@ var NoopAnimationDriver = /** @class */ (function () {
     NoopAnimationDriver.ngInjectableDef = defineInjectable({ token: NoopAnimationDriver, factory: function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); }, providedIn: null });
     return NoopAnimationDriver;
 }());
+/*@__PURE__*/ ɵsetClassMetadata(NoopAnimationDriver, [{
+        type: Injectable
+    }], null, null);
 /**
  * @publicApi
  */

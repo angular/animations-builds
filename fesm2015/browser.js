@@ -1,11 +1,11 @@
 /**
- * @license Angular v7.1.0-beta.1+6.sha-4e9f2e5
+ * @license Angular v7.1.0-beta.1+14.sha-2e7b5c5
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 import { AUTO_STYLE, NoopAnimationPlayer, ɵAnimationGroupPlayer, ɵPRE_STYLE, sequence, style } from '@angular/animations';
-import { Injectable, defineInjectable } from '@angular/core';
+import { Injectable, defineInjectable, ɵsetClassMetadata } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -355,6 +355,9 @@ NoopAnimationDriver.decorators = [
     { type: Injectable },
 ];
 NoopAnimationDriver.ngInjectableDef = defineInjectable({ token: NoopAnimationDriver, factory: function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); }, providedIn: null });
+/*@__PURE__*/ ɵsetClassMetadata(NoopAnimationDriver, [{
+        type: Injectable
+    }], null, null);
 /**
  * \@publicApi
  * @abstract
