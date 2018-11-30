@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0+81.sha-c8a8dcf
+ * @license Angular v7.1.0+82.sha-eb17502
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -191,4 +191,4 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
  */
 
 export { MockAnimationDriver, MockAnimationPlayer };
-//# sourceMappingURL=browser__testing.js.map
+//# sourceMappingURL=testing.js.map
