@@ -1,12 +1,12 @@
 /**
- * @license Angular v7.2.0-beta.2+8.sha-9c7fb0d
+ * @license Angular v7.2.0-beta.2+6.sha-28ceca0
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * An injectable service that produces an animation sequence programmatically within an
@@ -68,14 +68,13 @@ class AnimationFactory {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
-/**
+/** *
  * Specifies automatic styling.
  *
  * \@publicApi
- * @type {?}
- */
+  @type {?} */
 const AUTO_STYLE = '*';
 /**
  * Creates a named animation trigger, containing a  list of `state()`
@@ -137,7 +136,8 @@ const AUTO_STYLE = '*';
  *   // notice that `element` and `params` are also available here
  *   return toState == 'yes-please-animate';
  * }
- *  /
+ *
+ * \@Component({
  *   selector: 'my-component',
  *   templateUrl: 'my-component-tpl.html',
  *   animations: [
@@ -162,7 +162,8 @@ const AUTO_STYLE = '*';
  *
  * The following example shows how to use this feature:
  *
- * ```typescript /
+ * ```typescript
+ * \@Component({
  *   selector: 'my-component',
  *   template: `
  *     <div [\@.disabled]="isDisabled">
@@ -192,7 +193,8 @@ const AUTO_STYLE = '*';
  *
  * ```typescript
  * import {Component, HostBinding} from '\@angular/core';
- *  /
+ *
+ * \@Component({
  *   selector: 'app-component',
  *   templateUrl: 'app.component.html',
  * })
@@ -912,7 +914,7 @@ function stagger(timings, animation) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -929,7 +931,7 @@ function scheduleMicroTask(cb) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * An empty programmatic controller for reusable animations.
@@ -1066,7 +1068,7 @@ class NoopAnimationPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * A programmatic controller for a group of reusable animations.
@@ -1266,24 +1268,24 @@ class AnimationGroupPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
 const ɵPRE_STYLE = '!';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
 /**
