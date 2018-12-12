@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0-beta.2+4.sha-042463f
+ * @license Angular v7.2.0-beta.2+8.sha-9c7fb0d
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -9,7 +9,7 @@ import { ɵallowPreviousPlayerStylesMerge, ɵcontainsElement, ɵinvokeQuery, ɵm
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
 /**
  * \@publicApi
@@ -64,7 +64,7 @@ class MockAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = []) {
         /** @type {?} */
         const player = new MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers);
-        MockAnimationDriver.log.push(/** @type {?} */ (player));
+        MockAnimationDriver.log.push((/** @type {?} */ (player)));
         return player;
     }
 }
@@ -104,11 +104,13 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
             });
         }
     }
+    /* @internal */
     /**
      * @param {?} fn
      * @return {?}
      */
     onInit(fn) { this._onInitFns.push(fn); }
+    /* @internal */
     /**
      * @return {?}
      */
@@ -131,6 +133,7 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         super.destroy();
         this.__finished = true;
     }
+    /* @internal */
     /**
      * @return {?}
      */
@@ -173,17 +176,17 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
 
 export { MockAnimationDriver, MockAnimationPlayer };
