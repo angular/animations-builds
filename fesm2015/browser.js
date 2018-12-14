@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.3+25.sha-c220328
+ * @license Angular v7.1.3+28.sha-cd1e206
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -449,7 +449,7 @@ function parseTimeExpression(exp, errors, allowNegativeValues) {
         /** @type {?} */
         const delayMatch = matches[3];
         if (delayMatch != null) {
-            delay = _convertTimeValueToMS(Math.floor(parseFloat(delayMatch)), matches[4]);
+            delay = _convertTimeValueToMS(parseFloat(delayMatch), matches[4]);
         }
         /** @type {?} */
         const easingVal = matches[5];
@@ -4363,7 +4363,7 @@ class TransitionAnimationEngine {
             this.markElementAsDisabled(element, false);
         }
         this.driver.query(element, DISABLED_SELECTOR, true).forEach(node => {
-            this.markElementAsDisabled(element, false);
+            this.markElementAsDisabled(node, false);
         });
     }
     /**
