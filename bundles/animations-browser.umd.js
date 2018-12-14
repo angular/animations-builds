@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.3+27.sha-453589f
+ * @license Angular v7.1.3+29.sha-b224057
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -365,7 +365,7 @@
             duration = _convertTimeValueToMS(parseFloat(matches[1]), matches[2]);
             var delayMatch = matches[3];
             if (delayMatch != null) {
-                delay = _convertTimeValueToMS(Math.floor(parseFloat(delayMatch)), matches[4]);
+                delay = _convertTimeValueToMS(parseFloat(delayMatch), matches[4]);
             }
             var easingVal = matches[5];
             if (easingVal) {

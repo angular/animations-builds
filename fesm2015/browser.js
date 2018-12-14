@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.3+27.sha-453589f
+ * @license Angular v7.1.3+29.sha-b224057
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -449,7 +449,7 @@ function parseTimeExpression(exp, errors, allowNegativeValues) {
         /** @type {?} */
         const delayMatch = matches[3];
         if (delayMatch != null) {
-            delay = _convertTimeValueToMS(Math.floor(parseFloat(delayMatch)), matches[4]);
+            delay = _convertTimeValueToMS(parseFloat(delayMatch), matches[4]);
         }
         /** @type {?} */
         const easingVal = matches[5];
