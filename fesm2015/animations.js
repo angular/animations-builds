@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0-beta.2+40.sha-650c5a0
+ * @license Angular v7.2.0-beta.2+52.sha-f8096d4
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -738,7 +738,7 @@ function useAnimation(animation, options = null) {
 }
 /**
  * Finds one or more inner elements within the current element that is
- * being animated within a sequence. Use with `animateChild()`.
+ * being animated within a sequence. Use with `animate()`.
  *
  * \@usageNotes
  * Tokens can be merged into a combined query selector string. For example:
@@ -771,7 +771,7 @@ function useAnimation(animation, options = null) {
  * ### Usage Example
  *
  * The following example queries for inner elements and animates them
- * individually using `animateChild()`.
+ * individually using `animate()`.
  *
  * ```typescript
  * \@Component({
