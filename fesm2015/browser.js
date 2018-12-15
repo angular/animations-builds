@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0-beta.2+46.sha-df123e0
+ * @license Angular v7.2.0-beta.2+45.sha-023bd31
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4374,7 +4374,7 @@ class TransitionAnimationEngine {
             this.markElementAsDisabled(element, false);
         }
         this.driver.query(element, DISABLED_SELECTOR, true).forEach(node => {
-            this.markElementAsDisabled(node, false);
+            this.markElementAsDisabled(element, false);
         });
     }
     /**
