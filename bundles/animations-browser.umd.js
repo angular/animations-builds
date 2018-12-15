@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0-beta.2+47.sha-f1c9d6a
+ * @license Angular v7.2.0-beta.2+43.sha-f9545d1
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -366,7 +366,7 @@
             duration = _convertTimeValueToMS(parseFloat(matches[1]), matches[2]);
             var delayMatch = matches[3];
             if (delayMatch != null) {
-                delay = _convertTimeValueToMS(parseFloat(delayMatch), matches[4]);
+                delay = _convertTimeValueToMS(Math.floor(parseFloat(delayMatch)), matches[4]);
             }
             var easingVal = matches[5];
             if (easingVal) {
@@ -3063,7 +3063,7 @@
                 this.markElementAsDisabled(element, false);
             }
             this.driver.query(element, DISABLED_SELECTOR, true).forEach(function (node) {
-                _this.markElementAsDisabled(node, false);
+                _this.markElementAsDisabled(element, false);
             });
         };
         TransitionAnimationEngine.prototype.flush = function (microtaskId) {
