@@ -1,12 +1,12 @@
 /**
- * @license Angular v7.1.0+202.sha-3fa2a5f
+ * @license Angular v7.2.0-beta.2+63.sha-19508c4
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
 /**
  * An injectable service that produces an animation sequence programmatically within an
@@ -68,13 +68,14 @@ class AnimationFactory {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
-/** *
+/**
  * Specifies automatic styling.
  *
  * \@publicApi
-  @type {?} */
+ * @type {?}
+ */
 const AUTO_STYLE = '*';
 /**
  * Creates a named animation trigger, containing a  list of `state()`
@@ -136,8 +137,7 @@ const AUTO_STYLE = '*';
  *   // notice that `element` and `params` are also available here
  *   return toState == 'yes-please-animate';
  * }
- *
- * \@Component({
+ *  /
  *   selector: 'my-component',
  *   templateUrl: 'my-component-tpl.html',
  *   animations: [
@@ -162,8 +162,7 @@ const AUTO_STYLE = '*';
  *
  * The following example shows how to use this feature:
  *
- * ```typescript
- * \@Component({
+ * ```typescript /
  *   selector: 'my-component',
  *   template: `
  *     <div [\@.disabled]="isDisabled">
@@ -193,8 +192,7 @@ const AUTO_STYLE = '*';
  *
  * ```typescript
  * import {Component, HostBinding} from '\@angular/core';
- *
- * \@Component({
+ *  /
  *   selector: 'app-component',
  *   templateUrl: 'app.component.html',
  * })
@@ -740,7 +738,7 @@ function useAnimation(animation, options = null) {
 }
 /**
  * Finds one or more inner elements within the current element that is
- * being animated within a sequence. Use with `animateChild()`.
+ * being animated within a sequence. Use with `animate()`.
  *
  * \@usageNotes
  * Tokens can be merged into a combined query selector string. For example:
@@ -773,7 +771,7 @@ function useAnimation(animation, options = null) {
  * ### Usage Example
  *
  * The following example queries for inner elements and animates them
- * individually using `animateChild()`.
+ * individually using `animate()`.
  *
  * ```typescript
  * \@Component({
@@ -914,7 +912,7 @@ function stagger(timings, animation) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -931,7 +929,7 @@ function scheduleMicroTask(cb) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
 /**
  * An empty programmatic controller for reusable animations.
@@ -1068,7 +1066,7 @@ class NoopAnimationPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
 /**
  * A programmatic controller for a group of reusable animations.
@@ -1268,24 +1266,24 @@ class AnimationGroupPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
 /** @type {?} */
 const ɵPRE_STYLE = '!';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
 
 /**
