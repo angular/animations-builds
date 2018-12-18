@@ -1,12 +1,12 @@
 /**
- * @license Angular v7.2.0-beta.2+83.sha-b04bc5d
+ * @license Angular v7.2.0-beta.2+89.sha-69198ba
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * An injectable service that produces an animation sequence programmatically within an
@@ -68,7 +68,7 @@ class AnimationFactory {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Specifies automatic styling.
@@ -912,7 +912,7 @@ function stagger(timings, animation) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -929,7 +929,7 @@ function scheduleMicroTask(cb) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * An empty programmatic controller for reusable animations.
@@ -958,6 +958,7 @@ class NoopAnimationPlayer {
         this.totalTime = duration + delay;
     }
     /**
+     * @private
      * @return {?}
      */
     _onFinish() {
@@ -1006,6 +1007,7 @@ class NoopAnimationPlayer {
      */
     triggerMicrotask() { scheduleMicroTask(() => this._onFinish()); }
     /**
+     * @private
      * @return {?}
      */
     _onStart() {
@@ -1066,7 +1068,7 @@ class NoopAnimationPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * A programmatic controller for a group of reusable animations.
@@ -1123,6 +1125,7 @@ class AnimationGroupPlayer {
         this.totalTime = this.players.reduce((time, player) => Math.max(time, player.totalTime), 0);
     }
     /**
+     * @private
      * @return {?}
      */
     _onFinish() {
@@ -1142,6 +1145,7 @@ class AnimationGroupPlayer {
      */
     onStart(fn) { this._onStartFns.push(fn); }
     /**
+     * @private
      * @return {?}
      */
     _onStart() {
@@ -1195,6 +1199,7 @@ class AnimationGroupPlayer {
      */
     destroy() { this._onDestroy(); }
     /**
+     * @private
      * @return {?}
      */
     _onDestroy() {
@@ -1266,24 +1271,24 @@ class AnimationGroupPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const ɵPRE_STYLE = '!';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
