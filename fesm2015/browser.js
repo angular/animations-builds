@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0-beta.2+82.sha-1c93afe
+ * @license Angular v7.2.0-beta.2+90.sha-7901cd8
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @return {?}
@@ -296,7 +296,7 @@ function hypenatePropsObject(object) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@publicApi
@@ -366,7 +366,7 @@ AnimationDriver.NOOP = new NoopAnimationDriver();
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const ONE_SECOND = 1000;
@@ -796,7 +796,7 @@ function computeStyle(element, prop) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -915,7 +915,7 @@ function makeLambdaFromStates(lhs, rhs) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const SELF_TOKEN = ':self';
@@ -987,6 +987,7 @@ class AnimationAstBuilderVisitor {
         return (/** @type {?} */ (visitDslNode(this, normalizeAnimationEntry(metadata), context)));
     }
     /**
+     * @private
      * @param {?} context
      * @return {?}
      */
@@ -1198,6 +1199,7 @@ class AnimationAstBuilderVisitor {
         return ast;
     }
     /**
+     * @private
      * @param {?} metadata
      * @param {?} context
      * @return {?}
@@ -1258,6 +1260,7 @@ class AnimationAstBuilderVisitor {
         };
     }
     /**
+     * @private
      * @param {?} ast
      * @param {?} context
      * @return {?}
@@ -1602,7 +1605,7 @@ function makeTimingAst(duration, delay, easing) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} element
@@ -1630,7 +1633,7 @@ function createTimelineInstruction(element, keyframes, preStyleProps, postStyleP
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class ElementInstructionMap {
     constructor() {
@@ -1677,7 +1680,7 @@ class ElementInstructionMap {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const ONE_FRAME_IN_MILLISECONDS = 1;
@@ -1884,6 +1887,7 @@ class AnimationTimelineBuilderVisitor {
         context.previousNode = ast;
     }
     /**
+     * @private
      * @param {?} instructions
      * @param {?} context
      * @param {?} options
@@ -1988,6 +1992,7 @@ class AnimationTimelineBuilderVisitor {
         context.previousNode = ast;
     }
     /**
+     * @private
      * @param {?} ast
      * @param {?} context
      * @return {?}
@@ -2258,6 +2263,7 @@ class AnimationTimelineContext {
         }
     }
     /**
+     * @private
      * @return {?}
      */
     _copyOptions() {
@@ -2457,6 +2463,7 @@ class TimelineBuilder {
         return new TimelineBuilder(this._driver, element, currentTime || this.currentTime, this._elementTimelineStylesLookup);
     }
     /**
+     * @private
      * @return {?}
      */
     _loadKeyframe() {
@@ -2486,6 +2493,7 @@ class TimelineBuilder {
         this._loadKeyframe();
     }
     /**
+     * @private
      * @param {?} prop
      * @param {?} value
      * @return {?}
@@ -2773,7 +2781,7 @@ function flattenStyles(input, allStyles) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class Animation {
     /**
@@ -2824,7 +2832,7 @@ class Animation {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -2863,7 +2871,7 @@ class NoopAnimationStyleNormalizer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class WebAnimationsStyleNormalizer extends AnimationStyleNormalizer {
     /**
@@ -2917,7 +2925,7 @@ function makeBooleanMap(keys) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} element
@@ -2956,7 +2964,7 @@ function createTransitionInstruction(element, triggerName, fromState, toState, i
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const EMPTY_OBJECT = {};
@@ -3115,7 +3123,7 @@ class AnimationStateStyles {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@publicApi
@@ -3217,7 +3225,7 @@ function balanceProperties(obj, key1, key2) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const EMPTY_INSTRUCTION_MAP = new ElementInstructionMap();
@@ -3253,6 +3261,7 @@ class TimelineAnimationEngine {
         }
     }
     /**
+     * @private
      * @param {?} i
      * @param {?} preStyles
      * @param {?=} postStyles
@@ -3327,6 +3336,7 @@ class TimelineAnimationEngine {
         }
     }
     /**
+     * @private
      * @param {?} id
      * @return {?}
      */
@@ -3403,7 +3413,7 @@ class TimelineAnimationEngine {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const QUEUED_CLASSNAME = 'ng-animate-queued';
@@ -3566,6 +3576,7 @@ class AnimationTransitionNamespace {
         }
     }
     /**
+     * @private
      * @param {?} name
      * @return {?}
      */
@@ -3712,6 +3723,7 @@ class AnimationTransitionNamespace {
         }
     }
     /**
+     * @private
      * @param {?} rootElement
      * @param {?} context
      * @param {?=} animate
@@ -4025,6 +4037,7 @@ class TransitionAnimationEngine {
         return this._namespaceLookup[namespaceId] = ns;
     }
     /**
+     * @private
      * @param {?} ns
      * @param {?} hostElement
      * @return {?}
@@ -4102,6 +4115,7 @@ class TransitionAnimationEngine {
         this.afterFlushAnimationsDone(() => ns.destroy(context));
     }
     /**
+     * @private
      * @param {?} id
      * @return {?}
      */
@@ -4271,6 +4285,7 @@ class TransitionAnimationEngine {
         return () => { };
     }
     /**
+     * @private
      * @param {?} entry
      * @param {?} subTimelines
      * @param {?} enterClassName
@@ -4432,6 +4447,7 @@ class TransitionAnimationEngine {
         throw new Error(`Unable to process animations due to the following failed trigger transitions\n ${errors.join('\n')}`);
     }
     /**
+     * @private
      * @param {?} cleanupFns
      * @param {?} microtaskId
      * @return {?}
@@ -4863,6 +4879,7 @@ class TransitionAnimationEngine {
      */
     afterFlushAnimationsDone(callback) { this._whenQuietFns.push(callback); }
     /**
+     * @private
      * @param {?} element
      * @param {?} isQueriedElement
      * @param {?=} namespaceId
@@ -4907,6 +4924,7 @@ class TransitionAnimationEngine {
         return players;
     }
     /**
+     * @private
      * @param {?} namespaceId
      * @param {?} instruction
      * @param {?} allPreviousPlayersMap
@@ -4947,6 +4965,7 @@ class TransitionAnimationEngine {
         eraseStyles(rootElement, instruction.fromStyles);
     }
     /**
+     * @private
      * @param {?} namespaceId
      * @param {?} instruction
      * @param {?} allPreviousPlayersMap
@@ -5030,6 +5049,7 @@ class TransitionAnimationEngine {
         return player;
     }
     /**
+     * @private
      * @param {?} instruction
      * @param {?} keyframes
      * @param {?} previousPlayers
@@ -5102,6 +5122,7 @@ class TransitionAnimationPlayer {
         player.onDestroy(() => this.destroy());
     }
     /**
+     * @private
      * @param {?} name
      * @param {?} callback
      * @return {?}
@@ -5487,7 +5508,7 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AnimationEngine {
     /**
@@ -5628,7 +5649,7 @@ class AnimationEngine {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -5700,6 +5721,7 @@ class ElementAnimationStyleHandler {
      */
     getPosition() { return this._position; }
     /**
+     * @private
      * @param {?} event
      * @return {?}
      */
@@ -5868,7 +5890,7 @@ function countChars(value, char) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const DEFAULT_FILL_MODE = 'forwards';
@@ -5931,6 +5953,7 @@ class CssKeyframesPlayer {
         this._onDestroyFns = [];
     }
     /**
+     * @private
      * @return {?}
      */
     _flushDoneFns() {
@@ -5938,6 +5961,7 @@ class CssKeyframesPlayer {
         this._onDoneFns = [];
     }
     /**
+     * @private
      * @return {?}
      */
     _flushStartFns() {
@@ -6017,6 +6041,7 @@ class CssKeyframesPlayer {
         this._styler.apply();
     }
     /**
+     * @private
      * @return {?}
      */
     _buildStyler() {
@@ -6055,7 +6080,7 @@ class CssKeyframesPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class DirectStylePlayer extends NoopAnimationPlayer {
     /**
@@ -6115,7 +6140,7 @@ class DirectStylePlayer extends NoopAnimationPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const KEYFRAMES_NAME_PREFIX = 'gen_css_kf_';
@@ -6252,6 +6277,7 @@ class CssKeyframesDriver {
         return player;
     }
     /**
+     * @private
      * @return {?}
      */
     _notifyFaultyScrubber() {
@@ -6291,7 +6317,7 @@ function removeElement(node) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class WebAnimationsPlayer {
     /**
@@ -6318,6 +6344,7 @@ class WebAnimationsPlayer {
         this.time = this._duration + this._delay;
     }
     /**
+     * @private
      * @return {?}
      */
     _onFinish() {
@@ -6335,6 +6362,7 @@ class WebAnimationsPlayer {
         this._preparePlayerBeforeStart();
     }
     /**
+     * @private
      * @return {?}
      */
     _buildPlayer() {
@@ -6349,6 +6377,7 @@ class WebAnimationsPlayer {
         this.domPlayer.addEventListener('finish', () => this._onFinish());
     }
     /**
+     * @private
      * @return {?}
      */
     _preparePlayerBeforeStart() {
@@ -6424,6 +6453,7 @@ class WebAnimationsPlayer {
         this._started = false;
     }
     /**
+     * @private
      * @return {?}
      */
     _resetDomPlayerState() {
@@ -6498,7 +6528,7 @@ class WebAnimationsPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class WebAnimationsDriver {
     constructor() {
@@ -6603,22 +6633,22 @@ function getElementAnimateFn() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
