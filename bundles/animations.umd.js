@@ -1,14 +1,14 @@
 /**
- * @license Angular v7.2.0+101.sha-ad6569c
- * (c) 2010-2018 Google, Inc. https://angular.io/
+ * @license Angular v7.2.0+128.sha-091a8a6
+ * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
     typeof define === 'function' && define.amd ? define('@angular/animations', ['exports'], factory) :
-    (factory((global.ng = global.ng || {}, global.ng.animations = {})));
-}(this, (function (exports) { 'use strict';
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.animations = {})));
+}(this, function (exports) { 'use strict';
 
     /**
      * An injectable service that produces an animation sequence programmatically within an
@@ -1215,5 +1215,5 @@
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));
 //# sourceMappingURL=animations.umd.js.map

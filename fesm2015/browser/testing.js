@@ -1,11 +1,11 @@
 /**
- * @license Angular v7.2.0+101.sha-ad6569c
- * (c) 2010-2018 Google, Inc. https://angular.io/
+ * @license Angular v7.2.0+128.sha-091a8a6
+ * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { AUTO_STYLE, NoopAnimationPlayer } from '@angular/animations';
-import { ɵallowPreviousPlayerStylesMerge, ɵcontainsElement, ɵinvokeQuery, ɵmatchesElement, ɵvalidateStyleProperty } from '@angular/animations/browser';
+import { NoopAnimationPlayer, AUTO_STYLE } from '@angular/animations';
+import { ɵvalidateStyleProperty, ɵmatchesElement, ɵcontainsElement, ɵinvokeQuery, ɵallowPreviousPlayerStylesMerge } from '@angular/animations/browser';
 
 /**
  * @fileoverview added by tsickle
