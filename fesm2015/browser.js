@@ -1,10 +1,10 @@
 /**
- * @license Angular v7.2.0-rc.0+79.sha-d4b476f
+ * @license Angular v7.2.0-rc.0+82.sha-c18c46a
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { AUTO_STYLE, NoopAnimationPlayer, ɵAnimationGroupPlayer, ɵPRE_STYLE, sequence, style } from '@angular/animations';
+import { NoopAnimationPlayer, ɵAnimationGroupPlayer, ɵPRE_STYLE, AUTO_STYLE, sequence, style } from '@angular/animations';
 import { Injectable } from '@angular/core';
 
 /**
@@ -6655,5 +6655,5 @@ function getElementAnimateFn() {
  * Generated bundle index. Do not edit.
  */
 
-export { AnimationDriver, Animation as ɵAnimation, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, AnimationDriver as ɵAnimationDriver, NoopAnimationDriver as ɵNoopAnimationDriver, AnimationEngine as ɵAnimationEngine, CssKeyframesDriver as ɵCssKeyframesDriver, CssKeyframesPlayer as ɵCssKeyframesPlayer, containsElement as ɵcontainsElement, invokeQuery as ɵinvokeQuery, matchesElement as ɵmatchesElement, validateStyleProperty as ɵvalidateStyleProperty, WebAnimationsDriver as ɵWebAnimationsDriver, supportsWebAnimations as ɵsupportsWebAnimations, WebAnimationsPlayer as ɵWebAnimationsPlayer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge };
+export { AnimationDriver, AnimationDriver as ɵAnimationDriver, Animation as ɵAnimation, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, NoopAnimationDriver as ɵNoopAnimationDriver, AnimationEngine as ɵAnimationEngine, CssKeyframesDriver as ɵCssKeyframesDriver, CssKeyframesPlayer as ɵCssKeyframesPlayer, containsElement as ɵcontainsElement, invokeQuery as ɵinvokeQuery, matchesElement as ɵmatchesElement, validateStyleProperty as ɵvalidateStyleProperty, WebAnimationsDriver as ɵWebAnimationsDriver, supportsWebAnimations as ɵsupportsWebAnimations, WebAnimationsPlayer as ɵWebAnimationsPlayer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge };
 //# sourceMappingURL=browser.js.map
