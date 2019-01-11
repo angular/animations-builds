@@ -71,7 +71,7 @@ export class NoopAnimationDriver {
 NoopAnimationDriver.decorators = [
     { type: Injectable },
 ];
-/** @nocollapse */ NoopAnimationDriver.ngInjectableDef = i0.defineInjectable({ token: NoopAnimationDriver, factory: function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); }, providedIn: null });
+NoopAnimationDriver.ngInjectableDef = i0.defineInjectable({ token: NoopAnimationDriver, factory: function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); }, providedIn: null });
 /*@__PURE__*/ i0.ɵsetClassMetadata(NoopAnimationDriver, [{
         type: Injectable
     }], null, null);
