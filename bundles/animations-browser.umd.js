@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0+103.sha-7de7e1b
+ * @license Angular v7.2.0+112.sha-7a9e3ad
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -7,8 +7,8 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/animations'), require('@angular/core')) :
     typeof define === 'function' && define.amd ? define('@angular/animations/browser', ['exports', '@angular/animations', '@angular/core'], factory) :
-    (factory((global.ng = global.ng || {}, global.ng.animations = global.ng.animations || {}, global.ng.animations.browser = {}),global.ng.animations,global.ng.core));
-}(this, (function (exports,animations,core) { 'use strict';
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.animations = global.ng.animations || {}, global.ng.animations.browser = {}), global.ng.animations, global.ng.core));
+}(this, function (exports, animations, core) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -4562,11 +4562,11 @@
      */
 
     exports.AnimationDriver = AnimationDriver;
+    exports.ɵAnimationDriver = AnimationDriver;
     exports.ɵAnimation = Animation;
     exports.ɵAnimationStyleNormalizer = AnimationStyleNormalizer;
     exports.ɵNoopAnimationStyleNormalizer = NoopAnimationStyleNormalizer;
     exports.ɵWebAnimationsStyleNormalizer = WebAnimationsStyleNormalizer;
-    exports.ɵAnimationDriver = AnimationDriver;
     exports.ɵNoopAnimationDriver = NoopAnimationDriver;
     exports.ɵAnimationEngine = AnimationEngine;
     exports.ɵCssKeyframesDriver = CssKeyframesDriver;
@@ -4582,5 +4582,5 @@
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));
 //# sourceMappingURL=animations-browser.umd.js.map
