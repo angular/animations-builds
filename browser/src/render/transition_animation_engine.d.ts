@@ -105,7 +105,7 @@ export declare class TransitionAnimationEngine {
     insertNode(namespaceId: string, element: any, parent: any, insertBefore: boolean): void;
     collectEnterElement(element: any): void;
     markElementAsDisabled(element: any, value: boolean): void;
-    removeNode(namespaceId: string, element: any, context: any): void;
+    removeNode(namespaceId: string, element: any, isHostElement: boolean, context: any): void;
     markElementAsRemoved(namespaceId: string, element: any, hasAnimation?: boolean, context?: any): void;
     listen(namespaceId: string, element: any, name: string, phase: string, callback: (event: any) => boolean): () => any;
     private _buildInstruction;

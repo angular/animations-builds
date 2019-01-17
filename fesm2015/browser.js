@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.0+9.sha-896cf35
+ * @license Angular v8.0.0-beta.0+12.sha-5a582a8
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4249,21 +4249,30 @@ class TransitionAnimationEngine {
     /**
      * @param {?} namespaceId
      * @param {?} element
+     * @param {?} isHostElement
      * @param {?} context
      * @return {?}
      */
-    removeNode(namespaceId, element, context) {
-        if (!isElementNode(element)) {
-            this._onRemovalComplete(element, context);
-            return;
-        }
-        /** @type {?} */
-        const ns = namespaceId ? this._fetchNamespace(namespaceId) : null;
-        if (ns) {
-            ns.removeNode(element, context);
+    removeNode(namespaceId, element, isHostElement, context) {
+        if (isElementNode(element)) {
+            /** @type {?} */
+            const ns = namespaceId ? this._fetchNamespace(namespaceId) : null;
+            if (ns) {
+                ns.removeNode(element, context);
+            }
+            else {
+                this.markElementAsRemoved(namespaceId, element, false, context);
+            }
+            if (isHostElement) {
+                /** @type {?} */
+                const hostNS = this.namespacesByHostElement.get(element);
+                if (hostNS && hostNS.id !== namespaceId) {
+                    hostNS.removeNode(element, context);
+                }
+            }
         }
         else {
-            this.markElementAsRemoved(namespaceId, element, false, context);
+            this._onRemovalComplete(element, context);
         }
     }
     /**
@@ -5593,10 +5602,11 @@ class AnimationEngine {
      * @param {?} namespaceId
      * @param {?} element
      * @param {?} context
+     * @param {?=} isHostElement
      * @return {?}
      */
-    onRemove(namespaceId, element, context) {
-        this._transitionEngine.removeNode(namespaceId, element, context);
+    onRemove(namespaceId, element, context, isHostElement) {
+        this._transitionEngine.removeNode(namespaceId, element, isHostElement || false, context);
     }
     /**
      * @param {?} element
