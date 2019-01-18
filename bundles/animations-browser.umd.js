@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.0+3.sha-808898d
+ * @license Angular v8.0.0-beta.0+21.sha-45bf911
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2971,17 +2971,24 @@
                 removeClass(element, DISABLED_CLASSNAME);
             }
         };
-        TransitionAnimationEngine.prototype.removeNode = function (namespaceId, element, context) {
-            if (!isElementNode(element)) {
-                this._onRemovalComplete(element, context);
-                return;
-            }
-            var ns = namespaceId ? this._fetchNamespace(namespaceId) : null;
-            if (ns) {
-                ns.removeNode(element, context);
+        TransitionAnimationEngine.prototype.removeNode = function (namespaceId, element, isHostElement, context) {
+            if (isElementNode(element)) {
+                var ns = namespaceId ? this._fetchNamespace(namespaceId) : null;
+                if (ns) {
+                    ns.removeNode(element, context);
+                }
+                else {
+                    this.markElementAsRemoved(namespaceId, element, false, context);
+                }
+                if (isHostElement) {
+                    var hostNS = this.namespacesByHostElement.get(element);
+                    if (hostNS && hostNS.id !== namespaceId) {
+                        hostNS.removeNode(element, context);
+                    }
+                }
             }
             else {
-                this.markElementAsRemoved(namespaceId, element, false, context);
+                this._onRemovalComplete(element, context);
             }
         };
         TransitionAnimationEngine.prototype.markElementAsRemoved = function (namespaceId, element, hasAnimation, context) {
@@ -3905,8 +3912,8 @@
         AnimationEngine.prototype.onInsert = function (namespaceId, element, parent, insertBefore) {
             this._transitionEngine.insertNode(namespaceId, element, parent, insertBefore);
         };
-        AnimationEngine.prototype.onRemove = function (namespaceId, element, context) {
-            this._transitionEngine.removeNode(namespaceId, element, context);
+        AnimationEngine.prototype.onRemove = function (namespaceId, element, context, isHostElement) {
+            this._transitionEngine.removeNode(namespaceId, element, isHostElement || false, context);
         };
         AnimationEngine.prototype.disableAnimations = function (element, disable) {
             this._transitionEngine.markElementAsDisabled(element, disable);
