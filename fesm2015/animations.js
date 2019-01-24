@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.2+5.sha-beacbfc
+ * @license Angular v7.2.2+12.sha-bc10328
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -307,8 +307,8 @@ function animate(timings, styles = null) {
  *
  * ```typescript
  * group([
- *   animate("1s", { background: "black" }))
- *   animate("2s", { color: "white" }))
+ *   animate("1s", style({ background: "black" })),
+ *   animate("2s", style({ color: "white" }))
  * ])
  * ```
  *
@@ -344,7 +344,7 @@ function group(steps, options = null) {
  * ```typescript
  * sequence([
  *   style({ opacity: 0 })),
- *   animate("1s", { opacity: 1 }))
+ *   animate("1s", style({ opacity: 1 }))
  * ])
  * ```
  *
