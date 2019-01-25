@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.0+21.sha-45bf911
+ * @license Angular v8.0.0-beta.1+43.sha-3d5a919
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -310,8 +310,8 @@
      *
      * ```typescript
      * group([
-     *   animate("1s", { background: "black" }))
-     *   animate("2s", { color: "white" }))
+     *   animate("1s", style({ background: "black" })),
+     *   animate("2s", style({ color: "white" }))
      * ])
      * ```
      *
@@ -346,7 +346,7 @@
      * ```typescript
      * sequence([
      *   style({ opacity: 0 })),
-     *   animate("1s", { opacity: 1 }))
+     *   animate("1s", style({ opacity: 1 }))
      * ])
      * ```
      *
