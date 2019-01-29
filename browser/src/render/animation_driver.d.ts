@@ -1,4 +1,3 @@
-import * as i0 from '@angular/core';
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -7,6 +6,7 @@ import * as i0 from '@angular/core';
  * found in the LICENSE file at https://angular.io/license
  */
 import { AnimationPlayer } from '@angular/animations';
+import * as i0 from "@angular/core";
 /**
  * @publicApi
  */
