@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.3+160.sha-2c6a6f1
+ * @license Angular v8.0.0-beta.3+161.sha-36df905
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -727,7 +727,7 @@
      * for a child animation to run, the parent animation must query each of the elements
      * containing child animations, and run them using this function.
      *
-     * Note that this feature designed to be used with `query()` and it will only work
+     * Note that this feature is designed to be used with `query()` and it will only work
      * with animations that are assigned using the Angular animation library. CSS keyframes
      * and transitions are not handled by this API.
      *
