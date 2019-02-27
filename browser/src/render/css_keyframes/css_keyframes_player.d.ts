@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { AnimationPlayer } from '@angular/animations';
+import { SpecialCasedStyles } from '../special_cased_styles';
 export declare const enum AnimatorControlState {
     INITIALIZED = 1,
     STARTED = 2,
@@ -21,6 +22,7 @@ export declare class CssKeyframesPlayer implements AnimationPlayer {
     private readonly _duration;
     private readonly _delay;
     private readonly _finalStyles;
+    private readonly _specialStyles?;
     private _onDoneFns;
     private _onStartFns;
     private _onDestroyFns;
@@ -37,7 +39,7 @@ export declare class CssKeyframesPlayer implements AnimationPlayer {
         [key: string]: string | number;
     }[], animationName: string, _duration: number, _delay: number, easing: string, _finalStyles: {
         [key: string]: any;
-    });
+    }, _specialStyles?: SpecialCasedStyles | null | undefined);
     onStart(fn: () => void): void;
     onDone(fn: () => void): void;
     onDestroy(fn: () => void): void;
