@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.6+15.sha-a6ae759.with-local-changes
+ * @license Angular v8.0.0-beta.6+14.sha-827e89c.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -452,13 +452,10 @@
         }
         element.setAttribute('style', styleAttrValue);
     }
-    function setStyles(element, styles, formerStyles) {
+    function setStyles(element, styles) {
         if (element['style']) {
             Object.keys(styles).forEach(function (prop) {
                 var camelProp = dashCaseToCamelCase(prop);
-                if (formerStyles && !formerStyles.hasOwnProperty(prop)) {
-                    formerStyles[prop] = element.style[camelProp];
-                }
                 element.style[camelProp] = styles[prop];
             });
             // On the server set the 'style' attribute since it's not automatically reflected.
@@ -3962,113 +3959,6 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    /**
-     * Returns an instance of `SpecialCasedStyles` if and when any special (non animateable) styles are
-     * detected.
-     *
-     * In CSS there exist properties that cannot be animated within a keyframe animation
-     * (whether it be via CSS keyframes or web-animations) and the animation implementation
-     * will ignore them. This function is designed to detect those special cased styles and
-     * return a container that will be executed at the start and end of the animation.
-     *
-     * @returns an instance of `SpecialCasedStyles` if any special styles are detected otherwise `null`
-     */
-    function packageNonAnimatableStyles(element, styles) {
-        var startStyles = null;
-        var endStyles = null;
-        if (Array.isArray(styles) && styles.length) {
-            startStyles = filterNonAnimatableStyles(styles[0]);
-            if (styles.length > 1) {
-                endStyles = filterNonAnimatableStyles(styles[styles.length - 1]);
-            }
-        }
-        else if (styles) {
-            startStyles = filterNonAnimatableStyles(styles);
-        }
-        return (startStyles || endStyles) ? new SpecialCasedStyles(element, startStyles, endStyles) :
-            null;
-    }
-    /**
-     * Designed to be executed during a keyframe-based animation to apply any special-cased styles.
-     *
-     * When started (when the `start()` method is run) then the provided `startStyles`
-     * will be applied. When finished (when the `finish()` method is called) the
-     * `endStyles` will be applied as well any any starting styles. Finally when
-     * `destroy()` is called then all styles will be removed.
-     */
-    var SpecialCasedStyles = /** @class */ (function () {
-        function SpecialCasedStyles(_element, _startStyles, _endStyles) {
-            this._element = _element;
-            this._startStyles = _startStyles;
-            this._endStyles = _endStyles;
-            this._state = 0 /* Pending */;
-            var initialStyles = SpecialCasedStyles.initialStylesByElement.get(_element);
-            if (!initialStyles) {
-                SpecialCasedStyles.initialStylesByElement.set(_element, initialStyles = {});
-            }
-            this._initialStyles = initialStyles;
-        }
-        SpecialCasedStyles.prototype.start = function () {
-            if (this._state < 1 /* Started */) {
-                if (this._startStyles) {
-                    setStyles(this._element, this._startStyles, this._initialStyles);
-                }
-                this._state = 1 /* Started */;
-            }
-        };
-        SpecialCasedStyles.prototype.finish = function () {
-            this.start();
-            if (this._state < 2 /* Finished */) {
-                setStyles(this._element, this._initialStyles);
-                if (this._endStyles) {
-                    setStyles(this._element, this._endStyles);
-                    this._endStyles = null;
-                }
-                this._state = 1 /* Started */;
-            }
-        };
-        SpecialCasedStyles.prototype.destroy = function () {
-            this.finish();
-            if (this._state < 3 /* Destroyed */) {
-                SpecialCasedStyles.initialStylesByElement.delete(this._element);
-                if (this._startStyles) {
-                    eraseStyles(this._element, this._startStyles);
-                    this._endStyles = null;
-                }
-                if (this._endStyles) {
-                    eraseStyles(this._element, this._endStyles);
-                    this._endStyles = null;
-                }
-                setStyles(this._element, this._initialStyles);
-                this._state = 3 /* Destroyed */;
-            }
-        };
-        SpecialCasedStyles.initialStylesByElement = new WeakMap();
-        return SpecialCasedStyles;
-    }());
-    function filterNonAnimatableStyles(styles) {
-        var result = null;
-        var props = Object.keys(styles);
-        for (var i = 0; i < props.length; i++) {
-            var prop = props[i];
-            if (isNonAnimatableStyle(prop)) {
-                result = result || {};
-                result[prop] = styles[prop];
-            }
-        }
-        return result;
-    }
-    function isNonAnimatableStyle(prop) {
-        return prop === 'display' || prop === 'position';
-    }
-
-    /**
-     * @license
-     * Copyright Google Inc. All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     var ELAPSED_TIME_MAX_DECIMAL_PLACES = 3;
     var ANIMATION_PROP = 'animation';
     var ANIMATIONEND_EVENT = 'animationend';
@@ -4198,14 +4088,13 @@
     var DEFAULT_FILL_MODE = 'forwards';
     var DEFAULT_EASING = 'linear';
     var CssKeyframesPlayer = /** @class */ (function () {
-        function CssKeyframesPlayer(element, keyframes, animationName, _duration, _delay, easing, _finalStyles, _specialStyles) {
+        function CssKeyframesPlayer(element, keyframes, animationName, _duration, _delay, easing, _finalStyles) {
             this.element = element;
             this.keyframes = keyframes;
             this.animationName = animationName;
             this._duration = _duration;
             this._delay = _delay;
             this._finalStyles = _finalStyles;
-            this._specialStyles = _specialStyles;
             this._onDoneFns = [];
             this._onStartFns = [];
             this._onDestroyFns = [];
@@ -4227,9 +4116,6 @@
             this._styler.destroy();
             this._flushStartFns();
             this._flushDoneFns();
-            if (this._specialStyles) {
-                this._specialStyles.destroy();
-            }
             this._onDestroyFns.forEach(function (fn) { return fn(); });
             this._onDestroyFns = [];
         };
@@ -4248,9 +4134,6 @@
             this._state = 3 /* FINISHED */;
             this._styler.finish();
             this._flushStartFns();
-            if (this._specialStyles) {
-                this._specialStyles.finish();
-            }
             this._flushDoneFns();
         };
         CssKeyframesPlayer.prototype.setPosition = function (value) { this._styler.setPosition(value); };
@@ -4271,9 +4154,6 @@
             if (!this.hasStarted()) {
                 this._flushStartFns();
                 this._state = 2 /* STARTED */;
-                if (this._specialStyles) {
-                    this._specialStyles.start();
-                }
             }
             this._styler.resume();
         };
@@ -4440,8 +4320,7 @@
             var animationName = "" + KEYFRAMES_NAME_PREFIX + this._count++;
             var kfElm = this.buildKeyframeElement(element, animationName, keyframes);
             document.querySelector('head').appendChild(kfElm);
-            var specialStyles = packageNonAnimatableStyles(element, keyframes);
-            var player = new CssKeyframesPlayer(element, keyframes, animationName, duration, delay, easing, finalStyles, specialStyles);
+            var player = new CssKeyframesPlayer(element, keyframes, animationName, duration, delay, easing, finalStyles);
             player.onDestroy(function () { return removeElement(kfElm); });
             return player;
         };
@@ -4472,11 +4351,10 @@
     }
 
     var WebAnimationsPlayer = /** @class */ (function () {
-        function WebAnimationsPlayer(element, keyframes, options, _specialStyles) {
+        function WebAnimationsPlayer(element, keyframes, options) {
             this.element = element;
             this.keyframes = keyframes;
             this.options = options;
-            this._specialStyles = _specialStyles;
             this._onDoneFns = [];
             this._onStartFns = [];
             this._onDestroyFns = [];
@@ -4537,9 +4415,6 @@
                 this._onStartFns.forEach(function (fn) { return fn(); });
                 this._onStartFns = [];
                 this._started = true;
-                if (this._specialStyles) {
-                    this._specialStyles.start();
-                }
             }
             this.domPlayer.play();
         };
@@ -4549,9 +4424,6 @@
         };
         WebAnimationsPlayer.prototype.finish = function () {
             this.init();
-            if (this._specialStyles) {
-                this._specialStyles.finish();
-            }
             this._onFinish();
             this.domPlayer.finish();
         };
@@ -4576,9 +4448,6 @@
                 this._destroyed = true;
                 this._resetDomPlayerState();
                 this._onFinish();
-                if (this._specialStyles) {
-                    this._specialStyles.destroy();
-                }
                 this._onDestroyFns.forEach(function (fn) { return fn(); });
                 this._onDestroyFns = [];
             }
@@ -4652,8 +4521,7 @@
             }
             keyframes = keyframes.map(function (styles) { return copyStyles(styles, false); });
             keyframes = balancePreviousStylesIntoKeyframes(element, keyframes, previousStyles);
-            var specialStyles = packageNonAnimatableStyles(element, keyframes);
-            return new WebAnimationsPlayer(element, keyframes, playerOptions, specialStyles);
+            return new WebAnimationsPlayer(element, keyframes, playerOptions);
         };
         return WebAnimationsDriver;
     }());
@@ -4700,7 +4568,6 @@
      * Generated bundle index. Do not edit.
      */
 
-    exports.ɵangular_packages_animations_browser_browser_a = SpecialCasedStyles;
     exports.AnimationDriver = AnimationDriver;
     exports.ɵAnimationDriver = AnimationDriver;
     exports.ɵAnimation = Animation;

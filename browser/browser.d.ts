@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.6+15.sha-a6ae759.with-local-changes
+ * @license Angular v8.0.0-beta.6+14.sha-827e89c.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -81,33 +81,6 @@ declare class ElementInstructionMap {
 
 export declare function ɵallowPreviousPlayerStylesMerge(duration: number, delay: number): boolean;
 
-/**
- * Designed to be executed during a keyframe-based animation to apply any special-cased styles.
- *
- * When started (when the `start()` method is run) then the provided `startStyles`
- * will be applied. When finished (when the `finish()` method is called) the
- * `endStyles` will be applied as well any any starting styles. Finally when
- * `destroy()` is called then all styles will be removed.
- */
-export declare class ɵangular_packages_animations_browser_browser_a {
-    private _element;
-    private _startStyles;
-    private _endStyles;
-    static initialStylesByElement: WeakMap<any, {
-        [key: string]: any;
-    }>;
-    private _state;
-    private _initialStyles;
-    constructor(_element: any, _startStyles: {
-        [key: string]: any;
-    } | null, _endStyles: {
-        [key: string]: any;
-    } | null);
-    start(): void;
-    finish(): void;
-    destroy(): void;
-}
-
 export declare class ɵAnimation {
     private _driver;
     private _animationAst;
@@ -172,7 +145,6 @@ export declare class ɵCssKeyframesPlayer implements AnimationPlayer {
     private readonly _duration;
     private readonly _delay;
     private readonly _finalStyles;
-    private readonly _specialStyles?;
     private _onDoneFns;
     private _onStartFns;
     private _onDestroyFns;
@@ -189,7 +161,7 @@ export declare class ɵCssKeyframesPlayer implements AnimationPlayer {
         [key: string]: string | number;
     }[], animationName: string, _duration: number, _delay: number, easing: string, _finalStyles: {
         [key: string]: any;
-    }, _specialStyles?: ɵangular_packages_animations_browser_browser_a | null | undefined);
+    });
     onStart(fn: () => void): void;
     onDone(fn: () => void): void;
     onDestroy(fn: () => void): void;
@@ -259,7 +231,6 @@ export declare class ɵWebAnimationsPlayer implements AnimationPlayer {
     options: {
         [key: string]: string | number;
     };
-    private _specialStyles?;
     private _onDoneFns;
     private _onStartFns;
     private _onDestroyFns;
@@ -280,7 +251,7 @@ export declare class ɵWebAnimationsPlayer implements AnimationPlayer {
         [key: string]: string | number;
     }[], options: {
         [key: string]: string | number;
-    }, _specialStyles?: ɵangular_packages_animations_browser_browser_a | null | undefined);
+    });
     private _onFinish;
     init(): void;
     private _buildPlayer;
