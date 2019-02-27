@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { AnimationPlayer } from '@angular/animations';
+import { SpecialCasedStyles } from '../special_cased_styles';
 import { DOMAnimation } from './dom_animation';
 export declare class WebAnimationsPlayer implements AnimationPlayer {
     element: any;
@@ -15,6 +16,7 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     options: {
         [key: string]: string | number;
     };
+    private _specialStyles?;
     private _onDoneFns;
     private _onStartFns;
     private _onDestroyFns;
@@ -35,7 +37,7 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
         [key: string]: string | number;
     }[], options: {
         [key: string]: string | number;
-    });
+    }, _specialStyles?: SpecialCasedStyles | null | undefined);
     private _onFinish;
     init(): void;
     private _buildPlayer;

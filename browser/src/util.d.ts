@@ -30,7 +30,9 @@ export declare function copyObj(obj: {
 };
 export declare function normalizeStyles(styles: ɵStyleData | ɵStyleData[]): ɵStyleData;
 export declare function copyStyles(styles: ɵStyleData, readPrototype: boolean, destination?: ɵStyleData): ɵStyleData;
-export declare function setStyles(element: any, styles: ɵStyleData): void;
+export declare function setStyles(element: any, styles: ɵStyleData, formerStyles?: {
+    [key: string]: any;
+}): void;
 export declare function eraseStyles(element: any, styles: ɵStyleData): void;
 export declare function normalizeAnimationEntry(steps: AnimationMetadata | AnimationMetadata[]): AnimationMetadata;
 export declare function validateStyleParams(value: string | number, options: AnimationOptions, errors: any[]): void;
