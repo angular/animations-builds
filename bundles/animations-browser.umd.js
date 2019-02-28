@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.7+5.sha-a54a752.with-local-changes
+ * @license Angular v7.2.7+6.sha-b06847f.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4383,7 +4383,7 @@
             var tab = '';
             keyframes.forEach(function (kf) {
                 tab = TAB_SPACE;
-                var offset = parseFloat(kf.offset);
+                var offset = parseFloat(kf['offset']);
                 keyframeStr += "" + tab + offset * 100 + "% {\n";
                 tab += TAB_SPACE;
                 Object.keys(kf).forEach(function (prop) {
