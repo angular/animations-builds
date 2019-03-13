@@ -1,12 +1,12 @@
 /**
- * @license Angular v8.0.0-beta.8+1.sha-940fbf7.with-local-changes
+ * @license Angular v8.0.0-beta.8+9.sha-75748d6.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * An injectable service that produces an animation sequence programmatically within an
@@ -68,7 +68,7 @@ class AnimationFactory {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Specifies automatic styling.
@@ -912,7 +912,7 @@ function stagger(timings, animation) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -929,7 +929,7 @@ function scheduleMicroTask(cb) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * An empty programmatic controller for reusable animations.
@@ -964,7 +964,11 @@ class NoopAnimationPlayer {
     _onFinish() {
         if (!this._finished) {
             this._finished = true;
-            this._onDoneFns.forEach(fn => fn());
+            this._onDoneFns.forEach((/**
+             * @param {?} fn
+             * @return {?}
+             */
+            fn => fn()));
             this._onDoneFns = [];
         }
     }
@@ -1005,13 +1009,20 @@ class NoopAnimationPlayer {
      * \@internal
      * @return {?}
      */
-    triggerMicrotask() { scheduleMicroTask(() => this._onFinish()); }
+    triggerMicrotask() { scheduleMicroTask((/**
+     * @return {?}
+     */
+    () => this._onFinish())); }
     /**
      * @private
      * @return {?}
      */
     _onStart() {
-        this._onStartFns.forEach(fn => fn());
+        this._onStartFns.forEach((/**
+         * @param {?} fn
+         * @return {?}
+         */
+        fn => fn()));
         this._onStartFns = [];
     }
     /**
@@ -1036,7 +1047,11 @@ class NoopAnimationPlayer {
                 this._onStart();
             }
             this.finish();
-            this._onDestroyFns.forEach(fn => fn());
+            this._onDestroyFns.forEach((/**
+             * @param {?} fn
+             * @return {?}
+             */
+            fn => fn()));
             this._onDestroyFns = [];
         }
     }
@@ -1061,14 +1076,18 @@ class NoopAnimationPlayer {
     triggerCallback(phaseName) {
         /** @type {?} */
         const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
-        methods.forEach(fn => fn());
+        methods.forEach((/**
+         * @param {?} fn
+         * @return {?}
+         */
+        fn => fn()));
         methods.length = 0;
     }
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * A programmatic controller for a group of reusable animations.
@@ -1101,28 +1120,49 @@ class AnimationGroupPlayer {
         /** @type {?} */
         const total = this.players.length;
         if (total == 0) {
-            scheduleMicroTask(() => this._onFinish());
+            scheduleMicroTask((/**
+             * @return {?}
+             */
+            () => this._onFinish()));
         }
         else {
-            this.players.forEach(player => {
-                player.onDone(() => {
+            this.players.forEach((/**
+             * @param {?} player
+             * @return {?}
+             */
+            player => {
+                player.onDone((/**
+                 * @return {?}
+                 */
+                () => {
                     if (++doneCount == total) {
                         this._onFinish();
                     }
-                });
-                player.onDestroy(() => {
+                }));
+                player.onDestroy((/**
+                 * @return {?}
+                 */
+                () => {
                     if (++destroyCount == total) {
                         this._onDestroy();
                     }
-                });
-                player.onStart(() => {
+                }));
+                player.onStart((/**
+                 * @return {?}
+                 */
+                () => {
                     if (++startCount == total) {
                         this._onStart();
                     }
-                });
-            });
+                }));
+            }));
         }
-        this.totalTime = this.players.reduce((time, player) => Math.max(time, player.totalTime), 0);
+        this.totalTime = this.players.reduce((/**
+         * @param {?} time
+         * @param {?} player
+         * @return {?}
+         */
+        (time, player) => Math.max(time, player.totalTime)), 0);
     }
     /**
      * @private
@@ -1131,14 +1171,22 @@ class AnimationGroupPlayer {
     _onFinish() {
         if (!this._finished) {
             this._finished = true;
-            this._onDoneFns.forEach(fn => fn());
+            this._onDoneFns.forEach((/**
+             * @param {?} fn
+             * @return {?}
+             */
+            fn => fn()));
             this._onDoneFns = [];
         }
     }
     /**
      * @return {?}
      */
-    init() { this.players.forEach(player => player.init()); }
+    init() { this.players.forEach((/**
+     * @param {?} player
+     * @return {?}
+     */
+    player => player.init())); }
     /**
      * @param {?} fn
      * @return {?}
@@ -1151,7 +1199,11 @@ class AnimationGroupPlayer {
     _onStart() {
         if (!this.hasStarted()) {
             this._started = true;
-            this._onStartFns.forEach(fn => fn());
+            this._onStartFns.forEach((/**
+             * @param {?} fn
+             * @return {?}
+             */
+            fn => fn()));
             this._onStartFns = [];
         }
     }
@@ -1177,22 +1229,38 @@ class AnimationGroupPlayer {
             this.init();
         }
         this._onStart();
-        this.players.forEach(player => player.play());
+        this.players.forEach((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => player.play()));
     }
     /**
      * @return {?}
      */
-    pause() { this.players.forEach(player => player.pause()); }
+    pause() { this.players.forEach((/**
+     * @param {?} player
+     * @return {?}
+     */
+    player => player.pause())); }
     /**
      * @return {?}
      */
-    restart() { this.players.forEach(player => player.restart()); }
+    restart() { this.players.forEach((/**
+     * @param {?} player
+     * @return {?}
+     */
+    player => player.restart())); }
     /**
      * @return {?}
      */
     finish() {
         this._onFinish();
-        this.players.forEach(player => player.finish());
+        this.players.forEach((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => player.finish()));
     }
     /**
      * @return {?}
@@ -1206,8 +1274,16 @@ class AnimationGroupPlayer {
         if (!this._destroyed) {
             this._destroyed = true;
             this._onFinish();
-            this.players.forEach(player => player.destroy());
-            this._onDestroyFns.forEach(fn => fn());
+            this.players.forEach((/**
+             * @param {?} player
+             * @return {?}
+             */
+            player => player.destroy()));
+            this._onDestroyFns.forEach((/**
+             * @param {?} fn
+             * @return {?}
+             */
+            fn => fn()));
             this._onDestroyFns = [];
         }
     }
@@ -1215,7 +1291,11 @@ class AnimationGroupPlayer {
      * @return {?}
      */
     reset() {
-        this.players.forEach(player => player.reset());
+        this.players.forEach((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => player.reset()));
         this._destroyed = false;
         this._finished = false;
         this._started = false;
@@ -1227,11 +1307,15 @@ class AnimationGroupPlayer {
     setPosition(p) {
         /** @type {?} */
         const timeAtPosition = p * this.totalTime;
-        this.players.forEach(player => {
+        this.players.forEach((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => {
             /** @type {?} */
             const position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
             player.setPosition(position);
-        });
+        }));
     }
     /**
      * @return {?}
@@ -1239,22 +1323,30 @@ class AnimationGroupPlayer {
     getPosition() {
         /** @type {?} */
         let min = 0;
-        this.players.forEach(player => {
+        this.players.forEach((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => {
             /** @type {?} */
             const p = player.getPosition();
             min = Math.min(p, min);
-        });
+        }));
         return min;
     }
     /**
      * @return {?}
      */
     beforeDestroy() {
-        this.players.forEach(player => {
+        this.players.forEach((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => {
             if (player.beforeDestroy) {
                 player.beforeDestroy();
             }
-        });
+        }));
     }
     /**
      * \@internal
@@ -1264,31 +1356,35 @@ class AnimationGroupPlayer {
     triggerCallback(phaseName) {
         /** @type {?} */
         const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
-        methods.forEach(fn => fn());
+        methods.forEach((/**
+         * @param {?} fn
+         * @return {?}
+         */
+        fn => fn()));
         methods.length = 0;
     }
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const ɵPRE_STYLE = '!';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**

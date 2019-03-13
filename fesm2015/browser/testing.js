@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.8+1.sha-940fbf7.with-local-changes
+ * @license Angular v8.0.0-beta.8+9.sha-75748d6.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -9,7 +9,7 @@ import { ɵvalidateStyleProperty, ɵmatchesElement, ɵcontainsElement, ɵinvokeQ
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@publicApi
@@ -95,13 +95,21 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         this._onInitFns = [];
         this.currentSnapshot = {};
         if (ɵallowPreviousPlayerStylesMerge(duration, delay)) {
-            previousPlayers.forEach(player => {
+            previousPlayers.forEach((/**
+             * @param {?} player
+             * @return {?}
+             */
+            player => {
                 if (player instanceof MockAnimationPlayer) {
                     /** @type {?} */
                     const styles = player.currentSnapshot;
-                    Object.keys(styles).forEach(prop => this.previousStyles[prop] = styles[prop]);
+                    Object.keys(styles).forEach((/**
+                     * @param {?} prop
+                     * @return {?}
+                     */
+                    prop => this.previousStyles[prop] = styles[prop]));
                 }
-            });
+            }));
         }
     }
     /* @internal */
@@ -116,7 +124,11 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
      */
     init() {
         super.init();
-        this._onInitFns.forEach(fn => fn());
+        this._onInitFns.forEach((/**
+         * @param {?} fn
+         * @return {?}
+         */
+        fn => fn()));
         this._onInitFns = [];
     }
     /**
@@ -155,20 +167,32 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
     beforeDestroy() {
         /** @type {?} */
         const captures = {};
-        Object.keys(this.previousStyles).forEach(prop => {
+        Object.keys(this.previousStyles).forEach((/**
+         * @param {?} prop
+         * @return {?}
+         */
+        prop => {
             captures[prop] = this.previousStyles[prop];
-        });
+        }));
         if (this.hasStarted()) {
             // when assembling the captured styles, it's important that
             // we build the keyframe styles in the following order:
             // {other styles within keyframes, ... previousStyles }
-            this.keyframes.forEach(kf => {
-                Object.keys(kf).forEach(prop => {
+            this.keyframes.forEach((/**
+             * @param {?} kf
+             * @return {?}
+             */
+            kf => {
+                Object.keys(kf).forEach((/**
+                 * @param {?} prop
+                 * @return {?}
+                 */
+                prop => {
                     if (prop != 'offset') {
                         captures[prop] = this.__finished ? kf[prop] : AUTO_STYLE;
                     }
-                });
-            });
+                }));
+            }));
         }
         this.currentSnapshot = captures;
     }
@@ -176,17 +200,17 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
