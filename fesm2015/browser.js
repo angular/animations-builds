@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.8+8.sha-9a7f560.with-local-changes
+ * @license Angular v8.0.0-beta.8+11.sha-7b20cec.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @return {?}
@@ -55,14 +55,22 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles = 
     let previousOffset = -1;
     /** @type {?} */
     let previousKeyframe = null;
-    keyframes.forEach(kf => {
+    keyframes.forEach((/**
+     * @param {?} kf
+     * @return {?}
+     */
+    kf => {
         /** @type {?} */
         const offset = (/** @type {?} */ (kf['offset']));
         /** @type {?} */
         const isSameOffset = offset == previousOffset;
         /** @type {?} */
         const normalizedKeyframe = (isSameOffset && previousKeyframe) || {};
-        Object.keys(kf).forEach(prop => {
+        Object.keys(kf).forEach((/**
+         * @param {?} prop
+         * @return {?}
+         */
+        prop => {
             /** @type {?} */
             let normalizedProp = prop;
             /** @type {?} */
@@ -83,13 +91,13 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles = 
                 }
             }
             normalizedKeyframe[normalizedProp] = normalizedValue;
-        });
+        }));
         if (!isSameOffset) {
             normalizedKeyframes.push(normalizedKeyframe);
         }
         previousKeyframe = normalizedKeyframe;
         previousOffset = offset;
-    });
+    }));
     if (errors.length) {
         /** @type {?} */
         const LINE_START = '\n - ';
@@ -107,13 +115,22 @@ function normalizeKeyframes(driver, normalizer, element, keyframes, preStyles = 
 function listenOnPlayer(player, eventName, event, callback) {
     switch (eventName) {
         case 'start':
-            player.onStart(() => callback(event && copyAnimationEvent(event, 'start', player)));
+            player.onStart((/**
+             * @return {?}
+             */
+            () => callback(event && copyAnimationEvent(event, 'start', player))));
             break;
         case 'done':
-            player.onDone(() => callback(event && copyAnimationEvent(event, 'done', player)));
+            player.onDone((/**
+             * @return {?}
+             */
+            () => callback(event && copyAnimationEvent(event, 'done', player))));
             break;
         case 'destroy':
-            player.onDestroy(() => callback(event && copyAnimationEvent(event, 'destroy', player)));
+            player.onDestroy((/**
+             * @return {?}
+             */
+            () => callback(event && copyAnimationEvent(event, 'destroy', player))));
             break;
     }
 }
@@ -187,22 +204,48 @@ function parseTimelineCommand(command) {
     return [id, action];
 }
 /** @type {?} */
-let _contains = (elm1, elm2) => false;
+let _contains = (/**
+ * @param {?} elm1
+ * @param {?} elm2
+ * @return {?}
+ */
+(elm1, elm2) => false);
 /** @type {?} */
-let _matches = (element, selector) => false;
+let _matches = (/**
+ * @param {?} element
+ * @param {?} selector
+ * @return {?}
+ */
+(element, selector) => false);
 /** @type {?} */
-let _query = (element, selector, multi) => {
+let _query = (/**
+ * @param {?} element
+ * @param {?} selector
+ * @param {?} multi
+ * @return {?}
+ */
+(element, selector, multi) => {
     return [];
-};
+});
 // Define utility methods for browsers and platform-server(domino) where Element
 // and utility methods exist.
 /** @type {?} */
 const _isNode = isNode();
 if (_isNode || typeof Element !== 'undefined') {
     // this is well supported in all browsers
-    _contains = (elm1, elm2) => { return (/** @type {?} */ (elm1.contains(elm2))); };
+    _contains = (/**
+     * @param {?} elm1
+     * @param {?} elm2
+     * @return {?}
+     */
+    (elm1, elm2) => { return (/** @type {?} */ (elm1.contains(elm2))); });
     if (_isNode || Element.prototype.matches) {
-        _matches = (element, selector) => element.matches(selector);
+        _matches = (/**
+         * @param {?} element
+         * @param {?} selector
+         * @return {?}
+         */
+        (element, selector) => element.matches(selector));
     }
     else {
         /** @type {?} */
@@ -211,10 +254,21 @@ if (_isNode || typeof Element !== 'undefined') {
         const fn = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
             proto.oMatchesSelector || proto.webkitMatchesSelector;
         if (fn) {
-            _matches = (element, selector) => fn.apply(element, [selector]);
+            _matches = (/**
+             * @param {?} element
+             * @param {?} selector
+             * @return {?}
+             */
+            (element, selector) => fn.apply(element, [selector]));
         }
     }
-    _query = (element, selector, multi) => {
+    _query = (/**
+     * @param {?} element
+     * @param {?} selector
+     * @param {?} multi
+     * @return {?}
+     */
+    (element, selector, multi) => {
         /** @type {?} */
         let results = [];
         if (multi) {
@@ -228,7 +282,7 @@ if (_isNode || typeof Element !== 'undefined') {
             }
         }
         return results;
-    };
+    });
 }
 /**
  * @param {?} prop
@@ -286,17 +340,21 @@ const invokeQuery = _query;
 function hypenatePropsObject(object) {
     /** @type {?} */
     const newObj = {};
-    Object.keys(object).forEach(prop => {
+    Object.keys(object).forEach((/**
+     * @param {?} prop
+     * @return {?}
+     */
+    prop => {
         /** @type {?} */
         const newProp = prop.replace(/([a-z])([A-Z])/g, '$1-$2');
         newObj[newProp] = object[prop];
-    });
+    }));
     return newObj;
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@publicApi
@@ -366,7 +424,7 @@ AnimationDriver.NOOP = new NoopAnimationDriver();
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const ONE_SECOND = 1000;
@@ -485,7 +543,11 @@ function parseTimeExpression(exp, errors, allowNegativeValues) {
  * @return {?}
  */
 function copyObj(obj, destination = {}) {
-    Object.keys(obj).forEach(prop => { destination[prop] = obj[prop]; });
+    Object.keys(obj).forEach((/**
+     * @param {?} prop
+     * @return {?}
+     */
+    prop => { destination[prop] = obj[prop]; }));
     return destination;
 }
 /**
@@ -496,7 +558,11 @@ function normalizeStyles(styles) {
     /** @type {?} */
     const normalizedStyles = {};
     if (Array.isArray(styles)) {
-        styles.forEach(data => copyStyles(data, false, normalizedStyles));
+        styles.forEach((/**
+         * @param {?} data
+         * @return {?}
+         */
+        data => copyStyles(data, false, normalizedStyles)));
     }
     else {
         copyStyles(styles, false, normalizedStyles);
@@ -574,14 +640,18 @@ function writeStyleAttribute(element) {
  */
 function setStyles(element, styles, formerStyles) {
     if (element['style']) {
-        Object.keys(styles).forEach(prop => {
+        Object.keys(styles).forEach((/**
+         * @param {?} prop
+         * @return {?}
+         */
+        prop => {
             /** @type {?} */
             const camelProp = dashCaseToCamelCase(prop);
             if (formerStyles && !formerStyles.hasOwnProperty(prop)) {
                 formerStyles[prop] = element.style[camelProp];
             }
             element.style[camelProp] = styles[prop];
-        });
+        }));
         // On the server set the 'style' attribute since it's not automatically reflected.
         if (isNode()) {
             writeStyleAttribute(element);
@@ -595,11 +665,15 @@ function setStyles(element, styles, formerStyles) {
  */
 function eraseStyles(element, styles) {
     if (element['style']) {
-        Object.keys(styles).forEach(prop => {
+        Object.keys(styles).forEach((/**
+         * @param {?} prop
+         * @return {?}
+         */
+        prop => {
             /** @type {?} */
             const camelProp = dashCaseToCamelCase(prop);
             element.style[camelProp] = '';
-        });
+        }));
         // On the server set the 'style' attribute since it's not automatically reflected.
         if (isNode()) {
             writeStyleAttribute(element);
@@ -630,11 +704,15 @@ function validateStyleParams(value, options, errors) {
     /** @type {?} */
     const matches = extractStyleParams(value);
     if (matches.length) {
-        matches.forEach(varName => {
+        matches.forEach((/**
+         * @param {?} varName
+         * @return {?}
+         */
+        varName => {
             if (!params.hasOwnProperty(varName)) {
                 errors.push(`Unable to resolve the local animation param ${varName} in the given list of values`);
             }
-        });
+        }));
     }
 }
 /** @type {?} */
@@ -668,7 +746,12 @@ function interpolateParams(value, params, errors) {
     /** @type {?} */
     const original = value.toString();
     /** @type {?} */
-    const str = original.replace(PARAM_REGEX, (_, varName) => {
+    const str = original.replace(PARAM_REGEX, (/**
+     * @param {?} _
+     * @param {?} varName
+     * @return {?}
+     */
+    (_, varName) => {
         /** @type {?} */
         let localVal = params[varName];
         // this means that the value was never overridden by the data passed in by the user
@@ -677,7 +760,7 @@ function interpolateParams(value, params, errors) {
             localVal = '';
         }
         return localVal.toString();
-    });
+    }));
     // we do this to assert that numeric values stay as they are
     return str == original ? value : str;
 }
@@ -703,7 +786,11 @@ const DASH_CASE_REGEXP = /-+([a-z0-9])/g;
  * @return {?}
  */
 function dashCaseToCamelCase(input) {
-    return input.replace(DASH_CASE_REGEXP, (...m) => m[1].toUpperCase());
+    return input.replace(DASH_CASE_REGEXP, (/**
+     * @param {...?} m
+     * @return {?}
+     */
+    (...m) => m[1].toUpperCase()));
 }
 /**
  * @param {?} input
@@ -734,18 +821,26 @@ function balancePreviousStylesIntoKeyframes(element, keyframes, previousStyles) 
         let startingKeyframe = keyframes[0];
         /** @type {?} */
         let missingStyleProps = [];
-        previousStyleProps.forEach(prop => {
+        previousStyleProps.forEach((/**
+         * @param {?} prop
+         * @return {?}
+         */
+        prop => {
             if (!startingKeyframe.hasOwnProperty(prop)) {
                 missingStyleProps.push(prop);
             }
             startingKeyframe[prop] = previousStyles[prop];
-        });
+        }));
         if (missingStyleProps.length) {
             // tslint:disable-next-line
             for (var i = 1; i < keyframes.length; i++) {
                 /** @type {?} */
                 let kf = keyframes[i];
-                missingStyleProps.forEach(function (prop) { kf[prop] = computeStyle(element, prop); });
+                missingStyleProps.forEach((/**
+                 * @param {?} prop
+                 * @return {?}
+                 */
+                function (prop) { kf[prop] = computeStyle(element, prop); }));
             }
         }
     }
@@ -800,7 +895,7 @@ function computeStyle(element, prop) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -822,7 +917,11 @@ function parseTransitionExpr(transitionValue, errors) {
     if (typeof transitionValue == 'string') {
         ((/** @type {?} */ (transitionValue)))
             .split(/\s*,\s*/)
-            .forEach(str => parseInnerTransitionStr(str, expressions, errors));
+            .forEach((/**
+         * @param {?} str
+         * @return {?}
+         */
+        str => parseInnerTransitionStr(str, expressions, errors)));
     }
     else {
         expressions.push((/** @type {?} */ (transitionValue)));
@@ -876,9 +975,19 @@ function parseAnimationAlias(alias, errors) {
         case ':leave':
             return '* => void';
         case ':increment':
-            return (fromState, toState) => parseFloat(toState) > parseFloat(fromState);
+            return (/**
+             * @param {?} fromState
+             * @param {?} toState
+             * @return {?}
+             */
+            (fromState, toState) => parseFloat(toState) > parseFloat(fromState));
         case ':decrement':
-            return (fromState, toState) => parseFloat(toState) < parseFloat(fromState);
+            return (/**
+             * @param {?} fromState
+             * @param {?} toState
+             * @return {?}
+             */
+            (fromState, toState) => parseFloat(toState) < parseFloat(fromState));
         default:
             errors.push(`The transition alias value "${alias}" is not supported`);
             return '* => *';
@@ -902,7 +1011,12 @@ function makeLambdaFromStates(lhs, rhs) {
     const LHS_MATCH_BOOLEAN = TRUE_BOOLEAN_VALUES.has(lhs) || FALSE_BOOLEAN_VALUES.has(lhs);
     /** @type {?} */
     const RHS_MATCH_BOOLEAN = TRUE_BOOLEAN_VALUES.has(rhs) || FALSE_BOOLEAN_VALUES.has(rhs);
-    return (fromState, toState) => {
+    return (/**
+     * @param {?} fromState
+     * @param {?} toState
+     * @return {?}
+     */
+    (fromState, toState) => {
         /** @type {?} */
         let lhsMatch = lhs == ANY_STATE || lhs == fromState;
         /** @type {?} */
@@ -914,12 +1028,12 @@ function makeLambdaFromStates(lhs, rhs) {
             rhsMatch = toState ? TRUE_BOOLEAN_VALUES.has(rhs) : FALSE_BOOLEAN_VALUES.has(rhs);
         }
         return lhsMatch && rhsMatch;
-    };
+    });
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const SELF_TOKEN = ':self';
@@ -1018,17 +1132,25 @@ class AnimationAstBuilderVisitor {
         if (metadata.name.charAt(0) == '@') {
             context.errors.push('animation triggers cannot be prefixed with an `@` sign (e.g. trigger(\'@foo\', [...]))');
         }
-        metadata.definitions.forEach(def => {
+        metadata.definitions.forEach((/**
+         * @param {?} def
+         * @return {?}
+         */
+        def => {
             this._resetContextStyleTimingState(context);
             if (def.type == 0 /* State */) {
                 /** @type {?} */
                 const stateDef = (/** @type {?} */ (def));
                 /** @type {?} */
                 const name = stateDef.name;
-                name.toString().split(/\s*,\s*/).forEach(n => {
+                name.toString().split(/\s*,\s*/).forEach((/**
+                 * @param {?} n
+                 * @return {?}
+                 */
+                n => {
                     stateDef.name = n;
                     states.push(this.visitState(stateDef, context));
-                });
+                }));
                 stateDef.name = name;
             }
             else if (def.type == 1 /* Transition */) {
@@ -1041,7 +1163,7 @@ class AnimationAstBuilderVisitor {
             else {
                 context.errors.push('only state() and transition() definitions can sit inside of a trigger()');
             }
-        });
+        }));
         return {
             type: 7 /* Trigger */,
             name: metadata.name, states, transitions, queryCount, depCount,
@@ -1063,19 +1185,31 @@ class AnimationAstBuilderVisitor {
             const missingSubs = new Set();
             /** @type {?} */
             const params = astParams || {};
-            styleAst.styles.forEach(value => {
+            styleAst.styles.forEach((/**
+             * @param {?} value
+             * @return {?}
+             */
+            value => {
                 if (isObject(value)) {
                     /** @type {?} */
                     const stylesObj = (/** @type {?} */ (value));
-                    Object.keys(stylesObj).forEach(prop => {
-                        extractStyleParams(stylesObj[prop]).forEach(sub => {
+                    Object.keys(stylesObj).forEach((/**
+                     * @param {?} prop
+                     * @return {?}
+                     */
+                    prop => {
+                        extractStyleParams(stylesObj[prop]).forEach((/**
+                         * @param {?} sub
+                         * @return {?}
+                         */
+                        sub => {
                             if (!params.hasOwnProperty(sub)) {
                                 missingSubs.add(sub);
                             }
-                        });
-                    });
+                        }));
+                    }));
                 }
-            });
+            }));
             if (missingSubs.size) {
                 /** @type {?} */
                 const missingSubsArr = iteratorToArray(missingSubs.values());
@@ -1118,7 +1252,11 @@ class AnimationAstBuilderVisitor {
     visitSequence(metadata, context) {
         return {
             type: 2 /* Sequence */,
-            steps: metadata.steps.map(s => visitDslNode(this, s, context)),
+            steps: metadata.steps.map((/**
+             * @param {?} s
+             * @return {?}
+             */
+            s => visitDslNode(this, s, context))),
             options: normalizeAnimationOptions(metadata.options)
         };
     }
@@ -1133,13 +1271,17 @@ class AnimationAstBuilderVisitor {
         /** @type {?} */
         let furthestTime = 0;
         /** @type {?} */
-        const steps = metadata.steps.map(step => {
+        const steps = metadata.steps.map((/**
+         * @param {?} step
+         * @return {?}
+         */
+        step => {
             context.currentTime = currentTime;
             /** @type {?} */
             const innerAst = visitDslNode(this, step, context);
             furthestTime = Math.max(furthestTime, context.currentTime);
             return innerAst;
-        });
+        }));
         context.currentTime = furthestTime;
         return {
             type: 3 /* Group */,
@@ -1212,7 +1354,11 @@ class AnimationAstBuilderVisitor {
         /** @type {?} */
         const styles = [];
         if (Array.isArray(metadata.styles)) {
-            ((/** @type {?} */ (metadata.styles))).forEach(styleTuple => {
+            ((/** @type {?} */ (metadata.styles))).forEach((/**
+             * @param {?} styleTuple
+             * @return {?}
+             */
+            styleTuple => {
                 if (typeof styleTuple == 'string') {
                     if (styleTuple == AUTO_STYLE) {
                         styles.push((/** @type {?} */ (styleTuple)));
@@ -1224,7 +1370,7 @@ class AnimationAstBuilderVisitor {
                 else {
                     styles.push((/** @type {?} */ (styleTuple)));
                 }
-            });
+            }));
         }
         else {
             styles.push(metadata.styles);
@@ -1233,7 +1379,11 @@ class AnimationAstBuilderVisitor {
         let containsDynamicStyles = false;
         /** @type {?} */
         let collectedEasing = null;
-        styles.forEach(styleData => {
+        styles.forEach((/**
+         * @param {?} styleData
+         * @return {?}
+         */
+        styleData => {
             if (isObject(styleData)) {
                 /** @type {?} */
                 const styleMap = (/** @type {?} */ (styleData));
@@ -1254,7 +1404,7 @@ class AnimationAstBuilderVisitor {
                     }
                 }
             }
-        });
+        }));
         return {
             type: 6 /* Style */,
             styles,
@@ -1279,10 +1429,18 @@ class AnimationAstBuilderVisitor {
         if (timings && startTime > 0) {
             startTime -= timings.duration + timings.delay;
         }
-        ast.styles.forEach(tuple => {
+        ast.styles.forEach((/**
+         * @param {?} tuple
+         * @return {?}
+         */
+        tuple => {
             if (typeof tuple == 'string')
                 return;
-            Object.keys(tuple).forEach(prop => {
+            Object.keys(tuple).forEach((/**
+             * @param {?} prop
+             * @return {?}
+             */
+            prop => {
                 if (!this._driver.validateStyleProperty(prop)) {
                     context.errors.push(`The provided animation property "${prop}" is not a supported CSS property for animations`);
                     return;
@@ -1310,8 +1468,8 @@ class AnimationAstBuilderVisitor {
                 if (context.options) {
                     validateStyleParams(tuple[prop], context.options, context.errors);
                 }
-            });
-        });
+            }));
+        }));
     }
     /**
      * @param {?} metadata
@@ -1338,7 +1496,11 @@ class AnimationAstBuilderVisitor {
         /** @type {?} */
         let previousOffset = 0;
         /** @type {?} */
-        const keyframes = metadata.steps.map(styles => {
+        const keyframes = metadata.steps.map((/**
+         * @param {?} styles
+         * @return {?}
+         */
+        styles => {
             /** @type {?} */
             const style$$1 = this._makeStyleAst(styles, context);
             /** @type {?} */
@@ -1354,7 +1516,7 @@ class AnimationAstBuilderVisitor {
             previousOffset = offset;
             offsets.push(offset);
             return style$$1;
-        });
+        }));
         if (keyframesOutOfRange) {
             context.errors.push(`Please ensure that all keyframe offsets are between 0 and 1`);
         }
@@ -1379,7 +1541,12 @@ class AnimationAstBuilderVisitor {
         const currentAnimateTimings = (/** @type {?} */ (context.currentAnimateTimings));
         /** @type {?} */
         const animateDuration = currentAnimateTimings.duration;
-        keyframes.forEach((kf, i) => {
+        keyframes.forEach((/**
+         * @param {?} kf
+         * @param {?} i
+         * @return {?}
+         */
+        (kf, i) => {
             /** @type {?} */
             const offset = generatedOffset > 0 ? (i == limit ? 1 : (generatedOffset * i)) : offsets[i];
             /** @type {?} */
@@ -1389,7 +1556,7 @@ class AnimationAstBuilderVisitor {
             this._validateStyleAst(kf, context);
             kf.offset = offset;
             ast.styles.push(kf);
-        });
+        }));
         return ast;
     }
     /**
@@ -1483,13 +1650,21 @@ class AnimationAstBuilderVisitor {
  */
 function normalizeSelector(selector) {
     /** @type {?} */
-    const hasAmpersand = selector.split(/\s*,\s*/).find(token => token == SELF_TOKEN) ? true : false;
+    const hasAmpersand = selector.split(/\s*,\s*/).find((/**
+     * @param {?} token
+     * @return {?}
+     */
+    token => token == SELF_TOKEN)) ? true : false;
     if (hasAmpersand) {
         selector = selector.replace(SELF_TOKEN_REGEX, '');
     }
     // the :enter and :leave selectors are filled in at runtime during timeline building
     selector = selector.replace(/@\*/g, NG_TRIGGER_SELECTOR)
-        .replace(/@\w+/g, match => NG_TRIGGER_SELECTOR + '-' + match.substr(1))
+        .replace(/@\w+/g, (/**
+     * @param {?} match
+     * @return {?}
+     */
+    match => NG_TRIGGER_SELECTOR + '-' + match.substr(1)))
         .replace(/:animating/g, NG_ANIMATING_SELECTOR);
     return [selector, hasAmpersand];
 }
@@ -1527,14 +1702,18 @@ function consumeOffset(styles) {
     /** @type {?} */
     let offset = null;
     if (Array.isArray(styles)) {
-        styles.forEach(styleTuple => {
+        styles.forEach((/**
+         * @param {?} styleTuple
+         * @return {?}
+         */
+        styleTuple => {
             if (isObject(styleTuple) && styleTuple.hasOwnProperty('offset')) {
                 /** @type {?} */
                 const obj = (/** @type {?} */ (styleTuple));
                 offset = parseFloat((/** @type {?} */ (obj['offset'])));
                 delete obj['offset'];
             }
-        });
+        }));
     }
     else if (isObject(styles) && styles.hasOwnProperty('offset')) {
         /** @type {?} */
@@ -1570,7 +1749,11 @@ function constructTimingAst(value, errors) {
     /** @type {?} */
     const strValue = (/** @type {?} */ (value));
     /** @type {?} */
-    const isDynamic = strValue.split(/\s+/).some(v => v.charAt(0) == '{' && v.charAt(1) == '{');
+    const isDynamic = strValue.split(/\s+/).some((/**
+     * @param {?} v
+     * @return {?}
+     */
+    v => v.charAt(0) == '{' && v.charAt(1) == '{'));
     if (isDynamic) {
         /** @type {?} */
         const ast = (/** @type {?} */ (makeTimingAst(0, 0, '')));
@@ -1609,7 +1792,7 @@ function makeTimingAst(duration, delay, easing) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} element
@@ -1637,7 +1820,7 @@ function createTimelineInstruction(element, keyframes, preStyleProps, postStyleP
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class ElementInstructionMap {
     constructor() {
@@ -1684,7 +1867,7 @@ class ElementInstructionMap {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const ONE_FRAME_IN_MILLISECONDS = 1;
@@ -1819,7 +2002,11 @@ class AnimationTimelineBuilderVisitor {
         visitDslNode(this, ast, context);
         // this checks to see if an actual animation happened
         /** @type {?} */
-        const timelines = context.timelines.filter(timeline => timeline.containsAnimation());
+        const timelines = context.timelines.filter((/**
+         * @param {?} timeline
+         * @return {?}
+         */
+        timeline => timeline.containsAnimation()));
         if (timelines.length && Object.keys(finalStyles).length) {
             /** @type {?} */
             const tl = timelines[timelines.length - 1];
@@ -1827,7 +2014,11 @@ class AnimationTimelineBuilderVisitor {
                 tl.setStyles([finalStyles], null, context.errors, options);
             }
         }
-        return timelines.length ? timelines.map(timeline => timeline.buildKeyframes()) :
+        return timelines.length ? timelines.map((/**
+         * @param {?} timeline
+         * @return {?}
+         */
+        timeline => timeline.buildKeyframes())) :
             [createTimelineInstruction(rootElement, [], [], [], 0, 0, '', false)];
     }
     /**
@@ -1909,12 +2100,16 @@ class AnimationTimelineBuilderVisitor {
         /** @type {?} */
         const delay = options.delay != null ? resolveTimingValue(options.delay) : null;
         if (duration !== 0) {
-            instructions.forEach(instruction => {
+            instructions.forEach((/**
+             * @param {?} instruction
+             * @return {?}
+             */
+            instruction => {
                 /** @type {?} */
                 const instructionTimings = context.appendInstructionToTimeline(instruction, duration, delay);
                 furthestTime =
                     Math.max(furthestTime, instructionTimings.duration + instructionTimings.delay);
-            });
+            }));
         }
         return furthestTime;
     }
@@ -1954,7 +2149,11 @@ class AnimationTimelineBuilderVisitor {
             }
         }
         if (ast.steps.length) {
-            ast.steps.forEach(s => visitDslNode(this, s, ctx));
+            ast.steps.forEach((/**
+             * @param {?} s
+             * @return {?}
+             */
+            s => visitDslNode(this, s, ctx)));
             // this is here just incase the inner steps only contain or end with a style() call
             ctx.currentTimeline.applyStylesToKeyframe();
             // this means that some animation function within the sequence
@@ -1978,7 +2177,11 @@ class AnimationTimelineBuilderVisitor {
         let furthestTime = context.currentTimeline.currentTime;
         /** @type {?} */
         const delay = ast.options && ast.options.delay ? resolveTimingValue(ast.options.delay) : 0;
-        ast.steps.forEach(s => {
+        ast.steps.forEach((/**
+         * @param {?} s
+         * @return {?}
+         */
+        s => {
             /** @type {?} */
             const innerContext = context.createSubContext(ast.options);
             if (delay) {
@@ -1987,11 +2190,15 @@ class AnimationTimelineBuilderVisitor {
             visitDslNode(this, s, innerContext);
             furthestTime = Math.max(furthestTime, innerContext.currentTimeline.currentTime);
             innerTimelines.push(innerContext.currentTimeline);
-        });
+        }));
         // this operation is run after the AST loop because otherwise
         // if the parent timeline's collected styles were updated then
         // it would pass in invalid data into the new-to-be forked items
-        innerTimelines.forEach(timeline => context.currentTimeline.mergeTimelineCollectedStyles(timeline));
+        innerTimelines.forEach((/**
+         * @param {?} timeline
+         * @return {?}
+         */
+        timeline => context.currentTimeline.mergeTimelineCollectedStyles(timeline)));
         context.transformIntoNewTimeline(furthestTime);
         context.previousNode = ast;
     }
@@ -2082,13 +2289,17 @@ class AnimationTimelineBuilderVisitor {
         /** @type {?} */
         const innerTimeline = innerContext.currentTimeline;
         innerTimeline.easing = currentAnimateTimings.easing;
-        ast.styles.forEach(step => {
+        ast.styles.forEach((/**
+         * @param {?} step
+         * @return {?}
+         */
+        step => {
             /** @type {?} */
             const offset = step.offset || 0;
             innerTimeline.forwardTime(offset * duration);
             innerTimeline.setStyles(step.styles, step.easing, context.errors, context.options);
             innerTimeline.applyStylesToKeyframe();
-        });
+        }));
         // this will ensure that the parent timeline gets all the styles from
         // the child even if the new timeline below is not used
         context.currentTimeline.mergeTimelineCollectedStyles(innerTimeline);
@@ -2123,7 +2334,12 @@ class AnimationTimelineBuilderVisitor {
         context.currentQueryTotal = elms.length;
         /** @type {?} */
         let sameElementTimeline = null;
-        elms.forEach((element, i) => {
+        elms.forEach((/**
+         * @param {?} element
+         * @param {?} i
+         * @return {?}
+         */
+        (element, i) => {
             context.currentQueryIndex = i;
             /** @type {?} */
             const innerContext = context.createSubContext(ast.options, element);
@@ -2141,7 +2357,7 @@ class AnimationTimelineBuilderVisitor {
             /** @type {?} */
             const endTime = innerContext.currentTimeline.currentTime;
             furthestTime = Math.max(furthestTime, endTime);
-        });
+        }));
         context.currentQueryIndex = 0;
         context.currentQueryTotal = 0;
         context.transformIntoNewTimeline(furthestTime);
@@ -2259,11 +2475,15 @@ class AnimationTimelineContext {
             if (!paramsToUpdate) {
                 paramsToUpdate = this.options.params = {};
             }
-            Object.keys(newParams).forEach(name => {
+            Object.keys(newParams).forEach((/**
+             * @param {?} name
+             * @return {?}
+             */
+            name => {
                 if (!skipIfExists || !paramsToUpdate.hasOwnProperty(name)) {
                     paramsToUpdate[name] = interpolateParams(newParams[name], paramsToUpdate, this.errors);
                 }
-            });
+            }));
         }
     }
     /**
@@ -2279,7 +2499,11 @@ class AnimationTimelineContext {
             if (oldParams) {
                 /** @type {?} */
                 const params = options['params'] = {};
-                Object.keys(oldParams).forEach(name => { params[name] = oldParams[name]; });
+                Object.keys(oldParams).forEach((/**
+                 * @param {?} name
+                 * @return {?}
+                 */
+                name => { params[name] = oldParams[name]; }));
             }
         }
         return options;
@@ -2525,10 +2749,14 @@ class TimelineBuilder {
         // keyframe then they will override the overridden styles
         // We use `_globalTimelineStyles` here because there may be
         // styles in previous keyframes that are not present in this timeline
-        Object.keys(this._globalTimelineStyles).forEach(prop => {
+        Object.keys(this._globalTimelineStyles).forEach((/**
+         * @param {?} prop
+         * @return {?}
+         */
+        prop => {
             this._backFill[prop] = this._globalTimelineStyles[prop] || AUTO_STYLE;
             this._currentKeyframe[prop] = AUTO_STYLE;
-        });
+        }));
         this._currentEmptyStepKeyframe = this._currentKeyframe;
     }
     /**
@@ -2546,7 +2774,11 @@ class TimelineBuilder {
         const params = (options && options.params) || {};
         /** @type {?} */
         const styles = flattenStyles(input, this._globalTimelineStyles);
-        Object.keys(styles).forEach(prop => {
+        Object.keys(styles).forEach((/**
+         * @param {?} prop
+         * @return {?}
+         */
+        prop => {
             /** @type {?} */
             const val = interpolateParams(styles[prop], params, errors);
             this._pendingStyles[prop] = val;
@@ -2556,7 +2788,7 @@ class TimelineBuilder {
                     AUTO_STYLE;
             }
             this._updateStyle(prop, val);
-        });
+        }));
     }
     /**
      * @return {?}
@@ -2569,27 +2801,39 @@ class TimelineBuilder {
         if (props.length == 0)
             return;
         this._pendingStyles = {};
-        props.forEach(prop => {
+        props.forEach((/**
+         * @param {?} prop
+         * @return {?}
+         */
+        prop => {
             /** @type {?} */
             const val = styles[prop];
             this._currentKeyframe[prop] = val;
-        });
-        Object.keys(this._localTimelineStyles).forEach(prop => {
+        }));
+        Object.keys(this._localTimelineStyles).forEach((/**
+         * @param {?} prop
+         * @return {?}
+         */
+        prop => {
             if (!this._currentKeyframe.hasOwnProperty(prop)) {
                 this._currentKeyframe[prop] = this._localTimelineStyles[prop];
             }
-        });
+        }));
     }
     /**
      * @return {?}
      */
     snapshotCurrentStyles() {
-        Object.keys(this._localTimelineStyles).forEach(prop => {
+        Object.keys(this._localTimelineStyles).forEach((/**
+         * @param {?} prop
+         * @return {?}
+         */
+        prop => {
             /** @type {?} */
             const val = this._localTimelineStyles[prop];
             this._pendingStyles[prop] = val;
             this._updateStyle(prop, val);
-        });
+        }));
     }
     /**
      * @return {?}
@@ -2611,7 +2855,11 @@ class TimelineBuilder {
      * @return {?}
      */
     mergeTimelineCollectedStyles(timeline) {
-        Object.keys(timeline._styleSummary).forEach(prop => {
+        Object.keys(timeline._styleSummary).forEach((/**
+         * @param {?} prop
+         * @return {?}
+         */
+        prop => {
             /** @type {?} */
             const details0 = this._styleSummary[prop];
             /** @type {?} */
@@ -2619,7 +2867,7 @@ class TimelineBuilder {
             if (!details0 || details1.time > details0.time) {
                 this._updateStyle(prop, details1.value);
             }
-        });
+        }));
     }
     /**
      * @return {?}
@@ -2634,10 +2882,19 @@ class TimelineBuilder {
         const isEmpty = this._keyframes.size === 1 && this.duration === 0;
         /** @type {?} */
         let finalKeyframes = [];
-        this._keyframes.forEach((keyframe, time) => {
+        this._keyframes.forEach((/**
+         * @param {?} keyframe
+         * @param {?} time
+         * @return {?}
+         */
+        (keyframe, time) => {
             /** @type {?} */
             const finalKeyframe = copyStyles(keyframe, true);
-            Object.keys(finalKeyframe).forEach(prop => {
+            Object.keys(finalKeyframe).forEach((/**
+             * @param {?} prop
+             * @return {?}
+             */
+            prop => {
                 /** @type {?} */
                 const value = finalKeyframe[prop];
                 if (value == ɵPRE_STYLE) {
@@ -2646,12 +2903,12 @@ class TimelineBuilder {
                 else if (value == AUTO_STYLE) {
                     postStyleProps.add(prop);
                 }
-            });
+            }));
             if (!isEmpty) {
                 finalKeyframe['offset'] = time / this.duration;
             }
             finalKeyframes.push(finalKeyframe);
-        });
+        }));
         /** @type {?} */
         const preProps = preStyleProps.size ? iteratorToArray(preStyleProps.values()) : [];
         /** @type {?} */
@@ -2771,21 +3028,29 @@ function flattenStyles(input, allStyles) {
     const styles = {};
     /** @type {?} */
     let allProperties;
-    input.forEach(token => {
+    input.forEach((/**
+     * @param {?} token
+     * @return {?}
+     */
+    token => {
         if (token === '*') {
             allProperties = allProperties || Object.keys(allStyles);
-            allProperties.forEach(prop => { styles[prop] = AUTO_STYLE; });
+            allProperties.forEach((/**
+             * @param {?} prop
+             * @return {?}
+             */
+            prop => { styles[prop] = AUTO_STYLE; }));
         }
         else {
             copyStyles((/** @type {?} */ (token)), false, styles);
         }
-    });
+    }));
     return styles;
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class Animation {
     /**
@@ -2836,7 +3101,7 @@ class Animation {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -2875,7 +3140,7 @@ class NoopAnimationStyleNormalizer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class WebAnimationsStyleNormalizer extends AnimationStyleNormalizer {
     /**
@@ -2923,13 +3188,17 @@ const DIMENSIONAL_PROP_MAP = makeBooleanMap('width,height,minWidth,minHeight,max
 function makeBooleanMap(keys) {
     /** @type {?} */
     const map = {};
-    keys.forEach(key => map[key] = true);
+    keys.forEach((/**
+     * @param {?} key
+     * @return {?}
+     */
+    key => map[key] = true));
     return map;
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} element
@@ -2968,7 +3237,7 @@ function createTransitionInstruction(element, triggerName, fromState, toState, i
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const EMPTY_OBJECT = {};
@@ -3048,23 +3317,39 @@ class AnimationTransitionFactory {
         const timelines = skipAstBuild ? [] : buildAnimationTimelines(driver, element, this.ast.animation, enterClassName, leaveClassName, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
         /** @type {?} */
         let totalTime = 0;
-        timelines.forEach(tl => { totalTime = Math.max(tl.duration + tl.delay, totalTime); });
+        timelines.forEach((/**
+         * @param {?} tl
+         * @return {?}
+         */
+        tl => { totalTime = Math.max(tl.duration + tl.delay, totalTime); }));
         if (errors.length) {
             return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, [], [], preStyleMap, postStyleMap, totalTime, errors);
         }
-        timelines.forEach(tl => {
+        timelines.forEach((/**
+         * @param {?} tl
+         * @return {?}
+         */
+        tl => {
             /** @type {?} */
             const elm = tl.element;
             /** @type {?} */
             const preProps = getOrSetAsInMap(preStyleMap, elm, {});
-            tl.preStyleProps.forEach(prop => preProps[prop] = true);
+            tl.preStyleProps.forEach((/**
+             * @param {?} prop
+             * @return {?}
+             */
+            prop => preProps[prop] = true));
             /** @type {?} */
             const postProps = getOrSetAsInMap(postStyleMap, elm, {});
-            tl.postStyleProps.forEach(prop => postProps[prop] = true);
+            tl.postStyleProps.forEach((/**
+             * @param {?} prop
+             * @return {?}
+             */
+            prop => postProps[prop] = true));
             if (elm !== element) {
                 queriedElements.add(elm);
             }
-        });
+        }));
         /** @type {?} */
         const queriedElementsList = iteratorToArray(queriedElements.values());
         return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, timelines, queriedElementsList, preStyleMap, postStyleMap, totalTime);
@@ -3079,7 +3364,11 @@ class AnimationTransitionFactory {
  * @return {?}
  */
 function oneOrMoreTransitionsMatch(matchFns, currentState, nextState, element, params) {
-    return matchFns.some(fn => fn(currentState, nextState, element, params));
+    return matchFns.some((/**
+     * @param {?} fn
+     * @return {?}
+     */
+    fn => fn(currentState, nextState, element, params)));
 }
 class AnimationStateStyles {
     /**
@@ -3100,34 +3389,46 @@ class AnimationStateStyles {
         const finalStyles = {};
         /** @type {?} */
         const combinedParams = copyObj(this.defaultParams);
-        Object.keys(params).forEach(key => {
+        Object.keys(params).forEach((/**
+         * @param {?} key
+         * @return {?}
+         */
+        key => {
             /** @type {?} */
             const value = params[key];
             if (value != null) {
                 combinedParams[key] = value;
             }
-        });
-        this.styles.styles.forEach(value => {
+        }));
+        this.styles.styles.forEach((/**
+         * @param {?} value
+         * @return {?}
+         */
+        value => {
             if (typeof value !== 'string') {
                 /** @type {?} */
                 const styleObj = (/** @type {?} */ (value));
-                Object.keys(styleObj).forEach(prop => {
+                Object.keys(styleObj).forEach((/**
+                 * @param {?} prop
+                 * @return {?}
+                 */
+                prop => {
                     /** @type {?} */
                     let val = styleObj[prop];
                     if (val.length > 1) {
                         val = interpolateParams(val, combinedParams, errors);
                     }
                     finalStyles[prop] = val;
-                });
+                }));
             }
-        });
+        }));
         return finalStyles;
     }
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@publicApi
@@ -3151,16 +3452,24 @@ class AnimationTrigger {
         this.ast = ast;
         this.transitionFactories = [];
         this.states = {};
-        ast.states.forEach(ast => {
+        ast.states.forEach((/**
+         * @param {?} ast
+         * @return {?}
+         */
+        ast => {
             /** @type {?} */
             const defaultParams = (ast.options && ast.options.params) || {};
             this.states[ast.name] = new AnimationStateStyles(ast.style, defaultParams);
-        });
+        }));
         balanceProperties(this.states, 'true', '1');
         balanceProperties(this.states, 'false', '0');
-        ast.transitions.forEach(ast => {
+        ast.transitions.forEach((/**
+         * @param {?} ast
+         * @return {?}
+         */
+        ast => {
             this.transitionFactories.push(new AnimationTransitionFactory(name, ast, this.states));
-        });
+        }));
         this.fallbackTransition = createFallbackTransition(name, this.states);
     }
     /**
@@ -3176,7 +3485,11 @@ class AnimationTrigger {
      */
     matchTransition(currentState, nextState, element, params) {
         /** @type {?} */
-        const entry = this.transitionFactories.find(f => f.match(currentState, nextState, element, params));
+        const entry = this.transitionFactories.find((/**
+         * @param {?} f
+         * @return {?}
+         */
+        f => f.match(currentState, nextState, element, params)));
         return entry || null;
     }
     /**
@@ -3196,7 +3509,12 @@ class AnimationTrigger {
  */
 function createFallbackTransition(triggerName, states) {
     /** @type {?} */
-    const matchers = [(fromState, toState) => true];
+    const matchers = [(/**
+         * @param {?} fromState
+         * @param {?} toState
+         * @return {?}
+         */
+        (fromState, toState) => true)];
     /** @type {?} */
     const animation = { type: 2 /* Sequence */, steps: [], options: null };
     /** @type {?} */
@@ -3229,7 +3547,7 @@ function balanceProperties(obj, key1, key2) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const EMPTY_INSTRUCTION_MAP = new ElementInstructionMap();
@@ -3295,11 +3613,19 @@ class TimelineAnimationEngine {
         const autoStylesMap = new Map();
         if (ast) {
             instructions = buildAnimationTimelines(this._driver, element, ast, ENTER_CLASSNAME, LEAVE_CLASSNAME, {}, {}, options, EMPTY_INSTRUCTION_MAP, errors);
-            instructions.forEach(inst => {
+            instructions.forEach((/**
+             * @param {?} inst
+             * @return {?}
+             */
+            inst => {
                 /** @type {?} */
                 const styles = getOrSetAsInMap(autoStylesMap, inst.element, {});
-                inst.postStyleProps.forEach(prop => styles[prop] = null);
-            });
+                inst.postStyleProps.forEach((/**
+                 * @param {?} prop
+                 * @return {?}
+                 */
+                prop => styles[prop] = null));
+            }));
         }
         else {
             errors.push('The requested animation doesn\'t exist or has already been destroyed');
@@ -3308,19 +3634,35 @@ class TimelineAnimationEngine {
         if (errors.length) {
             throw new Error(`Unable to create the animation due to the following errors: ${errors.join("\n")}`);
         }
-        autoStylesMap.forEach((styles, element) => {
-            Object.keys(styles).forEach(prop => { styles[prop] = this._driver.computeStyle(element, prop, AUTO_STYLE); });
-        });
+        autoStylesMap.forEach((/**
+         * @param {?} styles
+         * @param {?} element
+         * @return {?}
+         */
+        (styles, element) => {
+            Object.keys(styles).forEach((/**
+             * @param {?} prop
+             * @return {?}
+             */
+            prop => { styles[prop] = this._driver.computeStyle(element, prop, AUTO_STYLE); }));
+        }));
         /** @type {?} */
-        const players = instructions.map(i => {
+        const players = instructions.map((/**
+         * @param {?} i
+         * @return {?}
+         */
+        i => {
             /** @type {?} */
             const styles = autoStylesMap.get(i.element);
             return this._buildPlayer(i, {}, styles);
-        });
+        }));
         /** @type {?} */
         const player = optimizeGroupPlayer(players);
         this._playersById[id] = player;
-        player.onDestroy(() => this.destroy(id));
+        player.onDestroy((/**
+         * @return {?}
+         */
+        () => this.destroy(id)));
         this.players.push(player);
         return player;
     }
@@ -3364,7 +3706,10 @@ class TimelineAnimationEngine {
         /** @type {?} */
         const baseEvent = makeAnimationEvent(element, '', '', '');
         listenOnPlayer(this._getPlayer(id), eventName, baseEvent, callback);
-        return () => { };
+        return (/**
+         * @return {?}
+         */
+        () => { });
     }
     /**
      * @param {?} id
@@ -3417,7 +3762,7 @@ class TimelineAnimationEngine {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const QUEUED_CLASSNAME = 'ng-animate-queued';
@@ -3490,11 +3835,15 @@ class StateValue {
         if (newParams) {
             /** @type {?} */
             const oldParams = (/** @type {?} */ (this.options.params));
-            Object.keys(newParams).forEach(prop => {
+            Object.keys(newParams).forEach((/**
+             * @param {?} prop
+             * @return {?}
+             */
+            prop => {
                 if (oldParams[prop] == null) {
                     oldParams[prop] = newParams[prop];
                 }
-            });
+            }));
         }
     }
 }
@@ -3548,11 +3897,17 @@ class AnimationTransitionNamespace {
             addClass(element, NG_TRIGGER_CLASSNAME + '-' + name);
             triggersWithStates[name] = DEFAULT_STATE_VALUE;
         }
-        return () => {
+        return (/**
+         * @return {?}
+         */
+        () => {
             // the event listener is removed AFTER the flush has occurred such
             // that leave animations callbacks can fire (otherwise if the node
             // is removed in between then the listeners would be deregistered)
-            this._engine.afterFlush(() => {
+            this._engine.afterFlush((/**
+             * @return {?}
+             */
+            () => {
                 /** @type {?} */
                 const index = listeners.indexOf(data);
                 if (index >= 0) {
@@ -3561,8 +3916,8 @@ class AnimationTransitionNamespace {
                 if (!this._triggers[name]) {
                     delete triggersWithStates[name];
                 }
-            });
-        };
+            }));
+        });
     }
     /**
      * @param {?} name
@@ -3646,17 +4001,24 @@ class AnimationTransitionNamespace {
                     this._engine.reportError(errors);
                 }
                 else {
-                    this._engine.afterFlush(() => {
+                    this._engine.afterFlush((/**
+                     * @return {?}
+                     */
+                    () => {
                         eraseStyles(element, fromStyles);
                         setStyles(element, toStyles);
-                    });
+                    }));
                 }
             }
             return;
         }
         /** @type {?} */
         const playersOnElement = getOrSetAsInMap(this._engine.playersByElement, element, []);
-        playersOnElement.forEach(player => {
+        playersOnElement.forEach((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => {
             // only remove the player if it is queued on the EXACT same trigger/namespace
             // we only also deal with queued players here because if the animation has
             // started then we want to keep the player alive until the flush happens
@@ -3664,7 +4026,7 @@ class AnimationTransitionNamespace {
             if (player.namespaceId == this.id && player.triggerName == triggerName && player.queued) {
                 player.destroy();
             }
-        });
+        }));
         /** @type {?} */
         let transition = trigger.matchTransition(fromState.value, toState.value, element, toState.params);
         /** @type {?} */
@@ -3679,9 +4041,15 @@ class AnimationTransitionNamespace {
         this._queue.push({ element, triggerName, transition, fromState, toState, player, isFallbackTransition });
         if (!isFallbackTransition) {
             addClass(element, QUEUED_CLASSNAME);
-            player.onStart(() => { removeClass(element, QUEUED_CLASSNAME); });
+            player.onStart((/**
+             * @return {?}
+             */
+            () => { removeClass(element, QUEUED_CLASSNAME); }));
         }
-        player.onDone(() => {
+        player.onDone((/**
+         * @return {?}
+         */
+        () => {
             /** @type {?} */
             let index = this.players.indexOf(player);
             if (index >= 0) {
@@ -3696,7 +4064,7 @@ class AnimationTransitionNamespace {
                     players.splice(index, 1);
                 }
             }
-        });
+        }));
         this.players.push(player);
         playersOnElement.push(player);
         return player;
@@ -3707,10 +4075,24 @@ class AnimationTransitionNamespace {
      */
     deregister(name) {
         delete this._triggers[name];
-        this._engine.statesByElement.forEach((stateMap, element) => { delete stateMap[name]; });
-        this._elementListeners.forEach((listeners, element) => {
-            this._elementListeners.set(element, listeners.filter(entry => { return entry.name != name; }));
-        });
+        this._engine.statesByElement.forEach((/**
+         * @param {?} stateMap
+         * @param {?} element
+         * @return {?}
+         */
+        (stateMap, element) => { delete stateMap[name]; }));
+        this._elementListeners.forEach((/**
+         * @param {?} listeners
+         * @param {?} element
+         * @return {?}
+         */
+        (listeners, element) => {
+            this._elementListeners.set(element, listeners.filter((/**
+             * @param {?} entry
+             * @return {?}
+             */
+            entry => { return entry.name != name; })));
+        }));
     }
     /**
      * @param {?} element
@@ -3722,7 +4104,11 @@ class AnimationTransitionNamespace {
         /** @type {?} */
         const elementPlayers = this._engine.playersByElement.get(element);
         if (elementPlayers) {
-            elementPlayers.forEach(player => player.destroy());
+            elementPlayers.forEach((/**
+             * @param {?} player
+             * @return {?}
+             */
+            player => player.destroy()));
             this._engine.playersByElement.delete(element);
         }
     }
@@ -3737,7 +4123,11 @@ class AnimationTransitionNamespace {
         // emulate a leave animation for all inner nodes within this node.
         // If there are no animations found for any of the nodes then clear the cache
         // for the element.
-        this._engine.driver.query(rootElement, NG_TRIGGER_SELECTOR, true).forEach(elm => {
+        this._engine.driver.query(rootElement, NG_TRIGGER_SELECTOR, true).forEach((/**
+         * @param {?} elm
+         * @return {?}
+         */
+        elm => {
             // this means that an inner remove() operation has already kicked off
             // the animation on this element...
             if (elm[REMOVAL_FLAG])
@@ -3745,12 +4135,16 @@ class AnimationTransitionNamespace {
             /** @type {?} */
             const namespaces = this._engine.fetchNamespacesByElement(elm);
             if (namespaces.size) {
-                namespaces.forEach(ns => ns.triggerLeaveAnimation(elm, context, false, true));
+                namespaces.forEach((/**
+                 * @param {?} ns
+                 * @return {?}
+                 */
+                ns => ns.triggerLeaveAnimation(elm, context, false, true)));
             }
             else {
                 this.clearElementCache(elm);
             }
-        });
+        }));
     }
     /**
      * @param {?} element
@@ -3765,7 +4159,11 @@ class AnimationTransitionNamespace {
         if (triggerStates) {
             /** @type {?} */
             const players = [];
-            Object.keys(triggerStates).forEach(triggerName => {
+            Object.keys(triggerStates).forEach((/**
+             * @param {?} triggerName
+             * @return {?}
+             */
+            triggerName => {
                 // this check is here in the event that an element is removed
                 // twice (both on the host level and the component level)
                 if (this._triggers[triggerName]) {
@@ -3775,11 +4173,14 @@ class AnimationTransitionNamespace {
                         players.push(player);
                     }
                 }
-            });
+            }));
             if (players.length) {
                 this._engine.markElementAsRemoved(this.id, element, true, context);
                 if (destroyAfterComplete) {
-                    optimizeGroupPlayer(players).onDone(() => this._engine.processLeaveNode(element));
+                    optimizeGroupPlayer(players).onDone((/**
+                     * @return {?}
+                     */
+                    () => this._engine.processLeaveNode(element)));
                 }
                 return true;
             }
@@ -3796,7 +4197,11 @@ class AnimationTransitionNamespace {
         if (listeners) {
             /** @type {?} */
             const visitedTriggers = new Set();
-            listeners.forEach(listener => {
+            listeners.forEach((/**
+             * @param {?} listener
+             * @return {?}
+             */
+            listener => {
                 /** @type {?} */
                 const triggerName = listener.name;
                 if (visitedTriggers.has(triggerName))
@@ -3824,7 +4229,7 @@ class AnimationTransitionNamespace {
                     player,
                     isFallbackTransition: true
                 });
-            });
+            }));
         }
     }
     /**
@@ -3881,7 +4286,10 @@ class AnimationTransitionNamespace {
         else {
             // we do this after the flush has occurred such
             // that the callbacks can be fired
-            engine.afterFlush(() => this.clearElementCache(element));
+            engine.afterFlush((/**
+             * @return {?}
+             */
+            () => this.clearElementCache(element)));
             engine.destroyInnerAnimations(element);
             engine._onRemovalComplete(element, context);
         }
@@ -3899,7 +4307,11 @@ class AnimationTransitionNamespace {
     drainQueuedTransitions(microtaskId) {
         /** @type {?} */
         const instructions = [];
-        this._queue.forEach(entry => {
+        this._queue.forEach((/**
+         * @param {?} entry
+         * @return {?}
+         */
+        entry => {
             /** @type {?} */
             const player = entry.player;
             if (player.destroyed)
@@ -3909,28 +4321,40 @@ class AnimationTransitionNamespace {
             /** @type {?} */
             const listeners = this._elementListeners.get(element);
             if (listeners) {
-                listeners.forEach((listener) => {
+                listeners.forEach((/**
+                 * @param {?} listener
+                 * @return {?}
+                 */
+                (listener) => {
                     if (listener.name == entry.triggerName) {
                         /** @type {?} */
                         const baseEvent = makeAnimationEvent(element, entry.triggerName, entry.fromState.value, entry.toState.value);
                         ((/** @type {?} */ (baseEvent)))['_data'] = microtaskId;
                         listenOnPlayer(entry.player, listener.phase, baseEvent, listener.callback);
                     }
-                });
+                }));
             }
             if (player.markedForDestroy) {
-                this._engine.afterFlush(() => {
+                this._engine.afterFlush((/**
+                 * @return {?}
+                 */
+                () => {
                     // now we can destroy the element properly since the event listeners have
                     // been bound to the player
                     player.destroy();
-                });
+                }));
             }
             else {
                 instructions.push(entry);
             }
-        });
+        }));
         this._queue = [];
-        return instructions.sort((a, b) => {
+        return instructions.sort((/**
+         * @param {?} a
+         * @param {?} b
+         * @return {?}
+         */
+        (a, b) => {
             // if depCount == 0 them move to front
             // otherwise if a contains b then move back
             /** @type {?} */
@@ -3941,14 +4365,18 @@ class AnimationTransitionNamespace {
                 return d0 - d1;
             }
             return this._engine.driver.containsElement(a.element, b.element) ? 1 : -1;
-        });
+        }));
     }
     /**
      * @param {?} context
      * @return {?}
      */
     destroy(context) {
-        this.players.forEach(p => p.destroy());
+        this.players.forEach((/**
+         * @param {?} p
+         * @return {?}
+         */
+        p => p.destroy()));
         this._signalRemovalForInnerTriggers(this.hostElement, context);
     }
     /**
@@ -3961,7 +4389,11 @@ class AnimationTransitionNamespace {
         if (this._elementListeners.has(element))
             containsData = true;
         containsData =
-            (this._queue.find(entry => entry.element === element) ? true : false) || containsData;
+            (this._queue.find((/**
+             * @param {?} entry
+             * @return {?}
+             */
+            entry => entry.element === element)) ? true : false) || containsData;
         return containsData;
     }
 }
@@ -3991,7 +4423,12 @@ class TransitionAnimationEngine {
         this.collectedEnterElements = [];
         this.collectedLeaveElements = [];
         // this method is designed to be overridden by the code that uses this engine
-        this.onRemovalComplete = (element, context) => { };
+        this.onRemovalComplete = (/**
+         * @param {?} element
+         * @param {?} context
+         * @return {?}
+         */
+        (element, context) => { });
     }
     /**
      * \@internal
@@ -4006,13 +4443,21 @@ class TransitionAnimationEngine {
     get queuedPlayers() {
         /** @type {?} */
         const players = [];
-        this._namespaceList.forEach(ns => {
-            ns.players.forEach(player => {
+        this._namespaceList.forEach((/**
+         * @param {?} ns
+         * @return {?}
+         */
+        ns => {
+            ns.players.forEach((/**
+             * @param {?} player
+             * @return {?}
+             */
+            player => {
                 if (player.queued) {
                     players.push(player);
                 }
-            });
-        });
+            }));
+        }));
         return players;
     }
     /**
@@ -4107,7 +4552,10 @@ class TransitionAnimationEngine {
             return;
         /** @type {?} */
         const ns = this._fetchNamespace(namespaceId);
-        this.afterFlush(() => {
+        this.afterFlush((/**
+         * @return {?}
+         */
+        () => {
             this.namespacesByHostElement.delete(ns.hostElement);
             delete this._namespaceLookup[namespaceId];
             /** @type {?} */
@@ -4115,8 +4563,11 @@ class TransitionAnimationEngine {
             if (index >= 0) {
                 this._namespaceList.splice(index, 1);
             }
-        });
-        this.afterFlushAnimationsDone(() => ns.destroy(context));
+        }));
+        this.afterFlushAnimationsDone((/**
+         * @return {?}
+         */
+        () => ns.destroy(context)));
     }
     /**
      * @private
@@ -4295,7 +4746,10 @@ class TransitionAnimationEngine {
         if (isElementNode(element)) {
             return this._fetchNamespace(namespaceId).listen(element, name, phase, callback);
         }
-        return () => { };
+        return (/**
+         * @return {?}
+         */
+        () => { });
     }
     /**
      * @private
@@ -4316,11 +4770,19 @@ class TransitionAnimationEngine {
     destroyInnerAnimations(containerElement) {
         /** @type {?} */
         let elements = this.driver.query(containerElement, NG_TRIGGER_SELECTOR, true);
-        elements.forEach(element => this.destroyActiveAnimationsForElement(element));
+        elements.forEach((/**
+         * @param {?} element
+         * @return {?}
+         */
+        element => this.destroyActiveAnimationsForElement(element)));
         if (this.playersByQueriedElement.size == 0)
             return;
         elements = this.driver.query(containerElement, NG_ANIMATING_SELECTOR, true);
-        elements.forEach(element => this.finishActiveQueriedAnimationOnElement(element));
+        elements.forEach((/**
+         * @param {?} element
+         * @return {?}
+         */
+        element => this.finishActiveQueriedAnimationOnElement(element)));
     }
     /**
      * @param {?} element
@@ -4330,7 +4792,11 @@ class TransitionAnimationEngine {
         /** @type {?} */
         const players = this.playersByElement.get(element);
         if (players) {
-            players.forEach(player => {
+            players.forEach((/**
+             * @param {?} player
+             * @return {?}
+             */
+            player => {
                 // special case for when an element is set for destruction, but hasn't started.
                 // in this situation we want to delay the destruction until the flush occurs
                 // so that any event listeners attached to the player are triggered.
@@ -4340,7 +4806,7 @@ class TransitionAnimationEngine {
                 else {
                     player.destroy();
                 }
-            });
+            }));
         }
     }
     /**
@@ -4351,21 +4817,32 @@ class TransitionAnimationEngine {
         /** @type {?} */
         const players = this.playersByQueriedElement.get(element);
         if (players) {
-            players.forEach(player => player.finish());
+            players.forEach((/**
+             * @param {?} player
+             * @return {?}
+             */
+            player => player.finish()));
         }
     }
     /**
      * @return {?}
      */
     whenRenderingDone() {
-        return new Promise(resolve => {
+        return new Promise((/**
+         * @param {?} resolve
+         * @return {?}
+         */
+        resolve => {
             if (this.players.length) {
-                return optimizeGroupPlayer(this.players).onDone(() => resolve());
+                return optimizeGroupPlayer(this.players).onDone((/**
+                 * @return {?}
+                 */
+                () => resolve()));
             }
             else {
                 resolve();
             }
-        });
+        }));
     }
     /**
      * @param {?} element
@@ -4390,9 +4867,13 @@ class TransitionAnimationEngine {
         if (this.driver.matchesElement(element, DISABLED_SELECTOR)) {
             this.markElementAsDisabled(element, false);
         }
-        this.driver.query(element, DISABLED_SELECTOR, true).forEach(node => {
+        this.driver.query(element, DISABLED_SELECTOR, true).forEach((/**
+         * @param {?} node
+         * @return {?}
+         */
+        node => {
             this.markElementAsDisabled(node, false);
-        });
+        }));
     }
     /**
      * @param {?=} microtaskId
@@ -4402,7 +4883,12 @@ class TransitionAnimationEngine {
         /** @type {?} */
         let players = [];
         if (this.newHostElements.size) {
-            this.newHostElements.forEach((ns, element) => this._balanceNamespaceList(ns, element));
+            this.newHostElements.forEach((/**
+             * @param {?} ns
+             * @param {?} element
+             * @return {?}
+             */
+            (ns, element) => this._balanceNamespaceList(ns, element)));
             this.newHostElements.clear();
         }
         if (this.totalAnimations && this.collectedEnterElements.length) {
@@ -4435,7 +4921,11 @@ class TransitionAnimationEngine {
         this.totalQueuedPlayers = 0;
         this.collectedEnterElements.length = 0;
         this.collectedLeaveElements.length = 0;
-        this._flushFns.forEach(fn => fn());
+        this._flushFns.forEach((/**
+         * @param {?} fn
+         * @return {?}
+         */
+        fn => fn()));
         this._flushFns = [];
         if (this._whenQuietFns.length) {
             // we move these over to a variable so that
@@ -4445,10 +4935,21 @@ class TransitionAnimationEngine {
             const quietFns = this._whenQuietFns;
             this._whenQuietFns = [];
             if (players.length) {
-                optimizeGroupPlayer(players).onDone(() => { quietFns.forEach(fn => fn()); });
+                optimizeGroupPlayer(players).onDone((/**
+                 * @return {?}
+                 */
+                () => { quietFns.forEach((/**
+                 * @param {?} fn
+                 * @return {?}
+                 */
+                fn => fn())); }));
             }
             else {
-                quietFns.forEach(fn => fn());
+                quietFns.forEach((/**
+                 * @param {?} fn
+                 * @return {?}
+                 */
+                fn => fn()));
             }
         }
     }
@@ -4482,14 +4983,18 @@ class TransitionAnimationEngine {
         const allPostStyleElements = new Map();
         /** @type {?} */
         const disabledElementsSet = new Set();
-        this.disabledNodes.forEach(node => {
+        this.disabledNodes.forEach((/**
+         * @param {?} node
+         * @return {?}
+         */
+        node => {
             disabledElementsSet.add(node);
             /** @type {?} */
             const nodesThatAreDisabled = this.driver.query(node, QUEUED_SELECTOR, true);
             for (let i = 0; i < nodesThatAreDisabled.length; i++) {
                 disabledElementsSet.add(nodesThatAreDisabled[i]);
             }
-        });
+        }));
         /** @type {?} */
         const bodyNode = this.bodyNode;
         /** @type {?} */
@@ -4503,12 +5008,21 @@ class TransitionAnimationEngine {
         const enterNodeMapIds = new Map();
         /** @type {?} */
         let i = 0;
-        enterNodeMap.forEach((nodes, root) => {
+        enterNodeMap.forEach((/**
+         * @param {?} nodes
+         * @param {?} root
+         * @return {?}
+         */
+        (nodes, root) => {
             /** @type {?} */
             const className = ENTER_CLASSNAME + i++;
             enterNodeMapIds.set(root, className);
-            nodes.forEach(node => addClass(node, className));
-        });
+            nodes.forEach((/**
+             * @param {?} node
+             * @return {?}
+             */
+            node => addClass(node, className)));
+        }));
         /** @type {?} */
         const allLeaveNodes = [];
         /** @type {?} */
@@ -4524,7 +5038,11 @@ class TransitionAnimationEngine {
                 allLeaveNodes.push(element);
                 mergedLeaveNodes.add(element);
                 if (details.hasAnimation) {
-                    this.driver.query(element, STAR_SELECTOR, true).forEach(elm => mergedLeaveNodes.add(elm));
+                    this.driver.query(element, STAR_SELECTOR, true).forEach((/**
+                     * @param {?} elm
+                     * @return {?}
+                     */
+                    elm => mergedLeaveNodes.add(elm)));
                 }
                 else {
                     leaveNodesWithoutAnimations.add(element);
@@ -4535,25 +5053,59 @@ class TransitionAnimationEngine {
         const leaveNodeMapIds = new Map();
         /** @type {?} */
         const leaveNodeMap = buildRootMap(allTriggerElements, Array.from(mergedLeaveNodes));
-        leaveNodeMap.forEach((nodes, root) => {
+        leaveNodeMap.forEach((/**
+         * @param {?} nodes
+         * @param {?} root
+         * @return {?}
+         */
+        (nodes, root) => {
             /** @type {?} */
             const className = LEAVE_CLASSNAME + i++;
             leaveNodeMapIds.set(root, className);
-            nodes.forEach(node => addClass(node, className));
-        });
-        cleanupFns.push(() => {
-            enterNodeMap.forEach((nodes, root) => {
+            nodes.forEach((/**
+             * @param {?} node
+             * @return {?}
+             */
+            node => addClass(node, className)));
+        }));
+        cleanupFns.push((/**
+         * @return {?}
+         */
+        () => {
+            enterNodeMap.forEach((/**
+             * @param {?} nodes
+             * @param {?} root
+             * @return {?}
+             */
+            (nodes, root) => {
                 /** @type {?} */
                 const className = (/** @type {?} */ (enterNodeMapIds.get(root)));
-                nodes.forEach(node => removeClass(node, className));
-            });
-            leaveNodeMap.forEach((nodes, root) => {
+                nodes.forEach((/**
+                 * @param {?} node
+                 * @return {?}
+                 */
+                node => removeClass(node, className)));
+            }));
+            leaveNodeMap.forEach((/**
+             * @param {?} nodes
+             * @param {?} root
+             * @return {?}
+             */
+            (nodes, root) => {
                 /** @type {?} */
                 const className = (/** @type {?} */ (leaveNodeMapIds.get(root)));
-                nodes.forEach(node => removeClass(node, className));
-            });
-            allLeaveNodes.forEach(element => { this.processLeaveNode(element); });
-        });
+                nodes.forEach((/**
+                 * @param {?} node
+                 * @return {?}
+                 */
+                node => removeClass(node, className)));
+            }));
+            allLeaveNodes.forEach((/**
+             * @param {?} element
+             * @return {?}
+             */
+            element => { this.processLeaveNode(element); }));
+        }));
         /** @type {?} */
         const allPlayers = [];
         /** @type {?} */
@@ -4561,7 +5113,11 @@ class TransitionAnimationEngine {
         for (let i = this._namespaceList.length - 1; i >= 0; i--) {
             /** @type {?} */
             const ns = this._namespaceList[i];
-            ns.drainQueuedTransitions(microtaskId).forEach(entry => {
+            ns.drainQueuedTransitions(microtaskId).forEach((/**
+             * @param {?} entry
+             * @return {?}
+             */
+            entry => {
                 /** @type {?} */
                 const player = entry.player;
                 /** @type {?} */
@@ -4593,16 +5149,28 @@ class TransitionAnimationEngine {
                 // projection and/or dynamic component insertion) therefore it's
                 // important we still style the element.
                 if (nodeIsOrphaned) {
-                    player.onStart(() => eraseStyles(element, instruction.fromStyles));
-                    player.onDestroy(() => setStyles(element, instruction.toStyles));
+                    player.onStart((/**
+                     * @return {?}
+                     */
+                    () => eraseStyles(element, instruction.fromStyles)));
+                    player.onDestroy((/**
+                     * @return {?}
+                     */
+                    () => setStyles(element, instruction.toStyles)));
                     skippedPlayers.push(player);
                     return;
                 }
                 // if a unmatched transition is queued to go then it SHOULD NOT render
                 // an animation and cancel the previously running animations.
                 if (entry.isFallbackTransition) {
-                    player.onStart(() => eraseStyles(element, instruction.fromStyles));
-                    player.onDestroy(() => setStyles(element, instruction.toStyles));
+                    player.onStart((/**
+                     * @return {?}
+                     */
+                    () => eraseStyles(element, instruction.fromStyles)));
+                    player.onDestroy((/**
+                     * @return {?}
+                     */
+                    () => setStyles(element, instruction.toStyles)));
                     skippedPlayers.push(player);
                     return;
                 }
@@ -4611,13 +5179,26 @@ class TransitionAnimationEngine {
                 // instead stretch the first keyframe gap up until the animation starts. The
                 // reason this is important is to prevent extra initialization styles from being
                 // required by the user in the animation.
-                instruction.timelines.forEach(tl => tl.stretchStartingKeyframe = true);
+                instruction.timelines.forEach((/**
+                 * @param {?} tl
+                 * @return {?}
+                 */
+                tl => tl.stretchStartingKeyframe = true));
                 subTimelines.append(element, instruction.timelines);
                 /** @type {?} */
                 const tuple = { instruction, player, element };
                 queuedInstructions.push(tuple);
-                instruction.queriedElements.forEach(element => getOrSetAsInMap(queriedElements, element, []).push(player));
-                instruction.preStyleProps.forEach((stringMap, element) => {
+                instruction.queriedElements.forEach((/**
+                 * @param {?} element
+                 * @return {?}
+                 */
+                element => getOrSetAsInMap(queriedElements, element, []).push(player)));
+                instruction.preStyleProps.forEach((/**
+                 * @param {?} stringMap
+                 * @param {?} element
+                 * @return {?}
+                 */
+                (stringMap, element) => {
                     /** @type {?} */
                     const props = Object.keys(stringMap);
                     if (props.length) {
@@ -4626,10 +5207,19 @@ class TransitionAnimationEngine {
                         if (!setVal) {
                             allPreStyleElements.set(element, setVal = new Set());
                         }
-                        props.forEach(prop => setVal.add(prop));
+                        props.forEach((/**
+                         * @param {?} prop
+                         * @return {?}
+                         */
+                        prop => setVal.add(prop)));
                     }
-                });
-                instruction.postStyleProps.forEach((stringMap, element) => {
+                }));
+                instruction.postStyleProps.forEach((/**
+                 * @param {?} stringMap
+                 * @param {?} element
+                 * @return {?}
+                 */
+                (stringMap, element) => {
                     /** @type {?} */
                     const props = Object.keys(stringMap);
                     /** @type {?} */
@@ -4637,18 +5227,34 @@ class TransitionAnimationEngine {
                     if (!setVal) {
                         allPostStyleElements.set(element, setVal = new Set());
                     }
-                    props.forEach(prop => setVal.add(prop));
-                });
-            });
+                    props.forEach((/**
+                     * @param {?} prop
+                     * @return {?}
+                     */
+                    prop => setVal.add(prop)));
+                }));
+            }));
         }
         if (erroneousTransitions.length) {
             /** @type {?} */
             const errors = [];
-            erroneousTransitions.forEach(instruction => {
+            erroneousTransitions.forEach((/**
+             * @param {?} instruction
+             * @return {?}
+             */
+            instruction => {
                 errors.push(`@${instruction.triggerName} has failed due to:\n`);
-                (/** @type {?} */ (instruction.errors)).forEach(error => errors.push(`- ${error}\n`));
-            });
-            allPlayers.forEach(player => player.destroy());
+                (/** @type {?} */ (instruction.errors)).forEach((/**
+                 * @param {?} error
+                 * @return {?}
+                 */
+                error => errors.push(`- ${error}\n`)));
+            }));
+            allPlayers.forEach((/**
+             * @param {?} player
+             * @return {?}
+             */
+            player => player.destroy()));
             this.reportError(errors);
         }
         /** @type {?} */
@@ -4659,24 +5265,36 @@ class TransitionAnimationEngine {
         // if a sub player is skipped due to a parent player having priority.
         /** @type {?} */
         const animationElementMap = new Map();
-        queuedInstructions.forEach(entry => {
+        queuedInstructions.forEach((/**
+         * @param {?} entry
+         * @return {?}
+         */
+        entry => {
             /** @type {?} */
             const element = entry.element;
             if (subTimelines.has(element)) {
                 animationElementMap.set(element, element);
                 this._beforeAnimationBuild(entry.player.namespaceId, entry.instruction, allPreviousPlayersMap);
             }
-        });
-        skippedPlayers.forEach(player => {
+        }));
+        skippedPlayers.forEach((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => {
             /** @type {?} */
             const element = player.element;
             /** @type {?} */
             const previousPlayers = this._getPreviousPlayers(element, false, player.namespaceId, player.triggerName, null);
-            previousPlayers.forEach(prevPlayer => {
+            previousPlayers.forEach((/**
+             * @param {?} prevPlayer
+             * @return {?}
+             */
+            prevPlayer => {
                 getOrSetAsInMap(allPreviousPlayersMap, element, []).push(prevPlayer);
                 prevPlayer.destroy();
-            });
-        });
+            }));
+        }));
         // this is a special case for nodes that will be removed (either by)
         // having their own leave animations or by being queried in a container
         // that will be removed once a parent animation is complete. The idea
@@ -4685,45 +5303,69 @@ class TransitionAnimationEngine {
         // Otherwise * styles will return an empty value or auto since the element
         // that is being getComputedStyle'd will not be visible (since * = destination)
         /** @type {?} */
-        const replaceNodes = allLeaveNodes.filter(node => {
+        const replaceNodes = allLeaveNodes.filter((/**
+         * @param {?} node
+         * @return {?}
+         */
+        node => {
             return replacePostStylesAsPre(node, allPreStyleElements, allPostStyleElements);
-        });
+        }));
         // POST STAGE: fill the * styles
         /** @type {?} */
         const postStylesMap = new Map();
         /** @type {?} */
         const allLeaveQueriedNodes = cloakAndComputeStyles(postStylesMap, this.driver, leaveNodesWithoutAnimations, allPostStyleElements, AUTO_STYLE);
-        allLeaveQueriedNodes.forEach(node => {
+        allLeaveQueriedNodes.forEach((/**
+         * @param {?} node
+         * @return {?}
+         */
+        node => {
             if (replacePostStylesAsPre(node, allPreStyleElements, allPostStyleElements)) {
                 replaceNodes.push(node);
             }
-        });
+        }));
         // PRE STAGE: fill the ! styles
         /** @type {?} */
         const preStylesMap = new Map();
-        enterNodeMap.forEach((nodes, root) => {
+        enterNodeMap.forEach((/**
+         * @param {?} nodes
+         * @param {?} root
+         * @return {?}
+         */
+        (nodes, root) => {
             cloakAndComputeStyles(preStylesMap, this.driver, new Set(nodes), allPreStyleElements, ɵPRE_STYLE);
-        });
-        replaceNodes.forEach(node => {
+        }));
+        replaceNodes.forEach((/**
+         * @param {?} node
+         * @return {?}
+         */
+        node => {
             /** @type {?} */
             const post = postStylesMap.get(node);
             /** @type {?} */
             const pre = preStylesMap.get(node);
             postStylesMap.set(node, (/** @type {?} */ (Object.assign({}, post, pre))));
-        });
+        }));
         /** @type {?} */
         const rootPlayers = [];
         /** @type {?} */
         const subPlayers = [];
         /** @type {?} */
         const NO_PARENT_ANIMATION_ELEMENT_DETECTED = {};
-        queuedInstructions.forEach(entry => {
+        queuedInstructions.forEach((/**
+         * @param {?} entry
+         * @return {?}
+         */
+        entry => {
             const { element, player, instruction } = entry;
             // this means that it was never consumed by a parent animation which
             // means that it is independent and therefore should be set for animation
             if (subTimelines.has(element)) {
                 if (disabledElementsSet.has(element)) {
-                    player.onDestroy(() => setStyles(element, instruction.toStyles));
+                    player.onDestroy((/**
+                     * @return {?}
+                     */
+                    () => setStyles(element, instruction.toStyles)));
                     player.disabled = true;
                     player.overrideTotalTime(instruction.totalTime);
                     skippedPlayers.push(player);
@@ -4751,7 +5393,11 @@ class TransitionAnimationEngine {
                         }
                         parentsToAdd.push(elm);
                     }
-                    parentsToAdd.forEach(parent => animationElementMap.set(parent, parentWithAnimation));
+                    parentsToAdd.forEach((/**
+                     * @param {?} parent
+                     * @return {?}
+                     */
+                    parent => animationElementMap.set(parent, parentWithAnimation)));
                 }
                 /** @type {?} */
                 const innerPlayer = this._buildAnimation(player.namespaceId, instruction, allPreviousPlayersMap, skippedPlayersMap, preStylesMap, postStylesMap);
@@ -4770,7 +5416,10 @@ class TransitionAnimationEngine {
             }
             else {
                 eraseStyles(element, instruction.fromStyles);
-                player.onDestroy(() => setStyles(element, instruction.toStyles));
+                player.onDestroy((/**
+                 * @return {?}
+                 */
+                () => setStyles(element, instruction.toStyles)));
                 // there still might be a ancestor player animating this
                 // element therefore we will still add it as a sub player
                 // even if its animation may be disabled
@@ -4779,9 +5428,13 @@ class TransitionAnimationEngine {
                     skippedPlayers.push(player);
                 }
             }
-        });
+        }));
         // find all of the sub players' corresponding inner animation player
-        subPlayers.forEach(player => {
+        subPlayers.forEach((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => {
             // even if any players are not found for a sub animation then it
             // will still complete itself after the next tick since it's Noop
             /** @type {?} */
@@ -4791,18 +5444,22 @@ class TransitionAnimationEngine {
                 const innerPlayer = optimizeGroupPlayer(playersForElement);
                 player.setRealPlayer(innerPlayer);
             }
-        });
+        }));
         // the reason why we don't actually play the animation is
         // because all that a skipped player is designed to do is to
         // fire the start/done transition callback events
-        skippedPlayers.forEach(player => {
+        skippedPlayers.forEach((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => {
             if (player.parentPlayer) {
                 player.syncPlayerEvents(player.parentPlayer);
             }
             else {
                 player.destroy();
             }
-        });
+        }));
         // run through all of the queued removals and see if they
         // were picked up by a query. If not then perform the removal
         // operation right away unless a parent animation is ongoing.
@@ -4839,7 +5496,11 @@ class TransitionAnimationEngine {
                 }
             }
             /** @type {?} */
-            const activePlayers = players.filter(p => !p.destroyed);
+            const activePlayers = players.filter((/**
+             * @param {?} p
+             * @return {?}
+             */
+            p => !p.destroyed));
             if (activePlayers.length) {
                 removeNodesAfterAnimationDone(this, element, activePlayers);
             }
@@ -4849,16 +5510,23 @@ class TransitionAnimationEngine {
         }
         // this is required so the cleanup method doesn't remove them
         allLeaveNodes.length = 0;
-        rootPlayers.forEach(player => {
+        rootPlayers.forEach((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => {
             this.players.push(player);
-            player.onDone(() => {
+            player.onDone((/**
+             * @return {?}
+             */
+            () => {
                 player.destroy();
                 /** @type {?} */
                 const index = this.players.indexOf(player);
                 this.players.splice(index, 1);
-            });
+            }));
             player.play();
-        });
+        }));
         return rootPlayers;
     }
     /**
@@ -4916,23 +5584,31 @@ class TransitionAnimationEngine {
             if (elementPlayers) {
                 /** @type {?} */
                 const isRemovalAnimation = !toStateValue || toStateValue == VOID_VALUE;
-                elementPlayers.forEach(player => {
+                elementPlayers.forEach((/**
+                 * @param {?} player
+                 * @return {?}
+                 */
+                player => {
                     if (player.queued)
                         return;
                     if (!isRemovalAnimation && player.triggerName != triggerName)
                         return;
                     players.push(player);
-                });
+                }));
             }
         }
         if (namespaceId || triggerName) {
-            players = players.filter(player => {
+            players = players.filter((/**
+             * @param {?} player
+             * @return {?}
+             */
+            player => {
                 if (namespaceId && namespaceId != player.namespaceId)
                     return false;
                 if (triggerName && triggerName != player.triggerName)
                     return false;
                 return true;
-            });
+            }));
         }
         return players;
     }
@@ -4963,7 +5639,11 @@ class TransitionAnimationEngine {
             const players = getOrSetAsInMap(allPreviousPlayersMap, element, []);
             /** @type {?} */
             const previousPlayers = this._getPreviousPlayers(element, isQueriedElement, targetNameSpaceId, targetTriggerName, instruction.toState);
-            previousPlayers.forEach(player => {
+            previousPlayers.forEach((/**
+             * @param {?} player
+             * @return {?}
+             */
+            player => {
                 /** @type {?} */
                 const realPlayer = (/** @type {?} */ (player.getRealPlayer()));
                 if (realPlayer.beforeDestroy) {
@@ -4971,7 +5651,7 @@ class TransitionAnimationEngine {
                 }
                 player.destroy();
                 players.push(player);
-            });
+            }));
         }
         // this needs to be done so that the PRE/POST styles can be
         // computed properly without interfering with the previous animation
@@ -5001,7 +5681,11 @@ class TransitionAnimationEngine {
         /** @type {?} */
         const allSubElements = new Set();
         /** @type {?} */
-        const allNewPlayers = instruction.timelines.map(timelineInstruction => {
+        const allNewPlayers = instruction.timelines.map((/**
+         * @param {?} timelineInstruction
+         * @return {?}
+         */
+        timelineInstruction => {
             /** @type {?} */
             const element = timelineInstruction.element;
             allConsumedElements.add(element);
@@ -5014,8 +5698,16 @@ class TransitionAnimationEngine {
             const isQueriedElement = element !== rootElement;
             /** @type {?} */
             const previousPlayers = flattenGroupPlayers((allPreviousPlayersMap.get(element) || EMPTY_PLAYER_ARRAY)
-                .map(p => p.getRealPlayer()))
-                .filter(p => {
+                .map((/**
+             * @param {?} p
+             * @return {?}
+             */
+            p => p.getRealPlayer())))
+                .filter((/**
+             * @param {?} p
+             * @return {?}
+             */
+            p => {
                 // the `element` is not apart of the AnimationPlayer definition, but
                 // Mock/WebAnimations
                 // use the element within their implementation. This will be added in Angular5 to
@@ -5023,7 +5715,7 @@ class TransitionAnimationEngine {
                 /** @type {?} */
                 const pp = (/** @type {?} */ (p));
                 return pp.element ? pp.element === element : false;
-            });
+            }));
             /** @type {?} */
             const preStyles = preStylesMap.get(element);
             /** @type {?} */
@@ -5044,21 +5736,43 @@ class TransitionAnimationEngine {
                 allQueriedPlayers.push(wrappedPlayer);
             }
             return player;
-        });
-        allQueriedPlayers.forEach(player => {
+        }));
+        allQueriedPlayers.forEach((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => {
             getOrSetAsInMap(this.playersByQueriedElement, player.element, []).push(player);
-            player.onDone(() => deleteOrUnsetInMap(this.playersByQueriedElement, player.element, player));
-        });
-        allConsumedElements.forEach(element => addClass(element, NG_ANIMATING_CLASSNAME));
+            player.onDone((/**
+             * @return {?}
+             */
+            () => deleteOrUnsetInMap(this.playersByQueriedElement, player.element, player)));
+        }));
+        allConsumedElements.forEach((/**
+         * @param {?} element
+         * @return {?}
+         */
+        element => addClass(element, NG_ANIMATING_CLASSNAME)));
         /** @type {?} */
         const player = optimizeGroupPlayer(allNewPlayers);
-        player.onDestroy(() => {
-            allConsumedElements.forEach(element => removeClass(element, NG_ANIMATING_CLASSNAME));
+        player.onDestroy((/**
+         * @return {?}
+         */
+        () => {
+            allConsumedElements.forEach((/**
+             * @param {?} element
+             * @return {?}
+             */
+            element => removeClass(element, NG_ANIMATING_CLASSNAME)));
             setStyles(rootElement, instruction.toStyles);
-        });
+        }));
         // this basically makes all of the callbacks for sub element animations
         // be dependent on the upper players for when they finish
-        allSubElements.forEach(element => { getOrSetAsInMap(skippedPlayersMap, element, []).push(player); });
+        allSubElements.forEach((/**
+         * @param {?} element
+         * @return {?}
+         */
+        element => { getOrSetAsInMap(skippedPlayersMap, element, []).push(player); }));
         return player;
     }
     /**
@@ -5104,9 +5818,17 @@ class TransitionAnimationPlayer {
         if (this._containsRealPlayer)
             return;
         this._player = player;
-        Object.keys(this._queuedCallbacks).forEach(phase => {
-            this._queuedCallbacks[phase].forEach(callback => listenOnPlayer(player, phase, undefined, callback));
-        });
+        Object.keys(this._queuedCallbacks).forEach((/**
+         * @param {?} phase
+         * @return {?}
+         */
+        phase => {
+            this._queuedCallbacks[phase].forEach((/**
+             * @param {?} callback
+             * @return {?}
+             */
+            callback => listenOnPlayer(player, phase, undefined, callback)));
+        }));
         this._queuedCallbacks = {};
         this._containsRealPlayer = true;
         this.overrideTotalTime(player.totalTime);
@@ -5129,10 +5851,19 @@ class TransitionAnimationPlayer {
         /** @type {?} */
         const p = (/** @type {?} */ (this._player));
         if (p.triggerCallback) {
-            player.onStart(() => (/** @type {?} */ (p.triggerCallback))('start'));
+            player.onStart((/**
+             * @return {?}
+             */
+            () => (/** @type {?} */ (p.triggerCallback))('start')));
         }
-        player.onDone(() => this.finish());
-        player.onDestroy(() => this.destroy());
+        player.onDone((/**
+         * @return {?}
+         */
+        () => this.finish()));
+        player.onDestroy((/**
+         * @return {?}
+         */
+        () => this.destroy()));
     }
     /**
      * @private
@@ -5317,13 +6048,26 @@ function cloakElement(element, value) {
 function cloakAndComputeStyles(valuesMap, driver, elements, elementPropsMap, defaultStyle) {
     /** @type {?} */
     const cloakVals = [];
-    elements.forEach(element => cloakVals.push(cloakElement(element)));
+    elements.forEach((/**
+     * @param {?} element
+     * @return {?}
+     */
+    element => cloakVals.push(cloakElement(element))));
     /** @type {?} */
     const failedElements = [];
-    elementPropsMap.forEach((props, element) => {
+    elementPropsMap.forEach((/**
+     * @param {?} props
+     * @param {?} element
+     * @return {?}
+     */
+    (props, element) => {
         /** @type {?} */
         const styles = {};
-        props.forEach(prop => {
+        props.forEach((/**
+         * @param {?} prop
+         * @return {?}
+         */
+        prop => {
             /** @type {?} */
             const value = styles[prop] = driver.computeStyle(element, prop, defaultStyle);
             // there is no easy way to detect this because a sub element could be removed
@@ -5332,14 +6076,18 @@ function cloakAndComputeStyles(valuesMap, driver, elements, elementPropsMap, def
                 element[REMOVAL_FLAG] = NULL_REMOVED_QUERIED_STATE;
                 failedElements.push(element);
             }
-        });
+        }));
         valuesMap.set(element, styles);
-    });
+    }));
     // we use a index variable here since Set.forEach(a, i) does not return
     // an index value for the closure (but instead just the value)
     /** @type {?} */
     let i = 0;
-    elements.forEach(element => cloakElement(element, cloakVals[i++]));
+    elements.forEach((/**
+     * @param {?} element
+     * @return {?}
+     */
+    element => cloakElement(element, cloakVals[i++])));
     return failedElements;
 }
 /*
@@ -5360,7 +6108,11 @@ is placed into the Map[@trigger] spot.
 function buildRootMap(roots, nodes) {
     /** @type {?} */
     const rootMap = new Map();
-    roots.forEach(root => rootMap.set(root, []));
+    roots.forEach((/**
+     * @param {?} root
+     * @return {?}
+     */
+    root => rootMap.set(root, [])));
     if (nodes.length == 0)
         return rootMap;
     /** @type {?} */
@@ -5394,13 +6146,17 @@ function buildRootMap(roots, nodes) {
         localRootMap.set(node, root);
         return root;
     }
-    nodes.forEach(node => {
+    nodes.forEach((/**
+     * @param {?} node
+     * @return {?}
+     */
+    node => {
         /** @type {?} */
         const root = getRoot(node);
         if (root !== NULL_NODE) {
             (/** @type {?} */ (rootMap.get(root))).push(node);
         }
-    });
+    }));
     return rootMap;
 }
 /** @type {?} */
@@ -5447,7 +6203,10 @@ function removeClass(element, className) {
  * @return {?}
  */
 function removeNodesAfterAnimationDone(engine, element, players) {
-    optimizeGroupPlayer(players).onDone(() => engine.processLeaveNode(element));
+    optimizeGroupPlayer(players).onDone((/**
+     * @return {?}
+     */
+    () => engine.processLeaveNode(element)));
 }
 /**
  * @param {?} players
@@ -5510,7 +6269,11 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
     /** @type {?} */
     let preEntry = allPreStyleElements.get(element);
     if (preEntry) {
-        postEntry.forEach(data => (/** @type {?} */ (preEntry)).add(data));
+        postEntry.forEach((/**
+         * @param {?} data
+         * @return {?}
+         */
+        data => (/** @type {?} */ (preEntry)).add(data)));
     }
     else {
         allPreStyleElements.set(element, postEntry);
@@ -5521,7 +6284,7 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AnimationEngine {
     /**
@@ -5534,10 +6297,20 @@ class AnimationEngine {
         this._driver = _driver;
         this._triggerCache = {};
         // this method is designed to be overridden by the code that uses this engine
-        this.onRemovalComplete = (element, context) => { };
+        this.onRemovalComplete = (/**
+         * @param {?} element
+         * @param {?} context
+         * @return {?}
+         */
+        (element, context) => { });
         this._transitionEngine = new TransitionAnimationEngine(bodyNode, _driver, normalizer);
         this._timelineEngine = new TimelineAnimationEngine(bodyNode, _driver, normalizer);
-        this._transitionEngine.onRemovalComplete = (element, context) => this.onRemovalComplete(element, context);
+        this._transitionEngine.onRemovalComplete = (/**
+         * @param {?} element
+         * @param {?} context
+         * @return {?}
+         */
+        (element, context) => this.onRemovalComplete(element, context));
     }
     /**
      * @param {?} componentId
@@ -5663,7 +6436,7 @@ class AnimationEngine {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Returns an instance of `SpecialCasedStyles` if and when any special (non animateable) styles are
@@ -5796,7 +6569,7 @@ function isNonAnimatableStyle(prop) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -5835,7 +6608,11 @@ class ElementAnimationStyleHandler {
         this._destroyed = false;
         this._startTime = 0;
         this._position = 0;
-        this._eventFn = (e) => this._handleCallback(e);
+        this._eventFn = (/**
+         * @param {?} e
+         * @return {?}
+         */
+        (e) => this._handleCallback(e));
     }
     /**
      * @return {?}
@@ -6037,7 +6814,7 @@ function countChars(value, char) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const DEFAULT_FILL_MODE = 'forwards';
@@ -6101,7 +6878,11 @@ class CssKeyframesPlayer {
         if (this._specialStyles) {
             this._specialStyles.destroy();
         }
-        this._onDestroyFns.forEach(fn => fn());
+        this._onDestroyFns.forEach((/**
+         * @param {?} fn
+         * @return {?}
+         */
+        fn => fn()));
         this._onDestroyFns = [];
     }
     /**
@@ -6109,7 +6890,11 @@ class CssKeyframesPlayer {
      * @return {?}
      */
     _flushDoneFns() {
-        this._onDoneFns.forEach(fn => fn());
+        this._onDoneFns.forEach((/**
+         * @param {?} fn
+         * @return {?}
+         */
+        fn => fn()));
         this._onDoneFns = [];
     }
     /**
@@ -6117,7 +6902,11 @@ class CssKeyframesPlayer {
      * @return {?}
      */
     _flushStartFns() {
-        this._onStartFns.forEach(fn => fn());
+        this._onStartFns.forEach((/**
+         * @param {?} fn
+         * @return {?}
+         */
+        fn => fn()));
         this._onStartFns = [];
     }
     /**
@@ -6203,7 +6992,10 @@ class CssKeyframesPlayer {
      * @return {?}
      */
     _buildStyler() {
-        this._styler = new ElementAnimationStyleHandler(this.element, this.animationName, this._duration, this._delay, this.easing, DEFAULT_FILL_MODE, () => this.finish());
+        this._styler = new ElementAnimationStyleHandler(this.element, this.animationName, this._duration, this._delay, this.easing, DEFAULT_FILL_MODE, (/**
+         * @return {?}
+         */
+        () => this.finish()));
     }
     /**
      * \@internal
@@ -6213,7 +7005,11 @@ class CssKeyframesPlayer {
     triggerCallback(phaseName) {
         /** @type {?} */
         const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
-        methods.forEach(fn => fn());
+        methods.forEach((/**
+         * @param {?} fn
+         * @return {?}
+         */
+        fn => fn()));
         methods.length = 0;
     }
     /**
@@ -6226,11 +7022,15 @@ class CssKeyframesPlayer {
         if (this.hasStarted()) {
             /** @type {?} */
             const finished = this._state >= 3 /* FINISHED */;
-            Object.keys(this._finalStyles).forEach(prop => {
+            Object.keys(this._finalStyles).forEach((/**
+             * @param {?} prop
+             * @return {?}
+             */
+            prop => {
                 if (prop != 'offset') {
                     styles[prop] = finished ? this._finalStyles[prop] : computeStyle(this.element, prop);
                 }
-            });
+            }));
         }
         this.currentSnapshot = styles;
     }
@@ -6238,7 +7038,7 @@ class CssKeyframesPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class DirectStylePlayer extends NoopAnimationPlayer {
     /**
@@ -6259,9 +7059,13 @@ class DirectStylePlayer extends NoopAnimationPlayer {
         if (this.__initialized || !this._startingStyles)
             return;
         this.__initialized = true;
-        Object.keys(this._styles).forEach(prop => {
+        Object.keys(this._styles).forEach((/**
+         * @param {?} prop
+         * @return {?}
+         */
+        prop => {
             (/** @type {?} */ (this._startingStyles))[prop] = this.element.style[prop];
-        });
+        }));
         super.init();
     }
     /**
@@ -6272,7 +7076,11 @@ class DirectStylePlayer extends NoopAnimationPlayer {
             return;
         this.init();
         Object.keys(this._styles)
-            .forEach(prop => this.element.style.setProperty(prop, this._styles[prop]));
+            .forEach((/**
+         * @param {?} prop
+         * @return {?}
+         */
+        prop => this.element.style.setProperty(prop, this._styles[prop])));
         super.play();
     }
     /**
@@ -6281,7 +7089,11 @@ class DirectStylePlayer extends NoopAnimationPlayer {
     destroy() {
         if (!this._startingStyles)
             return;
-        Object.keys(this._startingStyles).forEach(prop => {
+        Object.keys(this._startingStyles).forEach((/**
+         * @param {?} prop
+         * @return {?}
+         */
+        prop => {
             /** @type {?} */
             const value = (/** @type {?} */ (this._startingStyles))[prop];
             if (value) {
@@ -6290,7 +7102,7 @@ class DirectStylePlayer extends NoopAnimationPlayer {
             else {
                 this.element.style.removeProperty(prop);
             }
-        });
+        }));
         this._startingStyles = null;
         super.destroy();
     }
@@ -6298,7 +7110,7 @@ class DirectStylePlayer extends NoopAnimationPlayer {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const KEYFRAMES_NAME_PREFIX = 'gen_css_kf_';
@@ -6354,18 +7166,30 @@ class CssKeyframesDriver {
      * @return {?}
      */
     buildKeyframeElement(element, name, keyframes) {
-        keyframes = keyframes.map(kf => hypenatePropsObject(kf));
+        keyframes = keyframes.map((/**
+         * @param {?} kf
+         * @return {?}
+         */
+        kf => hypenatePropsObject(kf)));
         /** @type {?} */
         let keyframeStr = `@keyframes ${name} {\n`;
         /** @type {?} */
         let tab = '';
-        keyframes.forEach(kf => {
+        keyframes.forEach((/**
+         * @param {?} kf
+         * @return {?}
+         */
+        kf => {
             tab = TAB_SPACE;
             /** @type {?} */
             const offset = parseFloat(kf['offset']);
             keyframeStr += `${tab}${offset * 100}% {\n`;
             tab += TAB_SPACE;
-            Object.keys(kf).forEach(prop => {
+            Object.keys(kf).forEach((/**
+             * @param {?} prop
+             * @return {?}
+             */
+            prop => {
                 /** @type {?} */
                 const value = kf[prop];
                 switch (prop) {
@@ -6380,9 +7204,9 @@ class CssKeyframesDriver {
                         keyframeStr += `${tab}${prop}: ${value};\n`;
                         return;
                 }
-            });
+            }));
             keyframeStr += `${tab}}\n`;
-        });
+        }));
         keyframeStr += `}\n`;
         /** @type {?} */
         const kfElm = document.createElement('style');
@@ -6404,15 +7228,27 @@ class CssKeyframesDriver {
             this._notifyFaultyScrubber();
         }
         /** @type {?} */
-        const previousCssKeyframePlayers = (/** @type {?} */ (previousPlayers.filter(player => player instanceof CssKeyframesPlayer)));
+        const previousCssKeyframePlayers = (/** @type {?} */ (previousPlayers.filter((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => player instanceof CssKeyframesPlayer))));
         /** @type {?} */
         const previousStyles = {};
         if (allowPreviousPlayerStylesMerge(duration, delay)) {
-            previousCssKeyframePlayers.forEach(player => {
+            previousCssKeyframePlayers.forEach((/**
+             * @param {?} player
+             * @return {?}
+             */
+            player => {
                 /** @type {?} */
                 let styles = player.currentSnapshot;
-                Object.keys(styles).forEach(prop => previousStyles[prop] = styles[prop]);
-            });
+                Object.keys(styles).forEach((/**
+                 * @param {?} prop
+                 * @return {?}
+                 */
+                prop => previousStyles[prop] = styles[prop]));
+            }));
         }
         keyframes = balancePreviousStylesIntoKeyframes(element, keyframes, previousStyles);
         /** @type {?} */
@@ -6433,7 +7269,10 @@ class CssKeyframesDriver {
         const specialStyles = packageNonAnimatableStyles(element, keyframes);
         /** @type {?} */
         const player = new CssKeyframesPlayer(element, keyframes, animationName, duration, delay, easing, finalStyles, specialStyles);
-        player.onDestroy(() => removeElement(kfElm));
+        player.onDestroy((/**
+         * @return {?}
+         */
+        () => removeElement(kfElm)));
         return player;
     }
     /**
@@ -6457,13 +7296,21 @@ function flattenKeyframesIntoStyles(keyframes) {
     if (keyframes) {
         /** @type {?} */
         const kfs = Array.isArray(keyframes) ? keyframes : [keyframes];
-        kfs.forEach(kf => {
-            Object.keys(kf).forEach(prop => {
+        kfs.forEach((/**
+         * @param {?} kf
+         * @return {?}
+         */
+        kf => {
+            Object.keys(kf).forEach((/**
+             * @param {?} prop
+             * @return {?}
+             */
+            prop => {
                 if (prop == 'offset' || prop == 'easing')
                     return;
                 flatKeyframes[prop] = kf[prop];
-            });
-        });
+            }));
+        }));
     }
     return flatKeyframes;
 }
@@ -6477,7 +7324,7 @@ function removeElement(node) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class WebAnimationsPlayer {
     /**
@@ -6512,7 +7359,11 @@ class WebAnimationsPlayer {
     _onFinish() {
         if (!this._finished) {
             this._finished = true;
-            this._onDoneFns.forEach(fn => fn());
+            this._onDoneFns.forEach((/**
+             * @param {?} fn
+             * @return {?}
+             */
+            fn => fn()));
             this._onDoneFns = [];
         }
     }
@@ -6536,7 +7387,10 @@ class WebAnimationsPlayer {
         ((/** @type {?} */ (this))).domPlayer =
             this._triggerWebAnimation(this.element, keyframes, this.options);
         this._finalKeyframe = keyframes.length ? keyframes[keyframes.length - 1] : {};
-        this.domPlayer.addEventListener('finish', () => this._onFinish());
+        this.domPlayer.addEventListener('finish', (/**
+         * @return {?}
+         */
+        () => this._onFinish()));
     }
     /**
      * @private
@@ -6584,7 +7438,11 @@ class WebAnimationsPlayer {
     play() {
         this._buildPlayer();
         if (!this.hasStarted()) {
-            this._onStartFns.forEach(fn => fn());
+            this._onStartFns.forEach((/**
+             * @param {?} fn
+             * @return {?}
+             */
+            fn => fn()));
             this._onStartFns = [];
             this._started = true;
             if (this._specialStyles) {
@@ -6651,7 +7509,11 @@ class WebAnimationsPlayer {
             if (this._specialStyles) {
                 this._specialStyles.destroy();
             }
-            this._onDestroyFns.forEach(fn => fn());
+            this._onDestroyFns.forEach((/**
+             * @param {?} fn
+             * @return {?}
+             */
+            fn => fn()));
             this._onDestroyFns = [];
         }
     }
@@ -6675,12 +7537,16 @@ class WebAnimationsPlayer {
         /** @type {?} */
         const styles = {};
         if (this.hasStarted()) {
-            Object.keys(this._finalKeyframe).forEach(prop => {
+            Object.keys(this._finalKeyframe).forEach((/**
+             * @param {?} prop
+             * @return {?}
+             */
+            prop => {
                 if (prop != 'offset') {
                     styles[prop] =
                         this._finished ? this._finalKeyframe[prop] : computeStyle(this.element, prop);
                 }
-            });
+            }));
         }
         this.currentSnapshot = styles;
     }
@@ -6692,14 +7558,18 @@ class WebAnimationsPlayer {
     triggerCallback(phaseName) {
         /** @type {?} */
         const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
-        methods.forEach(fn => fn());
+        methods.forEach((/**
+         * @param {?} fn
+         * @return {?}
+         */
+        fn => fn()));
         methods.length = 0;
     }
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class WebAnimationsDriver {
     constructor() {
@@ -6776,15 +7646,31 @@ class WebAnimationsDriver {
         /** @type {?} */
         const previousStyles = {};
         /** @type {?} */
-        const previousWebAnimationPlayers = (/** @type {?} */ (previousPlayers.filter(player => player instanceof WebAnimationsPlayer)));
+        const previousWebAnimationPlayers = (/** @type {?} */ (previousPlayers.filter((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => player instanceof WebAnimationsPlayer))));
         if (allowPreviousPlayerStylesMerge(duration, delay)) {
-            previousWebAnimationPlayers.forEach(player => {
+            previousWebAnimationPlayers.forEach((/**
+             * @param {?} player
+             * @return {?}
+             */
+            player => {
                 /** @type {?} */
                 let styles = player.currentSnapshot;
-                Object.keys(styles).forEach(prop => previousStyles[prop] = styles[prop]);
-            });
+                Object.keys(styles).forEach((/**
+                 * @param {?} prop
+                 * @return {?}
+                 */
+                prop => previousStyles[prop] = styles[prop]));
+            }));
         }
-        keyframes = keyframes.map(styles => copyStyles(styles, false));
+        keyframes = keyframes.map((/**
+         * @param {?} styles
+         * @return {?}
+         */
+        styles => copyStyles(styles, false)));
         keyframes = balancePreviousStylesIntoKeyframes(element, keyframes, previousStyles);
         /** @type {?} */
         const specialStyles = packageNonAnimatableStyles(element, keyframes);
@@ -6806,22 +7692,22 @@ function getElementAnimateFn() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
