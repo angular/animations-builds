@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.8+20.sha-a3e1054.with-local-changes
+ * @license Angular v8.0.0-beta.8+25.sha-410ccac.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -908,18 +908,18 @@ var AnimationAstBuilderVisitor = /** @class */ (function () {
         var keyframesOutOfRange = false;
         var previousOffset = 0;
         var keyframes = metadata.steps.map(function (styles) {
-            var style$$1 = _this._makeStyleAst(styles, context);
-            var offsetVal = style$$1.offset != null ? style$$1.offset : consumeOffset(style$$1.styles);
+            var style = _this._makeStyleAst(styles, context);
+            var offsetVal = style.offset != null ? style.offset : consumeOffset(style.styles);
             var offset = 0;
             if (offsetVal != null) {
                 totalKeyframesWithOffsets++;
-                offset = style$$1.offset = offsetVal;
+                offset = style.offset = offsetVal;
             }
             keyframesOutOfRange = keyframesOutOfRange || offset < 0 || offset > 1;
             offsetsOutOfOrder = offsetsOutOfOrder || offset < previousOffset;
             previousOffset = offset;
             offsets.push(offset);
-            return style$$1;
+            return style;
         });
         if (keyframesOutOfRange) {
             context.errors.push("Please ensure that all keyframe offsets are between 0 and 1");
@@ -1371,13 +1371,13 @@ var AnimationTimelineBuilderVisitor = /** @class */ (function () {
             context.incrementTime(timings.delay);
             timeline.snapshotCurrentStyles();
         }
-        var style$$1 = ast.style;
-        if (style$$1.type == 5 /* Keyframes */) {
-            this.visitKeyframes(style$$1, context);
+        var style = ast.style;
+        if (style.type == 5 /* Keyframes */) {
+            this.visitKeyframes(style, context);
         }
         else {
             context.incrementTime(timings.duration);
-            this.visitStyle(style$$1, context);
+            this.visitStyle(style, context);
             timeline.applyStylesToKeyframe();
         }
         context.currentAnimateTimings = null;
