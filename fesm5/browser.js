@@ -1,11 +1,11 @@
 /**
- * @license Angular v8.0.0-beta.11+55.sha-db62ccf.with-local-changes
+ * @license Angular v8.0.0-beta.11+57.sha-ef85336.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { NoopAnimationPlayer, ɵAnimationGroupPlayer, ɵPRE_STYLE, AUTO_STYLE, sequence, style } from '@angular/animations';
-import { defineInjectable, ɵsetClassMetadata, Injectable } from '@angular/core';
+import { ΔdefineInjectable, ɵsetClassMetadata, Injectable } from '@angular/core';
 import { __spread, __read, __extends, __assign, __values } from 'tslib';
 
 function isBrowser() {
@@ -223,7 +223,7 @@ var NoopAnimationDriver = /** @class */ (function () {
         if (previousPlayers === void 0) { previousPlayers = []; }
         return new NoopAnimationPlayer(duration, delay);
     };
-    NoopAnimationDriver.ngInjectableDef = defineInjectable({ token: NoopAnimationDriver, factory: function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); }, providedIn: null });
+    NoopAnimationDriver.ngInjectableDef = ΔdefineInjectable({ token: NoopAnimationDriver, factory: function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); }, providedIn: null });
     return NoopAnimationDriver;
 }());
 /*@__PURE__*/ ɵsetClassMetadata(NoopAnimationDriver, [{
