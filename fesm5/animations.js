@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.13+23.sha-0629ebd.with-local-changes
+ * @license Angular v8.0.0-beta.13+28.sha-c1d5fbd.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -815,8 +815,8 @@ function useAnimation(animation, options) {
  *        query('.content', style({ opacity: 0 })),
  *
  *        // animate the inner elements in, one by one
- *        query('h1', animate(1000, style({ opacity: 1 })),
- *        query('.content', animate(1000, style({ opacity: 1 })),
+ *        query('h1', animate(1000, style({ opacity: 1 }))),
+ *        query('.content', animate(1000, style({ opacity: 1 }))),
  *      ])
  *    ])
  *  ]
