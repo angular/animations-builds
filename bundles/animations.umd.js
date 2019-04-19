@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.13+21.sha-78146c1.with-local-changes
+ * @license Angular v8.0.0-beta.13+51.sha-d9ce8a4.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -821,8 +821,8 @@
      *        query('.content', style({ opacity: 0 })),
      *
      *        // animate the inner elements in, one by one
-     *        query('h1', animate(1000, style({ opacity: 1 })),
-     *        query('.content', animate(1000, style({ opacity: 1 })),
+     *        query('h1', animate(1000, style({ opacity: 1 }))),
+     *        query('.content', animate(1000, style({ opacity: 1 }))),
      *      ])
      *    ])
      *  ]
