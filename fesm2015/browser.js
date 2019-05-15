@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-rc.3+50.sha-db64b01.with-local-changes
+ * @license Angular v8.0.0-rc.3+52.sha-b12e76d.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -239,29 +239,37 @@ if (_isNode || typeof Element !== 'undefined') {
      * @return {?}
      */
     (elm1, elm2) => { return (/** @type {?} */ (elm1.contains(elm2))); });
-    if (_isNode || Element.prototype.matches) {
-        _matches = (/**
-         * @param {?} element
-         * @param {?} selector
-         * @return {?}
-         */
-        (element, selector) => element.matches(selector));
-    }
-    else {
-        /** @type {?} */
-        const proto = (/** @type {?} */ (Element.prototype));
-        /** @type {?} */
-        const fn = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
-            proto.oMatchesSelector || proto.webkitMatchesSelector;
-        if (fn) {
-            _matches = (/**
+    _matches = ((/**
+     * @return {?}
+     */
+    () => {
+        if (_isNode || Element.prototype.matches) {
+            return (/**
              * @param {?} element
              * @param {?} selector
              * @return {?}
              */
-            (element, selector) => fn.apply(element, [selector]));
+            (element, selector) => element.matches(selector));
         }
-    }
+        else {
+            /** @type {?} */
+            const proto = (/** @type {?} */ (Element.prototype));
+            /** @type {?} */
+            const fn = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
+                proto.oMatchesSelector || proto.webkitMatchesSelector;
+            if (fn) {
+                return (/**
+                 * @param {?} element
+                 * @param {?} selector
+                 * @return {?}
+                 */
+                (element, selector) => fn.apply(element, [selector]));
+            }
+            else {
+                return _matches;
+            }
+        }
+    }))();
     _query = (/**
      * @param {?} element
      * @param {?} selector
@@ -3178,9 +3186,13 @@ class WebAnimationsStyleNormalizer extends AnimationStyleNormalizer {
         return strVal + unit;
     }
 }
-/** @type {?} */
-const DIMENSIONAL_PROP_MAP = makeBooleanMap('width,height,minWidth,minHeight,maxWidth,maxHeight,left,top,bottom,right,fontSize,outlineWidth,outlineOffset,paddingTop,paddingLeft,paddingBottom,paddingRight,marginTop,marginLeft,marginBottom,marginRight,borderRadius,borderWidth,borderTopWidth,borderLeftWidth,borderRightWidth,borderBottomWidth,textIndent,perspective'
+const ɵ0 = /**
+ * @return {?}
+ */
+() => makeBooleanMap('width,height,minWidth,minHeight,maxWidth,maxHeight,left,top,bottom,right,fontSize,outlineWidth,outlineOffset,paddingTop,paddingLeft,paddingBottom,paddingRight,marginTop,marginLeft,marginBottom,marginRight,borderRadius,borderWidth,borderTopWidth,borderLeftWidth,borderRightWidth,borderBottomWidth,textIndent,perspective'
     .split(','));
+/** @type {?} */
+const DIMENSIONAL_PROP_MAP = ((ɵ0))();
 /**
  * @param {?} keys
  * @return {?}
