@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.1+11.sha-0ddf0c4.with-local-changes
+ * @license Angular v9.0.0-next.1+13.sha-c198a27.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -210,6 +210,7 @@ let _contains = (/**
  * @return {?}
  */
 (elm1, elm2) => false);
+const ɵ0 = _contains;
 /** @type {?} */
 let _matches = (/**
  * @param {?} element
@@ -217,6 +218,7 @@ let _matches = (/**
  * @return {?}
  */
 (element, selector) => false);
+const ɵ1 = _matches;
 /** @type {?} */
 let _query = (/**
  * @param {?} element
@@ -227,6 +229,7 @@ let _query = (/**
 (element, selector, multi) => {
     return [];
 });
+const ɵ2 = _query;
 // Define utility methods for browsers and platform-server(domino) where Element
 // and utility methods exist.
 /** @type {?} */
@@ -429,6 +432,58 @@ NoopAnimationDriver.decorators = [
 class AnimationDriver {
 }
 AnimationDriver.NOOP = new NoopAnimationDriver();
+if (false) {
+    /** @type {?} */
+    AnimationDriver.NOOP;
+    /**
+     * @abstract
+     * @param {?} prop
+     * @return {?}
+     */
+    AnimationDriver.prototype.validateStyleProperty = function (prop) { };
+    /**
+     * @abstract
+     * @param {?} element
+     * @param {?} selector
+     * @return {?}
+     */
+    AnimationDriver.prototype.matchesElement = function (element, selector) { };
+    /**
+     * @abstract
+     * @param {?} elm1
+     * @param {?} elm2
+     * @return {?}
+     */
+    AnimationDriver.prototype.containsElement = function (elm1, elm2) { };
+    /**
+     * @abstract
+     * @param {?} element
+     * @param {?} selector
+     * @param {?} multi
+     * @return {?}
+     */
+    AnimationDriver.prototype.query = function (element, selector, multi) { };
+    /**
+     * @abstract
+     * @param {?} element
+     * @param {?} prop
+     * @param {?=} defaultValue
+     * @return {?}
+     */
+    AnimationDriver.prototype.computeStyle = function (element, prop, defaultValue) { };
+    /**
+     * @abstract
+     * @param {?} element
+     * @param {?} keyframes
+     * @param {?} duration
+     * @param {?} delay
+     * @param {?=} easing
+     * @param {?=} previousPlayers
+     * @param {?=} scrubberAccessRequested
+     * @return {?}
+     */
+    AnimationDriver.prototype.animate = function (element, keyframes, duration, delay, easing, previousPlayers, scrubberAccessRequested) { };
+}
 
 /**
  * @fileoverview added by tsickle
@@ -444,6 +499,10 @@ const SUBSTITUTION_EXPR_END = '}}';
 const ENTER_CLASSNAME = 'ng-enter';
 /** @type {?} */
 const LEAVE_CLASSNAME = 'ng-leave';
+/** @type {?} */
+const ENTER_SELECTOR = '.ng-enter';
+/** @type {?} */
+const LEAVE_SELECTOR = '.ng-leave';
 /** @type {?} */
 const NG_TRIGGER_CLASSNAME = 'ng-trigger';
 /** @type {?} */
@@ -786,6 +845,32 @@ function iteratorToArray(iterator) {
         item = iterator.next();
     }
     return arr;
+}
+/**
+ * @param {?} source
+ * @param {?} destination
+ * @return {?}
+ */
+function mergeAnimationOptions(source, destination) {
+    if (source.params) {
+        /** @type {?} */
+        const p0 = source.params;
+        if (!destination.params) {
+            destination.params = {};
+        }
+        /** @type {?} */
+        const p1 = destination.params;
+        Object.keys(p0).forEach((/**
+         * @param {?} param
+         * @return {?}
+         */
+        param => {
+            if (!p1.hasOwnProperty(param)) {
+                p1[param] = p0[param];
+            }
+        }));
+    }
+    return destination;
 }
 /** @type {?} */
 const DASH_CASE_REGEXP = /-+([a-z0-9])/g;
@@ -1652,6 +1737,13 @@ class AnimationAstBuilderVisitor {
         };
     }
 }
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationAstBuilderVisitor.prototype._driver;
+}
 /**
  * @param {?} selector
  * @return {?}
@@ -1699,6 +1791,28 @@ class AnimationAstBuilderContext {
         this.collectedStyles = {};
         this.options = null;
     }
+}
+if (false) {
+    /** @type {?} */
+    AnimationAstBuilderContext.prototype.queryCount;
+    /** @type {?} */
+    AnimationAstBuilderContext.prototype.depCount;
+    /** @type {?} */
+    AnimationAstBuilderContext.prototype.currentTransition;
+    /** @type {?} */
+    AnimationAstBuilderContext.prototype.currentQuery;
+    /** @type {?} */
+    AnimationAstBuilderContext.prototype.currentQuerySelector;
+    /** @type {?} */
+    AnimationAstBuilderContext.prototype.currentAnimateTimings;
+    /** @type {?} */
+    AnimationAstBuilderContext.prototype.currentTime;
+    /** @type {?} */
+    AnimationAstBuilderContext.prototype.collectedStyles;
+    /** @type {?} */
+    AnimationAstBuilderContext.prototype.options;
+    /** @type {?} */
+    AnimationAstBuilderContext.prototype.errors;
 }
 /**
  * @param {?} styles
@@ -1803,6 +1917,32 @@ function makeTimingAst(duration, delay, easing) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
+ * @record
+ */
+function AnimationTimelineInstruction() { }
+if (false) {
+    /** @type {?} */
+    AnimationTimelineInstruction.prototype.element;
+    /** @type {?} */
+    AnimationTimelineInstruction.prototype.keyframes;
+    /** @type {?} */
+    AnimationTimelineInstruction.prototype.preStyleProps;
+    /** @type {?} */
+    AnimationTimelineInstruction.prototype.postStyleProps;
+    /** @type {?} */
+    AnimationTimelineInstruction.prototype.duration;
+    /** @type {?} */
+    AnimationTimelineInstruction.prototype.delay;
+    /** @type {?} */
+    AnimationTimelineInstruction.prototype.totalTime;
+    /** @type {?} */
+    AnimationTimelineInstruction.prototype.easing;
+    /** @type {?|undefined} */
+    AnimationTimelineInstruction.prototype.stretchStartingKeyframe;
+    /** @type {?} */
+    AnimationTimelineInstruction.prototype.subTimeline;
+}
+/**
  * @param {?} element
  * @param {?} keyframes
  * @param {?} preStyleProps
@@ -1871,6 +2011,13 @@ class ElementInstructionMap {
      * @return {?}
      */
     clear() { this._map.clear(); }
+}
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ElementInstructionMap.prototype._map;
 }
 
 /**
@@ -2616,6 +2763,49 @@ class AnimationTimelineContext {
         return results;
     }
 }
+if (false) {
+    /** @type {?} */
+    AnimationTimelineContext.prototype.parentContext;
+    /** @type {?} */
+    AnimationTimelineContext.prototype.currentTimeline;
+    /** @type {?} */
+    AnimationTimelineContext.prototype.currentAnimateTimings;
+    /** @type {?} */
+    AnimationTimelineContext.prototype.previousNode;
+    /** @type {?} */
+    AnimationTimelineContext.prototype.subContextCount;
+    /** @type {?} */
+    AnimationTimelineContext.prototype.options;
+    /** @type {?} */
+    AnimationTimelineContext.prototype.currentQueryIndex;
+    /** @type {?} */
+    AnimationTimelineContext.prototype.currentQueryTotal;
+    /** @type {?} */
+    AnimationTimelineContext.prototype.currentStaggerTime;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationTimelineContext.prototype._driver;
+    /** @type {?} */
+    AnimationTimelineContext.prototype.element;
+    /** @type {?} */
+    AnimationTimelineContext.prototype.subInstructions;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationTimelineContext.prototype._enterClassName;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationTimelineContext.prototype._leaveClassName;
+    /** @type {?} */
+    AnimationTimelineContext.prototype.errors;
+    /** @type {?} */
+    AnimationTimelineContext.prototype.timelines;
+}
 class TimelineBuilder {
     /**
      * @param {?} _driver
@@ -2934,6 +3124,71 @@ class TimelineBuilder {
         return createTimelineInstruction(this.element, finalKeyframes, preProps, postProps, this.duration, this.startTime, this.easing, false);
     }
 }
+if (false) {
+    /** @type {?} */
+    TimelineBuilder.prototype.duration;
+    /** @type {?} */
+    TimelineBuilder.prototype.easing;
+    /**
+     * @type {?}
+     * @private
+     */
+    TimelineBuilder.prototype._previousKeyframe;
+    /**
+     * @type {?}
+     * @private
+     */
+    TimelineBuilder.prototype._currentKeyframe;
+    /**
+     * @type {?}
+     * @private
+     */
+    TimelineBuilder.prototype._keyframes;
+    /**
+     * @type {?}
+     * @private
+     */
+    TimelineBuilder.prototype._styleSummary;
+    /**
+     * @type {?}
+     * @private
+     */
+    TimelineBuilder.prototype._localTimelineStyles;
+    /**
+     * @type {?}
+     * @private
+     */
+    TimelineBuilder.prototype._globalTimelineStyles;
+    /**
+     * @type {?}
+     * @private
+     */
+    TimelineBuilder.prototype._pendingStyles;
+    /**
+     * @type {?}
+     * @private
+     */
+    TimelineBuilder.prototype._backFill;
+    /**
+     * @type {?}
+     * @private
+     */
+    TimelineBuilder.prototype._currentEmptyStepKeyframe;
+    /**
+     * @type {?}
+     * @private
+     */
+    TimelineBuilder.prototype._driver;
+    /** @type {?} */
+    TimelineBuilder.prototype.element;
+    /** @type {?} */
+    TimelineBuilder.prototype.startTime;
+    /**
+     * @type {?}
+     * @private
+     */
+    TimelineBuilder.prototype._elementTimelineStylesLookup;
+}
 class SubTimelineBuilder extends TimelineBuilder {
     /**
      * @param {?} driver
@@ -3015,6 +3270,23 @@ class SubTimelineBuilder extends TimelineBuilder {
         }
         return createTimelineInstruction(this.element, keyframes, this.preStyleProps, this.postStyleProps, duration, delay, easing, true);
     }
+}
+if (false) {
+    /** @type {?} */
+    SubTimelineBuilder.prototype.timings;
+    /** @type {?} */
+    SubTimelineBuilder.prototype.element;
+    /** @type {?} */
+    SubTimelineBuilder.prototype.keyframes;
+    /** @type {?} */
+    SubTimelineBuilder.prototype.preStyleProps;
+    /** @type {?} */
+    SubTimelineBuilder.prototype.postStyleProps;
+    /**
+     * @type {?}
+     * @private
+     */
+    SubTimelineBuilder.prototype._stretchStartingKeyframe;
 }
 /**
  * @param {?} offset
@@ -3106,6 +3378,18 @@ class Animation {
         return result;
     }
 }
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    Animation.prototype._animationAst;
+    /**
+     * @type {?}
+     * @private
+     */
+    Animation.prototype._driver;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -3123,6 +3407,24 @@ class Animation {
  * @abstract
  */
 class AnimationStyleNormalizer {
+}
+if (false) {
+    /**
+     * @abstract
+     * @param {?} propertyName
+     * @param {?} errors
+     * @return {?}
+     */
+    AnimationStyleNormalizer.prototype.normalizePropertyName = function (propertyName, errors) { };
+    /**
+     * @abstract
+     * @param {?} userProvidedProperty
+     * @param {?} normalizedProperty
+     * @param {?} value
+     * @param {?} errors
+     * @return {?}
+     */
+    AnimationStyleNormalizer.prototype.normalizeStyleValue = function (userProvidedProperty, normalizedProperty, value, errors) { };
 }
 /**
  * \@publicApi
@@ -3186,13 +3488,13 @@ class WebAnimationsStyleNormalizer extends AnimationStyleNormalizer {
         return strVal + unit;
     }
 }
-const ɵ0 = /**
+const ɵ0$1 = /**
  * @return {?}
  */
 () => makeBooleanMap('width,height,minWidth,minHeight,maxWidth,maxHeight,left,top,bottom,right,fontSize,outlineWidth,outlineOffset,paddingTop,paddingLeft,paddingBottom,paddingRight,marginTop,marginLeft,marginBottom,marginRight,borderRadius,borderWidth,borderTopWidth,borderLeftWidth,borderRightWidth,borderBottomWidth,textIndent,perspective'
     .split(','));
 /** @type {?} */
-const DIMENSIONAL_PROP_MAP = ((ɵ0))();
+const DIMENSIONAL_PROP_MAP = ((ɵ0$1))();
 /**
  * @param {?} keys
  * @return {?}
@@ -3212,6 +3514,38 @@ function makeBooleanMap(keys) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+/**
+ * @record
+ */
+function AnimationTransitionInstruction() { }
+if (false) {
+    /** @type {?} */
+    AnimationTransitionInstruction.prototype.element;
+    /** @type {?} */
+    AnimationTransitionInstruction.prototype.triggerName;
+    /** @type {?} */
+    AnimationTransitionInstruction.prototype.isRemovalTransition;
+    /** @type {?} */
+    AnimationTransitionInstruction.prototype.fromState;
+    /** @type {?} */
+    AnimationTransitionInstruction.prototype.fromStyles;
+    /** @type {?} */
+    AnimationTransitionInstruction.prototype.toState;
+    /** @type {?} */
+    AnimationTransitionInstruction.prototype.toStyles;
+    /** @type {?} */
+    AnimationTransitionInstruction.prototype.timelines;
+    /** @type {?} */
+    AnimationTransitionInstruction.prototype.queriedElements;
+    /** @type {?} */
+    AnimationTransitionInstruction.prototype.preStyleProps;
+    /** @type {?} */
+    AnimationTransitionInstruction.prototype.postStyleProps;
+    /** @type {?} */
+    AnimationTransitionInstruction.prototype.totalTime;
+    /** @type {?|undefined} */
+    AnimationTransitionInstruction.prototype.errors;
+}
 /**
  * @param {?} element
  * @param {?} triggerName
@@ -3367,6 +3701,20 @@ class AnimationTransitionFactory {
         return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, timelines, queriedElementsList, preStyleMap, postStyleMap, totalTime);
     }
 }
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationTransitionFactory.prototype._triggerName;
+    /** @type {?} */
+    AnimationTransitionFactory.prototype.ast;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationTransitionFactory.prototype._stateStyles;
+}
 /**
  * @param {?} matchFns
  * @param {?} currentState
@@ -3436,6 +3784,18 @@ class AnimationStateStyles {
         }));
         return finalStyles;
     }
+}
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationStateStyles.prototype.styles;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationStateStyles.prototype.defaultParams;
 }
 
 /**
@@ -3513,6 +3873,18 @@ class AnimationTrigger {
     matchStyles(currentState, params, errors) {
         return this.fallbackTransition.buildStyles(currentState, params, errors);
     }
+}
+if (false) {
+    /** @type {?} */
+    AnimationTrigger.prototype.transitionFactories;
+    /** @type {?} */
+    AnimationTrigger.prototype.fallbackTransition;
+    /** @type {?} */
+    AnimationTrigger.prototype.states;
+    /** @type {?} */
+    AnimationTrigger.prototype.name;
+    /** @type {?} */
+    AnimationTrigger.prototype.ast;
 }
 /**
  * @param {?} triggerName
@@ -3771,6 +4143,32 @@ class TimelineAnimationEngine {
         }
     }
 }
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    TimelineAnimationEngine.prototype._animations;
+    /**
+     * @type {?}
+     * @private
+     */
+    TimelineAnimationEngine.prototype._playersById;
+    /** @type {?} */
+    TimelineAnimationEngine.prototype.players;
+    /** @type {?} */
+    TimelineAnimationEngine.prototype.bodyNode;
+    /**
+     * @type {?}
+     * @private
+     */
+    TimelineAnimationEngine.prototype._driver;
+    /**
+     * @type {?}
+     * @private
+     */
+    TimelineAnimationEngine.prototype._normalizer;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -3806,8 +4204,56 @@ const NULL_REMOVED_QUERIED_STATE = {
     hasAnimation: false,
     removedBeforeQueried: true
 };
+/**
+ * @record
+ */
+function TriggerListener() { }
+if (false) {
+    /** @type {?} */
+    TriggerListener.prototype.name;
+    /** @type {?} */
+    TriggerListener.prototype.phase;
+    /** @type {?} */
+    TriggerListener.prototype.callback;
+}
+/**
+ * @record
+ */
+function QueueInstruction() { }
+if (false) {
+    /** @type {?} */
+    QueueInstruction.prototype.element;
+    /** @type {?} */
+    QueueInstruction.prototype.triggerName;
+    /** @type {?} */
+    QueueInstruction.prototype.fromState;
+    /** @type {?} */
+    QueueInstruction.prototype.toState;
+    /** @type {?} */
+    QueueInstruction.prototype.transition;
+    /** @type {?} */
+    QueueInstruction.prototype.player;
+    /** @type {?} */
+    QueueInstruction.prototype.isFallbackTransition;
+}
 /** @type {?} */
 const REMOVAL_FLAG = '__ng_removed';
+/**
+ * @record
+ */
+function ElementAnimationState() { }
+if (false) {
+    /** @type {?} */
+    ElementAnimationState.prototype.setForRemoval;
+    /** @type {?} */
+    ElementAnimationState.prototype.setForMove;
+    /** @type {?} */
+    ElementAnimationState.prototype.hasAnimation;
+    /** @type {?} */
+    ElementAnimationState.prototype.namespaceId;
+    /** @type {?} */
+    ElementAnimationState.prototype.removedBeforeQueried;
+}
 class StateValue {
     /**
      * @param {?} input
@@ -3858,6 +4304,14 @@ class StateValue {
             }));
         }
     }
+}
+if (false) {
+    /** @type {?} */
+    StateValue.prototype.value;
+    /** @type {?} */
+    StateValue.prototype.options;
+    /** @type {?} */
+    StateValue.prototype.namespaceId;
 }
 /** @type {?} */
 const VOID_VALUE = 'void';
@@ -4408,6 +4862,51 @@ class AnimationTransitionNamespace {
             entry => entry.element === element)) ? true : false) || containsData;
         return containsData;
     }
+}
+if (false) {
+    /** @type {?} */
+    AnimationTransitionNamespace.prototype.players;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationTransitionNamespace.prototype._triggers;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationTransitionNamespace.prototype._queue;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationTransitionNamespace.prototype._elementListeners;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationTransitionNamespace.prototype._hostClassName;
+    /** @type {?} */
+    AnimationTransitionNamespace.prototype.id;
+    /** @type {?} */
+    AnimationTransitionNamespace.prototype.hostElement;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationTransitionNamespace.prototype._engine;
+}
+/**
+ * @record
+ */
+function QueuedTransition() { }
+if (false) {
+    /** @type {?} */
+    QueuedTransition.prototype.element;
+    /** @type {?} */
+    QueuedTransition.prototype.instruction;
+    /** @type {?} */
+    QueuedTransition.prototype.player;
 }
 class TransitionAnimationEngine {
     /**
@@ -5803,6 +6302,61 @@ class TransitionAnimationEngine {
         return new NoopAnimationPlayer(instruction.duration, instruction.delay);
     }
 }
+if (false) {
+    /** @type {?} */
+    TransitionAnimationEngine.prototype.players;
+    /** @type {?} */
+    TransitionAnimationEngine.prototype.newHostElements;
+    /** @type {?} */
+    TransitionAnimationEngine.prototype.playersByElement;
+    /** @type {?} */
+    TransitionAnimationEngine.prototype.playersByQueriedElement;
+    /** @type {?} */
+    TransitionAnimationEngine.prototype.statesByElement;
+    /** @type {?} */
+    TransitionAnimationEngine.prototype.disabledNodes;
+    /** @type {?} */
+    TransitionAnimationEngine.prototype.totalAnimations;
+    /** @type {?} */
+    TransitionAnimationEngine.prototype.totalQueuedPlayers;
+    /**
+     * @type {?}
+     * @private
+     */
+    TransitionAnimationEngine.prototype._namespaceLookup;
+    /**
+     * @type {?}
+     * @private
+     */
+    TransitionAnimationEngine.prototype._namespaceList;
+    /**
+     * @type {?}
+     * @private
+     */
+    TransitionAnimationEngine.prototype._flushFns;
+    /**
+     * @type {?}
+     * @private
+     */
+    TransitionAnimationEngine.prototype._whenQuietFns;
+    /** @type {?} */
+    TransitionAnimationEngine.prototype.namespacesByHostElement;
+    /** @type {?} */
+    TransitionAnimationEngine.prototype.collectedEnterElements;
+    /** @type {?} */
+    TransitionAnimationEngine.prototype.collectedLeaveElements;
+    /** @type {?} */
+    TransitionAnimationEngine.prototype.onRemovalComplete;
+    /** @type {?} */
+    TransitionAnimationEngine.prototype.bodyNode;
+    /** @type {?} */
+    TransitionAnimationEngine.prototype.driver;
+    /**
+     * @type {?}
+     * @private
+     */
+    TransitionAnimationEngine.prototype._normalizer;
+}
 class TransitionAnimationPlayer {
     /**
      * @param {?} namespaceId
@@ -5976,6 +6530,41 @@ class TransitionAnimationPlayer {
             p.triggerCallback(phaseName);
         }
     }
+}
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    TransitionAnimationPlayer.prototype._player;
+    /**
+     * @type {?}
+     * @private
+     */
+    TransitionAnimationPlayer.prototype._containsRealPlayer;
+    /**
+     * @type {?}
+     * @private
+     */
+    TransitionAnimationPlayer.prototype._queuedCallbacks;
+    /** @type {?} */
+    TransitionAnimationPlayer.prototype.destroyed;
+    /** @type {?} */
+    TransitionAnimationPlayer.prototype.parentPlayer;
+    /** @type {?} */
+    TransitionAnimationPlayer.prototype.markedForDestroy;
+    /** @type {?} */
+    TransitionAnimationPlayer.prototype.disabled;
+    /** @type {?} */
+    TransitionAnimationPlayer.prototype.queued;
+    /** @type {?} */
+    TransitionAnimationPlayer.prototype.totalTime;
+    /** @type {?} */
+    TransitionAnimationPlayer.prototype.namespaceId;
+    /** @type {?} */
+    TransitionAnimationPlayer.prototype.triggerName;
+    /** @type {?} */
+    TransitionAnimationPlayer.prototype.element;
 }
 /**
  * @param {?} map
@@ -6173,6 +6762,21 @@ function buildRootMap(roots, nodes) {
 }
 /** @type {?} */
 const CLASSES_CACHE_KEY = '$$classes';
+/**
+ * @param {?} element
+ * @param {?} className
+ * @return {?}
+ */
+function containsClass(element, className) {
+    if (element.classList) {
+        return element.classList.contains(className);
+    }
+    else {
+        /** @type {?} */
+        const classes = element[CLASSES_CACHE_KEY];
+        return classes && classes[className];
+    }
+}
 /**
  * @param {?} element
  * @param {?} className
@@ -6445,6 +7049,35 @@ class AnimationEngine {
      */
     whenRenderingDone() { return this._transitionEngine.whenRenderingDone(); }
 }
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationEngine.prototype._transitionEngine;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationEngine.prototype._timelineEngine;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationEngine.prototype._triggerCache;
+    /** @type {?} */
+    AnimationEngine.prototype.onRemovalComplete;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationEngine.prototype.bodyNode;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationEngine.prototype._driver;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -6552,6 +7185,42 @@ class SpecialCasedStyles {
     }
 }
 SpecialCasedStyles.initialStylesByElement = new WeakMap();
+if (false) {
+    /** @type {?} */
+    SpecialCasedStyles.initialStylesByElement;
+    /**
+     * @type {?}
+     * @private
+     */
+    SpecialCasedStyles.prototype._state;
+    /**
+     * @type {?}
+     * @private
+     */
+    SpecialCasedStyles.prototype._initialStyles;
+    /**
+     * @type {?}
+     * @private
+     */
+    SpecialCasedStyles.prototype._element;
+    /**
+     * @type {?}
+     * @private
+     */
+    SpecialCasedStyles.prototype._startStyles;
+    /**
+     * @type {?}
+     * @private
+     */
+    SpecialCasedStyles.prototype._endStyles;
+}
+/** @enum {number} */
+const SpecialCasedStylesState = {
+    Pending: 0,
+    Started: 1,
+    Finished: 2,
+    Destroyed: 3,
+};
 /**
  * @param {?} styles
  * @return {?}
@@ -6691,6 +7360,68 @@ class ElementAnimationStyleHandler {
         this.finish();
         removeKeyframeAnimation(this._element, this._name);
     }
+}
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ElementAnimationStyleHandler.prototype._eventFn;
+    /**
+     * @type {?}
+     * @private
+     */
+    ElementAnimationStyleHandler.prototype._finished;
+    /**
+     * @type {?}
+     * @private
+     */
+    ElementAnimationStyleHandler.prototype._destroyed;
+    /**
+     * @type {?}
+     * @private
+     */
+    ElementAnimationStyleHandler.prototype._startTime;
+    /**
+     * @type {?}
+     * @private
+     */
+    ElementAnimationStyleHandler.prototype._position;
+    /**
+     * @type {?}
+     * @private
+     */
+    ElementAnimationStyleHandler.prototype._element;
+    /**
+     * @type {?}
+     * @private
+     */
+    ElementAnimationStyleHandler.prototype._name;
+    /**
+     * @type {?}
+     * @private
+     */
+    ElementAnimationStyleHandler.prototype._duration;
+    /**
+     * @type {?}
+     * @private
+     */
+    ElementAnimationStyleHandler.prototype._delay;
+    /**
+     * @type {?}
+     * @private
+     */
+    ElementAnimationStyleHandler.prototype._easing;
+    /**
+     * @type {?}
+     * @private
+     */
+    ElementAnimationStyleHandler.prototype._fillMode;
+    /**
+     * @type {?}
+     * @private
+     */
+    ElementAnimationStyleHandler.prototype._onDoneFn;
 }
 /**
  * @param {?} element
@@ -6832,6 +7563,10 @@ function countChars(value, char) {
 const DEFAULT_FILL_MODE = 'forwards';
 /** @type {?} */
 const DEFAULT_EASING = 'linear';
+/** @enum {number} */
+const AnimatorControlState = {
+    INITIALIZED: 1, STARTED: 2, FINISHED: 3, DESTROYED: 4,
+};
 class CssKeyframesPlayer {
     /**
      * @param {?} element
@@ -7047,6 +7782,72 @@ class CssKeyframesPlayer {
         this.currentSnapshot = styles;
     }
 }
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    CssKeyframesPlayer.prototype._onDoneFns;
+    /**
+     * @type {?}
+     * @private
+     */
+    CssKeyframesPlayer.prototype._onStartFns;
+    /**
+     * @type {?}
+     * @private
+     */
+    CssKeyframesPlayer.prototype._onDestroyFns;
+    /**
+     * @type {?}
+     * @private
+     */
+    CssKeyframesPlayer.prototype._started;
+    /**
+     * @type {?}
+     * @private
+     */
+    CssKeyframesPlayer.prototype._styler;
+    /** @type {?} */
+    CssKeyframesPlayer.prototype.parentPlayer;
+    /** @type {?} */
+    CssKeyframesPlayer.prototype.totalTime;
+    /** @type {?} */
+    CssKeyframesPlayer.prototype.easing;
+    /** @type {?} */
+    CssKeyframesPlayer.prototype.currentSnapshot;
+    /**
+     * @type {?}
+     * @private
+     */
+    CssKeyframesPlayer.prototype._state;
+    /** @type {?} */
+    CssKeyframesPlayer.prototype.element;
+    /** @type {?} */
+    CssKeyframesPlayer.prototype.keyframes;
+    /** @type {?} */
+    CssKeyframesPlayer.prototype.animationName;
+    /**
+     * @type {?}
+     * @private
+     */
+    CssKeyframesPlayer.prototype._duration;
+    /**
+     * @type {?}
+     * @private
+     */
+    CssKeyframesPlayer.prototype._delay;
+    /**
+     * @type {?}
+     * @private
+     */
+    CssKeyframesPlayer.prototype._finalStyles;
+    /**
+     * @type {?}
+     * @private
+     */
+    CssKeyframesPlayer.prototype._specialStyles;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -7118,6 +7919,25 @@ class DirectStylePlayer extends NoopAnimationPlayer {
         this._startingStyles = null;
         super.destroy();
     }
+}
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    DirectStylePlayer.prototype._startingStyles;
+    /**
+     * @type {?}
+     * @private
+     */
+    DirectStylePlayer.prototype.__initialized;
+    /**
+     * @type {?}
+     * @private
+     */
+    DirectStylePlayer.prototype._styles;
+    /** @type {?} */
+    DirectStylePlayer.prototype.element;
 }
 
 /**
@@ -7297,6 +8117,23 @@ class CssKeyframesDriver {
             this._warningIssued = true;
         }
     }
+}
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    CssKeyframesDriver.prototype._count;
+    /**
+     * @type {?}
+     * @private
+     */
+    CssKeyframesDriver.prototype._head;
+    /**
+     * @type {?}
+     * @private
+     */
+    CssKeyframesDriver.prototype._warningIssued;
 }
 /**
  * @param {?} keyframes
@@ -7578,6 +8415,77 @@ class WebAnimationsPlayer {
         methods.length = 0;
     }
 }
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    WebAnimationsPlayer.prototype._onDoneFns;
+    /**
+     * @type {?}
+     * @private
+     */
+    WebAnimationsPlayer.prototype._onStartFns;
+    /**
+     * @type {?}
+     * @private
+     */
+    WebAnimationsPlayer.prototype._onDestroyFns;
+    /**
+     * @type {?}
+     * @private
+     */
+    WebAnimationsPlayer.prototype._duration;
+    /**
+     * @type {?}
+     * @private
+     */
+    WebAnimationsPlayer.prototype._delay;
+    /**
+     * @type {?}
+     * @private
+     */
+    WebAnimationsPlayer.prototype._initialized;
+    /**
+     * @type {?}
+     * @private
+     */
+    WebAnimationsPlayer.prototype._finished;
+    /**
+     * @type {?}
+     * @private
+     */
+    WebAnimationsPlayer.prototype._started;
+    /**
+     * @type {?}
+     * @private
+     */
+    WebAnimationsPlayer.prototype._destroyed;
+    /**
+     * @type {?}
+     * @private
+     */
+    WebAnimationsPlayer.prototype._finalKeyframe;
+    /** @type {?} */
+    WebAnimationsPlayer.prototype.domPlayer;
+    /** @type {?} */
+    WebAnimationsPlayer.prototype.time;
+    /** @type {?} */
+    WebAnimationsPlayer.prototype.parentPlayer;
+    /** @type {?} */
+    WebAnimationsPlayer.prototype.currentSnapshot;
+    /** @type {?} */
+    WebAnimationsPlayer.prototype.element;
+    /** @type {?} */
+    WebAnimationsPlayer.prototype.keyframes;
+    /** @type {?} */
+    WebAnimationsPlayer.prototype.options;
+    /**
+     * @type {?}
+     * @private
+     */
+    WebAnimationsPlayer.prototype._specialStyles;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -7688,6 +8596,18 @@ class WebAnimationsDriver {
         const specialStyles = packageNonAnimatableStyles(element, keyframes);
         return new WebAnimationsPlayer(element, keyframes, playerOptions, specialStyles);
     }
+}
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    WebAnimationsDriver.prototype._isNativeImpl;
+    /**
+     * @type {?}
+     * @private
+     */
+    WebAnimationsDriver.prototype._cssKeyframesDriver;
 }
 /**
  * @return {?}
