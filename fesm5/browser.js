@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.1+4.sha-6ec91dd.with-local-changes
+ * @license Angular v8.2.1+6.sha-eccb60c.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -118,12 +118,15 @@ function parseTimelineCommand(command) {
     return [id, action];
 }
 var _contains = function (elm1, elm2) { return false; };
+var ɵ0 = _contains;
 var _matches = function (element, selector) {
     return false;
 };
+var ɵ1 = _matches;
 var _query = function (element, selector, multi) {
     return [];
 };
+var ɵ2 = _query;
 // Define utility methods for browsers and platform-server(domino) where Element
 // and utility methods exist.
 var _isNode = isNode();
@@ -248,6 +251,8 @@ var SUBSTITUTION_EXPR_START = '{{';
 var SUBSTITUTION_EXPR_END = '}}';
 var ENTER_CLASSNAME = 'ng-enter';
 var LEAVE_CLASSNAME = 'ng-leave';
+var ENTER_SELECTOR = '.ng-enter';
+var LEAVE_SELECTOR = '.ng-leave';
 var NG_TRIGGER_CLASSNAME = 'ng-trigger';
 var NG_TRIGGER_SELECTOR = '.ng-trigger';
 var NG_ANIMATING_CLASSNAME = 'ng-animating';
@@ -455,6 +460,21 @@ function iteratorToArray(iterator) {
         item = iterator.next();
     }
     return arr;
+}
+function mergeAnimationOptions(source, destination) {
+    if (source.params) {
+        var p0_1 = source.params;
+        if (!destination.params) {
+            destination.params = {};
+        }
+        var p1_1 = destination.params;
+        Object.keys(p0_1).forEach(function (param) {
+            if (!p1_1.hasOwnProperty(param)) {
+                p1_1[param] = p0_1[param];
+            }
+        });
+    }
+    return destination;
 }
 var DASH_CASE_REGEXP = /-+([a-z0-9])/g;
 function dashCaseToCamelCase(input) {
@@ -1993,9 +2013,9 @@ var WebAnimationsStyleNormalizer = /** @class */ (function (_super) {
     };
     return WebAnimationsStyleNormalizer;
 }(AnimationStyleNormalizer));
-var ɵ0 = function () { return makeBooleanMap('width,height,minWidth,minHeight,maxWidth,maxHeight,left,top,bottom,right,fontSize,outlineWidth,outlineOffset,paddingTop,paddingLeft,paddingBottom,paddingRight,marginTop,marginLeft,marginBottom,marginRight,borderRadius,borderWidth,borderTopWidth,borderLeftWidth,borderRightWidth,borderBottomWidth,textIndent,perspective'
+var ɵ0$1 = function () { return makeBooleanMap('width,height,minWidth,minHeight,maxWidth,maxHeight,left,top,bottom,right,fontSize,outlineWidth,outlineOffset,paddingTop,paddingLeft,paddingBottom,paddingRight,marginTop,marginLeft,marginBottom,marginRight,borderRadius,borderWidth,borderTopWidth,borderLeftWidth,borderRightWidth,borderBottomWidth,textIndent,perspective'
     .split(',')); };
-var DIMENSIONAL_PROP_MAP = (ɵ0)();
+var DIMENSIONAL_PROP_MAP = (ɵ0$1)();
 function makeBooleanMap(keys) {
     var map = {};
     keys.forEach(function (key) { return map[key] = true; });
@@ -3732,6 +3752,15 @@ function buildRootMap(roots, nodes) {
     return rootMap;
 }
 var CLASSES_CACHE_KEY = '$$classes';
+function containsClass(element, className) {
+    if (element.classList) {
+        return element.classList.contains(className);
+    }
+    else {
+        var classes = element[CLASSES_CACHE_KEY];
+        return classes && classes[className];
+    }
+}
 function addClass(element, className) {
     if (element.classList) {
         element.classList.add(className);
