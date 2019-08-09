@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.1+11.sha-0ddf0c4.with-local-changes
+ * @license Angular v9.0.0-next.1+13.sha-c198a27.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -256,6 +256,8 @@ var SUBSTITUTION_EXPR_START = '{{';
 var SUBSTITUTION_EXPR_END = '}}';
 var ENTER_CLASSNAME = 'ng-enter';
 var LEAVE_CLASSNAME = 'ng-leave';
+var ENTER_SELECTOR = '.ng-enter';
+var LEAVE_SELECTOR = '.ng-leave';
 var NG_TRIGGER_CLASSNAME = 'ng-trigger';
 var NG_TRIGGER_SELECTOR = '.ng-trigger';
 var NG_ANIMATING_CLASSNAME = 'ng-animating';
@@ -463,6 +465,21 @@ function iteratorToArray(iterator) {
         item = iterator.next();
     }
     return arr;
+}
+function mergeAnimationOptions(source, destination) {
+    if (source.params) {
+        var p0_1 = source.params;
+        if (!destination.params) {
+            destination.params = {};
+        }
+        var p1_1 = destination.params;
+        Object.keys(p0_1).forEach(function (param) {
+            if (!p1_1.hasOwnProperty(param)) {
+                p1_1[param] = p0_1[param];
+            }
+        });
+    }
+    return destination;
 }
 var DASH_CASE_REGEXP = /-+([a-z0-9])/g;
 function dashCaseToCamelCase(input) {
@@ -3739,6 +3756,15 @@ function buildRootMap(roots, nodes) {
     return rootMap;
 }
 var CLASSES_CACHE_KEY = '$$classes';
+function containsClass(element, className) {
+    if (element.classList) {
+        return element.classList.contains(className);
+    }
+    else {
+        var classes = element[CLASSES_CACHE_KEY];
+        return classes && classes[className];
+    }
+}
 function addClass(element, className) {
     if (element.classList) {
         element.classList.add(className);
