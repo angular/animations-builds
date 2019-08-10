@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.1+11.sha-0ddf0c4.with-local-changes
+ * @license Angular v9.0.0-next.1+18.sha-9a37e82.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -57,6 +57,16 @@
  */
 class AnimationBuilder {
 }
+if (false) {
+    /**
+     * Builds a factory for producing a defined animation.
+     * @see `animate()`
+     * @abstract
+     * @param {?} animation A reusable animation definition.
+     * @return {?} A factory object that can create a player for the defined animation.
+     */
+    AnimationBuilder.prototype.build = function (animation) { };
+}
 /**
  * A factory object returned from the `AnimationBuilder`.`build()` method.
  *
@@ -65,11 +75,104 @@ class AnimationBuilder {
  */
 class AnimationFactory {
 }
+if (false) {
+    /**
+     * Creates an `AnimationPlayer` instance for the reusable animation defined by
+     * the `AnimationBuilder`.`build()` method that created this factory.
+     * Attaches the new player a DOM element.
+     * @abstract
+     * @param {?} element The DOM element to which to attach the animation.
+     * @param {?=} options A set of options that can include a time delay and
+     * additional developer-defined parameters.
+     * @return {?}
+     */
+    AnimationFactory.prototype.create = function (element, options) { };
+}
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Represents a set of CSS styles for use in an animation style.
+ * @record
+ */
+function ɵStyleData() { }
+/** @enum {number} */
+const AnimationMetadataType = {
+    /**
+     * Associates a named animation state with a set of CSS styles.
+     * See `state()`
+     */
+    State: 0,
+    /**
+     * Data for a transition from one animation state to another.
+     * See `transition()`
+     */
+    Transition: 1,
+    /**
+     * Contains a set of animation steps.
+     * See `sequence()`
+     */
+    Sequence: 2,
+    /**
+     * Contains a set of animation steps.
+     * See `{@link animations/group group()}`
+     */
+    Group: 3,
+    /**
+     * Contains an animation step.
+     * See `animate()`
+     */
+    Animate: 4,
+    /**
+     * Contains a set of animation steps.
+     * See `keyframes()`
+     */
+    Keyframes: 5,
+    /**
+     * Contains a set of CSS property-value pairs into a named style.
+     * See `style()`
+     */
+    Style: 6,
+    /**
+     * Associates an animation with an entry trigger that can be attached to an element.
+     * See `trigger()`
+     */
+    Trigger: 7,
+    /**
+     * Contains a re-usable animation.
+     * See `animation()`
+     */
+    Reference: 8,
+    /**
+     * Contains data to use in executing child animations returned by a query.
+     * See `animateChild()`
+     */
+    AnimateChild: 9,
+    /**
+     * Contains animation parameters for a re-usable animation.
+     * See `useAnimation()`
+     */
+    AnimateRef: 10,
+    /**
+     * Contains child-animation query data.
+     * See `query()`
+     */
+    Query: 11,
+    /**
+     * Contains data for staggering an animation sequence.
+     * See `stagger()`
+     */
+    Stagger: 12,
+};
 /**
  * Specifies automatic styling.
  *
@@ -77,6 +180,305 @@ class AnimationFactory {
  * @type {?}
  */
 const AUTO_STYLE = '*';
+/**
+ * Base for animation data structures.
+ *
+ * \@publicApi
+ * @record
+ */
+function AnimationMetadata() { }
+if (false) {
+    /** @type {?} */
+    AnimationMetadata.prototype.type;
+}
+/**
+ * Contains an animation trigger. Instantiated and returned by the
+ * `trigger()` function.
+ *
+ * \@publicApi
+ * @record
+ */
+function AnimationTriggerMetadata() { }
+if (false) {
+    /**
+     * The trigger name, used to associate it with an element. Unique within the component.
+     * @type {?}
+     */
+    AnimationTriggerMetadata.prototype.name;
+    /**
+     * An animation definition object, containing an array of state and transition declarations.
+     * @type {?}
+     */
+    AnimationTriggerMetadata.prototype.definitions;
+    /**
+     * An options object containing a delay and
+     * developer-defined parameters that provide styling defaults and
+     * can be overridden on invocation. Default delay is 0.
+     * @type {?}
+     */
+    AnimationTriggerMetadata.prototype.options;
+}
+/**
+ * Encapsulates an animation state by associating a state name with a set of CSS styles.
+ * Instantiated and returned by the `state()` function.
+ *
+ * \@publicApi
+ * @record
+ */
+function AnimationStateMetadata() { }
+if (false) {
+    /**
+     * The state name, unique within the component.
+     * @type {?}
+     */
+    AnimationStateMetadata.prototype.name;
+    /**
+     *  The CSS styles associated with this state.
+     * @type {?}
+     */
+    AnimationStateMetadata.prototype.styles;
+    /**
+     * An options object containing
+     * developer-defined parameters that provide styling defaults and
+     * can be overridden on invocation.
+     * @type {?|undefined}
+     */
+    AnimationStateMetadata.prototype.options;
+}
+/**
+ * Encapsulates an animation transition. Instantiated and returned by the
+ * `transition()` function.
+ *
+ * \@publicApi
+ * @record
+ */
+function AnimationTransitionMetadata() { }
+if (false) {
+    /**
+     * An expression that describes a state change.
+     * @type {?}
+     */
+    AnimationTransitionMetadata.prototype.expr;
+    /**
+     * One or more animation objects to which this transition applies.
+     * @type {?}
+     */
+    AnimationTransitionMetadata.prototype.animation;
+    /**
+     * An options object containing a delay and
+     * developer-defined parameters that provide styling defaults and
+     * can be overridden on invocation. Default delay is 0.
+     * @type {?}
+     */
+    AnimationTransitionMetadata.prototype.options;
+}
+/**
+ * Encapsulates a reusable animation, which is a collection of individual animation steps.
+ * Instantiated and returned by the `animation()` function, and
+ * passed to the `useAnimation()` function.
+ *
+ * \@publicApi
+ * @record
+ */
+function AnimationReferenceMetadata() { }
+if (false) {
+    /**
+     *  One or more animation step objects.
+     * @type {?}
+     */
+    AnimationReferenceMetadata.prototype.animation;
+    /**
+     * An options object containing a delay and
+     * developer-defined parameters that provide styling defaults and
+     * can be overridden on invocation. Default delay is 0.
+     * @type {?}
+     */
+    AnimationReferenceMetadata.prototype.options;
+}
+/**
+ * Encapsulates an animation query. Instantiated and returned by
+ * the `query()` function.
+ *
+ * \@publicApi
+ * @record
+ */
+function AnimationQueryMetadata() { }
+if (false) {
+    /**
+     *  The CSS selector for this query.
+     * @type {?}
+     */
+    AnimationQueryMetadata.prototype.selector;
+    /**
+     * One or more animation step objects.
+     * @type {?}
+     */
+    AnimationQueryMetadata.prototype.animation;
+    /**
+     * A query options object.
+     * @type {?}
+     */
+    AnimationQueryMetadata.prototype.options;
+}
+/**
+ * Encapsulates a keyframes sequence. Instantiated and returned by
+ * the `keyframes()` function.
+ *
+ * \@publicApi
+ * @record
+ */
+function AnimationKeyframesSequenceMetadata() { }
+if (false) {
+    /**
+     * An array of animation styles.
+     * @type {?}
+     */
+    AnimationKeyframesSequenceMetadata.prototype.steps;
+}
+/**
+ * Encapsulates an animation style. Instantiated and returned by
+ * the `style()` function.
+ *
+ * \@publicApi
+ * @record
+ */
+function AnimationStyleMetadata() { }
+if (false) {
+    /**
+     * A set of CSS style properties.
+     * @type {?}
+     */
+    AnimationStyleMetadata.prototype.styles;
+    /**
+     * A percentage of the total animate time at which the style is to be applied.
+     * @type {?}
+     */
+    AnimationStyleMetadata.prototype.offset;
+}
+/**
+ * Encapsulates an animation step. Instantiated and returned by
+ * the `animate()` function.
+ *
+ * \@publicApi
+ * @record
+ */
+function AnimationAnimateMetadata() { }
+if (false) {
+    /**
+     * The timing data for the step.
+     * @type {?}
+     */
+    AnimationAnimateMetadata.prototype.timings;
+    /**
+     * A set of styles used in the step.
+     * @type {?}
+     */
+    AnimationAnimateMetadata.prototype.styles;
+}
+/**
+ * Encapsulates a child animation, that can be run explicitly when the parent is run.
+ * Instantiated and returned by the `animateChild` function.
+ *
+ * \@publicApi
+ * @record
+ */
+function AnimationAnimateChildMetadata() { }
+if (false) {
+    /**
+     * An options object containing a delay and
+     * developer-defined parameters that provide styling defaults and
+     * can be overridden on invocation. Default delay is 0.
+     * @type {?}
+     */
+    AnimationAnimateChildMetadata.prototype.options;
+}
+/**
+ * Encapsulates a reusable animation.
+ * Instantiated and returned by the `useAnimation()` function.
+ *
+ * \@publicApi
+ * @record
+ */
+function AnimationAnimateRefMetadata() { }
+if (false) {
+    /**
+     * An animation reference object.
+     * @type {?}
+     */
+    AnimationAnimateRefMetadata.prototype.animation;
+    /**
+     * An options object containing a delay and
+     * developer-defined parameters that provide styling defaults and
+     * can be overridden on invocation. Default delay is 0.
+     * @type {?}
+     */
+    AnimationAnimateRefMetadata.prototype.options;
+}
+/**
+ * Encapsulates an animation sequence.
+ * Instantiated and returned by the `sequence()` function.
+ *
+ * \@publicApi
+ * @record
+ */
+function AnimationSequenceMetadata() { }
+if (false) {
+    /**
+     *  An array of animation step objects.
+     * @type {?}
+     */
+    AnimationSequenceMetadata.prototype.steps;
+    /**
+     * An options object containing a delay and
+     * developer-defined parameters that provide styling defaults and
+     * can be overridden on invocation. Default delay is 0.
+     * @type {?}
+     */
+    AnimationSequenceMetadata.prototype.options;
+}
+/**
+ * Encapsulates an animation group.
+ * Instantiated and returned by the `{\@link animations/group group()}` function.
+ *
+ * \@publicApi
+ * @record
+ */
+function AnimationGroupMetadata() { }
+if (false) {
+    /**
+     * One or more animation or style steps that form this group.
+     * @type {?}
+     */
+    AnimationGroupMetadata.prototype.steps;
+    /**
+     * An options object containing a delay and
+     * developer-defined parameters that provide styling defaults and
+     * can be overridden on invocation. Default delay is 0.
+     * @type {?}
+     */
+    AnimationGroupMetadata.prototype.options;
+}
+/**
+ * Encapsulates parameters for staggering the start times of a set of animation steps.
+ * Instantiated and returned by the `stagger()` function.
+ *
+ * \@publicApi
+ *
+ * @record
+ */
+function AnimationStaggerMetadata() { }
+if (false) {
+    /**
+     * The timing data for the steps.
+     * @type {?}
+     */
+    AnimationStaggerMetadata.prototype.timings;
+    /**
+     * One or more animation steps.
+     * @type {?}
+     */
+    AnimationStaggerMetadata.prototype.animation;
+}
 /**
  * Creates a named animation trigger, containing a  list of `state()`
  * and `transition()` entries to be evaluated when the expression
@@ -932,6 +1334,121 @@ function scheduleMicroTask(cb) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
+ * Provides programmatic control of a reusable animation sequence,
+ * built using the `build()` method of `AnimationBuilder`. The `build()` method
+ * returns a factory, whose `create()` method instantiates and initializes this interface.
+ *
+ * @see `AnimationBuilder`
+ * @see `AnimationFactory`
+ * @see `animate()`
+ *
+ * \@publicApi
+ * @record
+ */
+function AnimationPlayer() { }
+if (false) {
+    /**
+     * The parent of this player, if any.
+     * @type {?}
+     */
+    AnimationPlayer.prototype.parentPlayer;
+    /**
+     * The total run time of the animation, in milliseconds.
+     * @type {?}
+     */
+    AnimationPlayer.prototype.totalTime;
+    /**
+     * Provides a callback to invoke before the animation is destroyed.
+     * @type {?|undefined}
+     */
+    AnimationPlayer.prototype.beforeDestroy;
+    /**
+     * \@internal
+     * Internal
+     * @type {?|undefined}
+     */
+    AnimationPlayer.prototype.triggerCallback;
+    /**
+     * \@internal
+     * Internal
+     * @type {?|undefined}
+     */
+    AnimationPlayer.prototype.disabled;
+    /**
+     * Provides a callback to invoke when the animation finishes.
+     * @see `finish()`
+     * @param {?} fn The callback function.
+     * @return {?}
+     */
+    AnimationPlayer.prototype.onDone = function (fn) { };
+    /**
+     * Provides a callback to invoke when the animation starts.
+     * @see `run()`
+     * @param {?} fn The callback function.
+     * @return {?}
+     */
+    AnimationPlayer.prototype.onStart = function (fn) { };
+    /**
+     * Provides a callback to invoke after the animation is destroyed.
+     * @see `destroy()` / `beforeDestroy()`
+     * @param {?} fn The callback function.
+     * @return {?}
+     */
+    AnimationPlayer.prototype.onDestroy = function (fn) { };
+    /**
+     * Initializes the animation.
+     * @return {?}
+     */
+    AnimationPlayer.prototype.init = function () { };
+    /**
+     * Reports whether the animation has started.
+     * @return {?} True if the animation has started, false otherwise.
+     */
+    AnimationPlayer.prototype.hasStarted = function () { };
+    /**
+     * Runs the animation, invoking the `onStart()` callback.
+     * @return {?}
+     */
+    AnimationPlayer.prototype.play = function () { };
+    /**
+     * Pauses the animation.
+     * @return {?}
+     */
+    AnimationPlayer.prototype.pause = function () { };
+    /**
+     * Restarts the paused animation.
+     * @return {?}
+     */
+    AnimationPlayer.prototype.restart = function () { };
+    /**
+     * Ends the animation, invoking the `onDone()` callback.
+     * @return {?}
+     */
+    AnimationPlayer.prototype.finish = function () { };
+    /**
+     * Destroys the animation, after invoking the `beforeDestroy()` callback.
+     * Calls the `onDestroy()` callback when destruction is completed.
+     * @return {?}
+     */
+    AnimationPlayer.prototype.destroy = function () { };
+    /**
+     * Resets the animation to its initial state.
+     * @return {?}
+     */
+    AnimationPlayer.prototype.reset = function () { };
+    /**
+     * Sets the position of the animation.
+     * @param {?} position A 0-based offset into the duration, in milliseconds.
+     * @return {?}
+     */
+    AnimationPlayer.prototype.setPosition = function (position) { };
+    /**
+     * Reports the current position of the animation.
+     * @return {?} A 0-based offset into the duration, in milliseconds.
+     */
+    AnimationPlayer.prototype.getPosition = function () { };
+}
+/**
  * An empty programmatic controller for reusable animations.
  * Used internally when animations are disabled, to avoid
  * checking for the null case when an animation player is expected.
@@ -1083,6 +1600,42 @@ class NoopAnimationPlayer {
         fn => fn()));
         methods.length = 0;
     }
+}
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    NoopAnimationPlayer.prototype._onDoneFns;
+    /**
+     * @type {?}
+     * @private
+     */
+    NoopAnimationPlayer.prototype._onStartFns;
+    /**
+     * @type {?}
+     * @private
+     */
+    NoopAnimationPlayer.prototype._onDestroyFns;
+    /**
+     * @type {?}
+     * @private
+     */
+    NoopAnimationPlayer.prototype._started;
+    /**
+     * @type {?}
+     * @private
+     */
+    NoopAnimationPlayer.prototype._destroyed;
+    /**
+     * @type {?}
+     * @private
+     */
+    NoopAnimationPlayer.prototype._finished;
+    /** @type {?} */
+    NoopAnimationPlayer.prototype.parentPlayer;
+    /** @type {?} */
+    NoopAnimationPlayer.prototype.totalTime;
 }
 
 /**
@@ -1363,6 +1916,44 @@ class AnimationGroupPlayer {
         fn => fn()));
         methods.length = 0;
     }
+}
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationGroupPlayer.prototype._onDoneFns;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationGroupPlayer.prototype._onStartFns;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationGroupPlayer.prototype._finished;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationGroupPlayer.prototype._started;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationGroupPlayer.prototype._destroyed;
+    /**
+     * @type {?}
+     * @private
+     */
+    AnimationGroupPlayer.prototype._onDestroyFns;
+    /** @type {?} */
+    AnimationGroupPlayer.prototype.parentPlayer;
+    /** @type {?} */
+    AnimationGroupPlayer.prototype.totalTime;
+    /** @type {?} */
+    AnimationGroupPlayer.prototype.players;
 }
 
 /**

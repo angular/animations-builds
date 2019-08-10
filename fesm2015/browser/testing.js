@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.1+11.sha-0ddf0c4.with-local-changes
+ * @license Angular v9.0.0-next.1+18.sha-9a37e82.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -69,6 +69,10 @@ class MockAnimationDriver {
     }
 }
 MockAnimationDriver.log = [];
+if (false) {
+    /** @type {?} */
+    MockAnimationDriver.log;
+}
 /**
  * \@publicApi
  */
@@ -196,6 +200,39 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         }
         this.currentSnapshot = captures;
     }
+}
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    MockAnimationPlayer.prototype.__finished;
+    /**
+     * @type {?}
+     * @private
+     */
+    MockAnimationPlayer.prototype.__started;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.previousStyles;
+    /**
+     * @type {?}
+     * @private
+     */
+    MockAnimationPlayer.prototype._onInitFns;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.currentSnapshot;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.element;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.keyframes;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.duration;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.delay;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.easing;
+    /** @type {?} */
+    MockAnimationPlayer.prototype.previousPlayers;
 }
 
 /**
