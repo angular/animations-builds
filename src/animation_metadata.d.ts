@@ -693,7 +693,7 @@ export declare function group(steps: AnimationMetadata[], options?: AnimationOpt
  *
  * ```typescript
  * sequence([
- *   style({ opacity: 0 })),
+ *   style({ opacity: 0 }),
  *   animate("1s", style({ opacity: 1 }))
  * ])
  * ```
