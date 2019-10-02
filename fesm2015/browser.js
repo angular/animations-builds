@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.9.with-local-changes
+ * @license Angular v9.0.0-next.9+1.sha-4e35e34.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -422,7 +422,8 @@ class NoopAnimationDriver {
 NoopAnimationDriver.decorators = [
     { type: Injectable },
 ];
-/** @nocollapse */ NoopAnimationDriver.ngInjectableDef = ɵɵdefineInjectable({ token: NoopAnimationDriver, factory: function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); }, providedIn: null });
+/** @nocollapse */ NoopAnimationDriver.ngFactoryDef = function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); };
+/** @nocollapse */ NoopAnimationDriver.ngInjectableDef = ɵɵdefineInjectable({ token: NoopAnimationDriver, factory: function (t) { return NoopAnimationDriver.ngFactoryDef(t); }, providedIn: null });
 /*@__PURE__*/ ɵsetClassMetadata(NoopAnimationDriver, [{
         type: Injectable
     }], null, null);
