@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.10+27.sha-1ae77da.with-local-changes
+ * @license Angular v9.0.0-next.10+28.sha-6ab5f36.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -521,7 +521,7 @@ function resolveTimingValue(value) {
     if (typeof value == 'number')
         return value;
     /** @type {?} */
-    const matches = ((/** @type {?} */ (value))).match(/^(-?[\.\d]+)(m?s)/);
+    const matches = value.match(/^(-?[\.\d]+)(m?s)/);
     if (!matches || matches.length < 2)
         return 0;
     return _convertTimeValueToMS(parseFloat(matches[1]), matches[2]);
@@ -585,7 +585,7 @@ function parseTimeExpression(exp, errors, allowNegativeValues) {
         }
     }
     else {
-        duration = (/** @type {?} */ (exp));
+        duration = exp;
     }
     if (!allowNegativeValues) {
         /** @type {?} */
@@ -795,10 +795,8 @@ function extractStyleParams(value) {
     let params = [];
     if (typeof value === 'string') {
         /** @type {?} */
-        const val = value.toString();
-        /** @type {?} */
         let match;
-        while (match = PARAM_REGEX.exec(val)) {
+        while (match = PARAM_REGEX.exec(value)) {
             params.push((/** @type {?} */ (match[1])));
         }
         PARAM_REGEX.lastIndex = 0;
@@ -1010,9 +1008,7 @@ function parseTransitionExpr(transitionValue, errors) {
     /** @type {?} */
     const expressions = [];
     if (typeof transitionValue == 'string') {
-        ((/** @type {?} */ (transitionValue)))
-            .split(/\s*,\s*/)
-            .forEach((/**
+        transitionValue.split(/\s*,\s*/).forEach((/**
          * @param {?} str
          * @return {?}
          */
@@ -1037,7 +1033,7 @@ function parseInnerTransitionStr(eventStr, expressions, errors) {
             expressions.push(result);
             return;
         }
-        eventStr = (/** @type {?} */ (result));
+        eventStr = result;
     }
     /** @type {?} */
     const match = eventStr.match(/^(\*|[-\w]+)\s*(<?[=-]>)\s*(\*|[-\w]+)$/);
@@ -1456,14 +1452,14 @@ class AnimationAstBuilderVisitor {
             styleTuple => {
                 if (typeof styleTuple == 'string') {
                     if (styleTuple == AUTO_STYLE) {
-                        styles.push((/** @type {?} */ (styleTuple)));
+                        styles.push(styleTuple);
                     }
                     else {
                         context.errors.push(`The provided style string value ${styleTuple} is not allowed.`);
                     }
                 }
                 else {
-                    styles.push((/** @type {?} */ (styleTuple)));
+                    styles.push(styleTuple);
                 }
             }));
         }
@@ -1841,7 +1837,7 @@ function consumeOffset(styles) {
     }
     else if (isObject(styles) && styles.hasOwnProperty('offset')) {
         /** @type {?} */
-        const obj = (/** @type {?} */ (styles));
+        const obj = styles;
         offset = parseFloat((/** @type {?} */ (obj['offset'])));
         delete obj['offset'];
     }
@@ -1867,8 +1863,8 @@ function constructTimingAst(value, errors) {
     }
     else if (typeof value == 'number') {
         /** @type {?} */
-        const duration = resolveTiming((/** @type {?} */ (value)), errors).duration;
-        return makeTimingAst((/** @type {?} */ (duration)), 0, '');
+        const duration = resolveTiming(value, errors).duration;
+        return makeTimingAst(duration, 0, '');
     }
     /** @type {?} */
     const strValue = (/** @type {?} */ (value));
@@ -6848,7 +6844,7 @@ function _flattenGroupPlayersRecur(players, finalPlayers) {
             _flattenGroupPlayersRecur(player.players, finalPlayers);
         }
         else {
-            finalPlayers.push((/** @type {?} */ (player)));
+            finalPlayers.push(player);
         }
     }
 }

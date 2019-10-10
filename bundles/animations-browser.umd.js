@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.10+27.sha-1ae77da.with-local-changes
+ * @license Angular v9.0.0-next.10+28.sha-6ab5f36.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -624,9 +624,8 @@
     function extractStyleParams(value) {
         var params = [];
         if (typeof value === 'string') {
-            var val = value.toString();
             var match = void 0;
-            while (match = PARAM_REGEX.exec(val)) {
+            while (match = PARAM_REGEX.exec(value)) {
                 params.push(match[1]);
             }
             PARAM_REGEX.lastIndex = 0;
@@ -758,9 +757,7 @@
     function parseTransitionExpr(transitionValue, errors) {
         var expressions = [];
         if (typeof transitionValue == 'string') {
-            transitionValue
-                .split(/\s*,\s*/)
-                .forEach(function (str) { return parseInnerTransitionStr(str, expressions, errors); });
+            transitionValue.split(/\s*,\s*/).forEach(function (str) { return parseInnerTransitionStr(str, expressions, errors); });
         }
         else {
             expressions.push(transitionValue);
