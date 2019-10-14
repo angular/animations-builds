@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.10+66.sha-cd7b199.with-local-changes
+ * @license Angular v9.0.0-next.10+73.sha-f433d66.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -228,8 +228,8 @@ var NoopAnimationDriver = /** @class */ (function () {
         if (previousPlayers === void 0) { previousPlayers = []; }
         return new NoopAnimationPlayer(duration, delay);
     };
-    NoopAnimationDriver.ngFactoryDef = function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); };
-    NoopAnimationDriver.ngInjectableDef = ɵɵdefineInjectable({ token: NoopAnimationDriver, factory: function (t) { return NoopAnimationDriver.ngFactoryDef(t); }, providedIn: null });
+    NoopAnimationDriver.ɵfac = function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); };
+    NoopAnimationDriver.ngInjectableDef = ɵɵdefineInjectable({ token: NoopAnimationDriver, factory: function (t) { return NoopAnimationDriver.ɵfac(t); }, providedIn: null });
     return NoopAnimationDriver;
 }());
 /*@__PURE__*/ ɵsetClassMetadata(NoopAnimationDriver, [{
