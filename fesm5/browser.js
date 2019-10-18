@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.11+59.sha-117ca7c.with-local-changes
+ * @license Angular v9.0.0-next.11+62.sha-a0d16dc.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2065,7 +2065,7 @@ var AnimationTransitionFactory = /** @class */ (function () {
         var preStyleMap = new Map();
         var postStyleMap = new Map();
         var isRemoval = nextState === 'void';
-        var animationOptions = { params: __assign({}, transitionAnimationParams, nextAnimationParams) };
+        var animationOptions = { params: __assign(__assign({}, transitionAnimationParams), nextAnimationParams) };
         var timelines = skipAstBuild ? [] : buildAnimationTimelines(driver, element, this.ast.animation, enterClassName, leaveClassName, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
         var totalTime = 0;
         timelines.forEach(function (tl) { totalTime = Math.max(tl.duration + tl.delay, totalTime); });
@@ -3262,7 +3262,7 @@ var TransitionAnimationEngine = /** @class */ (function () {
         replaceNodes.forEach(function (node) {
             var post = postStylesMap.get(node);
             var pre = preStylesMap.get(node);
-            postStylesMap.set(node, __assign({}, post, pre));
+            postStylesMap.set(node, __assign(__assign({}, post), pre));
         });
         var rootPlayers = [];
         var subPlayers = [];
