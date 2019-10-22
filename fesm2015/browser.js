@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.11+24.sha-20be755.with-local-changes
+ * @license Angular v9.0.0-next.12+50.sha-dfff5fe.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3654,7 +3654,7 @@ class AnimationTransitionFactory {
         /** @type {?} */
         const isRemoval = nextState === 'void';
         /** @type {?} */
-        const animationOptions = { params: Object.assign({}, transitionAnimationParams, nextAnimationParams) };
+        const animationOptions = { params: Object.assign(Object.assign({}, transitionAnimationParams), nextAnimationParams) };
         /** @type {?} */
         const timelines = skipAstBuild ? [] : buildAnimationTimelines(driver, element, this.ast.animation, enterClassName, leaveClassName, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
         /** @type {?} */
@@ -5851,7 +5851,7 @@ class TransitionAnimationEngine {
             const post = postStylesMap.get(node);
             /** @type {?} */
             const pre = preStylesMap.get(node);
-            postStylesMap.set(node, (/** @type {?} */ (Object.assign({}, post, pre))));
+            postStylesMap.set(node, (/** @type {?} */ (Object.assign(Object.assign({}, post), pre))));
         }));
         /** @type {?} */
         const rootPlayers = [];

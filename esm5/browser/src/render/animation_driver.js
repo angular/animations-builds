@@ -1,4 +1,4 @@
-import * as tslib_1 from "tslib";
+import { __decorate } from "tslib";
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -30,7 +30,7 @@ var NoopAnimationDriver = /** @class */ (function () {
         if (previousPlayers === void 0) { previousPlayers = []; }
         return new NoopAnimationPlayer(duration, delay);
     };
-    NoopAnimationDriver = tslib_1.__decorate([
+    NoopAnimationDriver = __decorate([
         Injectable()
     ], NoopAnimationDriver);
     return NoopAnimationDriver;
