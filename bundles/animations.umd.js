@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.0+62.sha-d751ca7.with-local-changes
+ * @license Angular v9.0.0-rc.0+63.sha-3de72e4.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,7 +8,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
     typeof define === 'function' && define.amd ? define('@angular/animations', ['exports'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.animations = {})));
-}(this, (function (exports) { 'use strict';
+}(this, function (exports) { 'use strict';
 
     /**
      * An injectable service that produces an animation sequence programmatically within an
@@ -1193,10 +1193,9 @@
      * Generated bundle index. Do not edit.
      */
 
-    exports.AUTO_STYLE = AUTO_STYLE;
     exports.AnimationBuilder = AnimationBuilder;
     exports.AnimationFactory = AnimationFactory;
-    exports.NoopAnimationPlayer = NoopAnimationPlayer;
+    exports.AUTO_STYLE = AUTO_STYLE;
     exports.animate = animate;
     exports.animateChild = animateChild;
     exports.animation = animation;
@@ -1210,10 +1209,11 @@
     exports.transition = transition;
     exports.trigger = trigger;
     exports.useAnimation = useAnimation;
-    exports.ɵAnimationGroupPlayer = AnimationGroupPlayer;
+    exports.NoopAnimationPlayer = NoopAnimationPlayer;
     exports.ɵPRE_STYLE = ɵPRE_STYLE;
+    exports.ɵAnimationGroupPlayer = AnimationGroupPlayer;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));
 //# sourceMappingURL=animations.umd.js.map
