@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.0+47.sha-85298e3.with-local-changes
+ * @license Angular v9.0.0-rc.0+62.sha-d751ca7.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1183,5 +1183,5 @@ var ɵPRE_STYLE = '!';
  * found in the LICENSE file at https://angular.io/license
  */
 
-export { AnimationBuilder, AnimationFactory, AUTO_STYLE, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, NoopAnimationPlayer, ɵPRE_STYLE, AnimationGroupPlayer as ɵAnimationGroupPlayer };
+export { AUTO_STYLE, AnimationBuilder, AnimationFactory, NoopAnimationPlayer, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE };
 //# sourceMappingURL=animations.js.map
