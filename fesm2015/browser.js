@@ -1,10 +1,10 @@
 /**
- * @license Angular v9.0.0-rc.0+62.sha-d751ca7.with-local-changes
+ * @license Angular v9.0.0-rc.0+63.sha-3de72e4.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { ɵAnimationGroupPlayer, NoopAnimationPlayer, AUTO_STYLE, ɵPRE_STYLE, sequence, style } from '@angular/animations';
+import { NoopAnimationPlayer, ɵAnimationGroupPlayer, ɵPRE_STYLE, AUTO_STYLE, sequence, style } from '@angular/animations';
 import { Injectable, ɵɵdefineInjectable, ɵsetClassMetadata } from '@angular/core';
 
 /**
@@ -8639,5 +8639,5 @@ function getElementAnimateFn() {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { AnimationDriver, Animation as ɵAnimation, AnimationDriver as ɵAnimationDriver, AnimationEngine as ɵAnimationEngine, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, CssKeyframesDriver as ɵCssKeyframesDriver, CssKeyframesPlayer as ɵCssKeyframesPlayer, NoopAnimationDriver as ɵNoopAnimationDriver, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, containsElement as ɵcontainsElement, invokeQuery as ɵinvokeQuery, matchesElement as ɵmatchesElement, supportsWebAnimations as ɵsupportsWebAnimations, validateStyleProperty as ɵvalidateStyleProperty };
+export { AnimationDriver, AnimationDriver as ɵAnimationDriver, Animation as ɵAnimation, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, NoopAnimationDriver as ɵNoopAnimationDriver, AnimationEngine as ɵAnimationEngine, CssKeyframesDriver as ɵCssKeyframesDriver, CssKeyframesPlayer as ɵCssKeyframesPlayer, containsElement as ɵcontainsElement, invokeQuery as ɵinvokeQuery, matchesElement as ɵmatchesElement, validateStyleProperty as ɵvalidateStyleProperty, WebAnimationsDriver as ɵWebAnimationsDriver, supportsWebAnimations as ɵsupportsWebAnimations, WebAnimationsPlayer as ɵWebAnimationsPlayer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge };
 //# sourceMappingURL=browser.js.map
