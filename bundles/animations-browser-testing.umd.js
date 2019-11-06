@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.0+66.sha-1735135.with-local-changes
+ * @license Angular v9.0.0-rc.0+75.sha-114317c.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,7 +8,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/animations'), require('@angular/animations/browser')) :
     typeof define === 'function' && define.amd ? define('@angular/animations/browser/testing', ['exports', '@angular/animations', '@angular/animations/browser'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.animations = global.ng.animations || {}, global.ng.animations.browser = global.ng.animations.browser || {}, global.ng.animations.browser.testing = {}), global.ng.animations, global.ng.animations.browser));
-}(this, function (exports, animations, browser) { 'use strict';
+}(this, (function (exports, animations, browser) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -340,5 +340,5 @@
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=animations-browser-testing.umd.js.map
