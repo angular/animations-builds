@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.0+69.sha-41560b4.with-local-changes
+ * @license Angular v9.0.0-rc.0+78.sha-a20979d.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,7 +8,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/animations'), require('@angular/core')) :
     typeof define === 'function' && define.amd ? define('@angular/animations/browser', ['exports', '@angular/animations', '@angular/core'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.animations = global.ng.animations || {}, global.ng.animations.browser = {}), global.ng.animations, global.ng.core));
-}(this, function (exports, animations, core) { 'use strict';
+}(this, (function (exports, animations, core) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -4848,27 +4848,27 @@
      * Generated bundle index. Do not edit.
      */
 
-    exports.ɵangular_packages_animations_browser_browser_a = SpecialCasedStyles;
     exports.AnimationDriver = AnimationDriver;
-    exports.ɵAnimationDriver = AnimationDriver;
     exports.ɵAnimation = Animation;
-    exports.ɵAnimationStyleNormalizer = AnimationStyleNormalizer;
-    exports.ɵNoopAnimationStyleNormalizer = NoopAnimationStyleNormalizer;
-    exports.ɵWebAnimationsStyleNormalizer = WebAnimationsStyleNormalizer;
-    exports.ɵNoopAnimationDriver = NoopAnimationDriver;
+    exports.ɵAnimationDriver = AnimationDriver;
     exports.ɵAnimationEngine = AnimationEngine;
+    exports.ɵAnimationStyleNormalizer = AnimationStyleNormalizer;
     exports.ɵCssKeyframesDriver = CssKeyframesDriver;
     exports.ɵCssKeyframesPlayer = CssKeyframesPlayer;
+    exports.ɵNoopAnimationDriver = NoopAnimationDriver;
+    exports.ɵNoopAnimationStyleNormalizer = NoopAnimationStyleNormalizer;
+    exports.ɵWebAnimationsDriver = WebAnimationsDriver;
+    exports.ɵWebAnimationsPlayer = WebAnimationsPlayer;
+    exports.ɵWebAnimationsStyleNormalizer = WebAnimationsStyleNormalizer;
+    exports.ɵallowPreviousPlayerStylesMerge = allowPreviousPlayerStylesMerge;
+    exports.ɵangular_packages_animations_browser_browser_a = SpecialCasedStyles;
     exports.ɵcontainsElement = containsElement;
     exports.ɵinvokeQuery = invokeQuery;
     exports.ɵmatchesElement = matchesElement;
-    exports.ɵvalidateStyleProperty = validateStyleProperty;
-    exports.ɵWebAnimationsDriver = WebAnimationsDriver;
     exports.ɵsupportsWebAnimations = supportsWebAnimations;
-    exports.ɵWebAnimationsPlayer = WebAnimationsPlayer;
-    exports.ɵallowPreviousPlayerStylesMerge = allowPreviousPlayerStylesMerge;
+    exports.ɵvalidateStyleProperty = validateStyleProperty;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=animations-browser.umd.js.map

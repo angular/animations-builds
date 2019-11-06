@@ -1,10 +1,10 @@
 /**
- * @license Angular v9.0.0-rc.0+69.sha-41560b4.with-local-changes
+ * @license Angular v9.0.0-rc.0+78.sha-a20979d.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { NoopAnimationPlayer, ɵAnimationGroupPlayer, ɵPRE_STYLE, AUTO_STYLE, sequence, style } from '@angular/animations';
+import { ɵAnimationGroupPlayer, NoopAnimationPlayer, AUTO_STYLE, ɵPRE_STYLE, sequence, style } from '@angular/animations';
 import { Injectable } from '@angular/core';
 
 /**
@@ -8642,5 +8642,5 @@ function getElementAnimateFn() {
  * Generated bundle index. Do not edit.
  */
 
-export { SpecialCasedStyles as ɵangular_packages_animations_browser_browser_a, AnimationDriver, AnimationDriver as ɵAnimationDriver, Animation as ɵAnimation, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, NoopAnimationDriver as ɵNoopAnimationDriver, AnimationEngine as ɵAnimationEngine, CssKeyframesDriver as ɵCssKeyframesDriver, CssKeyframesPlayer as ɵCssKeyframesPlayer, containsElement as ɵcontainsElement, invokeQuery as ɵinvokeQuery, matchesElement as ɵmatchesElement, validateStyleProperty as ɵvalidateStyleProperty, WebAnimationsDriver as ɵWebAnimationsDriver, supportsWebAnimations as ɵsupportsWebAnimations, WebAnimationsPlayer as ɵWebAnimationsPlayer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge };
+export { AnimationDriver, Animation as ɵAnimation, AnimationDriver as ɵAnimationDriver, AnimationEngine as ɵAnimationEngine, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, CssKeyframesDriver as ɵCssKeyframesDriver, CssKeyframesPlayer as ɵCssKeyframesPlayer, NoopAnimationDriver as ɵNoopAnimationDriver, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, SpecialCasedStyles as ɵangular_packages_animations_browser_browser_a, containsElement as ɵcontainsElement, invokeQuery as ɵinvokeQuery, matchesElement as ɵmatchesElement, supportsWebAnimations as ɵsupportsWebAnimations, validateStyleProperty as ɵvalidateStyleProperty };
 //# sourceMappingURL=browser.js.map
