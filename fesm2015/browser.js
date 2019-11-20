@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.1+188.sha-b54ed98.with-local-changes
+ * @license Angular v9.0.0-rc.1+190.sha-d78d29f.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -424,9 +424,9 @@ NoopAnimationDriver.decorators = [
 ];
 /** @nocollapse */ NoopAnimationDriver.ɵfac = function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); };
 /** @nocollapse */ NoopAnimationDriver.ɵprov = ɵɵdefineInjectable({ token: NoopAnimationDriver, factory: function (t) { return NoopAnimationDriver.ɵfac(t); }, providedIn: null });
-/*@__PURE__*/ ɵsetClassMetadata(NoopAnimationDriver, [{
+/*@__PURE__*/ (function () { ɵsetClassMetadata(NoopAnimationDriver, [{
         type: Injectable
-    }], null, null);
+    }], null, null); })();
 /**
  * \@publicApi
  * @abstract
