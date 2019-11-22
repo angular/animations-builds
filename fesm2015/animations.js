@@ -1,11 +1,12 @@
 /**
- * @license Angular v9.0.0-rc.3+35.sha-ad9b9a3.with-local-changes
+ * @license Angular v9.0.0-rc.3+42.sha-99e68d0.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/src/animation_builder.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -91,6 +92,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/src/animation_metadata.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -1314,6 +1316,7 @@ function stagger(timings, animation) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/src/util.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -1331,6 +1334,7 @@ function scheduleMicroTask(cb) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/src/players/animation_player.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -1640,6 +1644,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/src/players/animation_group_player.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -1958,6 +1963,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/src/private_export.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
@@ -1965,16 +1971,19 @@ const ɵPRE_STYLE = '!';
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/src/animations.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/public_api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 

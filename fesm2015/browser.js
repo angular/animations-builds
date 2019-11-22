@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.3+35.sha-ad9b9a3.with-local-changes
+ * @license Angular v9.0.0-rc.3+42.sha-99e68d0.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -9,6 +9,7 @@ import { Injectable } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/render/shared.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -365,6 +366,7 @@ function hypenatePropsObject(object) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/render/animation_driver.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -487,6 +489,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/util.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
@@ -986,6 +989,7 @@ function computeStyle(element, prop) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/dsl/animation_transition_expr.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -1122,6 +1126,7 @@ function makeLambdaFromStates(lhs, rhs) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/dsl/animation_ast_builder.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
@@ -1910,6 +1915,7 @@ function makeTimingAst(duration, delay, easing) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/dsl/animation_timeline_instruction.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -1964,6 +1970,7 @@ function createTimelineInstruction(element, keyframes, preStyleProps, postStyleP
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/dsl/element_instruction_map.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class ElementInstructionMap {
@@ -2018,6 +2025,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/dsl/animation_timeline_builder.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
@@ -3326,6 +3334,7 @@ function flattenStyles(input, allStyles) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/dsl/animation.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class Animation {
@@ -3389,6 +3398,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/dsl/style_normalization/animation_style_normalizer.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -3446,6 +3456,7 @@ class NoopAnimationStyleNormalizer {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/dsl/style_normalization/web_animations_style_normalizer.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class WebAnimationsStyleNormalizer extends AnimationStyleNormalizer {
@@ -3508,6 +3519,7 @@ function makeBooleanMap(keys) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/dsl/animation_transition_instruction.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -3579,6 +3591,7 @@ function createTransitionInstruction(element, triggerName, fromState, toState, i
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/dsl/animation_transition_factory.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
@@ -3796,6 +3809,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/dsl/animation_trigger.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -3927,6 +3941,7 @@ function balanceProperties(obj, key1, key2) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/render/timeline_animation_engine.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
@@ -4168,6 +4183,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/render/transition_animation_engine.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
@@ -6896,6 +6912,7 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/render/animation_engine_next.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AnimationEngine {
@@ -7077,6 +7094,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/render/special_cased_styles.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -7246,6 +7264,7 @@ function isNonAnimatableStyle(prop) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/render/css_keyframes/element_animation_style_handler.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -7553,6 +7572,7 @@ function countChars(value, char) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/render/css_keyframes/css_keyframes_player.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
@@ -7847,6 +7867,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/render/css_keyframes/direct_style_player.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class DirectStylePlayer extends NoopAnimationPlayer {
@@ -7938,6 +7959,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/render/css_keyframes/css_keyframes_driver.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
@@ -8169,6 +8191,7 @@ function removeElement(node) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/render/web_animations/web_animations_player.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class WebAnimationsPlayer {
@@ -8485,6 +8508,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/render/web_animations/web_animations_driver.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class WebAnimationsDriver {
@@ -8620,21 +8644,25 @@ function getElementAnimateFn() {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/private_export.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/browser.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/public_api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 

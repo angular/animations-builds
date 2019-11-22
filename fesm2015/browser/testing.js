@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.3+35.sha-ad9b9a3.with-local-changes
+ * @license Angular v9.0.0-rc.3+42.sha-99e68d0.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -9,6 +9,7 @@ import { ɵvalidateStyleProperty, ɵmatchesElement, ɵcontainsElement, ɵinvokeQ
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/testing/src/mock_animation_driver.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -237,16 +238,19 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/testing/src/testing.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/testing/public_api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/testing/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
