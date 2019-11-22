@@ -1,5 +1,6 @@
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/animations/browser/src/render/web_animations/dom_animation.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
