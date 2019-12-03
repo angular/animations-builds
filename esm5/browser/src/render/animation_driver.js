@@ -31,7 +31,7 @@ var NoopAnimationDriver = /** @class */ (function () {
         return new NoopAnimationPlayer(duration, delay);
     };
     NoopAnimationDriver.ɵfac = function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); };
-    NoopAnimationDriver.ɵprov = i0.ɵɵdefineInjectable({ token: NoopAnimationDriver, factory: NoopAnimationDriver.ɵfac, providedIn: null });
+    NoopAnimationDriver.ɵprov = i0.ɵɵdefineInjectable({ token: NoopAnimationDriver, factory: NoopAnimationDriver.ɵfac });
     return NoopAnimationDriver;
 }());
 export { NoopAnimationDriver };

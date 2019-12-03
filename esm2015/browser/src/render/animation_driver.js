@@ -73,7 +73,7 @@ NoopAnimationDriver.decorators = [
     { type: Injectable },
 ];
 /** @nocollapse */ NoopAnimationDriver.ɵfac = function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); };
-/** @nocollapse */ NoopAnimationDriver.ɵprov = i0.ɵɵdefineInjectable({ token: NoopAnimationDriver, factory: NoopAnimationDriver.ɵfac, providedIn: null });
+/** @nocollapse */ NoopAnimationDriver.ɵprov = i0.ɵɵdefineInjectable({ token: NoopAnimationDriver, factory: NoopAnimationDriver.ɵfac });
 /*@__PURE__*/ (function () { i0.ɵsetClassMetadata(NoopAnimationDriver, [{
         type: Injectable
     }], null, null); })();
