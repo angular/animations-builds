@@ -1,0 +1,49 @@
+{
+  "name": "@angular/animations",
+  "version": "9.0.0-rc.1+420.sha-ed486b5.with-local-changes",
+  "description": "Angular - animations integration with web-animations",
+  "main": "./bundles/animations.umd.js",
+  "module": "./fesm5/animations.js",
+  "es2015": "./fesm2015/animations.js",
+  "esm5": "./esm5/animations.js",
+  "esm2015": "./esm2015/animations.js",
+  "fesm5": "./fesm5/animations.js",
+  "fesm2015": "./fesm2015/animations.js",
+  "typings": "./animations.d.ts",
+  "author": "angular",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/core": "9.0.0-rc.1+420.sha-ed486b5.with-local-changes",
+    "tslib": "^1.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/angular/angular.git"
+  },
+  "ng-update": {
+    "packageGroup": [
+      "@angular/core",
+      "@angular/bazel",
+      "@angular/common",
+      "@angular/compiler",
+      "@angular/compiler-cli",
+      "@angular/animations",
+      "@angular/elements",
+      "@angular/platform-browser",
+      "@angular/platform-browser-dynamic",
+      "@angular/forms",
+      "@angular/platform-server",
+      "@angular/platform-webworker",
+      "@angular/platform-webworker-dynamic",
+      "@angular/upgrade",
+      "@angular/router",
+      "@angular/language-service",
+      "@angular/localize",
+      "@angular/service-worker"
+    ]
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "registry": "https://wombat-dressing-room.appspot.com"
+  }
+}
