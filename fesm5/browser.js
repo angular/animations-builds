@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.1+422.sha-a719656.with-local-changes
+ * @license Angular v9.0.0-rc.1+524.sha-f004195
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2545,13 +2545,13 @@ var AnimationTransitionNamespace = /** @class */ (function () {
             this._engine.playersByElement.delete(element);
         }
     };
-    AnimationTransitionNamespace.prototype._signalRemovalForInnerTriggers = function (rootElement, context, animate) {
+    AnimationTransitionNamespace.prototype._signalRemovalForInnerTriggers = function (rootElement, context) {
         var _this = this;
-        if (animate === void 0) { animate = false; }
+        var elements = this._engine.driver.query(rootElement, NG_TRIGGER_SELECTOR, true);
         // emulate a leave animation for all inner nodes within this node.
         // If there are no animations found for any of the nodes then clear the cache
         // for the element.
-        this._engine.driver.query(rootElement, NG_TRIGGER_SELECTOR, true).forEach(function (elm) {
+        elements.forEach(function (elm) {
             // this means that an inner remove() operation has already kicked off
             // the animation on this element...
             if (elm[REMOVAL_FLAG])
@@ -2564,6 +2564,9 @@ var AnimationTransitionNamespace = /** @class */ (function () {
                 _this.clearElementCache(elm);
             }
         });
+        // If the child elements were removed along with the parent, their animations might not
+        // have completed. Clear all the elements from the cache so we don't end up with a memory leak.
+        this._engine.afterFlushAnimationsDone(function () { return elements.forEach(function (elm) { return _this.clearElementCache(elm); }); });
     };
     AnimationTransitionNamespace.prototype.triggerLeaveAnimation = function (element, context, destroyAfterComplete, defaultToFallback) {
         var _this = this;
@@ -2623,7 +2626,7 @@ var AnimationTransitionNamespace = /** @class */ (function () {
         var _this = this;
         var engine = this._engine;
         if (element.childElementCount) {
-            this._signalRemovalForInnerTriggers(element, context, true);
+            this._signalRemovalForInnerTriggers(element, context);
         }
         // this means that a * => VOID animation was detected and kicked off
         if (this.triggerLeaveAnimation(element, context, true))
