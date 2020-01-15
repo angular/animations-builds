@@ -32,7 +32,7 @@ export declare class StateValue {
     namespaceId: string;
     value: string;
     options: AnimationOptions;
-    readonly params: {
+    get params(): {
         [key: string]: any;
     };
     constructor(input: any, namespaceId?: string);
@@ -93,7 +93,7 @@ export declare class TransitionAnimationEngine {
     collectedLeaveElements: any[];
     onRemovalComplete: (element: any, context: any) => void;
     constructor(bodyNode: any, driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
-    readonly queuedPlayers: TransitionAnimationPlayer[];
+    get queuedPlayers(): TransitionAnimationPlayer[];
     createNamespace(namespaceId: string, hostElement: any): AnimationTransitionNamespace;
     private _balanceNamespaceList;
     register(namespaceId: string, hostElement: any): AnimationTransitionNamespace;

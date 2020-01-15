@@ -55,6 +55,6 @@ export declare class WebAnimationsPlayer implements AnimationPlayer {
     destroy(): void;
     setPosition(p: number): void;
     getPosition(): number;
-    readonly totalTime: number;
+    get totalTime(): number;
     beforeDestroy(): void;
 }

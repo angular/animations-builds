@@ -25,6 +25,6 @@ export declare class AnimationEngine {
     process(namespaceId: string, element: any, property: string, value: any): void;
     listen(namespaceId: string, element: any, eventName: string, eventPhase: string, callback: (event: any) => any): () => any;
     flush(microtaskId?: number): void;
-    readonly players: AnimationPlayer[];
+    get players(): AnimationPlayer[];
     whenRenderingDone(): Promise<any>;
 }

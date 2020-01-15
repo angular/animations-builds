@@ -51,7 +51,7 @@ export declare class AnimationTimelineContext {
     currentQueryTotal: number;
     currentStaggerTime: number;
     constructor(_driver: AnimationDriver, element: any, subInstructions: ElementInstructionMap, _enterClassName: string, _leaveClassName: string, errors: any[], timelines: TimelineBuilder[], initialTimeline?: TimelineBuilder);
-    readonly params: {
+    get params(): {
         [name: string]: any;
     } | undefined;
     updateOptions(options: AnimationOptions | null, skipIfExists?: boolean): void;
@@ -82,7 +82,7 @@ export declare class TimelineBuilder {
     constructor(_driver: AnimationDriver, element: any, startTime: number, _elementTimelineStylesLookup?: Map<any, ɵStyleData> | undefined);
     containsAnimation(): boolean;
     getCurrentStyleProperties(): string[];
-    readonly currentTime: number;
+    get currentTime(): number;
     delayNextStep(delay: number): void;
     fork(element: any, currentTime?: number): TimelineBuilder;
     private _loadKeyframe;
@@ -95,7 +95,7 @@ export declare class TimelineBuilder {
     applyStylesToKeyframe(): void;
     snapshotCurrentStyles(): void;
     getFinalKeyframe(): ɵStyleData | undefined;
-    readonly properties: string[];
+    get properties(): string[];
     mergeTimelineCollectedStyles(timeline: TimelineBuilder): void;
     buildKeyframes(): AnimationTimelineInstruction;
 }
