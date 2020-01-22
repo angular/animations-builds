@@ -1,6 +1,6 @@
 /**
- * @license Angular v9.0.0-rc.1+636.sha-142363a
- * (c) 2010-2019 Google LLC. https://angular.io/
+ * @license Angular v0.0.0
+ * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
@@ -132,7 +132,7 @@ export declare class ɵAnimationEngine {
     process(namespaceId: string, element: any, property: string, value: any): void;
     listen(namespaceId: string, element: any, eventName: string, eventPhase: string, callback: (event: any) => any): () => any;
     flush(microtaskId?: number): void;
-    readonly players: AnimationPlayer[];
+    get players(): AnimationPlayer[];
     whenRenderingDone(): Promise<any>;
 }
 
@@ -298,7 +298,7 @@ export declare class ɵWebAnimationsPlayer implements AnimationPlayer {
     destroy(): void;
     setPosition(p: number): void;
     getPosition(): number;
-    readonly totalTime: number;
+    get totalTime(): number;
     beforeDestroy(): void;
 }
 

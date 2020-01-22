@@ -1,6 +1,6 @@
 /**
- * @license Angular v9.0.0-rc.1+636.sha-142363a
- * (c) 2010-2019 Google LLC. https://angular.io/
+ * @license Angular v9.0.0-rc.1+745.sha-ad68b61
+ * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
@@ -4773,14 +4773,18 @@ class AnimationTransitionNamespace {
             engine.markElementAsRemoved(this.id, element, false, context);
         }
         else {
-            // we do this after the flush has occurred such
-            // that the callbacks can be fired
-            engine.afterFlush((/**
-             * @return {?}
-             */
-            () => this.clearElementCache(element)));
-            engine.destroyInnerAnimations(element);
-            engine._onRemovalComplete(element, context);
+            /** @type {?} */
+            const removalFlag = element[REMOVAL_FLAG];
+            if (!removalFlag || removalFlag === NULL_REMOVAL_STATE) {
+                // we do this after the flush has occurred such
+                // that the callbacks can be fired
+                engine.afterFlush((/**
+                 * @return {?}
+                 */
+                () => this.clearElementCache(element)));
+                engine.destroyInnerAnimations(element);
+                engine._onRemovalComplete(element, context);
+            }
         }
     }
     /**
