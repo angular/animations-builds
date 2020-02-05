@@ -1,6 +1,6 @@
 {
   "name": "@angular/animations",
-  "version": "9.0.0-rc.1+922.sha-aed5c7c",
+  "version": "9.0.0-rc.1+926.sha-1f6da8c",
   "description": "Angular - animations integration with web-animations",
   "main": "./bundles/animations.umd.js",
   "module": "./fesm5/animations.js",
@@ -13,7 +13,7 @@
   "author": "angular",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/core": "9.0.0-rc.1+922.sha-aed5c7c",
+    "@angular/core": "9.0.0-rc.1+926.sha-1f6da8c",
     "tslib": "^1.10.0"
   },
   "repository": {
