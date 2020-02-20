@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.2+3.sha-3a97972
+ * @license Angular v9.0.2+10.sha-72664ca
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -211,7 +211,12 @@
         return (typeof window !== 'undefined' && typeof window.document !== 'undefined');
     }
     function isNode() {
-        return (typeof process !== 'undefined');
+        // Checking only for `process` isn't enough to identify whether or not we're in a Node
+        // environment, because Webpack by default will polyfill the `process`. While we can discern
+        // that Webpack polyfilled it by looking at `process.browser`, it's very Webpack-specific and
+        // might not be future-proof. Instead we look at the stringified version of `process` which
+        // is `[object process]` in Node and `[object Object]` when polyfilled.
+        return typeof process !== 'undefined' && {}.toString.call(process) === '[object process]';
     }
     function optimizeGroupPlayer(players) {
         switch (players.length) {
