@@ -1,6 +1,6 @@
 {
   "name": "@angular/animations",
-  "version": "9.1.0-next.1+58.sha-0a1a989",
+  "version": "9.1.0-next.1+61.sha-1e20b2c",
   "description": "Angular - animations integration with web-animations",
   "main": "./bundles/animations.umd.js",
   "module": "./fesm5/animations.js",
@@ -13,12 +13,13 @@
   "author": "angular",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/core": "9.1.0-next.1+58.sha-0a1a989",
+    "@angular/core": "9.1.0-next.1+61.sha-1e20b2c",
     "tslib": "^1.10.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/angular/angular.git"
+    "url": "https://github.com/angular/angular.git",
+    "directory": "packages/animations"
   },
   "ng-update": {
     "packageGroup": [
