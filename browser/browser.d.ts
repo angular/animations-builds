@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.2+55.sha-406ce8c
+ * @license Angular v9.0.2+73.sha-79aaaa3
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -13,7 +13,7 @@ import { ɵStyleData } from '@angular/animations';
 /**
  * @publicApi
  */
-declare abstract class AnimationDriver {
+export declare abstract class AnimationDriver {
     static NOOP: AnimationDriver;
     abstract validateStyleProperty(prop: string): boolean;
     abstract matchesElement(element: any, selector: string): boolean;
@@ -24,8 +24,6 @@ declare abstract class AnimationDriver {
         [key: string]: string | number;
     }[], duration: number, delay: number, easing?: string | null, previousPlayers?: any[], scrubberAccessRequested?: boolean): any;
 }
-export { AnimationDriver }
-export { AnimationDriver as ɵAnimationDriver }
 
 declare interface AnimationEngineInstruction {
     type: AnimationTransitionInstructionType;
