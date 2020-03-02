@@ -29,3 +29,12 @@ export declare function hypenatePropsObject(object: {
 }): {
     [key: string]: any;
 };
+/**
+ * Returns the computed style for the provided property on the provided element.
+ *
+ * This function uses `window.getComputedStyle` internally to determine the
+ * style value for the element. Firefox doesn't support reading the shorthand
+ * forms of margin/padding and for this reason this function needs to account
+ * for that.
+ */
+export declare function computeStyle(element: HTMLElement, prop: string): string;

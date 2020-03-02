@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.0-next.2+28.sha-746e313
+ * @license Angular v9.1.0-next.2+32.sha-35c9f0d
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -203,6 +203,35 @@ function hypenatePropsObject(object) {
         newObj[newProp] = object[prop];
     });
     return newObj;
+}
+/**
+ * Returns the computed style for the provided property on the provided element.
+ *
+ * This function uses `window.getComputedStyle` internally to determine the
+ * style value for the element. Firefox doesn't support reading the shorthand
+ * forms of margin/padding and for this reason this function needs to account
+ * for that.
+ */
+function computeStyle(element, prop) {
+    var gcs = window.getComputedStyle(element);
+    // this is casted to any because the `CSSStyleDeclaration` type is a fixed
+    // set of properties and `prop` is a dynamic reference to a property within
+    // the `CSSStyleDeclaration` list.
+    var value = gcs[prop];
+    // Firefox returns empty string values for `margin` and `padding` properties
+    // when extracted using getComputedStyle (see similar issue here:
+    // https://github.com/jquery/jquery/issues/3383). In this situation
+    // we want to emulate the value that is returned by creating the top,
+    // right, bottom and left properties as individual style lookups.
+    if (value.length === 0 && (prop === 'margin' || prop === 'padding')) {
+        // reconstruct the padding/margin value as `top right bottom left`
+        var propTop = (prop + 'Top');
+        var propRight = (prop + 'Right');
+        var propBottom = (prop + 'Bottom');
+        var propLeft = (prop + 'Left');
+        value = gcs[propTop] + " " + gcs[propRight] + " " + gcs[propBottom] + " " + gcs[propLeft];
+    }
+    return value;
 }
 
 /**
@@ -557,9 +586,6 @@ function visitDslNode(visitor, node, context) {
         default:
             throw new Error("Unable to resolve animation metadata node #" + node.type);
     }
-}
-function computeStyle(element, prop) {
-    return window.getComputedStyle(element)[prop];
 }
 
 /**
@@ -4347,7 +4373,7 @@ var CssKeyframesDriver = /** @class */ (function () {
         return invokeQuery(element, selector, multi);
     };
     CssKeyframesDriver.prototype.computeStyle = function (element, prop, defaultValue) {
-        return window.getComputedStyle(element)[prop];
+        return computeStyle(element, prop);
     };
     CssKeyframesDriver.prototype.buildKeyframeElement = function (element, name, keyframes) {
         keyframes = keyframes.map(function (kf) { return hypenatePropsObject(kf); });
@@ -4591,7 +4617,7 @@ var WebAnimationsDriver = /** @class */ (function () {
         return invokeQuery(element, selector, multi);
     };
     WebAnimationsDriver.prototype.computeStyle = function (element, prop, defaultValue) {
-        return window.getComputedStyle(element)[prop];
+        return computeStyle(element, prop);
     };
     WebAnimationsDriver.prototype.overrideWebAnimationsSupport = function (supported) { this._isNativeImpl = supported; };
     WebAnimationsDriver.prototype.animate = function (element, keyframes, duration, delay, easing, previousPlayers, scrubberAccessRequested) {
