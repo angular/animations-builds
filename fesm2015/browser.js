@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.0-next.2+55.sha-c7d0567
+ * @license Angular v9.1.0-next.2+56.sha-17cf04e
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -381,30 +381,49 @@ function hypenatePropsObject(object) {
  */
 function computeStyle(element, prop) {
     /** @type {?} */
-    const gcs = window.getComputedStyle(element);
+    const styles = window.getComputedStyle(element);
     // this is casted to any because the `CSSStyleDeclaration` type is a fixed
     // set of properties and `prop` is a dynamic reference to a property within
     // the `CSSStyleDeclaration` list.
     /** @type {?} */
-    let value = gcs[(/** @type {?} */ (prop))];
+    let value = getComputedValue(styles, (/** @type {?} */ (prop)));
     // Firefox returns empty string values for `margin` and `padding` properties
     // when extracted using getComputedStyle (see similar issue here:
     // https://github.com/jquery/jquery/issues/3383). In this situation
     // we want to emulate the value that is returned by creating the top,
     // right, bottom and left properties as individual style lookups.
     if (value.length === 0 && (prop === 'margin' || prop === 'padding')) {
+        /** @type {?} */
+        const t = getComputedValue(styles, (/** @type {?} */ ((prop + 'Top'))));
+        /** @type {?} */
+        const r = getComputedValue(styles, (/** @type {?} */ ((prop + 'Right'))));
+        /** @type {?} */
+        const b = getComputedValue(styles, (/** @type {?} */ ((prop + 'Bottom'))));
+        /** @type {?} */
+        const l = getComputedValue(styles, (/** @type {?} */ ((prop + 'Left'))));
         // reconstruct the padding/margin value as `top right bottom left`
-        /** @type {?} */
-        const propTop = (/** @type {?} */ ((prop + 'Top')));
-        /** @type {?} */
-        const propRight = (/** @type {?} */ ((prop + 'Right')));
-        /** @type {?} */
-        const propBottom = (/** @type {?} */ ((prop + 'Bottom')));
-        /** @type {?} */
-        const propLeft = (/** @type {?} */ ((prop + 'Left')));
-        value = `${gcs[propTop]} ${gcs[propRight]} ${gcs[propBottom]} ${gcs[propLeft]}`;
+        // we `trim()` the value because if all of the values above are
+        // empty string values then we would like the return value to
+        // also be an empty string.
+        value = `${t} ${r} ${b} ${l}`.trim();
     }
     return value;
+}
+/**
+ * Reads and returns the provided property style from the provided styles collection.
+ *
+ * This function is useful because it will return an empty string in the
+ * event that the value obtained from the styles collection is a non-string
+ * value (which is usually the case if the `styles` object is mocked out).
+ * @template K
+ * @param {?} styles
+ * @param {?} prop
+ * @return {?}
+ */
+function getComputedValue(styles, prop) {
+    /** @type {?} */
+    const value = styles[prop];
+    return typeof value === 'string' ? value : '';
 }
 
 /**

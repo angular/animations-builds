@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.0-next.2+55.sha-c7d0567
+ * @license Angular v9.1.0-next.2+56.sha-17cf04e
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -415,25 +415,39 @@
      * for that.
      */
     function computeStyle(element, prop) {
-        var gcs = window.getComputedStyle(element);
+        var styles = window.getComputedStyle(element);
         // this is casted to any because the `CSSStyleDeclaration` type is a fixed
         // set of properties and `prop` is a dynamic reference to a property within
         // the `CSSStyleDeclaration` list.
-        var value = gcs[prop];
+        var value = getComputedValue(styles, prop);
         // Firefox returns empty string values for `margin` and `padding` properties
         // when extracted using getComputedStyle (see similar issue here:
         // https://github.com/jquery/jquery/issues/3383). In this situation
         // we want to emulate the value that is returned by creating the top,
         // right, bottom and left properties as individual style lookups.
         if (value.length === 0 && (prop === 'margin' || prop === 'padding')) {
+            var t = getComputedValue(styles, (prop + 'Top'));
+            var r = getComputedValue(styles, (prop + 'Right'));
+            var b = getComputedValue(styles, (prop + 'Bottom'));
+            var l = getComputedValue(styles, (prop + 'Left'));
             // reconstruct the padding/margin value as `top right bottom left`
-            var propTop = (prop + 'Top');
-            var propRight = (prop + 'Right');
-            var propBottom = (prop + 'Bottom');
-            var propLeft = (prop + 'Left');
-            value = gcs[propTop] + " " + gcs[propRight] + " " + gcs[propBottom] + " " + gcs[propLeft];
+            // we `trim()` the value because if all of the values above are
+            // empty string values then we would like the return value to
+            // also be an empty string.
+            value = (t + " " + r + " " + b + " " + l).trim();
         }
         return value;
+    }
+    /**
+     * Reads and returns the provided property style from the provided styles collection.
+     *
+     * This function is useful because it will return an empty string in the
+     * event that the value obtained from the styles collection is a non-string
+     * value (which is usually the case if the `styles` object is mocked out).
+     */
+    function getComputedValue(styles, prop) {
+        var value = styles[prop];
+        return typeof value === 'string' ? value : '';
     }
 
     /**
