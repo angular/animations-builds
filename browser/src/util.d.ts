@@ -53,3 +53,4 @@ export declare function balancePreviousStylesIntoKeyframes(element: any, keyfram
 }[];
 export declare function visitDslNode(visitor: AnimationDslVisitor, node: AnimationMetadata, context: any): any;
 export declare function visitDslNode(visitor: AnimationAstVisitor, node: AnimationAst<AnimationMetadataType>, context: any): any;
+export declare function computeStyle(element: any, prop: string): string;
