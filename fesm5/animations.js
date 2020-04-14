@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.1+36.sha-c8f2ca2
+ * @license Angular v9.1.1+40.sha-26f4915
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -353,7 +353,8 @@ function group(steps, options) {
  * @usageNotes
  * When you pass an array of steps to a
  * `transition()` call, the steps run sequentially by default.
- * Compare this to the `{@link animations/group group()}` call, which runs animation steps in parallel.
+ * Compare this to the `{@link animations/group group()}` call, which runs animation steps in
+ *parallel.
  *
  * When a sequence is used within a `{@link animations/group group()}` or a `transition()` call,
  * execution continues to the next instruction only after each of the inner animation
@@ -969,10 +970,18 @@ var NoopAnimationPlayer = /** @class */ (function () {
             this._onDoneFns = [];
         }
     };
-    NoopAnimationPlayer.prototype.onStart = function (fn) { this._onStartFns.push(fn); };
-    NoopAnimationPlayer.prototype.onDone = function (fn) { this._onDoneFns.push(fn); };
-    NoopAnimationPlayer.prototype.onDestroy = function (fn) { this._onDestroyFns.push(fn); };
-    NoopAnimationPlayer.prototype.hasStarted = function () { return this._started; };
+    NoopAnimationPlayer.prototype.onStart = function (fn) {
+        this._onStartFns.push(fn);
+    };
+    NoopAnimationPlayer.prototype.onDone = function (fn) {
+        this._onDoneFns.push(fn);
+    };
+    NoopAnimationPlayer.prototype.onDestroy = function (fn) {
+        this._onDestroyFns.push(fn);
+    };
+    NoopAnimationPlayer.prototype.hasStarted = function () {
+        return this._started;
+    };
     NoopAnimationPlayer.prototype.init = function () { };
     NoopAnimationPlayer.prototype.play = function () {
         if (!this.hasStarted()) {
@@ -992,7 +1001,9 @@ var NoopAnimationPlayer = /** @class */ (function () {
     };
     NoopAnimationPlayer.prototype.pause = function () { };
     NoopAnimationPlayer.prototype.restart = function () { };
-    NoopAnimationPlayer.prototype.finish = function () { this._onFinish(); };
+    NoopAnimationPlayer.prototype.finish = function () {
+        this._onFinish();
+    };
     NoopAnimationPlayer.prototype.destroy = function () {
         if (!this._destroyed) {
             this._destroyed = true;
@@ -1006,7 +1017,9 @@ var NoopAnimationPlayer = /** @class */ (function () {
     };
     NoopAnimationPlayer.prototype.reset = function () { };
     NoopAnimationPlayer.prototype.setPosition = function (position) { };
-    NoopAnimationPlayer.prototype.getPosition = function () { return 0; };
+    NoopAnimationPlayer.prototype.getPosition = function () {
+        return 0;
+    };
     /** @internal */
     NoopAnimationPlayer.prototype.triggerCallback = function (phaseName) {
         var methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
@@ -1078,8 +1091,12 @@ var AnimationGroupPlayer = /** @class */ (function () {
             this._onDoneFns = [];
         }
     };
-    AnimationGroupPlayer.prototype.init = function () { this.players.forEach(function (player) { return player.init(); }); };
-    AnimationGroupPlayer.prototype.onStart = function (fn) { this._onStartFns.push(fn); };
+    AnimationGroupPlayer.prototype.init = function () {
+        this.players.forEach(function (player) { return player.init(); });
+    };
+    AnimationGroupPlayer.prototype.onStart = function (fn) {
+        this._onStartFns.push(fn);
+    };
     AnimationGroupPlayer.prototype._onStart = function () {
         if (!this.hasStarted()) {
             this._started = true;
@@ -1087,9 +1104,15 @@ var AnimationGroupPlayer = /** @class */ (function () {
             this._onStartFns = [];
         }
     };
-    AnimationGroupPlayer.prototype.onDone = function (fn) { this._onDoneFns.push(fn); };
-    AnimationGroupPlayer.prototype.onDestroy = function (fn) { this._onDestroyFns.push(fn); };
-    AnimationGroupPlayer.prototype.hasStarted = function () { return this._started; };
+    AnimationGroupPlayer.prototype.onDone = function (fn) {
+        this._onDoneFns.push(fn);
+    };
+    AnimationGroupPlayer.prototype.onDestroy = function (fn) {
+        this._onDestroyFns.push(fn);
+    };
+    AnimationGroupPlayer.prototype.hasStarted = function () {
+        return this._started;
+    };
     AnimationGroupPlayer.prototype.play = function () {
         if (!this.parentPlayer) {
             this.init();
@@ -1097,13 +1120,19 @@ var AnimationGroupPlayer = /** @class */ (function () {
         this._onStart();
         this.players.forEach(function (player) { return player.play(); });
     };
-    AnimationGroupPlayer.prototype.pause = function () { this.players.forEach(function (player) { return player.pause(); }); };
-    AnimationGroupPlayer.prototype.restart = function () { this.players.forEach(function (player) { return player.restart(); }); };
+    AnimationGroupPlayer.prototype.pause = function () {
+        this.players.forEach(function (player) { return player.pause(); });
+    };
+    AnimationGroupPlayer.prototype.restart = function () {
+        this.players.forEach(function (player) { return player.restart(); });
+    };
     AnimationGroupPlayer.prototype.finish = function () {
         this._onFinish();
         this.players.forEach(function (player) { return player.finish(); });
     };
-    AnimationGroupPlayer.prototype.destroy = function () { this._onDestroy(); };
+    AnimationGroupPlayer.prototype.destroy = function () {
+        this._onDestroy();
+    };
     AnimationGroupPlayer.prototype._onDestroy = function () {
         if (!this._destroyed) {
             this._destroyed = true;

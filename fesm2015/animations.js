@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.1+36.sha-c8f2ca2
+ * @license Angular v9.1.1+40.sha-26f4915
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -732,7 +732,8 @@ function group(steps, options = null) {
  * \@usageNotes
  * When you pass an array of steps to a
  * `transition()` call, the steps run sequentially by default.
- * Compare this to the `{\@link animations/group group()}` call, which runs animation steps in parallel.
+ * Compare this to the `{\@link animations/group group()}` call, which runs animation steps in
+ * parallel.
  *
  * When a sequence is used within a `{\@link animations/group group()}` or a `transition()` call,
  * execution continues to the next instruction only after each of the inner animation
@@ -1497,21 +1498,29 @@ class NoopAnimationPlayer {
      * @param {?} fn
      * @return {?}
      */
-    onStart(fn) { this._onStartFns.push(fn); }
+    onStart(fn) {
+        this._onStartFns.push(fn);
+    }
     /**
      * @param {?} fn
      * @return {?}
      */
-    onDone(fn) { this._onDoneFns.push(fn); }
+    onDone(fn) {
+        this._onDoneFns.push(fn);
+    }
     /**
      * @param {?} fn
      * @return {?}
      */
-    onDestroy(fn) { this._onDestroyFns.push(fn); }
+    onDestroy(fn) {
+        this._onDestroyFns.push(fn);
+    }
     /**
      * @return {?}
      */
-    hasStarted() { return this._started; }
+    hasStarted() {
+        return this._started;
+    }
     /**
      * @return {?}
      */
@@ -1530,10 +1539,12 @@ class NoopAnimationPlayer {
      * \@internal
      * @return {?}
      */
-    triggerMicrotask() { scheduleMicroTask((/**
-     * @return {?}
-     */
-    () => this._onFinish())); }
+    triggerMicrotask() {
+        scheduleMicroTask((/**
+         * @return {?}
+         */
+        () => this._onFinish()));
+    }
     /**
      * @private
      * @return {?}
@@ -1557,7 +1568,9 @@ class NoopAnimationPlayer {
     /**
      * @return {?}
      */
-    finish() { this._onFinish(); }
+    finish() {
+        this._onFinish();
+    }
     /**
      * @return {?}
      */
@@ -1588,7 +1601,9 @@ class NoopAnimationPlayer {
     /**
      * @return {?}
      */
-    getPosition() { return 0; }
+    getPosition() {
+        return 0;
+    }
     /**
      * \@internal
      * @param {?} phaseName
@@ -1740,16 +1755,20 @@ class AnimationGroupPlayer {
     /**
      * @return {?}
      */
-    init() { this.players.forEach((/**
-     * @param {?} player
-     * @return {?}
-     */
-    player => player.init())); }
+    init() {
+        this.players.forEach((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => player.init()));
+    }
     /**
      * @param {?} fn
      * @return {?}
      */
-    onStart(fn) { this._onStartFns.push(fn); }
+    onStart(fn) {
+        this._onStartFns.push(fn);
+    }
     /**
      * @private
      * @return {?}
@@ -1769,16 +1788,22 @@ class AnimationGroupPlayer {
      * @param {?} fn
      * @return {?}
      */
-    onDone(fn) { this._onDoneFns.push(fn); }
+    onDone(fn) {
+        this._onDoneFns.push(fn);
+    }
     /**
      * @param {?} fn
      * @return {?}
      */
-    onDestroy(fn) { this._onDestroyFns.push(fn); }
+    onDestroy(fn) {
+        this._onDestroyFns.push(fn);
+    }
     /**
      * @return {?}
      */
-    hasStarted() { return this._started; }
+    hasStarted() {
+        return this._started;
+    }
     /**
      * @return {?}
      */
@@ -1796,19 +1821,23 @@ class AnimationGroupPlayer {
     /**
      * @return {?}
      */
-    pause() { this.players.forEach((/**
-     * @param {?} player
-     * @return {?}
-     */
-    player => player.pause())); }
+    pause() {
+        this.players.forEach((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => player.pause()));
+    }
     /**
      * @return {?}
      */
-    restart() { this.players.forEach((/**
-     * @param {?} player
-     * @return {?}
-     */
-    player => player.restart())); }
+    restart() {
+        this.players.forEach((/**
+         * @param {?} player
+         * @return {?}
+         */
+        player => player.restart()));
+    }
     /**
      * @return {?}
      */
@@ -1823,7 +1852,9 @@ class AnimationGroupPlayer {
     /**
      * @return {?}
      */
-    destroy() { this._onDestroy(); }
+    destroy() {
+        this._onDestroy();
+    }
     /**
      * @private
      * @return {?}

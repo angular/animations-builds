@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.1+36.sha-c8f2ca2
+ * @license Angular v9.1.1+40.sha-26f4915
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -505,10 +505,10 @@ export declare interface AnimationOptions {
      */
     delay?: number | string;
     /**
-    * A set of developer-defined parameters that modify styling and timing
-    * when an animation action starts. An array of key-value pairs, where the provided value
-    * is used as a default.
-    */
+     * A set of developer-defined parameters that modify styling and timing
+     * when an animation action starts. An array of key-value pairs, where the provided value
+     * is used as a default.
+     */
     params?: {
         [name: string]: any;
     };
@@ -783,8 +783,8 @@ export declare interface AnimationTransitionMetadata extends AnimationMetadata {
  */
 export declare interface AnimationTriggerMetadata extends AnimationMetadata {
     /**
-      * The trigger name, used to associate it with an element. Unique within the component.
-      */
+     * The trigger name, used to associate it with an element. Unique within the component.
+     */
     name: string;
     /**
      * An animation definition object, containing an array of state and transition declarations.
@@ -1042,7 +1042,8 @@ export declare function query(selector: string, animation: AnimationMetadata | A
  * @usageNotes
  * When you pass an array of steps to a
  * `transition()` call, the steps run sequentially by default.
- * Compare this to the `{@link animations/group group()}` call, which runs animation steps in parallel.
+ * Compare this to the `{@link animations/group group()}` call, which runs animation steps in
+ *parallel.
  *
  * When a sequence is used within a `{@link animations/group group()}` or a `transition()` call,
  * execution continues to the next instruction only after each of the inner animation

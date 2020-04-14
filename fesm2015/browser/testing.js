@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.1+36.sha-c8f2ca2
+ * @license Angular v9.1.1+40.sha-26f4915
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -20,7 +20,9 @@ class MockAnimationDriver {
      * @param {?} prop
      * @return {?}
      */
-    validateStyleProperty(prop) { return ɵvalidateStyleProperty(prop); }
+    validateStyleProperty(prop) {
+        return ɵvalidateStyleProperty(prop);
+    }
     /**
      * @param {?} element
      * @param {?} selector
@@ -34,7 +36,9 @@ class MockAnimationDriver {
      * @param {?} elm2
      * @return {?}
      */
-    containsElement(elm1, elm2) { return ɵcontainsElement(elm1, elm2); }
+    containsElement(elm1, elm2) {
+        return ɵcontainsElement(elm1, elm2);
+    }
     /**
      * @param {?} element
      * @param {?} selector
@@ -122,7 +126,9 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
      * @param {?} fn
      * @return {?}
      */
-    onInit(fn) { this._onInitFns.push(fn); }
+    onInit(fn) {
+        this._onInitFns.push(fn);
+    }
     /* @internal */
     /**
      * @return {?}
@@ -165,7 +171,9 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
     /**
      * @return {?}
      */
-    hasStarted() { return this.__started; }
+    hasStarted() {
+        return this.__started;
+    }
     /**
      * @return {?}
      */
