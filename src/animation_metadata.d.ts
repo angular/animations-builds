@@ -66,10 +66,10 @@ export declare interface AnimationOptions {
      */
     delay?: number | string;
     /**
-    * A set of developer-defined parameters that modify styling and timing
-    * when an animation action starts. An array of key-value pairs, where the provided value
-    * is used as a default.
-    */
+     * A set of developer-defined parameters that modify styling and timing
+     * when an animation action starts. An array of key-value pairs, where the provided value
+     * is used as a default.
+     */
     params?: {
         [name: string]: any;
     };
@@ -181,8 +181,8 @@ export interface AnimationMetadata {
  */
 export interface AnimationTriggerMetadata extends AnimationMetadata {
     /**
-      * The trigger name, used to associate it with an element. Unique within the component.
-      */
+     * The trigger name, used to associate it with an element. Unique within the component.
+     */
     name: string;
     /**
      * An animation definition object, containing an array of state and transition declarations.
@@ -707,7 +707,8 @@ export declare function group(steps: AnimationMetadata[], options?: AnimationOpt
  * @usageNotes
  * When you pass an array of steps to a
  * `transition()` call, the steps run sequentially by default.
- * Compare this to the `{@link animations/group group()}` call, which runs animation steps in parallel.
+ * Compare this to the `{@link animations/group group()}` call, which runs animation steps in
+ *parallel.
  *
  * When a sequence is used within a `{@link animations/group group()}` or a `transition()` call,
  * execution continues to the next instruction only after each of the inner animation

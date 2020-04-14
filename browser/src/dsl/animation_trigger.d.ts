@@ -13,8 +13,8 @@ import { AnimationStateStyles, AnimationTransitionFactory } from './animation_tr
  */
 export declare function buildTrigger(name: string, ast: TriggerAst): AnimationTrigger;
 /**
-* @publicApi
-*/
+ * @publicApi
+ */
 export declare class AnimationTrigger {
     name: string;
     ast: TriggerAst;

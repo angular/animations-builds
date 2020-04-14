@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.1+32.sha-5e80e7e
+ * @license Angular v10.0.0-next.1+33.sha-698b028
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -244,7 +244,9 @@ if (_isNode || typeof Element !== 'undefined') {
      * @param {?} elm2
      * @return {?}
      */
-    (elm1, elm2) => { return (/** @type {?} */ (elm1.contains(elm2))); });
+    (elm1, elm2) => {
+        return (/** @type {?} */ (elm1.contains(elm2)));
+    });
     _matches = ((/**
      * @return {?}
      */
@@ -379,7 +381,9 @@ class NoopAnimationDriver {
      * @param {?} prop
      * @return {?}
      */
-    validateStyleProperty(prop) { return validateStyleProperty(prop); }
+    validateStyleProperty(prop) {
+        return validateStyleProperty(prop);
+    }
     /**
      * @param {?} element
      * @param {?} selector
@@ -393,7 +397,9 @@ class NoopAnimationDriver {
      * @param {?} elm2
      * @return {?}
      */
-    containsElement(elm1, elm2) { return containsElement(elm1, elm2); }
+    containsElement(elm1, elm2) {
+        return containsElement(elm1, elm2);
+    }
     /**
      * @param {?} element
      * @param {?} selector
@@ -624,7 +630,9 @@ function copyObj(obj, destination = {}) {
      * @param {?} prop
      * @return {?}
      */
-    prop => { destination[prop] = obj[prop]; }));
+    prop => {
+        destination[prop] = obj[prop];
+    }));
     return destination;
 }
 /**
@@ -941,7 +949,9 @@ function balancePreviousStylesIntoKeyframes(element, keyframes, previousStyles) 
                  * @param {?} prop
                  * @return {?}
                  */
-                function (prop) { kf[prop] = computeStyle(element, prop); }));
+                function (prop) {
+                    kf[prop] = computeStyle(element, prop);
+                }));
             }
         }
     }
@@ -1267,7 +1277,11 @@ class AnimationAstBuilderVisitor {
         }));
         return {
             type: 7 /* Trigger */,
-            name: metadata.name, states, transitions, queryCount, depCount,
+            name: metadata.name,
+            states,
+            transitions,
+            queryCount,
+            depCount,
             options: null
         };
     }
@@ -1314,7 +1328,8 @@ class AnimationAstBuilderVisitor {
             if (missingSubs.size) {
                 /** @type {?} */
                 const missingSubsArr = iteratorToArray(missingSubs.values());
-                context.errors.push(`state("${metadata.name}", ...) must define default values for all the following style substitutions: ${missingSubsArr.join(', ')}`);
+                context.errors.push(`state("${metadata
+                    .name}", ...) must define default values for all the following style substitutions: ${missingSubsArr.join(', ')}`);
             }
         }
         return {
@@ -1510,7 +1525,8 @@ class AnimationAstBuilderVisitor {
             type: 6 /* Style */,
             styles,
             easing: collectedEasing,
-            offset: metadata.offset, containsDynamicStyles,
+            offset: metadata.offset,
+            containsDynamicStyles,
             options: null
         };
     }
@@ -1555,7 +1571,8 @@ class AnimationAstBuilderVisitor {
                 if (collectedEntry) {
                     if (startTime != endTime && startTime >= collectedEntry.startTime &&
                         endTime <= collectedEntry.endTime) {
-                        context.errors.push(`The CSS property "${prop}" that exists between the times of "${collectedEntry.startTime}ms" and "${collectedEntry.endTime}ms" is also being animated in a parallel animation between the times of "${startTime}ms" and "${endTime}ms"`);
+                        context.errors.push(`The CSS property "${prop}" that exists between the times of "${collectedEntry.startTime}ms" and "${collectedEntry
+                            .endTime}ms" is also being animated in a parallel animation between the times of "${startTime}ms" and "${endTime}ms"`);
                         updateCollectedStyle = false;
                     }
                     // we always choose the smaller start time value since we
@@ -1720,7 +1737,9 @@ class AnimationAstBuilderVisitor {
             type: 11 /* Query */,
             selector,
             limit: options.limit || 0,
-            optional: !!options.optional, includeSelf, animation,
+            optional: !!options.optional,
+            includeSelf,
+            animation,
             originalSelector: metadata.selector,
             options: normalizeAnimationOptions(metadata.options)
         };
@@ -1740,7 +1759,8 @@ class AnimationAstBuilderVisitor {
             resolveTiming(metadata.timings, context.errors, true);
         return {
             type: 12 /* Stagger */,
-            animation: visitDslNode(this, normalizeAnimationEntry(metadata.animation), context), timings,
+            animation: visitDslNode(this, normalizeAnimationEntry(metadata.animation), context),
+            timings,
             options: null
         };
     }
@@ -1971,7 +1991,9 @@ function createTimelineInstruction(element, keyframes, preStyleProps, postStyleP
         postStyleProps,
         duration,
         delay,
-        totalTime: duration + delay, easing, subTimeline
+        totalTime: duration + delay,
+        easing,
+        subTimeline
     };
 }
 
@@ -2016,11 +2038,15 @@ class ElementInstructionMap {
      * @param {?} element
      * @return {?}
      */
-    has(element) { return this._map.has(element); }
+    has(element) {
+        return this._map.has(element);
+    }
     /**
      * @return {?}
      */
-    clear() { this._map.clear(); }
+    clear() {
+        this._map.clear();
+    }
 }
 if (false) {
     /**
@@ -2488,8 +2514,9 @@ class AnimationTimelineBuilderVisitor {
         const options = (/** @type {?} */ ((ast.options || {})));
         /** @type {?} */
         const delay = options.delay ? resolveTimingValue(options.delay) : 0;
-        if (delay && (context.previousNode.type === 6 /* Style */ ||
-            (startTime == 0 && context.currentTimeline.getCurrentStyleProperties().length))) {
+        if (delay &&
+            (context.previousNode.type === 6 /* Style */ ||
+                (startTime == 0 && context.currentTimeline.getCurrentStyleProperties().length))) {
             context.currentTimeline.snapshotCurrentStyles();
             context.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
         }
@@ -2613,7 +2640,9 @@ class AnimationTimelineContext {
     /**
      * @return {?}
      */
-    get params() { return this.options.params; }
+    get params() {
+        return this.options.params;
+    }
     /**
      * @param {?} options
      * @param {?=} skipIfExists
@@ -2669,7 +2698,9 @@ class AnimationTimelineContext {
                  * @param {?} name
                  * @return {?}
                  */
-                name => { params[name] = oldParams[name]; }));
+                name => {
+                    params[name] = oldParams[name];
+                }));
             }
         }
         return options;
@@ -2864,11 +2895,15 @@ class TimelineBuilder {
     /**
      * @return {?}
      */
-    getCurrentStyleProperties() { return Object.keys(this._currentKeyframe); }
+    getCurrentStyleProperties() {
+        return Object.keys(this._currentKeyframe);
+    }
     /**
      * @return {?}
      */
-    get currentTime() { return this.startTime + this.duration; }
+    get currentTime() {
+        return this.startTime + this.duration;
+    }
     /**
      * @param {?} delay
      * @return {?}
@@ -2943,7 +2978,9 @@ class TimelineBuilder {
     /**
      * @return {?}
      */
-    allowOnlyTimelineStyles() { return this._currentEmptyStepKeyframe !== this._currentKeyframe; }
+    allowOnlyTimelineStyles() {
+        return this._currentEmptyStepKeyframe !== this._currentKeyframe;
+    }
     /**
      * @param {?} easing
      * @return {?}
@@ -3047,7 +3084,9 @@ class TimelineBuilder {
     /**
      * @return {?}
      */
-    getFinalKeyframe() { return this._keyframes.get(this.duration); }
+    getFinalKeyframe() {
+        return this._keyframes.get(this.duration);
+    }
     /**
      * @return {?}
      */
@@ -3222,7 +3261,9 @@ class SubTimelineBuilder extends TimelineBuilder {
     /**
      * @return {?}
      */
-    containsAnimation() { return this.keyframes.length > 1; }
+    containsAnimation() {
+        return this.keyframes.length > 1;
+    }
     /**
      * @return {?}
      */
@@ -3330,7 +3371,9 @@ function flattenStyles(input, allStyles) {
              * @param {?} prop
              * @return {?}
              */
-            prop => { styles[prop] = AUTO_STYLE; }));
+            prop => {
+                styles[prop] = AUTO_STYLE;
+            }));
         }
         else {
             copyStyles((/** @type {?} */ (token)), false, styles);
@@ -3357,7 +3400,7 @@ class Animation {
         const ast = buildAnimationAst(_driver, input, errors);
         if (errors.length) {
             /** @type {?} */
-            const errorMessage = `animation validation failed:\n${errors.join("\n")}`;
+            const errorMessage = `animation validation failed:\n${errors.join('\n')}`;
             throw new Error(errorMessage);
         }
         this._animationAst = ast;
@@ -3384,7 +3427,7 @@ class Animation {
         const result = buildAnimationTimelines(this._driver, element, this._animationAst, ENTER_CLASSNAME, LEAVE_CLASSNAME, start, dest, options, subInstructions, errors);
         if (errors.length) {
             /** @type {?} */
-            const errorMessage = `animation building failed:\n${errors.join("\n")}`;
+            const errorMessage = `animation building failed:\n${errors.join('\n')}`;
             throw new Error(errorMessage);
         }
         return result;
@@ -3448,7 +3491,9 @@ class NoopAnimationStyleNormalizer {
      * @param {?} errors
      * @return {?}
      */
-    normalizePropertyName(propertyName, errors) { return propertyName; }
+    normalizePropertyName(propertyName, errors) {
+        return propertyName;
+    }
     /**
      * @param {?} userProvidedProperty
      * @param {?} normalizedProperty
@@ -3675,14 +3720,18 @@ class AnimationTransitionFactory {
         /** @type {?} */
         const animationOptions = { params: Object.assign(Object.assign({}, transitionAnimationParams), nextAnimationParams) };
         /** @type {?} */
-        const timelines = skipAstBuild ? [] : buildAnimationTimelines(driver, element, this.ast.animation, enterClassName, leaveClassName, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
+        const timelines = skipAstBuild ?
+            [] :
+            buildAnimationTimelines(driver, element, this.ast.animation, enterClassName, leaveClassName, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
         /** @type {?} */
         let totalTime = 0;
         timelines.forEach((/**
          * @param {?} tl
          * @return {?}
          */
-        tl => { totalTime = Math.max(tl.duration + tl.delay, totalTime); }));
+        tl => {
+            totalTime = Math.max(tl.duration + tl.delay, totalTime);
+        }));
         if (errors.length) {
             return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, [], [], preStyleMap, postStyleMap, totalTime, errors);
         }
@@ -3863,7 +3912,9 @@ class AnimationTrigger {
     /**
      * @return {?}
      */
-    get containsQueries() { return this.ast.queryCount > 0; }
+    get containsQueries() {
+        return this.ast.queryCount > 0;
+    }
     /**
      * @param {?} currentState
      * @param {?} nextState
@@ -3977,7 +4028,7 @@ class TimelineAnimationEngine {
         /** @type {?} */
         const ast = buildAnimationAst(this._driver, metadata, errors);
         if (errors.length) {
-            throw new Error(`Unable to build the animation due to the following errors: ${errors.join("\n")}`);
+            throw new Error(`Unable to build the animation due to the following errors: ${errors.join('\n')}`);
         }
         else {
             this._animations[id] = ast;
@@ -4033,7 +4084,7 @@ class TimelineAnimationEngine {
             instructions = [];
         }
         if (errors.length) {
-            throw new Error(`Unable to create the animation due to the following errors: ${errors.join("\n")}`);
+            throw new Error(`Unable to create the animation due to the following errors: ${errors.join('\n')}`);
         }
         autoStylesMap.forEach((/**
          * @param {?} styles
@@ -4045,7 +4096,9 @@ class TimelineAnimationEngine {
              * @param {?} prop
              * @return {?}
              */
-            prop => { styles[prop] = this._driver.computeStyle(element, prop, AUTO_STYLE); }));
+            prop => {
+                styles[prop] = this._driver.computeStyle(element, prop, AUTO_STYLE);
+            }));
         }));
         /** @type {?} */
         const players = instructions.map((/**
@@ -4300,7 +4353,9 @@ class StateValue {
     /**
      * @return {?}
      */
-    get params() { return (/** @type {?} */ (this.options.params)); }
+    get params() {
+        return (/** @type {?} */ (this.options.params));
+    }
     /**
      * @param {?} options
      * @return {?}
@@ -4528,7 +4583,9 @@ class AnimationTransitionNamespace {
             player.onStart((/**
              * @return {?}
              */
-            () => { removeClass(element, QUEUED_CLASSNAME); }));
+            () => {
+                removeClass(element, QUEUED_CLASSNAME);
+            }));
         }
         player.onDone((/**
          * @return {?}
@@ -4564,7 +4621,9 @@ class AnimationTransitionNamespace {
          * @param {?} element
          * @return {?}
          */
-        (stateMap, element) => { delete stateMap[name]; }));
+        (stateMap, element) => {
+            delete stateMap[name];
+        }));
         this._elementListeners.forEach((/**
          * @param {?} listeners
          * @param {?} element
@@ -4575,7 +4634,9 @@ class AnimationTransitionNamespace {
              * @param {?} entry
              * @return {?}
              */
-            entry => { return entry.name != name; })));
+            entry => {
+                return entry.name != name;
+            })));
         }));
     }
     /**
@@ -4798,7 +4859,9 @@ class AnimationTransitionNamespace {
      * @param {?} parent
      * @return {?}
      */
-    insertNode(element, parent) { addClass(element, this._hostClassName); }
+    insertNode(element, parent) {
+        addClass(element, this._hostClassName);
+    }
     /**
      * @param {?} microtaskId
      * @return {?}
@@ -4980,7 +5043,9 @@ class TransitionAnimationEngine {
      * @param {?} context
      * @return {?}
      */
-    _onRemovalComplete(element, context) { this.onRemovalComplete(element, context); }
+    _onRemovalComplete(element, context) {
+        this.onRemovalComplete(element, context);
+    }
     /**
      * @return {?}
      */
@@ -5118,7 +5183,9 @@ class TransitionAnimationEngine {
      * @param {?} id
      * @return {?}
      */
-    _fetchNamespace(id) { return this._namespaceLookup[id]; }
+    _fetchNamespace(id) {
+        return this._namespaceLookup[id];
+    }
     /**
      * @param {?} element
      * @return {?}
@@ -5216,7 +5283,9 @@ class TransitionAnimationEngine {
      * @param {?} element
      * @return {?}
      */
-    collectEnterElement(element) { this.collectedEnterElements.push(element); }
+    collectEnterElement(element) {
+        this.collectedEnterElements.push(element);
+    }
     /**
      * @param {?} element
      * @param {?} value
@@ -5272,11 +5341,8 @@ class TransitionAnimationEngine {
      */
     markElementAsRemoved(namespaceId, element, hasAnimation, context) {
         this.collectedLeaveElements.push(element);
-        element[REMOVAL_FLAG] = {
-            namespaceId,
-            setForRemoval: context, hasAnimation,
-            removedBeforeQueried: false
-        };
+        element[REMOVAL_FLAG] =
+            { namespaceId, setForRemoval: context, hasAnimation, removedBeforeQueried: false };
     }
     /**
      * @param {?} namespaceId
@@ -5482,11 +5548,13 @@ class TransitionAnimationEngine {
                 optimizeGroupPlayer(players).onDone((/**
                  * @return {?}
                  */
-                () => { quietFns.forEach((/**
-                 * @param {?} fn
-                 * @return {?}
-                 */
-                fn => fn())); }));
+                () => {
+                    quietFns.forEach((/**
+                     * @param {?} fn
+                     * @return {?}
+                     */
+                    fn => fn()));
+                }));
             }
             else {
                 quietFns.forEach((/**
@@ -5648,7 +5716,9 @@ class TransitionAnimationEngine {
              * @param {?} element
              * @return {?}
              */
-            element => { this.processLeaveNode(element); }));
+            element => {
+                this.processLeaveNode(element);
+            }));
         }));
         /** @type {?} */
         const allPlayers = [];
@@ -6097,12 +6167,16 @@ class TransitionAnimationEngine {
      * @param {?} callback
      * @return {?}
      */
-    afterFlush(callback) { this._flushFns.push(callback); }
+    afterFlush(callback) {
+        this._flushFns.push(callback);
+    }
     /**
      * @param {?} callback
      * @return {?}
      */
-    afterFlushAnimationsDone(callback) { this._whenQuietFns.push(callback); }
+    afterFlushAnimationsDone(callback) {
+        this._whenQuietFns.push(callback);
+    }
     /**
      * @private
      * @param {?} element
@@ -6316,7 +6390,9 @@ class TransitionAnimationEngine {
          * @param {?} element
          * @return {?}
          */
-        element => { getOrSetAsInMap(skippedPlayersMap, element, []).push(player); }));
+        element => {
+            getOrSetAsInMap(skippedPlayersMap, element, []).push(player);
+        }));
         return player;
     }
     /**
@@ -6436,12 +6512,16 @@ class TransitionAnimationPlayer {
     /**
      * @return {?}
      */
-    getRealPlayer() { return this._player; }
+    getRealPlayer() {
+        return this._player;
+    }
     /**
      * @param {?} totalTime
      * @return {?}
      */
-    overrideTotalTime(totalTime) { ((/** @type {?} */ (this))).totalTime = totalTime; }
+    overrideTotalTime(totalTime) {
+        ((/** @type {?} */ (this))).totalTime = totalTime;
+    }
     /**
      * @param {?} player
      * @return {?}
@@ -6506,27 +6586,39 @@ class TransitionAnimationPlayer {
     /**
      * @return {?}
      */
-    init() { this._player.init(); }
+    init() {
+        this._player.init();
+    }
     /**
      * @return {?}
      */
-    hasStarted() { return this.queued ? false : this._player.hasStarted(); }
+    hasStarted() {
+        return this.queued ? false : this._player.hasStarted();
+    }
     /**
      * @return {?}
      */
-    play() { !this.queued && this._player.play(); }
+    play() {
+        !this.queued && this._player.play();
+    }
     /**
      * @return {?}
      */
-    pause() { !this.queued && this._player.pause(); }
+    pause() {
+        !this.queued && this._player.pause();
+    }
     /**
      * @return {?}
      */
-    restart() { !this.queued && this._player.restart(); }
+    restart() {
+        !this.queued && this._player.restart();
+    }
     /**
      * @return {?}
      */
-    finish() { this._player.finish(); }
+    finish() {
+        this._player.finish();
+    }
     /**
      * @return {?}
      */
@@ -6537,7 +6629,9 @@ class TransitionAnimationPlayer {
     /**
      * @return {?}
      */
-    reset() { !this.queued && this._player.reset(); }
+    reset() {
+        !this.queued && this._player.reset();
+    }
     /**
      * @param {?} p
      * @return {?}
@@ -6550,7 +6644,9 @@ class TransitionAnimationPlayer {
     /**
      * @return {?}
      */
-    getPosition() { return this.queued ? 0 : this._player.getPosition(); }
+    getPosition() {
+        return this.queued ? 0 : this._player.getPosition();
+    }
     /**
      * \@internal
      * @param {?} phaseName
@@ -6981,7 +7077,7 @@ class AnimationEngine {
             /** @type {?} */
             const ast = (/** @type {?} */ (buildAnimationAst(this._driver, (/** @type {?} */ (metadata)), errors)));
             if (errors.length) {
-                throw new Error(`The animation trigger "${name}" has failed to build due to the following errors:\n - ${errors.join("\n - ")}`);
+                throw new Error(`The animation trigger "${name}" has failed to build due to the following errors:\n - ${errors.join('\n - ')}`);
             }
             trigger = buildTrigger(name, ast);
             this._triggerCache[cacheKey] = trigger;
@@ -7070,7 +7166,9 @@ class AnimationEngine {
      * @param {?=} microtaskId
      * @return {?}
      */
-    flush(microtaskId = -1) { this._transitionEngine.flush(microtaskId); }
+    flush(microtaskId = -1) {
+        this._transitionEngine.flush(microtaskId);
+    }
     /**
      * @return {?}
      */
@@ -7081,7 +7179,9 @@ class AnimationEngine {
     /**
      * @return {?}
      */
-    whenRenderingDone() { return this._transitionEngine.whenRenderingDone(); }
+    whenRenderingDone() {
+        return this._transitionEngine.whenRenderingDone();
+    }
 }
 if (false) {
     /**
@@ -7342,11 +7442,15 @@ class ElementAnimationStyleHandler {
     /**
      * @return {?}
      */
-    pause() { playPauseAnimation(this._element, this._name, 'paused'); }
+    pause() {
+        playPauseAnimation(this._element, this._name, 'paused');
+    }
     /**
      * @return {?}
      */
-    resume() { playPauseAnimation(this._element, this._name, 'running'); }
+    resume() {
+        playPauseAnimation(this._element, this._name, 'running');
+    }
     /**
      * @param {?} position
      * @return {?}
@@ -7360,7 +7464,9 @@ class ElementAnimationStyleHandler {
     /**
      * @return {?}
      */
-    getPosition() { return this._position; }
+    getPosition() {
+        return this._position;
+    }
     /**
      * @private
      * @param {?} event
@@ -7602,7 +7708,10 @@ const DEFAULT_FILL_MODE = 'forwards';
 const DEFAULT_EASING = 'linear';
 /** @enum {number} */
 const AnimatorControlState = {
-    INITIALIZED: 1, STARTED: 2, FINISHED: 3, DESTROYED: 4,
+    INITIALIZED: 1,
+    STARTED: 2,
+    FINISHED: 3,
+    DESTROYED: 4,
 };
 class CssKeyframesPlayer {
     /**
@@ -7637,17 +7746,23 @@ class CssKeyframesPlayer {
      * @param {?} fn
      * @return {?}
      */
-    onStart(fn) { this._onStartFns.push(fn); }
+    onStart(fn) {
+        this._onStartFns.push(fn);
+    }
     /**
      * @param {?} fn
      * @return {?}
      */
-    onDone(fn) { this._onDoneFns.push(fn); }
+    onDone(fn) {
+        this._onDoneFns.push(fn);
+    }
     /**
      * @param {?} fn
      * @return {?}
      */
-    onDestroy(fn) { this._onDestroyFns.push(fn); }
+    onDestroy(fn) {
+        this._onDestroyFns.push(fn);
+    }
     /**
      * @return {?}
      */
@@ -7712,15 +7827,21 @@ class CssKeyframesPlayer {
      * @param {?} value
      * @return {?}
      */
-    setPosition(value) { this._styler.setPosition(value); }
+    setPosition(value) {
+        this._styler.setPosition(value);
+    }
     /**
      * @return {?}
      */
-    getPosition() { return this._styler.getPosition(); }
+    getPosition() {
+        return this._styler.getPosition();
+    }
     /**
      * @return {?}
      */
-    hasStarted() { return this._state >= 2 /* STARTED */; }
+    hasStarted() {
+        return this._state >= 2 /* STARTED */;
+    }
     /**
      * @return {?}
      */
@@ -7997,7 +8118,9 @@ class CssKeyframesDriver {
      * @param {?} prop
      * @return {?}
      */
-    validateStyleProperty(prop) { return validateStyleProperty(prop); }
+    validateStyleProperty(prop) {
+        return validateStyleProperty(prop);
+    }
     /**
      * @param {?} element
      * @param {?} selector
@@ -8011,7 +8134,9 @@ class CssKeyframesDriver {
      * @param {?} elm2
      * @return {?}
      */
-    containsElement(elm1, elm2) { return containsElement(elm1, elm2); }
+    containsElement(elm1, elm2) {
+        return containsElement(elm1, elm2);
+    }
     /**
      * @param {?} element
      * @param {?} selector
@@ -8310,17 +8435,23 @@ class WebAnimationsPlayer {
      * @param {?} fn
      * @return {?}
      */
-    onStart(fn) { this._onStartFns.push(fn); }
+    onStart(fn) {
+        this._onStartFns.push(fn);
+    }
     /**
      * @param {?} fn
      * @return {?}
      */
-    onDone(fn) { this._onDoneFns.push(fn); }
+    onDone(fn) {
+        this._onDoneFns.push(fn);
+    }
     /**
      * @param {?} fn
      * @return {?}
      */
-    onDestroy(fn) { this._onDestroyFns.push(fn); }
+    onDestroy(fn) {
+        this._onDestroyFns.push(fn);
+    }
     /**
      * @return {?}
      */
@@ -8386,7 +8517,9 @@ class WebAnimationsPlayer {
     /**
      * @return {?}
      */
-    hasStarted() { return this._started; }
+    hasStarted() {
+        return this._started;
+    }
     /**
      * @return {?}
      */
@@ -8410,15 +8543,21 @@ class WebAnimationsPlayer {
      * @param {?} p
      * @return {?}
      */
-    setPosition(p) { this.domPlayer.currentTime = p * this.time; }
+    setPosition(p) {
+        this.domPlayer.currentTime = p * this.time;
+    }
     /**
      * @return {?}
      */
-    getPosition() { return this.domPlayer.currentTime / this.time; }
+    getPosition() {
+        return this.domPlayer.currentTime / this.time;
+    }
     /**
      * @return {?}
      */
-    get totalTime() { return this._delay + this._duration; }
+    get totalTime() {
+        return this._delay + this._duration;
+    }
     /**
      * @return {?}
      */
@@ -8541,7 +8680,9 @@ class WebAnimationsDriver {
      * @param {?} prop
      * @return {?}
      */
-    validateStyleProperty(prop) { return validateStyleProperty(prop); }
+    validateStyleProperty(prop) {
+        return validateStyleProperty(prop);
+    }
     /**
      * @param {?} element
      * @param {?} selector
@@ -8555,7 +8696,9 @@ class WebAnimationsDriver {
      * @param {?} elm2
      * @return {?}
      */
-    containsElement(elm1, elm2) { return containsElement(elm1, elm2); }
+    containsElement(elm1, elm2) {
+        return containsElement(elm1, elm2);
+    }
     /**
      * @param {?} element
      * @param {?} selector
@@ -8578,7 +8721,9 @@ class WebAnimationsDriver {
      * @param {?} supported
      * @return {?}
      */
-    overrideWebAnimationsSupport(supported) { this._isNativeImpl = supported; }
+    overrideWebAnimationsSupport(supported) {
+        this._isNativeImpl = supported;
+    }
     /**
      * @param {?} element
      * @param {?} keyframes
