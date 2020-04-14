@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.1+32.sha-5e80e7e
+ * @license Angular v10.0.0-next.1+33.sha-698b028
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -230,11 +230,15 @@
     var MockAnimationDriver = /** @class */ (function () {
         function MockAnimationDriver() {
         }
-        MockAnimationDriver.prototype.validateStyleProperty = function (prop) { return browser.ɵvalidateStyleProperty(prop); };
+        MockAnimationDriver.prototype.validateStyleProperty = function (prop) {
+            return browser.ɵvalidateStyleProperty(prop);
+        };
         MockAnimationDriver.prototype.matchesElement = function (element, selector) {
             return browser.ɵmatchesElement(element, selector);
         };
-        MockAnimationDriver.prototype.containsElement = function (elm1, elm2) { return browser.ɵcontainsElement(elm1, elm2); };
+        MockAnimationDriver.prototype.containsElement = function (elm1, elm2) {
+            return browser.ɵcontainsElement(elm1, elm2);
+        };
         MockAnimationDriver.prototype.query = function (element, selector, multi) {
             return browser.ɵinvokeQuery(element, selector, multi);
         };
@@ -279,7 +283,9 @@
             return _this;
         }
         /* @internal */
-        MockAnimationPlayer.prototype.onInit = function (fn) { this._onInitFns.push(fn); };
+        MockAnimationPlayer.prototype.onInit = function (fn) {
+            this._onInitFns.push(fn);
+        };
         /* @internal */
         MockAnimationPlayer.prototype.init = function () {
             _super.prototype.init.call(this);
@@ -300,7 +306,9 @@
             _super.prototype.play.call(this);
             this.__started = true;
         };
-        MockAnimationPlayer.prototype.hasStarted = function () { return this.__started; };
+        MockAnimationPlayer.prototype.hasStarted = function () {
+            return this.__started;
+        };
         MockAnimationPlayer.prototype.beforeDestroy = function () {
             var _this = this;
             var captures = {};
