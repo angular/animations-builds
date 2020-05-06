@@ -1,19 +1,11 @@
 {
   "name": "@angular/animations",
-  "version": "10.0.0-next.5+45.sha-fafa50d",
+  "version": "10.0.0-next.5+53.sha-3c6c00d",
   "description": "Angular - animations integration with web-animations",
-  "main": "./bundles/animations.umd.js",
-  "module": "./fesm5/animations.js",
-  "es2015": "./fesm2015/animations.js",
-  "esm5": "./esm5/animations.js",
-  "esm2015": "./esm2015/animations.js",
-  "fesm5": "./fesm5/animations.js",
-  "fesm2015": "./fesm2015/animations.js",
-  "typings": "./animations.d.ts",
   "author": "angular",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/core": "10.0.0-next.5+45.sha-fafa50d",
+    "@angular/core": "10.0.0-next.5+53.sha-3c6c00d",
     "tslib": "^1.10.0"
   },
   "repository": {
@@ -46,5 +38,11 @@
   "sideEffects": false,
   "publishConfig": {
     "registry": "https://wombat-dressing-room.appspot.com"
-  }
+  },
+  "main": "./bundles/animations.umd.js",
+  "fesm2015": "./fesm2015/animations.js",
+  "esm2015": "./esm2015/animations.js",
+  "typings": "./animations.d.ts",
+  "module": "./fesm2015/animations.js",
+  "es2015": "./fesm2015/animations.js"
 }
