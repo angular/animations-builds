@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.7+17.sha-2418c6a
+ * @license Angular v10.0.0-next.7+43.sha-f16ca1c
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1796,7 +1796,7 @@
             get: function () {
                 return this.options.params;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         AnimationTimelineContext.prototype.updateOptions = function (options, skipIfExists) {
@@ -1942,7 +1942,7 @@
             get: function () {
                 return this.startTime + this.duration;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         TimelineBuilder.prototype.delayNextStep = function (delay) {
@@ -2063,7 +2063,7 @@
                 }
                 return properties;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         TimelineBuilder.prototype.mergeTimelineCollectedStyles = function (timeline) {
@@ -2427,7 +2427,7 @@
             get: function () {
                 return this.ast.queryCount > 0;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         AnimationTrigger.prototype.matchTransition = function (currentState, nextState, element, params) {
@@ -2639,7 +2639,7 @@
             get: function () {
                 return this.options.params;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         StateValue.prototype.absorbOptions = function (options) {
@@ -3059,7 +3059,7 @@
                 });
                 return players;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         TransitionAnimationEngine.prototype.createNamespace = function (namespaceId, hostElement) {
@@ -4225,7 +4225,7 @@
                 return this._transitionEngine.players
                     .concat(this._timelineEngine.players);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         AnimationEngine.prototype.whenRenderingDone = function () {
@@ -4902,7 +4902,7 @@
             get: function () {
                 return this._delay + this._duration;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         WebAnimationsPlayer.prototype.beforeDestroy = function () {
