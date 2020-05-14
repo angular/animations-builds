@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.7+17.sha-2418c6a
+ * @license Angular v10.0.0-next.7+43.sha-f16ca1c
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -379,72 +379,85 @@ function hypenatePropsObject(object) {
 /**
  * \@publicApi
  */
-class NoopAnimationDriver {
+let NoopAnimationDriver = /** @class */ (() => {
     /**
-     * @param {?} prop
-     * @return {?}
+     * \@publicApi
      */
-    validateStyleProperty(prop) {
-        return validateStyleProperty(prop);
+    class NoopAnimationDriver {
+        /**
+         * @param {?} prop
+         * @return {?}
+         */
+        validateStyleProperty(prop) {
+            return validateStyleProperty(prop);
+        }
+        /**
+         * @param {?} element
+         * @param {?} selector
+         * @return {?}
+         */
+        matchesElement(element, selector) {
+            return matchesElement(element, selector);
+        }
+        /**
+         * @param {?} elm1
+         * @param {?} elm2
+         * @return {?}
+         */
+        containsElement(elm1, elm2) {
+            return containsElement(elm1, elm2);
+        }
+        /**
+         * @param {?} element
+         * @param {?} selector
+         * @param {?} multi
+         * @return {?}
+         */
+        query(element, selector, multi) {
+            return invokeQuery(element, selector, multi);
+        }
+        /**
+         * @param {?} element
+         * @param {?} prop
+         * @param {?=} defaultValue
+         * @return {?}
+         */
+        computeStyle(element, prop, defaultValue) {
+            return defaultValue || '';
+        }
+        /**
+         * @param {?} element
+         * @param {?} keyframes
+         * @param {?} duration
+         * @param {?} delay
+         * @param {?} easing
+         * @param {?=} previousPlayers
+         * @param {?=} scrubberAccessRequested
+         * @return {?}
+         */
+        animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
+            return new NoopAnimationPlayer(duration, delay);
+        }
     }
-    /**
-     * @param {?} element
-     * @param {?} selector
-     * @return {?}
-     */
-    matchesElement(element, selector) {
-        return matchesElement(element, selector);
-    }
-    /**
-     * @param {?} elm1
-     * @param {?} elm2
-     * @return {?}
-     */
-    containsElement(elm1, elm2) {
-        return containsElement(elm1, elm2);
-    }
-    /**
-     * @param {?} element
-     * @param {?} selector
-     * @param {?} multi
-     * @return {?}
-     */
-    query(element, selector, multi) {
-        return invokeQuery(element, selector, multi);
-    }
-    /**
-     * @param {?} element
-     * @param {?} prop
-     * @param {?=} defaultValue
-     * @return {?}
-     */
-    computeStyle(element, prop, defaultValue) {
-        return defaultValue || '';
-    }
-    /**
-     * @param {?} element
-     * @param {?} keyframes
-     * @param {?} duration
-     * @param {?} delay
-     * @param {?} easing
-     * @param {?=} previousPlayers
-     * @param {?=} scrubberAccessRequested
-     * @return {?}
-     */
-    animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
-        return new NoopAnimationPlayer(duration, delay);
-    }
-}
-NoopAnimationDriver.decorators = [
-    { type: Injectable }
-];
+    NoopAnimationDriver.decorators = [
+        { type: Injectable }
+    ];
+    return NoopAnimationDriver;
+})();
 /**
  * \@publicApi
  * @abstract
  */
-class AnimationDriver {
-}
-AnimationDriver.NOOP = new NoopAnimationDriver();
+let AnimationDriver = /** @class */ (() => {
+    /**
+     * \@publicApi
+     * @abstract
+     */
+    class AnimationDriver {
+    }
+    AnimationDriver.NOOP = new NoopAnimationDriver();
+    return AnimationDriver;
+})();
 if (false) {
     /** @type {?} */
     AnimationDriver.NOOP;
@@ -7255,70 +7268,81 @@ function packageNonAnimatableStyles(element, styles) {
  * `endStyles` will be applied as well any any starting styles. Finally when
  * `destroy()` is called then all styles will be removed.
  */
-class SpecialCasedStyles {
+let SpecialCasedStyles = /** @class */ (() => {
     /**
-     * @param {?} _element
-     * @param {?} _startStyles
-     * @param {?} _endStyles
+     * Designed to be executed during a keyframe-based animation to apply any special-cased styles.
+     *
+     * When started (when the `start()` method is run) then the provided `startStyles`
+     * will be applied. When finished (when the `finish()` method is called) the
+     * `endStyles` will be applied as well any any starting styles. Finally when
+     * `destroy()` is called then all styles will be removed.
      */
-    constructor(_element, _startStyles, _endStyles) {
-        this._element = _element;
-        this._startStyles = _startStyles;
-        this._endStyles = _endStyles;
-        this._state = 0 /* Pending */;
-        /** @type {?} */
-        let initialStyles = SpecialCasedStyles.initialStylesByElement.get(_element);
-        if (!initialStyles) {
-            SpecialCasedStyles.initialStylesByElement.set(_element, initialStyles = {});
-        }
-        this._initialStyles = initialStyles;
-    }
-    /**
-     * @return {?}
-     */
-    start() {
-        if (this._state < 1 /* Started */) {
-            if (this._startStyles) {
-                setStyles(this._element, this._startStyles, this._initialStyles);
+    class SpecialCasedStyles {
+        /**
+         * @param {?} _element
+         * @param {?} _startStyles
+         * @param {?} _endStyles
+         */
+        constructor(_element, _startStyles, _endStyles) {
+            this._element = _element;
+            this._startStyles = _startStyles;
+            this._endStyles = _endStyles;
+            this._state = 0 /* Pending */;
+            /** @type {?} */
+            let initialStyles = SpecialCasedStyles.initialStylesByElement.get(_element);
+            if (!initialStyles) {
+                SpecialCasedStyles.initialStylesByElement.set(_element, initialStyles = {});
             }
-            this._state = 1 /* Started */;
+            this._initialStyles = initialStyles;
+        }
+        /**
+         * @return {?}
+         */
+        start() {
+            if (this._state < 1 /* Started */) {
+                if (this._startStyles) {
+                    setStyles(this._element, this._startStyles, this._initialStyles);
+                }
+                this._state = 1 /* Started */;
+            }
+        }
+        /**
+         * @return {?}
+         */
+        finish() {
+            this.start();
+            if (this._state < 2 /* Finished */) {
+                setStyles(this._element, this._initialStyles);
+                if (this._endStyles) {
+                    setStyles(this._element, this._endStyles);
+                    this._endStyles = null;
+                }
+                this._state = 1 /* Started */;
+            }
+        }
+        /**
+         * @return {?}
+         */
+        destroy() {
+            this.finish();
+            if (this._state < 3 /* Destroyed */) {
+                SpecialCasedStyles.initialStylesByElement.delete(this._element);
+                if (this._startStyles) {
+                    eraseStyles(this._element, this._startStyles);
+                    this._endStyles = null;
+                }
+                if (this._endStyles) {
+                    eraseStyles(this._element, this._endStyles);
+                    this._endStyles = null;
+                }
+                setStyles(this._element, this._initialStyles);
+                this._state = 3 /* Destroyed */;
+            }
         }
     }
-    /**
-     * @return {?}
-     */
-    finish() {
-        this.start();
-        if (this._state < 2 /* Finished */) {
-            setStyles(this._element, this._initialStyles);
-            if (this._endStyles) {
-                setStyles(this._element, this._endStyles);
-                this._endStyles = null;
-            }
-            this._state = 1 /* Started */;
-        }
-    }
-    /**
-     * @return {?}
-     */
-    destroy() {
-        this.finish();
-        if (this._state < 3 /* Destroyed */) {
-            SpecialCasedStyles.initialStylesByElement.delete(this._element);
-            if (this._startStyles) {
-                eraseStyles(this._element, this._startStyles);
-                this._endStyles = null;
-            }
-            if (this._endStyles) {
-                eraseStyles(this._element, this._endStyles);
-                this._endStyles = null;
-            }
-            setStyles(this._element, this._initialStyles);
-            this._state = 3 /* Destroyed */;
-        }
-    }
-}
-SpecialCasedStyles.initialStylesByElement = new WeakMap();
+    SpecialCasedStyles.initialStylesByElement = new WeakMap();
+    return SpecialCasedStyles;
+})();
 if (false) {
     /** @type {?} */
     SpecialCasedStyles.initialStylesByElement;

@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.7+17.sha-2418c6a
+ * @license Angular v10.0.0-next.7+43.sha-f16ca1c
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -15,65 +15,71 @@ import { ɵvalidateStyleProperty, ɵmatchesElement, ɵcontainsElement, ɵinvokeQ
 /**
  * \@publicApi
  */
-class MockAnimationDriver {
+let MockAnimationDriver = /** @class */ (() => {
     /**
-     * @param {?} prop
-     * @return {?}
+     * \@publicApi
      */
-    validateStyleProperty(prop) {
-        return ɵvalidateStyleProperty(prop);
+    class MockAnimationDriver {
+        /**
+         * @param {?} prop
+         * @return {?}
+         */
+        validateStyleProperty(prop) {
+            return ɵvalidateStyleProperty(prop);
+        }
+        /**
+         * @param {?} element
+         * @param {?} selector
+         * @return {?}
+         */
+        matchesElement(element, selector) {
+            return ɵmatchesElement(element, selector);
+        }
+        /**
+         * @param {?} elm1
+         * @param {?} elm2
+         * @return {?}
+         */
+        containsElement(elm1, elm2) {
+            return ɵcontainsElement(elm1, elm2);
+        }
+        /**
+         * @param {?} element
+         * @param {?} selector
+         * @param {?} multi
+         * @return {?}
+         */
+        query(element, selector, multi) {
+            return ɵinvokeQuery(element, selector, multi);
+        }
+        /**
+         * @param {?} element
+         * @param {?} prop
+         * @param {?=} defaultValue
+         * @return {?}
+         */
+        computeStyle(element, prop, defaultValue) {
+            return defaultValue || '';
+        }
+        /**
+         * @param {?} element
+         * @param {?} keyframes
+         * @param {?} duration
+         * @param {?} delay
+         * @param {?} easing
+         * @param {?=} previousPlayers
+         * @return {?}
+         */
+        animate(element, keyframes, duration, delay, easing, previousPlayers = []) {
+            /** @type {?} */
+            const player = new MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers);
+            MockAnimationDriver.log.push((/** @type {?} */ (player)));
+            return player;
+        }
     }
-    /**
-     * @param {?} element
-     * @param {?} selector
-     * @return {?}
-     */
-    matchesElement(element, selector) {
-        return ɵmatchesElement(element, selector);
-    }
-    /**
-     * @param {?} elm1
-     * @param {?} elm2
-     * @return {?}
-     */
-    containsElement(elm1, elm2) {
-        return ɵcontainsElement(elm1, elm2);
-    }
-    /**
-     * @param {?} element
-     * @param {?} selector
-     * @param {?} multi
-     * @return {?}
-     */
-    query(element, selector, multi) {
-        return ɵinvokeQuery(element, selector, multi);
-    }
-    /**
-     * @param {?} element
-     * @param {?} prop
-     * @param {?=} defaultValue
-     * @return {?}
-     */
-    computeStyle(element, prop, defaultValue) {
-        return defaultValue || '';
-    }
-    /**
-     * @param {?} element
-     * @param {?} keyframes
-     * @param {?} duration
-     * @param {?} delay
-     * @param {?} easing
-     * @param {?=} previousPlayers
-     * @return {?}
-     */
-    animate(element, keyframes, duration, delay, easing, previousPlayers = []) {
-        /** @type {?} */
-        const player = new MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers);
-        MockAnimationDriver.log.push((/** @type {?} */ (player)));
-        return player;
-    }
-}
-MockAnimationDriver.log = [];
+    MockAnimationDriver.log = [];
+    return MockAnimationDriver;
+})();
 if (false) {
     /** @type {?} */
     MockAnimationDriver.log;
