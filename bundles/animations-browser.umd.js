@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+34.sha-bd7393f
+ * @license Angular v10.0.0-rc.0+35.sha-4d0e175
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -441,6 +441,13 @@
     }
 
     /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    /**
      * @publicApi
      */
     var NoopAnimationDriver = /** @class */ (function () {
@@ -465,9 +472,9 @@
             if (previousPlayers === void 0) { previousPlayers = []; }
             return new animations.NoopAnimationPlayer(duration, delay);
         };
-        NoopAnimationDriver = __decorate([
-            core.Injectable()
-        ], NoopAnimationDriver);
+        NoopAnimationDriver.decorators = [
+            { type: core.Injectable }
+        ];
         return NoopAnimationDriver;
     }());
     /**

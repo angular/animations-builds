@@ -1,10 +1,9 @@
 /**
- * @license Angular v10.0.0-rc.0+34.sha-bd7393f
+ * @license Angular v10.0.0-rc.0+35.sha-4d0e175
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { __decorate } from 'tslib';
 import { ɵAnimationGroupPlayer, NoopAnimationPlayer, AUTO_STYLE, ɵPRE_STYLE, sequence, style } from '@angular/animations';
 import { Injectable } from '@angular/core';
 
@@ -212,10 +211,17 @@ function hypenatePropsObject(object) {
 }
 
 /**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * @publicApi
  */
 let NoopAnimationDriver = /** @class */ (() => {
-    let NoopAnimationDriver = class NoopAnimationDriver {
+    class NoopAnimationDriver {
         validateStyleProperty(prop) {
             return validateStyleProperty(prop);
         }
@@ -234,10 +240,10 @@ let NoopAnimationDriver = /** @class */ (() => {
         animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
             return new NoopAnimationPlayer(duration, delay);
         }
-    };
-    NoopAnimationDriver = __decorate([
-        Injectable()
-    ], NoopAnimationDriver);
+    }
+    NoopAnimationDriver.decorators = [
+        { type: Injectable }
+    ];
     return NoopAnimationDriver;
 })();
 /**
