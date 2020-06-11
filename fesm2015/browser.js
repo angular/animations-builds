@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+130.sha-8c682c5
+ * @license Angular v10.0.0-rc.0+134.sha-a937889
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -217,43 +217,37 @@ function hypenatePropsObject(object) {
 /**
  * @publicApi
  */
-let NoopAnimationDriver = /** @class */ (() => {
-    class NoopAnimationDriver {
-        validateStyleProperty(prop) {
-            return validateStyleProperty(prop);
-        }
-        matchesElement(element, selector) {
-            return matchesElement(element, selector);
-        }
-        containsElement(elm1, elm2) {
-            return containsElement(elm1, elm2);
-        }
-        query(element, selector, multi) {
-            return invokeQuery(element, selector, multi);
-        }
-        computeStyle(element, prop, defaultValue) {
-            return defaultValue || '';
-        }
-        animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
-            return new NoopAnimationPlayer(duration, delay);
-        }
+class NoopAnimationDriver {
+    validateStyleProperty(prop) {
+        return validateStyleProperty(prop);
     }
-    NoopAnimationDriver.ɵfac = function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); };
-    NoopAnimationDriver.ɵprov = ɵɵdefineInjectable({ token: NoopAnimationDriver, factory: NoopAnimationDriver.ɵfac });
-    return NoopAnimationDriver;
-})();
+    matchesElement(element, selector) {
+        return matchesElement(element, selector);
+    }
+    containsElement(elm1, elm2) {
+        return containsElement(elm1, elm2);
+    }
+    query(element, selector, multi) {
+        return invokeQuery(element, selector, multi);
+    }
+    computeStyle(element, prop, defaultValue) {
+        return defaultValue || '';
+    }
+    animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
+        return new NoopAnimationPlayer(duration, delay);
+    }
+}
+NoopAnimationDriver.ɵfac = function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); };
+NoopAnimationDriver.ɵprov = ɵɵdefineInjectable({ token: NoopAnimationDriver, factory: NoopAnimationDriver.ɵfac });
 /*@__PURE__*/ (function () { ɵsetClassMetadata(NoopAnimationDriver, [{
         type: Injectable
     }], null, null); })();
 /**
  * @publicApi
  */
-let AnimationDriver = /** @class */ (() => {
-    class AnimationDriver {
-    }
-    AnimationDriver.NOOP = new NoopAnimationDriver();
-    return AnimationDriver;
-})();
+class AnimationDriver {
+}
+AnimationDriver.NOOP = new NoopAnimationDriver();
 
 /**
  * @license
@@ -3949,58 +3943,55 @@ function packageNonAnimatableStyles(element, styles) {
  * `endStyles` will be applied as well any any starting styles. Finally when
  * `destroy()` is called then all styles will be removed.
  */
-let SpecialCasedStyles = /** @class */ (() => {
-    class SpecialCasedStyles {
-        constructor(_element, _startStyles, _endStyles) {
-            this._element = _element;
-            this._startStyles = _startStyles;
-            this._endStyles = _endStyles;
-            this._state = 0 /* Pending */;
-            let initialStyles = SpecialCasedStyles.initialStylesByElement.get(_element);
-            if (!initialStyles) {
-                SpecialCasedStyles.initialStylesByElement.set(_element, initialStyles = {});
-            }
-            this._initialStyles = initialStyles;
+class SpecialCasedStyles {
+    constructor(_element, _startStyles, _endStyles) {
+        this._element = _element;
+        this._startStyles = _startStyles;
+        this._endStyles = _endStyles;
+        this._state = 0 /* Pending */;
+        let initialStyles = SpecialCasedStyles.initialStylesByElement.get(_element);
+        if (!initialStyles) {
+            SpecialCasedStyles.initialStylesByElement.set(_element, initialStyles = {});
         }
-        start() {
-            if (this._state < 1 /* Started */) {
-                if (this._startStyles) {
-                    setStyles(this._element, this._startStyles, this._initialStyles);
-                }
-                this._state = 1 /* Started */;
+        this._initialStyles = initialStyles;
+    }
+    start() {
+        if (this._state < 1 /* Started */) {
+            if (this._startStyles) {
+                setStyles(this._element, this._startStyles, this._initialStyles);
             }
-        }
-        finish() {
-            this.start();
-            if (this._state < 2 /* Finished */) {
-                setStyles(this._element, this._initialStyles);
-                if (this._endStyles) {
-                    setStyles(this._element, this._endStyles);
-                    this._endStyles = null;
-                }
-                this._state = 1 /* Started */;
-            }
-        }
-        destroy() {
-            this.finish();
-            if (this._state < 3 /* Destroyed */) {
-                SpecialCasedStyles.initialStylesByElement.delete(this._element);
-                if (this._startStyles) {
-                    eraseStyles(this._element, this._startStyles);
-                    this._endStyles = null;
-                }
-                if (this._endStyles) {
-                    eraseStyles(this._element, this._endStyles);
-                    this._endStyles = null;
-                }
-                setStyles(this._element, this._initialStyles);
-                this._state = 3 /* Destroyed */;
-            }
+            this._state = 1 /* Started */;
         }
     }
-    SpecialCasedStyles.initialStylesByElement = new WeakMap();
-    return SpecialCasedStyles;
-})();
+    finish() {
+        this.start();
+        if (this._state < 2 /* Finished */) {
+            setStyles(this._element, this._initialStyles);
+            if (this._endStyles) {
+                setStyles(this._element, this._endStyles);
+                this._endStyles = null;
+            }
+            this._state = 1 /* Started */;
+        }
+    }
+    destroy() {
+        this.finish();
+        if (this._state < 3 /* Destroyed */) {
+            SpecialCasedStyles.initialStylesByElement.delete(this._element);
+            if (this._startStyles) {
+                eraseStyles(this._element, this._startStyles);
+                this._endStyles = null;
+            }
+            if (this._endStyles) {
+                eraseStyles(this._element, this._endStyles);
+                this._endStyles = null;
+            }
+            setStyles(this._element, this._initialStyles);
+            this._state = 3 /* Destroyed */;
+        }
+    }
+}
+SpecialCasedStyles.initialStylesByElement = new WeakMap();
 function filterNonAnimatableStyles(styles) {
     let result = null;
     const props = Object.keys(styles);
