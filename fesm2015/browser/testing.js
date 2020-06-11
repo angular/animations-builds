@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+130.sha-8c682c5
+ * @license Angular v10.0.0-rc.0+134.sha-a937889
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -17,32 +17,29 @@ import { ɵvalidateStyleProperty, ɵmatchesElement, ɵcontainsElement, ɵinvokeQ
 /**
  * @publicApi
  */
-let MockAnimationDriver = /** @class */ (() => {
-    class MockAnimationDriver {
-        validateStyleProperty(prop) {
-            return ɵvalidateStyleProperty(prop);
-        }
-        matchesElement(element, selector) {
-            return ɵmatchesElement(element, selector);
-        }
-        containsElement(elm1, elm2) {
-            return ɵcontainsElement(elm1, elm2);
-        }
-        query(element, selector, multi) {
-            return ɵinvokeQuery(element, selector, multi);
-        }
-        computeStyle(element, prop, defaultValue) {
-            return defaultValue || '';
-        }
-        animate(element, keyframes, duration, delay, easing, previousPlayers = []) {
-            const player = new MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers);
-            MockAnimationDriver.log.push(player);
-            return player;
-        }
+class MockAnimationDriver {
+    validateStyleProperty(prop) {
+        return ɵvalidateStyleProperty(prop);
     }
-    MockAnimationDriver.log = [];
-    return MockAnimationDriver;
-})();
+    matchesElement(element, selector) {
+        return ɵmatchesElement(element, selector);
+    }
+    containsElement(elm1, elm2) {
+        return ɵcontainsElement(elm1, elm2);
+    }
+    query(element, selector, multi) {
+        return ɵinvokeQuery(element, selector, multi);
+    }
+    computeStyle(element, prop, defaultValue) {
+        return defaultValue || '';
+    }
+    animate(element, keyframes, duration, delay, easing, previousPlayers = []) {
+        const player = new MockAnimationPlayer(element, keyframes, duration, delay, easing, previousPlayers);
+        MockAnimationDriver.log.push(player);
+        return player;
+    }
+}
+MockAnimationDriver.log = [];
 /**
  * @publicApi
  */
