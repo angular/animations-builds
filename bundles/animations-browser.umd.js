@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.5+40.sha-952710b
+ * @license Angular v11.0.0-next.5+41.sha-5471789
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4798,7 +4798,7 @@
             });
             keyframeStr += "}\n";
             var kfElm = document.createElement('style');
-            kfElm.innerHTML = keyframeStr;
+            kfElm.textContent = keyframeStr;
             return kfElm;
         };
         CssKeyframesDriver.prototype.animate = function (element, keyframes, duration, delay, easing, previousPlayers, scrubberAccessRequested) {
