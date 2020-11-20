@@ -21,3 +21,4 @@ export declare class ElementAnimationStyleHandler {
     finish(): void;
     destroy(): void;
 }
+export declare function getAnimationStyle(element: any, name: string): any;
