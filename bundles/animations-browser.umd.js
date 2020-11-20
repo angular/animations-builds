@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.0+36.sha-fe1ada8
+ * @license Angular v11.1.0-next.0+38.sha-66d863f
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4553,7 +4553,7 @@
         element.style[prop] = value;
     }
     function getAnimationStyle(element, name) {
-        return element.style[ANIMATION_PROP + name];
+        return element.style[ANIMATION_PROP + name] || '';
     }
     function countChars(value, char) {
         var count = 0;
