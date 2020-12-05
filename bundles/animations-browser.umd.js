@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.1+45.sha-d2042a0
+ * @license Angular v11.1.0-next.1+49.sha-7954c8d
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4770,7 +4770,6 @@
         function CssKeyframesDriver() {
             this._count = 0;
             this._head = document.querySelector('head');
-            this._warningIssued = false;
         }
         CssKeyframesDriver.prototype.validateStyleProperty = function (prop) {
             return validateStyleProperty(prop);
@@ -4820,8 +4819,8 @@
         };
         CssKeyframesDriver.prototype.animate = function (element, keyframes, duration, delay, easing, previousPlayers, scrubberAccessRequested) {
             if (previousPlayers === void 0) { previousPlayers = []; }
-            if (scrubberAccessRequested) {
-                this._notifyFaultyScrubber();
+            if ((typeof ngDevMode === 'undefined' || ngDevMode) && scrubberAccessRequested) {
+                notifyFaultyScrubber();
             }
             var previousCssKeyframePlayers = previousPlayers.filter(function (player) { return player instanceof CssKeyframesPlayer; });
             var previousStyles = {};
@@ -4848,12 +4847,6 @@
             player.onDestroy(function () { return removeElement(kfElm); });
             return player;
         };
-        CssKeyframesDriver.prototype._notifyFaultyScrubber = function () {
-            if (!this._warningIssued) {
-                console.warn('@angular/animations: please load the web-animations.js polyfill to allow programmatic access...\n', '  visit https://bit.ly/IWukam to learn more about using the web-animation-js polyfill.');
-                this._warningIssued = true;
-            }
-        };
         return CssKeyframesDriver;
     }());
     function flattenKeyframesIntoStyles(keyframes) {
@@ -4872,6 +4865,13 @@
     }
     function removeElement(node) {
         node.parentNode.removeChild(node);
+    }
+    var warningIssued = false;
+    function notifyFaultyScrubber() {
+        if (warningIssued)
+            return;
+        console.warn('@angular/animations: please load the web-animations.js polyfill to allow programmatic access...\n', '  visit https://bit.ly/IWukam to learn more about using the web-animation-js polyfill.');
+        warningIssued = true;
     }
 
     var WebAnimationsPlayer = /** @class */ (function () {
