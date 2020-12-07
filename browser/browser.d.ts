@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.3+26.sha-1e3534f
+ * @license Angular v11.0.3+39.sha-6d62971
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -148,7 +148,6 @@ export declare const ɵcontainsElement: (elm1: any, elm2: any) => boolean;
 export declare class ɵCssKeyframesDriver implements AnimationDriver {
     private _count;
     private readonly _head;
-    private _warningIssued;
     validateStyleProperty(prop: string): boolean;
     matchesElement(element: any, selector: string): boolean;
     containsElement(elm1: any, elm2: any): boolean;
@@ -158,7 +157,6 @@ export declare class ɵCssKeyframesDriver implements AnimationDriver {
         [key: string]: any;
     }[]): any;
     animate(element: any, keyframes: ɵStyleData[], duration: number, delay: number, easing: string, previousPlayers?: AnimationPlayer[], scrubberAccessRequested?: boolean): AnimationPlayer;
-    private _notifyFaultyScrubber;
 }
 
 export declare class ɵCssKeyframesPlayer implements AnimationPlayer {

@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.3+26.sha-1e3534f
+ * @license Angular v11.0.3+39.sha-6d62971
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4343,7 +4343,6 @@ class CssKeyframesDriver {
     constructor() {
         this._count = 0;
         this._head = document.querySelector('head');
-        this._warningIssued = false;
     }
     validateStyleProperty(prop) {
         return validateStyleProperty(prop);
@@ -4392,8 +4391,8 @@ class CssKeyframesDriver {
         return kfElm;
     }
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
-        if (scrubberAccessRequested) {
-            this._notifyFaultyScrubber();
+        if ((typeof ngDevMode === 'undefined' || ngDevMode) && scrubberAccessRequested) {
+            notifyFaultyScrubber();
         }
         const previousCssKeyframePlayers = previousPlayers.filter(player => player instanceof CssKeyframesPlayer);
         const previousStyles = {};
@@ -4420,12 +4419,6 @@ class CssKeyframesDriver {
         player.onDestroy(() => removeElement(kfElm));
         return player;
     }
-    _notifyFaultyScrubber() {
-        if (!this._warningIssued) {
-            console.warn('@angular/animations: please load the web-animations.js polyfill to allow programmatic access...\n', '  visit https://bit.ly/IWukam to learn more about using the web-animation-js polyfill.');
-            this._warningIssued = true;
-        }
-    }
 }
 function flattenKeyframesIntoStyles(keyframes) {
     let flatKeyframes = {};
@@ -4443,6 +4436,13 @@ function flattenKeyframesIntoStyles(keyframes) {
 }
 function removeElement(node) {
     node.parentNode.removeChild(node);
+}
+let warningIssued = false;
+function notifyFaultyScrubber() {
+    if (warningIssued)
+        return;
+    console.warn('@angular/animations: please load the web-animations.js polyfill to allow programmatic access...\n', '  visit https://bit.ly/IWukam to learn more about using the web-animation-js polyfill.');
+    warningIssued = true;
 }
 
 class WebAnimationsPlayer {
