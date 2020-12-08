@@ -641,8 +641,8 @@ export declare function trigger(name: string, definitions: AnimationMetadata[]):
  * ```typescript
  * animate(500, keyframes(
  *  [
- *   style({ background: "blue" }),
- *   style({ background: "red" })
+ *   style({ background: "blue" })),
+ *   style({ background: "red" }))
  *  ])
  * ```
  *
