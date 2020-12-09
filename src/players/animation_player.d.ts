@@ -104,6 +104,7 @@ export declare class NoopAnimationPlayer implements AnimationPlayer {
     private _started;
     private _destroyed;
     private _finished;
+    private _position;
     parentPlayer: AnimationPlayer | null;
     readonly totalTime: number;
     constructor(duration?: number, delay?: number);

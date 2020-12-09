@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.1+92.sha-2f8a420
+ * @license Angular v11.1.0-next.1+95.sha-cfb094d
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -944,6 +944,7 @@ class NoopAnimationPlayer {
         this._started = false;
         this._destroyed = false;
         this._finished = false;
+        this._position = 0;
         this.parentPlayer = null;
         this.totalTime = duration + delay;
     }
@@ -999,9 +1000,11 @@ class NoopAnimationPlayer {
         }
     }
     reset() { }
-    setPosition(position) { }
+    setPosition(position) {
+        this._position = this.totalTime ? position * this.totalTime : 1;
+    }
     getPosition() {
-        return 0;
+        return this.totalTime ? this._position / this.totalTime : 1;
     }
     /** @internal */
     triggerCallback(phaseName) {
@@ -1137,12 +1140,11 @@ class AnimationGroupPlayer {
         });
     }
     getPosition() {
-        let min = 0;
-        this.players.forEach(player => {
-            const p = player.getPosition();
-            min = Math.min(p, min);
-        });
-        return min;
+        const longestPlayer = this.players.reduce((longestSoFar, player) => {
+            const newPlayerIsLongest = longestSoFar === null || player.totalTime > longestSoFar.totalTime;
+            return newPlayerIsLongest ? player : longestSoFar;
+        }, null);
+        return longestPlayer != null ? longestPlayer.getPosition() : 0;
     }
     beforeDestroy() {
         this.players.forEach(player => {
