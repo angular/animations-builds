@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.1+92.sha-2f8a420
+ * @license Angular v11.1.0-next.1+95.sha-cfb094d
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -966,6 +966,7 @@
             this._started = false;
             this._destroyed = false;
             this._finished = false;
+            this._position = 0;
             this.parentPlayer = null;
             this.totalTime = duration + delay;
         }
@@ -1022,9 +1023,11 @@
             }
         };
         NoopAnimationPlayer.prototype.reset = function () { };
-        NoopAnimationPlayer.prototype.setPosition = function (position) { };
+        NoopAnimationPlayer.prototype.setPosition = function (position) {
+            this._position = this.totalTime ? position * this.totalTime : 1;
+        };
         NoopAnimationPlayer.prototype.getPosition = function () {
-            return 0;
+            return this.totalTime ? this._position / this.totalTime : 1;
         };
         /** @internal */
         NoopAnimationPlayer.prototype.triggerCallback = function (phaseName) {
@@ -1162,12 +1165,11 @@
             });
         };
         AnimationGroupPlayer.prototype.getPosition = function () {
-            var min = 0;
-            this.players.forEach(function (player) {
-                var p = player.getPosition();
-                min = Math.min(p, min);
-            });
-            return min;
+            var longestPlayer = this.players.reduce(function (longestSoFar, player) {
+                var newPlayerIsLongest = longestSoFar === null || player.totalTime > longestSoFar.totalTime;
+                return newPlayerIsLongest ? player : longestSoFar;
+            }, null);
+            return longestPlayer != null ? longestPlayer.getPosition() : 0;
         };
         AnimationGroupPlayer.prototype.beforeDestroy = function () {
             this.players.forEach(function (player) {
