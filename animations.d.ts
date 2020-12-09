@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.3+63.sha-65e93ea
+ * @license Angular v11.0.3+66.sha-5a765f0
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -909,6 +909,7 @@ export declare class NoopAnimationPlayer implements AnimationPlayer {
     private _started;
     private _destroyed;
     private _finished;
+    private _position;
     parentPlayer: AnimationPlayer | null;
     readonly totalTime: number;
     constructor(duration?: number, delay?: number);
