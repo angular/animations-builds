@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.2+8.sha-85b07ad
+ * @license Angular v11.1.0-next.2+9.sha-1f73af7
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -249,7 +249,7 @@ class NoopAnimationDriver {
 }
 NoopAnimationDriver.ɵfac = function NoopAnimationDriver_Factory(t) { return new (t || NoopAnimationDriver)(); };
 NoopAnimationDriver.ɵprov = ɵɵdefineInjectable({ token: NoopAnimationDriver, factory: NoopAnimationDriver.ɵfac });
-/*@__PURE__*/ (function () { ɵsetClassMetadata(NoopAnimationDriver, [{
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(NoopAnimationDriver, [{
         type: Injectable
     }], null, null); })();
 /**
