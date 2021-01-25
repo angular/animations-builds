@@ -1,26 +1,19 @@
 {
   "name": "@angular/animations",
-  "version": "8.0.0-rc.0+81.sha-b46eb3c.with-local-changes",
+  "version": "11.1.0-next.4+175.sha-02ff4ed",
   "description": "Angular - animations integration with web-animations",
-  "main": "./bundles/animations.umd.js",
-  "module": "./fesm5/animations.js",
-  "es2015": "./fesm2015/animations.js",
-  "esm5": "./esm5/animations.js",
-  "esm2015": "./esm2015/animations.js",
-  "fesm5": "./fesm5/animations.js",
-  "fesm2015": "./fesm2015/animations.js",
-  "typings": "./animations.d.ts",
   "author": "angular",
   "license": "MIT",
   "dependencies": {
-    "tslib": "^1.9.0"
+    "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@angular/core": "8.0.0-rc.0+81.sha-b46eb3c.with-local-changes"
+    "@angular/core": "11.1.0-next.4+175.sha-02ff4ed"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/angular/angular.git"
+    "url": "https://github.com/angular/angular.git",
+    "directory": "packages/animations"
   },
   "ng-update": {
     "packageGroup": [
@@ -35,13 +28,21 @@
       "@angular/platform-browser-dynamic",
       "@angular/forms",
       "@angular/platform-server",
-      "@angular/platform-webworker",
-      "@angular/platform-webworker-dynamic",
       "@angular/upgrade",
       "@angular/router",
       "@angular/language-service",
+      "@angular/localize",
       "@angular/service-worker"
     ]
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "publishConfig": {
+    "registry": "https://wombat-dressing-room.appspot.com"
+  },
+  "main": "./bundles/animations.umd.js",
+  "fesm2015": "./fesm2015/animations.js",
+  "esm2015": "./esm2015/animations.js",
+  "typings": "./animations.d.ts",
+  "module": "./fesm2015/animations.js",
+  "es2015": "./fesm2015/animations.js"
 }
