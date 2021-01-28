@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.4+197.sha-d4bb4a0
+ * @license Angular v11.1.0-next.4+208.sha-88f8ddd
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -480,21 +480,6 @@ function iteratorToArray(iterator) {
         item = iterator.next();
     }
     return arr;
-}
-function mergeAnimationOptions(source, destination) {
-    if (source.params) {
-        const p0 = source.params;
-        if (!destination.params) {
-            destination.params = {};
-        }
-        const p1 = destination.params;
-        Object.keys(p0).forEach(param => {
-            if (!p1.hasOwnProperty(param)) {
-                p1[param] = p0[param];
-            }
-        });
-    }
-    return destination;
 }
 const DASH_CASE_REGEXP = /-+([a-z0-9])/g;
 function dashCaseToCamelCase(input) {
