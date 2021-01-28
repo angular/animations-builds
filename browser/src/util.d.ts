@@ -41,7 +41,6 @@ export declare function interpolateParams(value: string | number, params: {
     [name: string]: any;
 }, errors: any[]): string | number;
 export declare function iteratorToArray(iterator: any): any[];
-export declare function mergeAnimationOptions(source: AnimationOptions, destination: AnimationOptions): AnimationOptions;
 export declare function dashCaseToCamelCase(input: string): string;
 export declare function allowPreviousPlayerStylesMerge(duration: number, delay: number): boolean;
 export declare function balancePreviousStylesIntoKeyframes(element: any, keyframes: {
