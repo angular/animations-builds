@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.2+4.sha-0fc5a16
+ * @license Angular v11.1.2+79.sha-e8c8a8d
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2972,7 +2972,10 @@
         AnimationTransitionNamespace.prototype.prepareLeaveAnimationListeners = function (element) {
             var _this = this;
             var listeners = this._elementListeners.get(element);
-            if (listeners) {
+            var elementStates = this._engine.statesByElement.get(element);
+            // if this statement fails then it means that the element was picked up
+            // by an earlier flush (or there are no listeners at all to track the leave).
+            if (listeners && elementStates) {
                 var visitedTriggers_1 = new Set();
                 listeners.forEach(function (listener) {
                     var triggerName = listener.name;
@@ -2981,7 +2984,6 @@
                     visitedTriggers_1.add(triggerName);
                     var trigger = _this._triggers[triggerName];
                     var transition = trigger.fallbackTransition;
-                    var elementStates = _this._engine.statesByElement.get(element);
                     var fromState = elementStates[triggerName] || DEFAULT_STATE_VALUE;
                     var toState = new StateValue(VOID_VALUE);
                     var player = new TransitionAnimationPlayer(_this.id, triggerName, element);

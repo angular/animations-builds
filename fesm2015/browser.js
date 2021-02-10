@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.2+4.sha-0fc5a16
+ * @license Angular v11.1.2+79.sha-e8c8a8d
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2591,7 +2591,10 @@ class AnimationTransitionNamespace {
     }
     prepareLeaveAnimationListeners(element) {
         const listeners = this._elementListeners.get(element);
-        if (listeners) {
+        const elementStates = this._engine.statesByElement.get(element);
+        // if this statement fails then it means that the element was picked up
+        // by an earlier flush (or there are no listeners at all to track the leave).
+        if (listeners && elementStates) {
             const visitedTriggers = new Set();
             listeners.forEach(listener => {
                 const triggerName = listener.name;
@@ -2600,7 +2603,6 @@ class AnimationTransitionNamespace {
                 visitedTriggers.add(triggerName);
                 const trigger = this._triggers[triggerName];
                 const transition = trigger.fallbackTransition;
-                const elementStates = this._engine.statesByElement.get(element);
                 const fromState = elementStates[triggerName] || DEFAULT_STATE_VALUE;
                 const toState = new StateValue(VOID_VALUE);
                 const player = new TransitionAnimationPlayer(this.id, triggerName, element);
