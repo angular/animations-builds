@@ -1,6 +1,6 @@
 /**
- * @license Angular v10.1.0-next.4+26.sha-6248d6c
- * (c) 2010-2020 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.5+9.sha-bff0d8f
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
@@ -275,8 +275,8 @@ function trigger(name, definitions) {
  * ```typescript
  * animate(500, keyframes(
  *  [
- *   style({ background: "blue" })),
- *   style({ background: "red" }))
+ *   style({ background: "blue" }),
+ *   style({ background: "red" })
  *  ])
  * ```
  *
@@ -944,6 +944,7 @@ class NoopAnimationPlayer {
         this._started = false;
         this._destroyed = false;
         this._finished = false;
+        this._position = 0;
         this.parentPlayer = null;
         this.totalTime = duration + delay;
     }
@@ -999,9 +1000,11 @@ class NoopAnimationPlayer {
         }
     }
     reset() { }
-    setPosition(position) { }
+    setPosition(position) {
+        this._position = this.totalTime ? position * this.totalTime : 1;
+    }
     getPosition() {
-        return 0;
+        return this.totalTime ? this._position / this.totalTime : 1;
     }
     /** @internal */
     triggerCallback(phaseName) {
@@ -1137,12 +1140,11 @@ class AnimationGroupPlayer {
         });
     }
     getPosition() {
-        let min = 0;
-        this.players.forEach(player => {
-            const p = player.getPosition();
-            min = Math.min(p, min);
-        });
-        return min;
+        const longestPlayer = this.players.reduce((longestSoFar, player) => {
+            const newPlayerIsLongest = longestSoFar === null || player.totalTime > longestSoFar.totalTime;
+            return newPlayerIsLongest ? player : longestSoFar;
+        }, null);
+        return longestPlayer != null ? longestPlayer.getPosition() : 0;
     }
     beforeDestroy() {
         this.players.forEach(player => {

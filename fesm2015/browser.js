@@ -1,6 +1,6 @@
 /**
- * @license Angular v10.1.0-next.4+26.sha-6248d6c
- * (c) 2010-2020 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.5+9.sha-bff0d8f
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
@@ -159,7 +159,17 @@ if (_isNode || typeof Element !== 'undefined') {
     _query = (element, selector, multi) => {
         let results = [];
         if (multi) {
-            results.push(...element.querySelectorAll(selector));
+            // DO NOT REFACTOR TO USE SPREAD SYNTAX.
+            // For element queries that return sufficiently large NodeList objects,
+            // using spread syntax to populate the results array causes a RangeError
+            // due to the call stack limit being reached. `Array.from` can not be used
+            // as well, since NodeList is not iterable in IE 11, see
+            // https://developer.mozilla.org/en-US/docs/Web/API/NodeList
+            // More info is available in #38551.
+            const elems = element.querySelectorAll(selector);
+            for (let i = 0; i < elems.length; i++) {
+                results.push(elems[i]);
+            }
         }
         else {
             const elm = element.querySelector(selector);
@@ -470,21 +480,6 @@ function iteratorToArray(iterator) {
         item = iterator.next();
     }
     return arr;
-}
-function mergeAnimationOptions(source, destination) {
-    if (source.params) {
-        const p0 = source.params;
-        if (!destination.params) {
-            destination.params = {};
-        }
-        const p1 = destination.params;
-        Object.keys(p0).forEach(param => {
-            if (!p1.hasOwnProperty(param)) {
-                p1[param] = p0[param];
-            }
-        });
-    }
-    return destination;
 }
 const DASH_CASE_REGEXP = /-+([a-z0-9])/g;
 function dashCaseToCamelCase(input) {
@@ -2596,7 +2591,10 @@ class AnimationTransitionNamespace {
     }
     prepareLeaveAnimationListeners(element) {
         const listeners = this._elementListeners.get(element);
-        if (listeners) {
+        const elementStates = this._engine.statesByElement.get(element);
+        // if this statement fails then it means that the element was picked up
+        // by an earlier flush (or there are no listeners at all to track the leave).
+        if (listeners && elementStates) {
             const visitedTriggers = new Set();
             listeners.forEach(listener => {
                 const triggerName = listener.name;
@@ -2605,7 +2603,6 @@ class AnimationTransitionNamespace {
                 visitedTriggers.add(triggerName);
                 const trigger = this._triggers[triggerName];
                 const transition = trigger.fallbackTransition;
-                const elementStates = this._engine.statesByElement.get(element);
                 const fromState = elementStates[triggerName] || DEFAULT_STATE_VALUE;
                 const toState = new StateValue(VOID_VALUE);
                 const player = new TransitionAnimationPlayer(this.id, triggerName, element);
@@ -4135,7 +4132,7 @@ function setAnimationStyle(element, name, value, index) {
     element.style[prop] = value;
 }
 function getAnimationStyle(element, name) {
-    return element.style[ANIMATION_PROP + name];
+    return element.style[ANIMATION_PROP + name] || '';
 }
 function countChars(value, char) {
     let count = 0;
@@ -4333,7 +4330,6 @@ class CssKeyframesDriver {
     constructor() {
         this._count = 0;
         this._head = document.querySelector('head');
-        this._warningIssued = false;
     }
     validateStyleProperty(prop) {
         return validateStyleProperty(prop);
@@ -4378,12 +4374,12 @@ class CssKeyframesDriver {
         });
         keyframeStr += `}\n`;
         const kfElm = document.createElement('style');
-        kfElm.innerHTML = keyframeStr;
+        kfElm.textContent = keyframeStr;
         return kfElm;
     }
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
-        if (scrubberAccessRequested) {
-            this._notifyFaultyScrubber();
+        if ((typeof ngDevMode === 'undefined' || ngDevMode) && scrubberAccessRequested) {
+            notifyFaultyScrubber();
         }
         const previousCssKeyframePlayers = previousPlayers.filter(player => player instanceof CssKeyframesPlayer);
         const previousStyles = {};
@@ -4410,12 +4406,6 @@ class CssKeyframesDriver {
         player.onDestroy(() => removeElement(kfElm));
         return player;
     }
-    _notifyFaultyScrubber() {
-        if (!this._warningIssued) {
-            console.warn('@angular/animations: please load the web-animations.js polyfill to allow programmatic access...\n', '  visit http://bit.ly/IWukam to learn more about using the web-animation-js polyfill.');
-            this._warningIssued = true;
-        }
-    }
 }
 function flattenKeyframesIntoStyles(keyframes) {
     let flatKeyframes = {};
@@ -4433,6 +4423,13 @@ function flattenKeyframesIntoStyles(keyframes) {
 }
 function removeElement(node) {
     node.parentNode.removeChild(node);
+}
+let warningIssued = false;
+function notifyFaultyScrubber() {
+    if (warningIssued)
+        return;
+    console.warn('@angular/animations: please load the web-animations.js polyfill to allow programmatic access...\n', '  visit https://bit.ly/IWukam to learn more about using the web-animation-js polyfill.');
+    warningIssued = true;
 }
 
 class WebAnimationsPlayer {
@@ -4555,6 +4552,9 @@ class WebAnimationsPlayer {
         }
     }
     setPosition(p) {
+        if (this.domPlayer === undefined) {
+            this.init();
+        }
         this.domPlayer.currentTime = p * this.time;
     }
     getPosition() {

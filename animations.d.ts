@@ -1,6 +1,6 @@
 /**
- * @license Angular v10.1.0-next.4+26.sha-6248d6c
- * (c) 2010-2020 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.5+9.sha-bff0d8f
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
@@ -56,8 +56,8 @@
  * ```typescript
  * animate(500, keyframes(
  *  [
- *   style({ background: "blue" })),
- *   style({ background: "red" }))
+ *   style({ background: "blue" }),
+ *   style({ background: "red" })
  *  ])
  * ```
  *
@@ -909,6 +909,7 @@ export declare class NoopAnimationPlayer implements AnimationPlayer {
     private _started;
     private _destroyed;
     private _finished;
+    private _position;
     parentPlayer: AnimationPlayer | null;
     readonly totalTime: number;
     constructor(duration?: number, delay?: number);
