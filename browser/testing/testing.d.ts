@@ -1,18 +1,18 @@
 /**
- * @license Angular v9.0.0-next.12+69.sha-1f498ab.with-local-changes
- * (c) 2010-2019 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.8+121.sha-72c4288
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
+import { AnimationDriver } from '@angular/animations/browser';
 import { AnimationPlayer } from '@angular/animations';
 import { NoopAnimationPlayer } from '@angular/animations';
-import { ɵAnimationDriver } from '@angular/animations/browser';
 import { ɵStyleData } from '@angular/animations';
 
 /**
  * @publicApi
  */
-export declare class MockAnimationDriver implements ɵAnimationDriver {
+export declare class MockAnimationDriver implements AnimationDriver {
     static log: AnimationPlayer[];
     validateStyleProperty(prop: string): boolean;
     matchesElement(element: any, selector: string): boolean;
