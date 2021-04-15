@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.9+14.sha-a4ff071
+ * @license Angular v12.0.0-next.9+17.sha-df465c6
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -143,10 +143,20 @@
     // and utility methods exist.
     var _isNode = isNode();
     if (_isNode || typeof Element !== 'undefined') {
-        // this is well supported in all browsers
-        _contains = function (elm1, elm2) {
-            return elm1.contains(elm2);
-        };
+        if (!isBrowser()) {
+            _contains = function (elm1, elm2) { return elm1.contains(elm2); };
+        }
+        else {
+            _contains = function (elm1, elm2) {
+                while (elm2 && elm2 !== document.documentElement) {
+                    if (elm2 === elm1) {
+                        return true;
+                    }
+                    elm2 = elm2.parentNode || elm2.host; // consider host to support shadow DOM
+                }
+                return false;
+            };
+        }
         _matches = (function () {
             if (_isNode || Element.prototype.matches) {
                 return function (element, selector) { return element.matches(selector); };
@@ -4767,7 +4777,6 @@
     var CssKeyframesDriver = /** @class */ (function () {
         function CssKeyframesDriver() {
             this._count = 0;
-            this._head = document.querySelector('head');
         }
         CssKeyframesDriver.prototype.validateStyleProperty = function (prop) {
             return validateStyleProperty(prop);
@@ -4839,7 +4848,8 @@
             }
             var animationName = "" + KEYFRAMES_NAME_PREFIX + this._count++;
             var kfElm = this.buildKeyframeElement(element, animationName, keyframes);
-            document.querySelector('head').appendChild(kfElm);
+            var nodeToAppendKfElm = findNodeToAppendKeyframeElement(element);
+            nodeToAppendKfElm.appendChild(kfElm);
             var specialStyles = packageNonAnimatableStyles(element, keyframes);
             var player = new CssKeyframesPlayer(element, keyframes, animationName, duration, delay, easing, finalStyles, specialStyles);
             player.onDestroy(function () { return removeElement(kfElm); });
@@ -4847,6 +4857,14 @@
         };
         return CssKeyframesDriver;
     }());
+    function findNodeToAppendKeyframeElement(element) {
+        var _a;
+        var rootNode = (_a = element.getRootNode) === null || _a === void 0 ? void 0 : _a.call(element);
+        if (typeof ShadowRoot !== 'undefined' && rootNode instanceof ShadowRoot) {
+            return rootNode;
+        }
+        return document.head;
+    }
     function flattenKeyframesIntoStyles(keyframes) {
         var flatKeyframes = {};
         if (keyframes) {
