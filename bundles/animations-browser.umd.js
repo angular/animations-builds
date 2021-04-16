@@ -1,6 +1,6 @@
 /**
- * @license Angular v11.1.0-next.4+175.sha-02ff4ed
- * (c) 2010-2020 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.8+133.sha-d5b13ce
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
@@ -143,10 +143,20 @@
     // and utility methods exist.
     var _isNode = isNode();
     if (_isNode || typeof Element !== 'undefined') {
-        // this is well supported in all browsers
-        _contains = function (elm1, elm2) {
-            return elm1.contains(elm2);
-        };
+        if (!isBrowser()) {
+            _contains = function (elm1, elm2) { return elm1.contains(elm2); };
+        }
+        else {
+            _contains = function (elm1, elm2) {
+                while (elm2 && elm2 !== document.documentElement) {
+                    if (elm2 === elm1) {
+                        return true;
+                    }
+                    elm2 = elm2.parentNode || elm2.host; // consider host to support shadow DOM
+                }
+                return false;
+            };
+        }
         _matches = (function () {
             if (_isNode || Element.prototype.matches) {
                 return function (element, selector) { return element.matches(selector); };
@@ -497,21 +507,6 @@
         }
         return arr;
     }
-    function mergeAnimationOptions(source, destination) {
-        if (source.params) {
-            var p0_1 = source.params;
-            if (!destination.params) {
-                destination.params = {};
-            }
-            var p1_1 = destination.params;
-            Object.keys(p0_1).forEach(function (param) {
-                if (!p1_1.hasOwnProperty(param)) {
-                    p1_1[param] = p0_1[param];
-                }
-            });
-        }
-        return destination;
-    }
     var DASH_CASE_REGEXP = /-+([a-z0-9])/g;
     function dashCaseToCamelCase(input) {
         return input.replace(DASH_CASE_REGEXP, function () {
@@ -609,11 +604,13 @@
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b)
-                if (b.hasOwnProperty(p))
+                if (Object.prototype.hasOwnProperty.call(b, p))
                     d[p] = b[p]; };
         return extendStatics(d, b);
     };
     function __extends(d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -756,10 +753,10 @@
             k2 = k;
         o[k2] = m[k];
     });
-    function __exportStar(m, exports) {
+    function __exportStar(m, o) {
         for (var p in m)
-            if (p !== "default" && !exports.hasOwnProperty(p))
-                __createBinding(exports, m, p);
+            if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p))
+                __createBinding(o, m, p);
     }
     function __values(o) {
         var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
@@ -799,11 +796,13 @@
         }
         return ar;
     }
+    /** @deprecated */
     function __spread() {
         for (var ar = [], i = 0; i < arguments.length; i++)
             ar = ar.concat(__read(arguments[i]));
         return ar;
     }
+    /** @deprecated */
     function __spreadArrays() {
         for (var s = 0, i = 0, il = arguments.length; i < il; i++)
             s += arguments[i].length;
@@ -812,7 +811,11 @@
                 r[k] = a[j];
         return r;
     }
-    ;
+    function __spreadArray(to, from) {
+        for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+            to[j] = from[i];
+        return to;
+    }
     function __await(v) {
         return this instanceof __await ? (this.v = v, this) : new __await(v);
     }
@@ -869,7 +872,7 @@
         var result = {};
         if (mod != null)
             for (var k in mod)
-                if (Object.hasOwnProperty.call(mod, k))
+                if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
                     __createBinding(result, mod, k);
         __setModuleDefault(result, mod);
         return result;
@@ -877,18 +880,21 @@
     function __importDefault(mod) {
         return (mod && mod.__esModule) ? mod : { default: mod };
     }
-    function __classPrivateFieldGet(receiver, privateMap) {
-        if (!privateMap.has(receiver)) {
-            throw new TypeError("attempted to get private field on non-instance");
-        }
-        return privateMap.get(receiver);
+    function __classPrivateFieldGet(receiver, state, kind, f) {
+        if (kind === "a" && !f)
+            throw new TypeError("Private accessor was defined without a getter");
+        if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+            throw new TypeError("Cannot read private member from an object whose class did not declare it");
+        return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
     }
-    function __classPrivateFieldSet(receiver, privateMap, value) {
-        if (!privateMap.has(receiver)) {
-            throw new TypeError("attempted to set private field on non-instance");
-        }
-        privateMap.set(receiver, value);
-        return value;
+    function __classPrivateFieldSet(receiver, state, value, kind, f) {
+        if (kind === "m")
+            throw new TypeError("Private method is not writable");
+        if (kind === "a" && !f)
+            throw new TypeError("Private accessor was defined without a setter");
+        if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+            throw new TypeError("Cannot write private member to an object whose class did not declare it");
+        return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
     }
 
     /**
@@ -1503,7 +1509,7 @@
             if (!existingInstructions) {
                 this._map.set(element, existingInstructions = []);
             }
-            existingInstructions.push.apply(existingInstructions, __spread(instructions));
+            existingInstructions.push.apply(existingInstructions, __spreadArray([], __read(instructions)));
         };
         ElementInstructionMap.prototype.has = function (element) {
             return this._map.has(element);
@@ -1994,7 +2000,7 @@
                     elements = limit < 0 ? elements.slice(elements.length + limit, elements.length) :
                         elements.slice(0, limit);
                 }
-                results.push.apply(results, __spread(elements));
+                results.push.apply(results, __spreadArray([], __read(elements)));
             }
             if (!optional && results.length == 0) {
                 errors.push("`query(\"" + originalSelector + "\")` returned zero elements. (Use `query(\"" + originalSelector + "\", { optional: true })` if you wish to allow this.)");
@@ -2987,7 +2993,10 @@
         AnimationTransitionNamespace.prototype.prepareLeaveAnimationListeners = function (element) {
             var _this = this;
             var listeners = this._elementListeners.get(element);
-            if (listeners) {
+            var elementStates = this._engine.statesByElement.get(element);
+            // if this statement fails then it means that the element was picked up
+            // by an earlier flush (or there are no listeners at all to track the leave).
+            if (listeners && elementStates) {
                 var visitedTriggers_1 = new Set();
                 listeners.forEach(function (listener) {
                     var triggerName = listener.name;
@@ -2996,7 +3005,6 @@
                     visitedTriggers_1.add(triggerName);
                     var trigger = _this._triggers[triggerName];
                     var transition = trigger.fallbackTransition;
-                    var elementStates = _this._engine.statesByElement.get(element);
                     var fromState = elementStates[triggerName] || DEFAULT_STATE_VALUE;
                     var toState = new StateValue(VOID_VALUE);
                     var player = new TransitionAnimationPlayer(_this.id, triggerName, element);
@@ -3770,13 +3778,13 @@
                 if (queriedElements.size) {
                     var queriedPlayerResults = queriedElements.get(element);
                     if (queriedPlayerResults && queriedPlayerResults.length) {
-                        players.push.apply(players, __spread(queriedPlayerResults));
+                        players.push.apply(players, __spreadArray([], __read(queriedPlayerResults)));
                     }
                     var queriedInnerElements = this.driver.query(element, NG_ANIMATING_SELECTOR, true);
                     for (var j = 0; j < queriedInnerElements.length; j++) {
                         var queriedPlayers = queriedElements.get(queriedInnerElements[j]);
                         if (queriedPlayers && queriedPlayers.length) {
-                            players.push.apply(players, __spread(queriedPlayers));
+                            players.push.apply(players, __spreadArray([], __read(queriedPlayers)));
                         }
                     }
                 }
@@ -4769,7 +4777,6 @@
     var CssKeyframesDriver = /** @class */ (function () {
         function CssKeyframesDriver() {
             this._count = 0;
-            this._head = document.querySelector('head');
         }
         CssKeyframesDriver.prototype.validateStyleProperty = function (prop) {
             return validateStyleProperty(prop);
@@ -4841,7 +4848,8 @@
             }
             var animationName = "" + KEYFRAMES_NAME_PREFIX + this._count++;
             var kfElm = this.buildKeyframeElement(element, animationName, keyframes);
-            document.querySelector('head').appendChild(kfElm);
+            var nodeToAppendKfElm = findNodeToAppendKeyframeElement(element);
+            nodeToAppendKfElm.appendChild(kfElm);
             var specialStyles = packageNonAnimatableStyles(element, keyframes);
             var player = new CssKeyframesPlayer(element, keyframes, animationName, duration, delay, easing, finalStyles, specialStyles);
             player.onDestroy(function () { return removeElement(kfElm); });
@@ -4849,6 +4857,14 @@
         };
         return CssKeyframesDriver;
     }());
+    function findNodeToAppendKeyframeElement(element) {
+        var _a;
+        var rootNode = (_a = element.getRootNode) === null || _a === void 0 ? void 0 : _a.call(element);
+        if (typeof ShadowRoot !== 'undefined' && rootNode instanceof ShadowRoot) {
+            return rootNode;
+        }
+        return document.head;
+    }
     function flattenKeyframesIntoStyles(keyframes) {
         var flatKeyframes = {};
         if (keyframes) {
@@ -4995,6 +5011,9 @@
             }
         };
         WebAnimationsPlayer.prototype.setPosition = function (p) {
+            if (this.domPlayer === undefined) {
+                this.init();
+            }
             this.domPlayer.currentTime = p * this.time;
         };
         WebAnimationsPlayer.prototype.getPosition = function () {
