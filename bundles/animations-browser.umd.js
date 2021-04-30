@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.8+300.sha-72384a3
+ * @license Angular v12.0.0-next.8+298.sha-35450c7
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3176,7 +3176,7 @@
         });
         TransitionAnimationEngine.prototype.createNamespace = function (namespaceId, hostElement) {
             var ns = new AnimationTransitionNamespace(namespaceId, hostElement, this);
-            if (this.bodyNode && this.driver.containsElement(this.bodyNode, hostElement)) {
+            if (hostElement.parentNode) {
                 this._balanceNamespaceList(ns, hostElement);
             }
             else {
@@ -3185,7 +3185,7 @@
                 // the namespace list
                 this.newHostElements.set(hostElement, ns);
                 // given that this host element is apart of the animation code, it
-                // may or may not be inserted by a parent node that is of an
+                // may or may not be inserted by a parent node that is an of an
                 // animation renderer type. If this happens then we can still have
                 // access to this item when we query for :enter nodes. If the parent
                 // is a renderer then the set data-structure will normalize the entry
