@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.1.0-next.2+68.sha-d7768c6
+ * @license Angular v12.1.0-next.2+69.sha-3a6af8e
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -75,6 +75,10 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         super.init();
         this._onInitFns.forEach(fn => fn());
         this._onInitFns = [];
+    }
+    reset() {
+        super.reset();
+        this.__started = false;
     }
     finish() {
         super.finish();
