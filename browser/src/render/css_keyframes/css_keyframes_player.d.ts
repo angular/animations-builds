@@ -8,6 +8,7 @@
 import { AnimationPlayer } from '@angular/animations';
 import { SpecialCasedStyles } from '../special_cased_styles';
 export declare const enum AnimatorControlState {
+    RESET = 0,
     INITIALIZED = 1,
     STARTED = 2,
     FINISHED = 3,
@@ -26,7 +27,6 @@ export declare class CssKeyframesPlayer implements AnimationPlayer {
     private _onDoneFns;
     private _onStartFns;
     private _onDestroyFns;
-    private _started;
     private _styler;
     parentPlayer: AnimationPlayer;
     readonly totalTime: number;
