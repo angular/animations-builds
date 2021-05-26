@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.1+66.sha-c01da21
+ * @license Angular v12.0.1+83.sha-54b23ae
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -171,7 +171,6 @@ export declare class ɵCssKeyframesPlayer implements AnimationPlayer {
     private _onDoneFns;
     private _onStartFns;
     private _onDestroyFns;
-    private _started;
     private _styler;
     parentPlayer: AnimationPlayer;
     readonly totalTime: number;

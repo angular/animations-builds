@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.1+66.sha-c01da21
+ * @license Angular v12.0.1+83.sha-54b23ae
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -999,7 +999,9 @@ class NoopAnimationPlayer {
             this._onDestroyFns = [];
         }
     }
-    reset() { }
+    reset() {
+        this._started = false;
+    }
     setPosition(position) {
         this._position = this.totalTime ? position * this.totalTime : 1;
     }

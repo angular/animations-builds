@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.1+66.sha-c01da21
+ * @license Angular v12.0.1+83.sha-54b23ae
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -389,6 +389,10 @@
             _super.prototype.init.call(this);
             this._onInitFns.forEach(function (fn) { return fn(); });
             this._onInitFns = [];
+        };
+        MockAnimationPlayer.prototype.reset = function () {
+            _super.prototype.reset.call(this);
+            this.__started = false;
         };
         MockAnimationPlayer.prototype.finish = function () {
             _super.prototype.finish.call(this);

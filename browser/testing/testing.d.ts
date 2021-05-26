@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.1+66.sha-c01da21
+ * @license Angular v12.0.1+83.sha-54b23ae
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -46,6 +46,7 @@ export declare class MockAnimationPlayer extends NoopAnimationPlayer {
     constructor(element: any, keyframes: {
         [key: string]: string | number;
     }[], duration: number, delay: number, easing: string, previousPlayers: any[]);
+    reset(): void;
     finish(): void;
     destroy(): void;
     play(): void;
