@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.1.1+7.sha-aa261e7
+ * @license Angular v12.1.1+12.sha-6da24e6
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -312,7 +312,7 @@ export declare abstract class AnimationBuilder {
  *
  * @publicApi
  */
-export declare interface AnimationEvent {
+declare interface AnimationEvent_2 {
     /**
      * The name of the state from which the animation is triggered.
      */
@@ -343,6 +343,7 @@ export declare interface AnimationEvent {
      */
     disabled: boolean;
 }
+export { AnimationEvent_2 as AnimationEvent }
 
 /**
  * A factory object returned from the `AnimationBuilder`.`build()` method.
