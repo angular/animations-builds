@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.0-next.1+67.sha-e8be045
+ * @license Angular v12.2.0-next.1+89.sha-b5ab7af
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2233,7 +2233,6 @@
         function SubTimelineBuilder(driver, element, keyframes, preStyleProps, postStyleProps, timings, _stretchStartingKeyframe) {
             if (_stretchStartingKeyframe === void 0) { _stretchStartingKeyframe = false; }
             var _this = _super.call(this, driver, element, timings.delay) || this;
-            _this.element = element;
             _this.keyframes = keyframes;
             _this.preStyleProps = preStyleProps;
             _this.postStyleProps = postStyleProps;
