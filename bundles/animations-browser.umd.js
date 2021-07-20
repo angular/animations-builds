@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.0-next.2+24.sha-3b2f607
+ * @license Angular v12.2.0-next.2+28.sha-0ce8f6e
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2481,11 +2481,13 @@
         return matchFns.some(function (fn) { return fn(currentState, nextState, element, params); });
     }
     var AnimationStateStyles = /** @class */ (function () {
-        function AnimationStateStyles(styles, defaultParams) {
+        function AnimationStateStyles(styles, defaultParams, normalizer) {
             this.styles = styles;
             this.defaultParams = defaultParams;
+            this.normalizer = normalizer;
         }
         AnimationStateStyles.prototype.buildStyles = function (params, errors) {
+            var _this = this;
             var finalStyles = {};
             var combinedParams = copyObj(this.defaultParams);
             Object.keys(params).forEach(function (key) {
@@ -2502,7 +2504,9 @@
                         if (val.length > 1) {
                             val = interpolateParams(val, combinedParams, errors);
                         }
-                        finalStyles[prop] = val;
+                        var normalizedProp = _this.normalizer.normalizePropertyName(prop, errors);
+                        val = _this.normalizer.normalizeStyleValue(prop, normalizedProp, val, errors);
+                        finalStyles[normalizedProp] = val;
                     });
                 }
             });
@@ -2511,32 +2515,27 @@
         return AnimationStateStyles;
     }());
 
-    /**
-     * @publicApi
-     */
-    function buildTrigger(name, ast) {
-        return new AnimationTrigger(name, ast);
+    function buildTrigger(name, ast, normalizer) {
+        return new AnimationTrigger(name, ast, normalizer);
     }
-    /**
-     * @publicApi
-     */
     var AnimationTrigger = /** @class */ (function () {
-        function AnimationTrigger(name, ast) {
+        function AnimationTrigger(name, ast, _normalizer) {
             var _this = this;
             this.name = name;
             this.ast = ast;
+            this._normalizer = _normalizer;
             this.transitionFactories = [];
             this.states = {};
             ast.states.forEach(function (ast) {
                 var defaultParams = (ast.options && ast.options.params) || {};
-                _this.states[ast.name] = new AnimationStateStyles(ast.style, defaultParams);
+                _this.states[ast.name] = new AnimationStateStyles(ast.style, defaultParams, _normalizer);
             });
             balanceProperties(this.states, 'true', '1');
             balanceProperties(this.states, 'false', '0');
             ast.transitions.forEach(function (ast) {
                 _this.transitionFactories.push(new AnimationTransitionFactory(name, ast, _this.states));
             });
-            this.fallbackTransition = createFallbackTransition(name, this.states);
+            this.fallbackTransition = createFallbackTransition(name, this.states, this._normalizer);
         }
         Object.defineProperty(AnimationTrigger.prototype, "containsQueries", {
             get: function () {
@@ -2554,7 +2553,7 @@
         };
         return AnimationTrigger;
     }());
-    function createFallbackTransition(triggerName, states) {
+    function createFallbackTransition(triggerName, states, normalizer) {
         var matchers = [function (fromState, toState) { return true; }];
         var animation = { type: 2 /* Sequence */, steps: [], options: null };
         var transition = {
@@ -4273,15 +4272,16 @@
     }
 
     var AnimationEngine = /** @class */ (function () {
-        function AnimationEngine(bodyNode, _driver, normalizer) {
+        function AnimationEngine(bodyNode, _driver, _normalizer) {
             var _this = this;
             this.bodyNode = bodyNode;
             this._driver = _driver;
+            this._normalizer = _normalizer;
             this._triggerCache = {};
             // this method is designed to be overridden by the code that uses this engine
             this.onRemovalComplete = function (element, context) { };
-            this._transitionEngine = new TransitionAnimationEngine(bodyNode, _driver, normalizer);
-            this._timelineEngine = new TimelineAnimationEngine(bodyNode, _driver, normalizer);
+            this._transitionEngine = new TransitionAnimationEngine(bodyNode, _driver, _normalizer);
+            this._timelineEngine = new TimelineAnimationEngine(bodyNode, _driver, _normalizer);
             this._transitionEngine.onRemovalComplete = function (element, context) { return _this.onRemovalComplete(element, context); };
         }
         AnimationEngine.prototype.registerTrigger = function (componentId, namespaceId, hostElement, name, metadata) {
@@ -4293,7 +4293,7 @@
                 if (errors.length) {
                     throw new Error("The animation trigger \"" + name + "\" has failed to build due to the following errors:\n - " + errors.join('\n - '));
                 }
-                trigger = buildTrigger(name, ast);
+                trigger = buildTrigger(name, ast, this._normalizer);
                 this._triggerCache[cacheKey] = trigger;
             }
             this._transitionEngine.registerTrigger(namespaceId, name, trigger);
