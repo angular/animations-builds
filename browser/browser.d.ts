@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.1.2+13.sha-97fa1cf
+ * @license Angular v12.1.2+29.sha-e6b7472
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -116,11 +116,12 @@ export declare class ɵAnimation {
 export declare class ɵAnimationEngine {
     private bodyNode;
     private _driver;
+    private _normalizer;
     private _transitionEngine;
     private _timelineEngine;
     private _triggerCache;
     onRemovalComplete: (element: any, context: any) => void;
-    constructor(bodyNode: any, _driver: AnimationDriver, normalizer: ɵAnimationStyleNormalizer);
+    constructor(bodyNode: any, _driver: AnimationDriver, _normalizer: ɵAnimationStyleNormalizer);
     registerTrigger(componentId: string, namespaceId: string, hostElement: any, name: string, metadata: AnimationTriggerMetadata): void;
     register(namespaceId: string, hostElement: any): void;
     destroy(namespaceId: string, context: any): void;
