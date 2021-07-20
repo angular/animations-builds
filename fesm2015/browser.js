@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.0-next.2+24.sha-3b2f607
+ * @license Angular v12.2.0-next.2+28.sha-0ce8f6e
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2099,9 +2099,10 @@ function oneOrMoreTransitionsMatch(matchFns, currentState, nextState, element, p
     return matchFns.some(fn => fn(currentState, nextState, element, params));
 }
 class AnimationStateStyles {
-    constructor(styles, defaultParams) {
+    constructor(styles, defaultParams, normalizer) {
         this.styles = styles;
         this.defaultParams = defaultParams;
+        this.normalizer = normalizer;
     }
     buildStyles(params, errors) {
         const finalStyles = {};
@@ -2120,7 +2121,9 @@ class AnimationStateStyles {
                     if (val.length > 1) {
                         val = interpolateParams(val, combinedParams, errors);
                     }
-                    finalStyles[prop] = val;
+                    const normalizedProp = this.normalizer.normalizePropertyName(prop, errors);
+                    val = this.normalizer.normalizeStyleValue(prop, normalizedProp, val, errors);
+                    finalStyles[normalizedProp] = val;
                 });
             }
         });
@@ -2128,31 +2131,26 @@ class AnimationStateStyles {
     }
 }
 
-/**
- * @publicApi
- */
-function buildTrigger(name, ast) {
-    return new AnimationTrigger(name, ast);
+function buildTrigger(name, ast, normalizer) {
+    return new AnimationTrigger(name, ast, normalizer);
 }
-/**
- * @publicApi
- */
 class AnimationTrigger {
-    constructor(name, ast) {
+    constructor(name, ast, _normalizer) {
         this.name = name;
         this.ast = ast;
+        this._normalizer = _normalizer;
         this.transitionFactories = [];
         this.states = {};
         ast.states.forEach(ast => {
             const defaultParams = (ast.options && ast.options.params) || {};
-            this.states[ast.name] = new AnimationStateStyles(ast.style, defaultParams);
+            this.states[ast.name] = new AnimationStateStyles(ast.style, defaultParams, _normalizer);
         });
         balanceProperties(this.states, 'true', '1');
         balanceProperties(this.states, 'false', '0');
         ast.transitions.forEach(ast => {
             this.transitionFactories.push(new AnimationTransitionFactory(name, ast, this.states));
         });
-        this.fallbackTransition = createFallbackTransition(name, this.states);
+        this.fallbackTransition = createFallbackTransition(name, this.states, this._normalizer);
     }
     get containsQueries() {
         return this.ast.queryCount > 0;
@@ -2165,7 +2163,7 @@ class AnimationTrigger {
         return this.fallbackTransition.buildStyles(currentState, params, errors);
     }
 }
-function createFallbackTransition(triggerName, states) {
+function createFallbackTransition(triggerName, states, normalizer) {
     const matchers = [(fromState, toState) => true];
     const animation = { type: 2 /* Sequence */, steps: [], options: null };
     const transition = {
@@ -3841,14 +3839,15 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
 }
 
 class AnimationEngine {
-    constructor(bodyNode, _driver, normalizer) {
+    constructor(bodyNode, _driver, _normalizer) {
         this.bodyNode = bodyNode;
         this._driver = _driver;
+        this._normalizer = _normalizer;
         this._triggerCache = {};
         // this method is designed to be overridden by the code that uses this engine
         this.onRemovalComplete = (element, context) => { };
-        this._transitionEngine = new TransitionAnimationEngine(bodyNode, _driver, normalizer);
-        this._timelineEngine = new TimelineAnimationEngine(bodyNode, _driver, normalizer);
+        this._transitionEngine = new TransitionAnimationEngine(bodyNode, _driver, _normalizer);
+        this._timelineEngine = new TimelineAnimationEngine(bodyNode, _driver, _normalizer);
         this._transitionEngine.onRemovalComplete = (element, context) => this.onRemovalComplete(element, context);
     }
     registerTrigger(componentId, namespaceId, hostElement, name, metadata) {
@@ -3860,7 +3859,7 @@ class AnimationEngine {
             if (errors.length) {
                 throw new Error(`The animation trigger "${name}" has failed to build due to the following errors:\n - ${errors.join('\n - ')}`);
             }
-            trigger = buildTrigger(name, ast);
+            trigger = buildTrigger(name, ast, this._normalizer);
             this._triggerCache[cacheKey] = trigger;
         }
         this._transitionEngine.registerTrigger(namespaceId, name, trigger);
