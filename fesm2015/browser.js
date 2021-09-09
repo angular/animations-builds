@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.4+20.sha-e726a63.with-local-changes
+ * @license Angular v12.2.5+4.sha-2658219.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -268,7 +268,7 @@ NoopAnimationDriver.decorators = [
  */
 class AnimationDriver {
 }
-AnimationDriver.NOOP = new NoopAnimationDriver();
+AnimationDriver.NOOP = ( /* @__PURE__ */new NoopAnimationDriver());
 
 /**
  * @license
@@ -3998,7 +3998,7 @@ class SpecialCasedStyles {
         }
     }
 }
-SpecialCasedStyles.initialStylesByElement = new WeakMap();
+SpecialCasedStyles.initialStylesByElement = ( /* @__PURE__ */new WeakMap());
 function filterNonAnimatableStyles(styles) {
     let result = null;
     const props = Object.keys(styles);
