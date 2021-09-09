@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.5+6.sha-4c307ad.with-local-changes
+ * @license Angular v13.0.0-next.5+8.sha-6c84c5f.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -282,7 +282,7 @@
         }
         return AnimationDriver;
     }());
-    AnimationDriver.NOOP = new NoopAnimationDriver();
+    AnimationDriver.NOOP = ( /* @__PURE__ */new NoopAnimationDriver());
 
     /**
      * @license
@@ -4439,7 +4439,7 @@
         };
         return SpecialCasedStyles;
     }());
-    SpecialCasedStyles.initialStylesByElement = new WeakMap();
+    SpecialCasedStyles.initialStylesByElement = ( /* @__PURE__ */new WeakMap());
     function filterNonAnimatableStyles(styles) {
         var result = null;
         var props = Object.keys(styles);
