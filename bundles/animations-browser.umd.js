@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.7+10.sha-cc427d1.with-local-changes
+ * @license Angular v13.0.0-next.7+11.sha-ea61ec2.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1516,7 +1516,7 @@
             if (!existingInstructions) {
                 this._map.set(element, existingInstructions = []);
             }
-            existingInstructions.push.apply(existingInstructions, __spreadArray([], __read(instructions)));
+            existingInstructions.push.apply(existingInstructions, __spreadArray([], __read(instructions), false));
         };
         ElementInstructionMap.prototype.has = function (element) {
             return this._map.has(element);
@@ -2007,7 +2007,7 @@
                     elements = limit < 0 ? elements.slice(elements.length + limit, elements.length) :
                         elements.slice(0, limit);
                 }
-                results.push.apply(results, __spreadArray([], __read(elements)));
+                results.push.apply(results, __spreadArray([], __read(elements), false));
             }
             if (!optional && results.length == 0) {
                 errors.push("`query(\"" + originalSelector + "\")` returned zero elements. (Use `query(\"" + originalSelector + "\", { optional: true })` if you wish to allow this.)");
@@ -3782,13 +3782,13 @@
                 if (queriedElements.size) {
                     var queriedPlayerResults = queriedElements.get(element);
                     if (queriedPlayerResults && queriedPlayerResults.length) {
-                        players.push.apply(players, __spreadArray([], __read(queriedPlayerResults)));
+                        players.push.apply(players, __spreadArray([], __read(queriedPlayerResults), false));
                     }
                     var queriedInnerElements = this.driver.query(element, NG_ANIMATING_SELECTOR, true);
                     for (var j = 0; j < queriedInnerElements.length; j++) {
                         var queriedPlayers = queriedElements.get(queriedInnerElements[j]);
                         if (queriedPlayers && queriedPlayers.length) {
-                            players.push.apply(players, __spreadArray([], __read(queriedPlayers)));
+                            players.push.apply(players, __spreadArray([], __read(queriedPlayers), false));
                         }
                     }
                 }
