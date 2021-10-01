@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.9+10.sha-9eba260.with-local-changes
+ * @license Angular v13.0.0-next.9+84.sha-c15b8c7.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,6 +8,7 @@ import { AnimationMetadata } from '@angular/animations';
 import { AnimationOptions } from '@angular/animations';
 import { AnimationPlayer } from '@angular/animations';
 import { AnimationTriggerMetadata } from '@angular/animations';
+import * as i0 from '@angular/core';
 import { ɵStyleData } from '@angular/animations';
 
 /**
@@ -77,8 +78,6 @@ declare class ElementInstructionMap {
     clear(): void;
 }
 
-export declare function ɵallowPreviousPlayerStylesMerge(duration: number, delay: number): boolean;
-
 /**
  * Designed to be executed during a keyframe-based animation to apply any special-cased styles.
  *
@@ -87,7 +86,7 @@ export declare function ɵallowPreviousPlayerStylesMerge(duration: number, delay
  * `endStyles` will be applied as well any any starting styles. Finally when
  * `destroy()` is called then all styles will be removed.
  */
-export declare class ɵangular_packages_animations_browser_browser_a {
+declare class SpecialCasedStyles {
     private _element;
     private _startStyles;
     private _endStyles;
@@ -105,6 +104,8 @@ export declare class ɵangular_packages_animations_browser_browser_a {
     finish(): void;
     destroy(): void;
 }
+
+export declare function ɵallowPreviousPlayerStylesMerge(duration: number, delay: number): boolean;
 
 export declare class ɵAnimation {
     private _driver;
@@ -184,7 +185,7 @@ export declare class ɵCssKeyframesPlayer implements AnimationPlayer {
         [key: string]: string | number;
     }[], animationName: string, _duration: number, _delay: number, easing: string, _finalStyles: {
         [key: string]: any;
-    }, _specialStyles?: ɵangular_packages_animations_browser_browser_a | null | undefined);
+    }, _specialStyles?: SpecialCasedStyles | null | undefined);
     onStart(fn: () => void): void;
     onDone(fn: () => void): void;
     onDestroy(fn: () => void): void;
@@ -220,6 +221,8 @@ export declare class ɵNoopAnimationDriver implements AnimationDriver {
     animate(element: any, keyframes: {
         [key: string]: string | number;
     }[], duration: number, delay: number, easing: string, previousPlayers?: any[], scrubberAccessRequested?: boolean): AnimationPlayer;
+    static ɵfac: i0.ɵɵFactoryDeclaration<ɵNoopAnimationDriver, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<ɵNoopAnimationDriver>;
 }
 
 /**
@@ -275,7 +278,7 @@ export declare class ɵWebAnimationsPlayer implements AnimationPlayer {
         [key: string]: string | number;
     }[], options: {
         [key: string]: string | number;
-    }, _specialStyles?: ɵangular_packages_animations_browser_browser_a | null | undefined);
+    }, _specialStyles?: SpecialCasedStyles | null | undefined);
     private _onFinish;
     init(): void;
     private _buildPlayer;
