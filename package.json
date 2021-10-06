@@ -1,17 +1,17 @@
 {
   "name": "@angular/animations",
-  "version": "13.0.0-next.12+14.sha-841c5ae.with-local-changes",
+  "version": "13.0.0-next.12+16.sha-e0a0d05.with-local-changes",
   "description": "Angular - animations integration with web-animations",
   "author": "angular",
   "license": "MIT",
   "engines": {
-    "node": "^12.14.1 || >=14.0.0"
+    "node": "^12.20.0 || ^14.15.0 || >=16.10.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/core": "13.0.0-next.12+14.sha-841c5ae.with-local-changes"
+    "@angular/core": "13.0.0-next.12+16.sha-e0a0d05.with-local-changes"
   },
   "repository": {
     "type": "git",
@@ -52,18 +52,24 @@
     },
     ".": {
       "types": "./animations.d.ts",
+      "esm2020": "./esm2020/animations.mjs",
+      "es2020": "./fesm2020/animations.mjs",
       "es2015": "./fesm2015/animations.mjs",
       "node": "./fesm2015/animations.mjs",
       "default": "./fesm2020/animations.mjs"
     },
     "./browser": {
       "types": "./browser/browser.d.ts",
+      "esm2020": "./esm2020/browser/browser.mjs",
+      "es2020": "./fesm2020/browser.mjs",
       "es2015": "./fesm2015/browser.mjs",
       "node": "./fesm2015/browser.mjs",
       "default": "./fesm2020/browser.mjs"
     },
     "./browser/testing": {
       "types": "./browser/testing/testing.d.ts",
+      "esm2020": "./esm2020/browser/testing/testing.mjs",
+      "es2020": "./fesm2020/browser/testing.mjs",
       "es2015": "./fesm2015/browser/testing.mjs",
       "node": "./fesm2015/browser/testing.mjs",
       "default": "./fesm2020/browser/testing.mjs"
