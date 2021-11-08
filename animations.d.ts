@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0+29.sha-58f453d.with-local-changes
+ * @license Angular v13.0.0+49.sha-e5a960b.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -80,6 +80,10 @@ export declare function animate(timings: string | number, styles?: AnimationStyl
  * Note that this feature is designed to be used with `query()` and it will only work
  * with animations that are assigned using the Angular animation library. CSS keyframes
  * and transitions are not handled by this API.
+ *
+ * `animateChild()` does not currently work with route transition animations. Please see
+ * GitHub Issue {@link https://github.com/angular/angular/issues/30477 #30477} for more
+ * information.
  *
  * @publicApi
  */
