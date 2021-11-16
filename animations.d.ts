@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.1+3.sha-7115e83.with-local-changes
+ * @license Angular v13.0.1+6.sha-aa98cf1.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1204,8 +1204,8 @@ export declare function state(name: string, styles: AnimationStyleMetadata, opti
  * style({ width: 100, height: 0 })
  * ```
  *
- * The following example uses auto-styling to allow a component to animate from
- * a height of 0 up to the height of the parent element:
+ * The following example uses auto-styling to allow an element to animate from
+ * a height of 0 up to its full height:
  *
  * ```
  * style({ height: 0 }),
