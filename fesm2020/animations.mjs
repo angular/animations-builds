@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.2+10.sha-16d026e.with-local-changes
+ * @license Angular v13.0.2+11.sha-427822e.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -493,7 +493,7 @@ function keyframes(steps) {
  * The animation steps run when the expression evaluates to true.
  *
  * - A state-change string takes the form "state1 => state2", where each side is a defined animation
- * state, or an asterix (*) to refer to a dynamic start or end state.
+ * state, or an asterisk (*) to refer to a dynamic start or end state.
  *   - The expression string can contain multiple comma-separated statements;
  * for example "state1 => state2, state3 => state4".
  *   - Special values `:enter` and `:leave` initiate a transition on the entry and exit states,
