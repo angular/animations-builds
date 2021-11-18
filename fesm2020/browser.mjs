@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.1.0-next.2+12.sha-213105c.with-local-changes
+ * @license Angular v13.1.0-next.2+14.sha-76833aa.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -258,9 +258,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.1.0-next.2+12.sha-213105c.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.1.0-next.2+12.sha-213105c.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.1.0-next.2+12.sha-213105c.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.1.0-next.2+14.sha-76833aa.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.1.0-next.2+14.sha-76833aa.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.1.0-next.2+14.sha-76833aa.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -1054,7 +1054,8 @@ function normalizeSelector(selector) {
     if (hasAmpersand) {
         selector = selector.replace(SELF_TOKEN_REGEX, '');
     }
-    // the :enter and :leave selectors are filled in at runtime during timeline building
+    // Note: the :enter and :leave aren't normalized here since those
+    // selectors are filled in at runtime during timeline building
     selector = selector.replace(/@\*/g, NG_TRIGGER_SELECTOR)
         .replace(/@\w+/g, match => NG_TRIGGER_SELECTOR + '-' + match.substr(1))
         .replace(/:animating/g, NG_ANIMATING_SELECTOR);
@@ -1229,14 +1230,14 @@ const LEAVE_TOKEN_REGEX = new RegExp(LEAVE_TOKEN, 'g');
  * [TimelineBuilder]
  * This class is responsible for tracking the styles and building a series of keyframe objects for a
  * timeline between a start and end time. The builder starts off with an initial timeline and each
- * time the AST comes across a `group()`, `keyframes()` or a combination of the two wihtin a
+ * time the AST comes across a `group()`, `keyframes()` or a combination of the two within a
  * `sequence()` then it will generate a sub timeline for each step as well as a new one after
  * they are complete.
  *
  * As the AST is traversed, the timing state on each of the timelines will be incremented. If a sub
  * timeline was created (based on one of the cases above) then the parent timeline will attempt to
  * merge the styles used within the sub timelines into itself (only with group() this will happen).
- * This happens with a merge operation (much like how the merge works in mergesort) and it will only
+ * This happens with a merge operation (much like how the merge works in mergeSort) and it will only
  * copy the most recently used styles from the sub timelines into the parent timeline. This ensures
  * that if the styles are used later on in another phase of the animation then they will be the most
  * up-to-date values.
@@ -1261,7 +1262,7 @@ const LEAVE_TOKEN_REGEX = new RegExp(LEAVE_TOKEN, 'g');
  * from all previous keyframes up until where it is first used. For the timeline keyframe generation
  * to properly fill in the style it will place the previous value (the value from the parent
  * timeline) or a default value of `*` into the backFill object. Given that each of the keyframe
- * styles are objects that prototypically inhert from the backFill object, this means that if a
+ * styles are objects that prototypically inherits from the backFill object, this means that if a
  * value is added into the backFill then it will automatically propagate any missing values to all
  * keyframes. Therefore the missing `height` value will be properly filled into the already
  * processed keyframes.
@@ -1366,7 +1367,7 @@ class AnimationTimelineBuilderVisitor {
         }
         if (ast.steps.length) {
             ast.steps.forEach(s => visitDslNode(this, s, ctx));
-            // this is here just incase the inner steps only contain or end with a style() call
+            // this is here just in case the inner steps only contain or end with a style() call
             ctx.currentTimeline.applyStylesToKeyframe();
             // this means that some animation function within the sequence
             // ended up creating a sub timeline (which means the current
@@ -1642,7 +1643,7 @@ class AnimationTimelineContext {
         if (includeSelf) {
             results.push(this.element);
         }
-        if (selector.length > 0) { // if :self is only used then the selector is empty
+        if (selector.length > 0) { // only if :self is used then the selector can be empty
             selector = selector.replace(ENTER_TOKEN_REGEX, '.' + this._enterClassName);
             selector = selector.replace(LEAVE_TOKEN_REGEX, '.' + this._leaveClassName);
             const multi = limit != 1;
@@ -1887,7 +1888,7 @@ class SubTimelineBuilder extends TimelineBuilder {
               When the keyframe is stretched then it means that the delay before the animation
               starts is gone. Instead the first keyframe is placed at the start of the animation
               and it is then copied to where it starts when the original delay is over. This basically
-              means nothing animates during that delay, but the styles are still renderered. For this
+              means nothing animates during that delay, but the styles are still rendered. For this
               to work the original offset values that exist in the original keyframes must be "warped"
               so that they can take the new keyframe + delay into account.
       
@@ -2491,7 +2492,7 @@ class AnimationTransitionNamespace {
             // only remove the player if it is queued on the EXACT same trigger/namespace
             // we only also deal with queued players here because if the animation has
             // started then we want to keep the player alive until the flush happens
-            // (which is where the previousPlayers are passed into the new palyer)
+            // (which is where the previousPlayers are passed into the new player)
             if (player.namespaceId == this.id && player.triggerName == triggerName && player.queued) {
                 player.destroy();
             }
@@ -2781,7 +2782,7 @@ class TransitionAnimationEngine {
             // been inserted so that we know exactly where to place it in
             // the namespace list
             this.newHostElements.set(hostElement, ns);
-            // given that this host element is apart of the animation code, it
+            // given that this host element is a part of the animation code, it
             // may or may not be inserted by a parent node that is of an
             // animation renderer type. If this happens then we can still have
             // access to this item when we query for :enter nodes. If the parent
@@ -2846,8 +2847,8 @@ class TransitionAnimationEngine {
         // normally there should only be one namespace per element, however
         // if @triggers are placed on both the component element and then
         // its host element (within the component code) then there will be
-        // two namespaces returned. We use a set here to simply the dedupe
-        // of namespaces incase there are multiple triggers both the elm and host
+        // two namespaces returned. We use a set here to simply deduplicate
+        // the namespaces in case (for the reason described above) there are multiple triggers
         const namespaces = new Set();
         const elementStates = this.statesByElement.get(element);
         if (elementStates) {
@@ -3162,29 +3163,30 @@ class TransitionAnimationEngine {
                     erroneousTransitions.push(instruction);
                     return;
                 }
-                // even though the element may not be apart of the DOM, it may
-                // still be added at a later point (due to the mechanics of content
+                // even though the element may not be in the DOM, it may still
+                // be added at a later point (due to the mechanics of content
                 // projection and/or dynamic component insertion) therefore it's
-                // important we still style the element.
+                // important to still style the element.
                 if (nodeIsOrphaned) {
                     player.onStart(() => eraseStyles(element, instruction.fromStyles));
                     player.onDestroy(() => setStyles(element, instruction.toStyles));
                     skippedPlayers.push(player);
                     return;
                 }
-                // if a unmatched transition is queued to go then it SHOULD NOT render
-                // an animation and cancel the previously running animations.
+                // if an unmatched transition is queued and ready to go
+                // then it SHOULD NOT render an animation and cancel the
+                // previously running animations.
                 if (entry.isFallbackTransition) {
                     player.onStart(() => eraseStyles(element, instruction.fromStyles));
                     player.onDestroy(() => setStyles(element, instruction.toStyles));
                     skippedPlayers.push(player);
                     return;
                 }
-                // this means that if a parent animation uses this animation as a sub trigger
-                // then it will instruct the timeline builder to not add a player delay, but
-                // instead stretch the first keyframe gap up until the animation starts. The
-                // reason this is important is to prevent extra initialization styles from being
-                // required by the user in the animation.
+                // this means that if a parent animation uses this animation as a sub-trigger
+                // then it will instruct the timeline builder not to add a player delay, but
+                // instead stretch the first keyframe gap until the animation starts. This is
+                // important in order to prevent extra initialization styles from being
+                // required by the user for the animation.
                 instruction.timelines.forEach(tl => tl.stretchStartingKeyframe = true);
                 subTimelines.append(element, instruction.timelines);
                 const tuple = { instruction, player, element };
@@ -3220,10 +3222,10 @@ class TransitionAnimationEngine {
             this.reportError(errors);
         }
         const allPreviousPlayersMap = new Map();
-        // this map works to tell which element in the DOM tree is contained by
-        // which animation. Further down below this map will get populated once
-        // the players are built and in doing so it can efficiently figure out
-        // if a sub player is skipped due to a parent player having priority.
+        // this map tells us which element in the DOM tree is contained by
+        // which animation. Further down this map will get populated once
+        // the players are built and in doing so we can use it to efficiently
+        // figure out if a sub player is skipped due to a parent player having priority.
         const animationElementMap = new Map();
         queuedInstructions.forEach(entry => {
             const element = entry.element;
@@ -3240,13 +3242,13 @@ class TransitionAnimationEngine {
                 prevPlayer.destroy();
             });
         });
-        // this is a special case for nodes that will be removed (either by)
+        // this is a special case for nodes that will be removed either by
         // having their own leave animations or by being queried in a container
         // that will be removed once a parent animation is complete. The idea
         // here is that * styles must be identical to ! styles because of
         // backwards compatibility (* is also filled in by default in many places).
-        // Otherwise * styles will return an empty value or auto since the element
-        // that is being getComputedStyle'd will not be visible (since * = destination)
+        // Otherwise * styles will return an empty value or "auto" since the element
+        // passed to getComputedStyle will not be visible (since * === destination)
         const replaceNodes = allLeaveNodes.filter(node => {
             return replacePostStylesAsPre(node, allPreStyleElements, allPostStyleElements);
         });
@@ -3328,9 +3330,9 @@ class TransitionAnimationEngine {
                 }
             }
         });
-        // find all of the sub players' corresponding inner animation player
+        // find all of the sub players' corresponding inner animation players
         subPlayers.forEach(player => {
-            // even if any players are not found for a sub animation then it
+            // even if no players are found for a sub animation it
             // will still complete itself after the next tick since it's Noop
             const playersForElement = skippedPlayersMap.get(player.element);
             if (playersForElement && playersForElement.length) {
