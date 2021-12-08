@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.3+15.sha-763212d.with-local-changes
+ * @license Angular v13.0.3+17.sha-86843f8.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -126,7 +126,6 @@ function parseTimelineCommand(command) {
     return [id, action];
 }
 let _contains = (elm1, elm2) => false;
-let _matches = (element, selector) => false;
 let _query = (element, selector, multi) => {
     return [];
 };
@@ -148,22 +147,6 @@ if (_isNode || typeof Element !== 'undefined') {
             return false;
         };
     }
-    _matches = (() => {
-        if (_isNode || Element.prototype.matches) {
-            return (element, selector) => element.matches(selector);
-        }
-        else {
-            const proto = Element.prototype;
-            const fn = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector ||
-                proto.oMatchesSelector || proto.webkitMatchesSelector;
-            if (fn) {
-                return (element, selector) => fn.apply(element, [selector]);
-            }
-            else {
-                return _matches;
-            }
-        }
-    })();
     _query = (element, selector, multi) => {
         let results = [];
         if (multi) {
@@ -216,7 +199,6 @@ function getBodyNode() {
     }
     return null;
 }
-const matchesElement = _matches;
 const containsElement = _contains;
 const invokeQuery = _query;
 function hypenatePropsObject(object) {
@@ -242,8 +224,9 @@ class NoopAnimationDriver {
     validateStyleProperty(prop) {
         return validateStyleProperty(prop);
     }
-    matchesElement(element, selector) {
-        return matchesElement(element, selector);
+    matchesElement(_element, _selector) {
+        // This method is deprecated and no longer in use so we return false.
+        return false;
     }
     containsElement(elm1, elm2) {
         return containsElement(elm1, elm2);
@@ -258,9 +241,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.0.3+15.sha-763212d.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.0.3+15.sha-763212d.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.3+15.sha-763212d.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.0.3+17.sha-86843f8.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.0.3+17.sha-86843f8.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.3+17.sha-86843f8.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -2999,6 +2982,7 @@ class TransitionAnimationEngine {
         });
     }
     processLeaveNode(element) {
+        var _a;
         const details = element[REMOVAL_FLAG];
         if (details && details.setForRemoval) {
             // this will prevent it from removing it twice
@@ -3012,7 +2996,7 @@ class TransitionAnimationEngine {
             }
             this._onRemovalComplete(element, details.setForRemoval);
         }
-        if (this.driver.matchesElement(element, DISABLED_SELECTOR)) {
+        if ((_a = element.classList) === null || _a === void 0 ? void 0 : _a.contains(DISABLED_CLASSNAME)) {
             this.markElementAsDisabled(element, false);
         }
         this.driver.query(element, DISABLED_SELECTOR, true).forEach(node => {
@@ -3760,38 +3744,13 @@ function buildRootMap(roots, nodes) {
     });
     return rootMap;
 }
-const CLASSES_CACHE_KEY = '$$classes';
-function containsClass(element, className) {
-    if (element.classList) {
-        return element.classList.contains(className);
-    }
-    else {
-        const classes = element[CLASSES_CACHE_KEY];
-        return classes && classes[className];
-    }
-}
 function addClass(element, className) {
-    if (element.classList) {
-        element.classList.add(className);
-    }
-    else {
-        let classes = element[CLASSES_CACHE_KEY];
-        if (!classes) {
-            classes = element[CLASSES_CACHE_KEY] = {};
-        }
-        classes[className] = true;
-    }
+    var _a;
+    (_a = element.classList) === null || _a === void 0 ? void 0 : _a.add(className);
 }
 function removeClass(element, className) {
-    if (element.classList) {
-        element.classList.remove(className);
-    }
-    else {
-        let classes = element[CLASSES_CACHE_KEY];
-        if (classes) {
-            delete classes[className];
-        }
-    }
+    var _a;
+    (_a = element.classList) === null || _a === void 0 ? void 0 : _a.remove(className);
 }
 function removeNodesAfterAnimationDone(engine, element, players) {
     optimizeGroupPlayer(players).onDone(() => engine.processLeaveNode(element));
@@ -4342,8 +4301,9 @@ class CssKeyframesDriver {
     validateStyleProperty(prop) {
         return validateStyleProperty(prop);
     }
-    matchesElement(element, selector) {
-        return matchesElement(element, selector);
+    matchesElement(_element, _selector) {
+        // This method is deprecated and no longer in use so we return false.
+        return false;
     }
     containsElement(elm1, elm2) {
         return containsElement(elm1, elm2);
@@ -4608,8 +4568,9 @@ class WebAnimationsDriver {
     validateStyleProperty(prop) {
         return validateStyleProperty(prop);
     }
-    matchesElement(element, selector) {
-        return matchesElement(element, selector);
+    matchesElement(_element, _selector) {
+        // This method is deprecated and no longer in use so we return false.
+        return false;
     }
     containsElement(elm1, elm2) {
         return containsElement(elm1, elm2);
@@ -4692,5 +4653,5 @@ function getElementAnimateFn() {
  * Generated bundle index. Do not edit.
  */
 
-export { AnimationDriver, Animation as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, CssKeyframesDriver as ɵCssKeyframesDriver, CssKeyframesPlayer as ɵCssKeyframesPlayer, NoopAnimationDriver as ɵNoopAnimationDriver, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, containsElement as ɵcontainsElement, invokeQuery as ɵinvokeQuery, matchesElement as ɵmatchesElement, supportsWebAnimations as ɵsupportsWebAnimations, validateStyleProperty as ɵvalidateStyleProperty };
+export { AnimationDriver, Animation as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, CssKeyframesDriver as ɵCssKeyframesDriver, CssKeyframesPlayer as ɵCssKeyframesPlayer, NoopAnimationDriver as ɵNoopAnimationDriver, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, containsElement as ɵcontainsElement, invokeQuery as ɵinvokeQuery, supportsWebAnimations as ɵsupportsWebAnimations, validateStyleProperty as ɵvalidateStyleProperty };
 //# sourceMappingURL=browser.mjs.map
