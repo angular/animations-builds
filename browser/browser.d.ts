@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.1.0-next.3+14.sha-80ab604.with-local-changes
+ * @license Angular v13.1.0-next.3+15.sha-6df314f.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -17,6 +17,9 @@ import { ɵStyleData } from '@angular/animations';
 export declare abstract class AnimationDriver {
     static NOOP: AnimationDriver;
     abstract validateStyleProperty(prop: string): boolean;
+    /**
+     * @deprecated No longer in use. Will be removed.
+     */
     abstract matchesElement(element: any, selector: string): boolean;
     abstract containsElement(elm1: any, elm2: any): boolean;
     abstract query(element: any, selector: string, multi: boolean): any[];
@@ -150,7 +153,7 @@ export declare const ɵcontainsElement: (elm1: any, elm2: any) => boolean;
 export declare class ɵCssKeyframesDriver implements AnimationDriver {
     private _count;
     validateStyleProperty(prop: string): boolean;
-    matchesElement(element: any, selector: string): boolean;
+    matchesElement(_element: any, _selector: string): boolean;
     containsElement(elm1: any, elm2: any): boolean;
     query(element: any, selector: string, multi: boolean): any[];
     computeStyle(element: any, prop: string, defaultValue?: string): string;
@@ -207,14 +210,12 @@ export declare class ɵCssKeyframesPlayer implements AnimationPlayer {
 
 export declare const ɵinvokeQuery: (element: any, selector: string, multi: boolean) => any[];
 
-export declare const ɵmatchesElement: (element: any, selector: string) => boolean;
-
 /**
  * @publicApi
  */
 export declare class ɵNoopAnimationDriver implements AnimationDriver {
     validateStyleProperty(prop: string): boolean;
-    matchesElement(element: any, selector: string): boolean;
+    matchesElement(_element: any, _selector: string): boolean;
     containsElement(elm1: any, elm2: any): boolean;
     query(element: any, selector: string, multi: boolean): any[];
     computeStyle(element: any, prop: string, defaultValue?: string): string;
@@ -241,7 +242,7 @@ export declare class ɵWebAnimationsDriver implements AnimationDriver {
     private _isNativeImpl;
     private _cssKeyframesDriver;
     validateStyleProperty(prop: string): boolean;
-    matchesElement(element: any, selector: string): boolean;
+    matchesElement(_element: any, _selector: string): boolean;
     containsElement(elm1: any, elm2: any): boolean;
     query(element: any, selector: string, multi: boolean): any[];
     computeStyle(element: any, prop: string, defaultValue?: string): string;

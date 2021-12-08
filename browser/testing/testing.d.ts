@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.1.0-next.3+14.sha-80ab604.with-local-changes
+ * @license Angular v13.1.0-next.3+15.sha-6df314f.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -15,7 +15,7 @@ import { ɵStyleData } from '@angular/animations';
 export declare class MockAnimationDriver implements AnimationDriver {
     static log: AnimationPlayer[];
     validateStyleProperty(prop: string): boolean;
-    matchesElement(element: any, selector: string): boolean;
+    matchesElement(_element: any, _selector: string): boolean;
     containsElement(elm1: any, elm2: any): boolean;
     query(element: any, selector: string, multi: boolean): any[];
     computeStyle(element: any, prop: string, defaultValue?: string): string;

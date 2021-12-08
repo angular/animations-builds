@@ -1,11 +1,11 @@
 /**
- * @license Angular v13.1.0-next.3+14.sha-80ab604.with-local-changes
+ * @license Angular v13.1.0-next.3+15.sha-6df314f.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { NoopAnimationPlayer, AUTO_STYLE } from '@angular/animations';
-import { ɵvalidateStyleProperty, ɵmatchesElement, ɵcontainsElement, ɵinvokeQuery, ɵallowPreviousPlayerStylesMerge } from '@angular/animations/browser';
+import { ɵvalidateStyleProperty, ɵcontainsElement, ɵinvokeQuery, ɵallowPreviousPlayerStylesMerge } from '@angular/animations/browser';
 
 /**
  * @license
@@ -21,8 +21,8 @@ class MockAnimationDriver {
     validateStyleProperty(prop) {
         return ɵvalidateStyleProperty(prop);
     }
-    matchesElement(element, selector) {
-        return ɵmatchesElement(element, selector);
+    matchesElement(_element, _selector) {
+        return false;
     }
     containsElement(elm1, elm2) {
         return ɵcontainsElement(elm1, elm2);
