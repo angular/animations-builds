@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.2.0-next.0+17.sha-5da31d6.with-local-changes
+ * @license Angular v13.2.0-next.0+18.sha-f56ac0f.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -241,9 +241,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0-next.0+17.sha-5da31d6.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.2.0-next.0+17.sha-5da31d6.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0-next.0+17.sha-5da31d6.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0-next.0+18.sha-f56ac0f.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.2.0-next.0+18.sha-f56ac0f.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0-next.0+18.sha-f56ac0f.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -4543,10 +4543,13 @@ class WebAnimationsPlayer {
     beforeDestroy() {
         const styles = {};
         if (this.hasStarted()) {
-            Object.keys(this._finalKeyframe).forEach(prop => {
+            // note: this code is invoked only when the `play` function was called prior to this
+            // (thus `hasStarted` returns true), this implies that the code that initializes
+            // `_finalKeyframe` has also been executed and the non-null assertion can be safely used here
+            const finalKeyframe = this._finalKeyframe;
+            Object.keys(finalKeyframe).forEach(prop => {
                 if (prop != 'offset') {
-                    styles[prop] =
-                        this._finished ? this._finalKeyframe[prop] : computeStyle(this.element, prop);
+                    styles[prop] = this._finished ? finalKeyframe[prop] : computeStyle(this.element, prop);
                 }
             });
         }
