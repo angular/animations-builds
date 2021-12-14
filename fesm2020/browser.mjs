@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.2.0-next.0+8.sha-bab7ed3.with-local-changes
+ * @license Angular v13.2.0-next.0+10.sha-030747a.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -241,9 +241,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0-next.0+8.sha-bab7ed3.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.2.0-next.0+8.sha-bab7ed3.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0-next.0+8.sha-bab7ed3.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0-next.0+10.sha-030747a.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.2.0-next.0+10.sha-030747a.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0-next.0+10.sha-030747a.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -1139,15 +1139,8 @@ class ElementInstructionMap {
     constructor() {
         this._map = new Map();
     }
-    consume(element) {
-        let instructions = this._map.get(element);
-        if (instructions) {
-            this._map.delete(element);
-        }
-        else {
-            instructions = [];
-        }
-        return instructions;
+    get(element) {
+        return this._map.get(element) || [];
     }
     append(element, instructions) {
         let existingInstructions = this._map.get(element);
@@ -1291,7 +1284,7 @@ class AnimationTimelineBuilderVisitor {
         // these values are not visited in this AST
     }
     visitAnimateChild(ast, context) {
-        const elementInstructions = context.subInstructions.consume(context.element);
+        const elementInstructions = context.subInstructions.get(context.element);
         if (elementInstructions) {
             const innerContext = context.createSubContext(ast.options);
             const startTime = context.currentTimeline.currentTime;
