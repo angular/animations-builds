@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.1.0+7.sha-a0316ab.with-local-changes
+ * @license Angular v13.1.0+24.sha-240edcb.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -75,7 +75,7 @@ declare interface DOMAnimation {
 
 declare class ElementInstructionMap {
     private _map;
-    consume(element: any): AnimationTimelineInstruction[];
+    get(element: any): AnimationTimelineInstruction[];
     append(element: any, instructions: AnimationTimelineInstruction[]): void;
     has(element: any): boolean;
     clear(): void;
@@ -268,7 +268,7 @@ export declare class ɵWebAnimationsPlayer implements AnimationPlayer {
     private _finished;
     private _started;
     private _destroyed;
-    private _finalKeyframe;
+    private _finalKeyframe?;
     readonly domPlayer: DOMAnimation;
     time: number;
     parentPlayer: AnimationPlayer | null;

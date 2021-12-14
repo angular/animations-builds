@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.1.0+7.sha-a0316ab.with-local-changes
+ * @license Angular v13.1.0+24.sha-240edcb.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -241,9 +241,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.1.0+7.sha-a0316ab.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.1.0+7.sha-a0316ab.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.1.0+7.sha-a0316ab.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.1.0+24.sha-240edcb.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.1.0+24.sha-240edcb.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.1.0+24.sha-240edcb.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -265,8 +265,6 @@ const SUBSTITUTION_EXPR_START = '{{';
 const SUBSTITUTION_EXPR_END = '}}';
 const ENTER_CLASSNAME = 'ng-enter';
 const LEAVE_CLASSNAME = 'ng-leave';
-const ENTER_SELECTOR = '.ng-enter';
-const LEAVE_SELECTOR = '.ng-leave';
 const NG_TRIGGER_CLASSNAME = 'ng-trigger';
 const NG_TRIGGER_SELECTOR = '.ng-trigger';
 const NG_ANIMATING_CLASSNAME = 'ng-animating';
@@ -1139,15 +1137,8 @@ class ElementInstructionMap {
     constructor() {
         this._map = new Map();
     }
-    consume(element) {
-        let instructions = this._map.get(element);
-        if (instructions) {
-            this._map.delete(element);
-        }
-        else {
-            instructions = [];
-        }
-        return instructions;
+    get(element) {
+        return this._map.get(element) || [];
     }
     append(element, instructions) {
         let existingInstructions = this._map.get(element);
@@ -1291,7 +1282,7 @@ class AnimationTimelineBuilderVisitor {
         // these values are not visited in this AST
     }
     visitAnimateChild(ast, context) {
-        const elementInstructions = context.subInstructions.consume(context.element);
+        const elementInstructions = context.subInstructions.get(context.element);
         if (elementInstructions) {
             const innerContext = context.createSubContext(ast.options);
             const startTime = context.currentTimeline.currentTime;
@@ -3171,7 +3162,14 @@ class TransitionAnimationEngine {
                 // instead stretch the first keyframe gap until the animation starts. This is
                 // important in order to prevent extra initialization styles from being
                 // required by the user for the animation.
-                instruction.timelines.forEach(tl => tl.stretchStartingKeyframe = true);
+                const timelines = [];
+                instruction.timelines.forEach(tl => {
+                    tl.stretchStartingKeyframe = true;
+                    if (!this.disabledNodes.has(tl.element)) {
+                        timelines.push(tl);
+                    }
+                });
+                instruction.timelines = timelines;
                 subTimelines.append(element, instruction.timelines);
                 const tuple = { instruction, player, element };
                 queuedInstructions.push(tuple);
@@ -4543,10 +4541,13 @@ class WebAnimationsPlayer {
     beforeDestroy() {
         const styles = {};
         if (this.hasStarted()) {
-            Object.keys(this._finalKeyframe).forEach(prop => {
+            // note: this code is invoked only when the `play` function was called prior to this
+            // (thus `hasStarted` returns true), this implies that the code that initializes
+            // `_finalKeyframe` has also been executed and the non-null assertion can be safely used here
+            const finalKeyframe = this._finalKeyframe;
+            Object.keys(finalKeyframe).forEach(prop => {
                 if (prop != 'offset') {
-                    styles[prop] =
-                        this._finished ? this._finalKeyframe[prop] : computeStyle(this.element, prop);
+                    styles[prop] = this._finished ? finalKeyframe[prop] : computeStyle(this.element, prop);
                 }
             });
         }
