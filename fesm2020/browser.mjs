@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.2.0-next.0+7.sha-6c05c3f.with-local-changes
+ * @license Angular v13.2.0-next.0+8.sha-bab7ed3.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -241,9 +241,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0-next.0+7.sha-6c05c3f.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.2.0-next.0+7.sha-6c05c3f.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0-next.0+7.sha-6c05c3f.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0-next.0+8.sha-bab7ed3.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.2.0-next.0+8.sha-bab7ed3.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0-next.0+8.sha-bab7ed3.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -3170,7 +3170,14 @@ class TransitionAnimationEngine {
                 // instead stretch the first keyframe gap until the animation starts. This is
                 // important in order to prevent extra initialization styles from being
                 // required by the user for the animation.
-                instruction.timelines.forEach(tl => tl.stretchStartingKeyframe = true);
+                const timelines = [];
+                instruction.timelines.forEach(tl => {
+                    tl.stretchStartingKeyframe = true;
+                    if (!this.disabledNodes.has(tl.element)) {
+                        timelines.push(tl);
+                    }
+                });
+                instruction.timelines = timelines;
                 subTimelines.append(element, instruction.timelines);
                 const tuple = { instruction, player, element };
                 queuedInstructions.push(tuple);
