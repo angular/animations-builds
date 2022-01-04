@@ -1,6 +1,6 @@
 /**
- * @license Angular v13.1.1+3.sha-2469b88.with-local-changes
- * (c) 2010-2021 Google LLC. https://angular.io/
+ * @license Angular v13.1.1+26.sha-25aef62.with-local-changes
+ * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
 
@@ -413,7 +413,7 @@ export declare interface AnimationMetadata {
 export declare const enum AnimationMetadataType {
     /**
      * Associates a named animation state with a set of CSS styles.
-     * See `state()`
+     * See [`state()`](api/animations/state)
      */
     State = 0,
     /**
@@ -704,7 +704,7 @@ export declare interface AnimationStaggerMetadata extends AnimationMetadata {
 
 /**
  * Encapsulates an animation state by associating a state name with a set of CSS styles.
- * Instantiated and returned by the `state()` function.
+ * Instantiated and returned by the [`state()`](api/animations/state) function.
  *
  * @publicApi
  */
@@ -1198,8 +1198,8 @@ export declare function state(name: string, styles: AnimationStyleMetadata, opti
 
 /**
  * Declares a key/value object containing CSS properties/styles that
- * can then be used for an animation `state`, within an animation `sequence`,
- * or as styling data for calls to `animate()` and `keyframes()`.
+ * can then be used for an animation [`state`](api/animations/state), within an animation
+ *`sequence`, or as styling data for calls to `animate()` and `keyframes()`.
  *
  * @param tokens A set of CSS styles or HTML styles associated with an animation state.
  * The value can be any of the following:
@@ -1392,13 +1392,13 @@ export declare function transition(stateChangeExpr: string | ((fromState: string
 }) => boolean), steps: AnimationMetadata | AnimationMetadata[], options?: AnimationOptions | null): AnimationTransitionMetadata;
 
 /**
- * Creates a named animation trigger, containing a  list of `state()`
+ * Creates a named animation trigger, containing a  list of [`state()`](api/animations/state)
  * and `transition()` entries to be evaluated when the expression
  * bound to the trigger changes.
  *
  * @param name An identifying string.
- * @param definitions  An animation definition object, containing an array of `state()`
- * and `transition()` declarations.
+ * @param definitions  An animation definition object, containing an array of
+ * [`state()`](api/animations/state) and `transition()` declarations.
  *
  * @return An object that encapsulates the trigger data.
  *
