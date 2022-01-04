@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.2.0-next.1+27.sha-5ae1030.with-local-changes
+ * @license Angular v13.2.0-next.1+29.sha-a864d1c.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -74,13 +74,13 @@ class AnimationFactory {
  */
 const AUTO_STYLE = '*';
 /**
- * Creates a named animation trigger, containing a  list of `state()`
+ * Creates a named animation trigger, containing a  list of [`state()`](api/animations/state)
  * and `transition()` entries to be evaluated when the expression
  * bound to the trigger changes.
  *
  * @param name An identifying string.
- * @param definitions  An animation definition object, containing an array of `state()`
- * and `transition()` declarations.
+ * @param definitions  An animation definition object, containing an array of
+ * [`state()`](api/animations/state) and `transition()` declarations.
  *
  * @return An object that encapsulates the trigger data.
  *
@@ -359,8 +359,8 @@ function sequence(steps, options = null) {
 }
 /**
  * Declares a key/value object containing CSS properties/styles that
- * can then be used for an animation `state`, within an animation `sequence`,
- * or as styling data for calls to `animate()` and `keyframes()`.
+ * can then be used for an animation [`state`](api/animations/state), within an animation
+ *`sequence`, or as styling data for calls to `animate()` and `keyframes()`.
  *
  * @param tokens A set of CSS styles or HTML styles associated with an animation state.
  * The value can be any of the following:
