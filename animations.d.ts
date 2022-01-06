@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.1.1+57.sha-98592b0.with-local-changes
+ * @license Angular v13.1.1+58.sha-9b9042c.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -236,8 +236,8 @@ export declare interface AnimationAnimateRefMetadata extends AnimationMetadata {
  * Apps do not typically need to create their own animation players, but if you
  * do need to, follow these steps:
  *
- * 1. Use the `build()` method to create a programmatic animation using the
- * `animate()` function. The method returns an `AnimationFactory` instance.
+ * 1. Use the <code>[AnimationBuilder.build](api/animations/AnimationBuilder#build)()</code> method
+ * to create a programmatic animation. The method returns an `AnimationFactory` instance.
  *
  * 2. Use the factory object to create an `AnimationPlayer` and attach it to a DOM element.
  *
@@ -345,16 +345,19 @@ declare interface AnimationEvent_2 {
 export { AnimationEvent_2 as AnimationEvent }
 
 /**
- * A factory object returned from the `AnimationBuilder`.`build()` method.
+ * A factory object returned from the
+ * <code>[AnimationBuilder.build](api/animations/AnimationBuilder#build)()</code>
+ * method.
  *
  * @publicApi
  */
 export declare abstract class AnimationFactory {
     /**
      * Creates an `AnimationPlayer` instance for the reusable animation defined by
-     * the `AnimationBuilder`.`build()` method that created this factory.
-     * Attaches the new player a DOM element.
-     * @param element The DOM element to which to attach the animation.
+     * the <code>[AnimationBuilder.build](api/animations/AnimationBuilder#build)()</code>
+     * method that created this factory and attaches the new player a DOM element.
+     *
+     * @param element The DOM element to which to attach the player.
      * @param options A set of options that can include a time delay and
      * additional developer-defined parameters.
      */
@@ -516,8 +519,10 @@ export declare interface AnimationOptions {
 
 /**
  * Provides programmatic control of a reusable animation sequence,
- * built using the `build()` method of `AnimationBuilder`. The `build()` method
- * returns a factory, whose `create()` method instantiates and initializes this interface.
+ * built using the <code>[AnimationBuilder.build](api/animations/AnimationBuilder#build)()</code>
+ * method which returns an `AnimationFactory`, whose
+ * <code>[create](api/animations/AnimationFactory#create)()</code> method instantiates and
+ * initializes this interface.
  *
  * @see `AnimationBuilder`
  * @see `AnimationFactory`

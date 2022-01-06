@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.1.1+57.sha-98592b0.with-local-changes
+ * @license Angular v13.1.1+58.sha-9b9042c.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -17,8 +17,8 @@
  * Apps do not typically need to create their own animation players, but if you
  * do need to, follow these steps:
  *
- * 1. Use the `build()` method to create a programmatic animation using the
- * `animate()` function. The method returns an `AnimationFactory` instance.
+ * 1. Use the <code>[AnimationBuilder.build](api/animations/AnimationBuilder#build)()</code> method
+ * to create a programmatic animation. The method returns an `AnimationFactory` instance.
  *
  * 2. Use the factory object to create an `AnimationPlayer` and attach it to a DOM element.
  *
@@ -53,7 +53,9 @@
 class AnimationBuilder {
 }
 /**
- * A factory object returned from the `AnimationBuilder`.`build()` method.
+ * A factory object returned from the
+ * <code>[AnimationBuilder.build](api/animations/AnimationBuilder#build)()</code>
+ * method.
  *
  * @publicApi
  */
