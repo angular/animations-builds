@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.1.1+79.sha-919f8ae.with-local-changes
+ * @license Angular v13.1.1+80.sha-abc217b.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -241,9 +241,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.1.1+79.sha-919f8ae.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.1.1+79.sha-919f8ae.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.1.1+79.sha-919f8ae.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.1.1+80.sha-abc217b.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.1.1+80.sha-abc217b.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.1.1+80.sha-abc217b.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -2548,9 +2548,11 @@ class AnimationTransitionNamespace {
     }
     triggerLeaveAnimation(element, context, destroyAfterComplete, defaultToFallback) {
         const triggerStates = this._engine.statesByElement.get(element);
+        const previousTriggersValues = new Map();
         if (triggerStates) {
             const players = [];
             Object.keys(triggerStates).forEach(triggerName => {
+                previousTriggersValues.set(triggerName, triggerStates[triggerName].value);
                 // this check is here in the event that an element is removed
                 // twice (both on the host level and the component level)
                 if (this._triggers[triggerName]) {
@@ -2561,7 +2563,7 @@ class AnimationTransitionNamespace {
                 }
             });
             if (players.length) {
-                this._engine.markElementAsRemoved(this.id, element, true, context);
+                this._engine.markElementAsRemoved(this.id, element, true, context, previousTriggersValues);
                 if (destroyAfterComplete) {
                     optimizeGroupPlayer(players).onDone(() => this._engine.processLeaveNode(element));
                 }
@@ -2918,10 +2920,15 @@ class TransitionAnimationEngine {
             this._onRemovalComplete(element, context);
         }
     }
-    markElementAsRemoved(namespaceId, element, hasAnimation, context) {
+    markElementAsRemoved(namespaceId, element, hasAnimation, context, previousTriggersValues) {
         this.collectedLeaveElements.push(element);
-        element[REMOVAL_FLAG] =
-            { namespaceId, setForRemoval: context, hasAnimation, removedBeforeQueried: false };
+        element[REMOVAL_FLAG] = {
+            namespaceId,
+            setForRemoval: context,
+            hasAnimation,
+            removedBeforeQueried: false,
+            previousTriggersValues
+        };
     }
     listen(namespaceId, element, name, phase, callback) {
         if (isElementNode(element)) {
@@ -3124,8 +3131,19 @@ class TransitionAnimationEngine {
                 allPlayers.push(player);
                 if (this.collectedEnterElements.length) {
                     const details = element[REMOVAL_FLAG];
-                    // move animations are currently not supported...
+                    // animations for move operations (elements being removed and reinserted,
+                    // e.g. when the order of an *ngFor list changes) are currently not supported
                     if (details && details.setForMove) {
+                        if (details.previousTriggersValues &&
+                            details.previousTriggersValues.has(entry.triggerName)) {
+                            const previousValue = details.previousTriggersValues.get(entry.triggerName);
+                            // we need to restore the previous trigger value since the element has
+                            // only been moved and hasn't actually left the DOM
+                            const triggersWithStates = this.statesByElement.get(entry.element);
+                            if (triggersWithStates && triggersWithStates[entry.triggerName]) {
+                                triggersWithStates[entry.triggerName].value = previousValue;
+                            }
+                        }
                         player.destroy();
                         return;
                     }
