@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.1.2+10.sha-44ff4fb.with-local-changes
+ * @license Angular v13.1.2+12.sha-af0a152.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -225,9 +225,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.1.2+10.sha-44ff4fb.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.1.2+10.sha-44ff4fb.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.1.2+10.sha-44ff4fb.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.1.2+12.sha-af0a152.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.1.2+12.sha-af0a152.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.1.2+12.sha-af0a152.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -1247,10 +1247,21 @@ class AnimationTimelineBuilderVisitor {
         visitDslNode(this, ast, context);
         // this checks to see if an actual animation happened
         const timelines = context.timelines.filter(timeline => timeline.containsAnimation());
-        if (timelines.length && Object.keys(finalStyles).length) {
-            const tl = timelines[timelines.length - 1];
-            if (!tl.allowOnlyTimelineStyles()) {
-                tl.setStyles([finalStyles], null, context.errors, options);
+        if (Object.keys(finalStyles).length) {
+            // note: we just want to apply the final styles for the rootElement, so we do not
+            //       just apply the styles to the last timeline but the last timeline which
+            //       element is the root one (basically `*`-styles are replaced with the actual
+            //       state style values only for the root element)
+            let lastRootTimeline;
+            for (let i = timelines.length - 1; i >= 0; i--) {
+                const timeline = timelines[i];
+                if (timeline.element === rootElement) {
+                    lastRootTimeline = timeline;
+                    break;
+                }
+            }
+            if (lastRootTimeline && !lastRootTimeline.allowOnlyTimelineStyles()) {
+                lastRootTimeline.setStyles([finalStyles], null, context.errors, options);
             }
         }
         return timelines.length ? timelines.map(timeline => timeline.buildKeyframes()) :
