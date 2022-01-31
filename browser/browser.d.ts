@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.0+1062.sha-5e099b5.with-local-changes
+ * @license Angular v14.0.0-next.0+1063.sha-6642e3c.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -143,54 +143,6 @@ export declare abstract class ɵAnimationStyleNormalizer {
 
 export declare const ɵcontainsElement: (elm1: any, elm2: any) => boolean;
 
-export declare class ɵCssKeyframesDriver implements AnimationDriver {
-    private _count;
-    validateStyleProperty(prop: string): boolean;
-    matchesElement(_element: any, _selector: string): boolean;
-    containsElement(elm1: any, elm2: any): boolean;
-    query(element: any, selector: string, multi: boolean): any[];
-    computeStyle(element: any, prop: string, defaultValue?: string): string;
-    buildKeyframeElement(element: any, name: string, keyframes: Array<ɵStyleDataMap>): any;
-    animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing: string, previousPlayers?: AnimationPlayer[], scrubberAccessRequested?: boolean): AnimationPlayer;
-}
-
-export declare class ɵCssKeyframesPlayer implements AnimationPlayer {
-    readonly element: any;
-    readonly keyframes: Array<ɵStyleDataMap>;
-    readonly animationName: string;
-    private readonly _duration;
-    private readonly _delay;
-    private readonly _finalStyles;
-    private readonly _specialStyles?;
-    private _onDoneFns;
-    private _onStartFns;
-    private _onDestroyFns;
-    private _styler;
-    parentPlayer: AnimationPlayer;
-    readonly totalTime: number;
-    readonly easing: string;
-    currentSnapshot: ɵStyleDataMap;
-    private _state;
-    constructor(element: any, keyframes: Array<ɵStyleDataMap>, animationName: string, _duration: number, _delay: number, easing: string, _finalStyles: ɵStyleDataMap, _specialStyles?: SpecialCasedStyles | null | undefined);
-    onStart(fn: () => void): void;
-    onDone(fn: () => void): void;
-    onDestroy(fn: () => void): void;
-    destroy(): void;
-    private _flushDoneFns;
-    private _flushStartFns;
-    finish(): void;
-    setPosition(value: number): void;
-    getPosition(): number;
-    hasStarted(): boolean;
-    init(): void;
-    play(): void;
-    pause(): void;
-    restart(): void;
-    reset(): void;
-    private _buildStyler;
-    beforeDestroy(): void;
-}
-
 export declare const ɵinvokeQuery: (element: any, selector: string, multi: boolean) => any[];
 
 /**
@@ -217,20 +169,15 @@ export declare class ɵNoopAnimationStyleNormalizer {
 
 export declare function ɵnormalizeKeyframes(keyframes: Array<ɵStyleData> | Array<ɵStyleDataMap>): Array<ɵStyleDataMap>;
 
-export declare function ɵsupportsWebAnimations(): boolean;
-
 export declare function ɵvalidateStyleProperty(prop: string): boolean;
 
 export declare class ɵWebAnimationsDriver implements AnimationDriver {
-    private _isNativeImpl;
-    private _cssKeyframesDriver;
     validateStyleProperty(prop: string): boolean;
     matchesElement(_element: any, _selector: string): boolean;
     containsElement(elm1: any, elm2: any): boolean;
     query(element: any, selector: string, multi: boolean): any[];
     computeStyle(element: any, prop: string, defaultValue?: string): string;
-    overrideWebAnimationsSupport(supported: boolean): void;
-    animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing: string, previousPlayers?: AnimationPlayer[], scrubberAccessRequested?: boolean): AnimationPlayer;
+    animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing: string, previousPlayers?: AnimationPlayer[]): AnimationPlayer;
 }
 
 export declare class ɵWebAnimationsPlayer implements AnimationPlayer {

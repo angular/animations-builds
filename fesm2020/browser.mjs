@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.0+1062.sha-5e099b5.with-local-changes
+ * @license Angular v14.0.0-next.0+1063.sha-6642e3c.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -216,9 +216,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.0+1062.sha-5e099b5.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.0+1062.sha-5e099b5.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.0+1062.sha-5e099b5.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.0+1063.sha-6642e3c.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.0+1063.sha-6642e3c.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.0+1063.sha-6642e3c.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -235,7 +235,7 @@ AnimationDriver.NOOP = ( /* @__PURE__ */new NoopAnimationDriver());
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const ONE_SECOND$1 = 1000;
+const ONE_SECOND = 1000;
 const SUBSTITUTION_EXPR_START = '{{';
 const SUBSTITUTION_EXPR_END = '}}';
 const ENTER_CLASSNAME = 'ng-enter';
@@ -255,7 +255,7 @@ function resolveTimingValue(value) {
 function _convertTimeValueToMS(value, unit) {
     switch (unit) {
         case 's':
-            return value * ONE_SECOND$1;
+            return value * ONE_SECOND;
         default: // ms or something else
             return value;
     }
@@ -3965,433 +3965,6 @@ function isNonAnimatableStyle(prop) {
     return prop === 'display' || prop === 'position';
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-const ELAPSED_TIME_MAX_DECIMAL_PLACES = 3;
-const ANIMATION_PROP = 'animation';
-const ANIMATIONEND_EVENT = 'animationend';
-const ONE_SECOND = 1000;
-class ElementAnimationStyleHandler {
-    constructor(_element, _name, _duration, _delay, _easing, _fillMode, _onDoneFn) {
-        this._element = _element;
-        this._name = _name;
-        this._duration = _duration;
-        this._delay = _delay;
-        this._easing = _easing;
-        this._fillMode = _fillMode;
-        this._onDoneFn = _onDoneFn;
-        this._finished = false;
-        this._destroyed = false;
-        this._startTime = 0;
-        this._position = 0;
-        this._eventFn = (e) => this._handleCallback(e);
-    }
-    apply() {
-        applyKeyframeAnimation(this._element, `${this._duration}ms ${this._easing} ${this._delay}ms 1 normal ${this._fillMode} ${this._name}`);
-        addRemoveAnimationEvent(this._element, this._eventFn, false);
-        this._startTime = Date.now();
-    }
-    pause() {
-        playPauseAnimation(this._element, this._name, 'paused');
-    }
-    resume() {
-        playPauseAnimation(this._element, this._name, 'running');
-    }
-    setPosition(position) {
-        const index = findIndexForAnimation(this._element, this._name);
-        this._position = position * this._duration;
-        setAnimationStyle(this._element, 'Delay', `-${this._position}ms`, index);
-    }
-    getPosition() {
-        return this._position;
-    }
-    _handleCallback(event) {
-        const timestamp = event._ngTestManualTimestamp || Date.now();
-        const elapsedTime = parseFloat(event.elapsedTime.toFixed(ELAPSED_TIME_MAX_DECIMAL_PLACES)) * ONE_SECOND;
-        if (event.animationName == this._name &&
-            Math.max(timestamp - this._startTime, 0) >= this._delay && elapsedTime >= this._duration) {
-            this.finish();
-        }
-    }
-    finish() {
-        if (this._finished)
-            return;
-        this._finished = true;
-        this._onDoneFn();
-        addRemoveAnimationEvent(this._element, this._eventFn, true);
-    }
-    destroy() {
-        if (this._destroyed)
-            return;
-        this._destroyed = true;
-        this.finish();
-        removeKeyframeAnimation(this._element, this._name);
-    }
-}
-function playPauseAnimation(element, name, status) {
-    const index = findIndexForAnimation(element, name);
-    setAnimationStyle(element, 'PlayState', status, index);
-}
-function applyKeyframeAnimation(element, value) {
-    const anim = getAnimationStyle(element, '').trim();
-    let index = 0;
-    if (anim.length) {
-        index = countChars(anim, ',') + 1;
-        value = `${anim}, ${value}`;
-    }
-    setAnimationStyle(element, '', value);
-    return index;
-}
-function removeKeyframeAnimation(element, name) {
-    const anim = getAnimationStyle(element, '');
-    const tokens = anim.split(',');
-    const index = findMatchingTokenIndex(tokens, name);
-    if (index >= 0) {
-        tokens.splice(index, 1);
-        const newValue = tokens.join(',');
-        setAnimationStyle(element, '', newValue);
-    }
-}
-function findIndexForAnimation(element, value) {
-    const anim = getAnimationStyle(element, '');
-    if (anim.indexOf(',') > 0) {
-        const tokens = anim.split(',');
-        return findMatchingTokenIndex(tokens, value);
-    }
-    return findMatchingTokenIndex([anim], value);
-}
-function findMatchingTokenIndex(tokens, searchToken) {
-    for (let i = 0; i < tokens.length; i++) {
-        if (tokens[i].indexOf(searchToken) >= 0) {
-            return i;
-        }
-    }
-    return -1;
-}
-function addRemoveAnimationEvent(element, fn, doRemove) {
-    doRemove ? element.removeEventListener(ANIMATIONEND_EVENT, fn) :
-        element.addEventListener(ANIMATIONEND_EVENT, fn);
-}
-function setAnimationStyle(element, name, value, index) {
-    const prop = ANIMATION_PROP + name;
-    if (index != null) {
-        const oldValue = element.style[prop];
-        if (oldValue.length) {
-            const tokens = oldValue.split(',');
-            tokens[index] = value;
-            value = tokens.join(',');
-        }
-    }
-    element.style[prop] = value;
-}
-function getAnimationStyle(element, name) {
-    return element.style[ANIMATION_PROP + name] || '';
-}
-function countChars(value, char) {
-    let count = 0;
-    for (let i = 0; i < value.length; i++) {
-        const c = value.charAt(i);
-        if (c === char)
-            count++;
-    }
-    return count;
-}
-
-const DEFAULT_FILL_MODE = 'forwards';
-const DEFAULT_EASING = 'linear';
-class CssKeyframesPlayer {
-    constructor(element, keyframes, animationName, _duration, _delay, easing, _finalStyles, _specialStyles) {
-        this.element = element;
-        this.keyframes = keyframes;
-        this.animationName = animationName;
-        this._duration = _duration;
-        this._delay = _delay;
-        this._finalStyles = _finalStyles;
-        this._specialStyles = _specialStyles;
-        this._onDoneFns = [];
-        this._onStartFns = [];
-        this._onDestroyFns = [];
-        this.currentSnapshot = new Map();
-        this._state = 0;
-        this.easing = easing || DEFAULT_EASING;
-        this.totalTime = _duration + _delay;
-        this._buildStyler();
-    }
-    onStart(fn) {
-        this._onStartFns.push(fn);
-    }
-    onDone(fn) {
-        this._onDoneFns.push(fn);
-    }
-    onDestroy(fn) {
-        this._onDestroyFns.push(fn);
-    }
-    destroy() {
-        this.init();
-        if (this._state >= 4 /* DESTROYED */)
-            return;
-        this._state = 4 /* DESTROYED */;
-        this._styler.destroy();
-        this._flushStartFns();
-        this._flushDoneFns();
-        if (this._specialStyles) {
-            this._specialStyles.destroy();
-        }
-        this._onDestroyFns.forEach(fn => fn());
-        this._onDestroyFns = [];
-    }
-    _flushDoneFns() {
-        this._onDoneFns.forEach(fn => fn());
-        this._onDoneFns = [];
-    }
-    _flushStartFns() {
-        this._onStartFns.forEach(fn => fn());
-        this._onStartFns = [];
-    }
-    finish() {
-        this.init();
-        if (this._state >= 3 /* FINISHED */)
-            return;
-        this._state = 3 /* FINISHED */;
-        this._styler.finish();
-        this._flushStartFns();
-        if (this._specialStyles) {
-            this._specialStyles.finish();
-        }
-        this._flushDoneFns();
-    }
-    setPosition(value) {
-        this._styler.setPosition(value);
-    }
-    getPosition() {
-        return this._styler.getPosition();
-    }
-    hasStarted() {
-        return this._state >= 2 /* STARTED */;
-    }
-    init() {
-        if (this._state >= 1 /* INITIALIZED */)
-            return;
-        this._state = 1 /* INITIALIZED */;
-        const elm = this.element;
-        this._styler.apply();
-        if (this._delay) {
-            this._styler.pause();
-        }
-    }
-    play() {
-        this.init();
-        if (!this.hasStarted()) {
-            this._flushStartFns();
-            this._state = 2 /* STARTED */;
-            if (this._specialStyles) {
-                this._specialStyles.start();
-            }
-        }
-        this._styler.resume();
-    }
-    pause() {
-        this.init();
-        this._styler.pause();
-    }
-    restart() {
-        this.reset();
-        this.play();
-    }
-    reset() {
-        this._state = 0 /* RESET */;
-        this._styler.destroy();
-        this._buildStyler();
-        this._styler.apply();
-    }
-    _buildStyler() {
-        this._styler = new ElementAnimationStyleHandler(this.element, this.animationName, this._duration, this._delay, this.easing, DEFAULT_FILL_MODE, () => this.finish());
-    }
-    /** @internal */
-    triggerCallback(phaseName) {
-        const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
-        methods.forEach(fn => fn());
-        methods.length = 0;
-    }
-    beforeDestroy() {
-        this.init();
-        const styles = new Map();
-        if (this.hasStarted()) {
-            const finished = this._state >= 3 /* FINISHED */;
-            this._finalStyles.forEach((val, prop) => {
-                if (prop !== 'offset') {
-                    styles.set(prop, finished ? val : computeStyle(this.element, prop));
-                }
-            });
-        }
-        this.currentSnapshot = styles;
-    }
-}
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-class DirectStylePlayer extends NoopAnimationPlayer {
-    constructor(element, styles) {
-        super();
-        this.element = element;
-        this._startingStyles = new Map();
-        this.__initialized = false;
-        this._styles = hypenatePropsKeys(styles);
-    }
-    init() {
-        if (this.__initialized || !this._startingStyles)
-            return;
-        this.__initialized = true;
-        this._styles.forEach((_, prop) => {
-            this._startingStyles.set(prop, this.element.style[prop]);
-        });
-        super.init();
-    }
-    play() {
-        if (!this._startingStyles)
-            return;
-        this.init();
-        this._styles.forEach((val, prop) => this.element.style.setProperty(prop, val));
-        super.play();
-    }
-    destroy() {
-        if (!this._startingStyles)
-            return;
-        this._startingStyles.forEach((value, prop) => {
-            if (value) {
-                this.element.style.setProperty(prop, value);
-            }
-            else {
-                this.element.style.removeProperty(prop);
-            }
-        });
-        this._startingStyles = null;
-        super.destroy();
-    }
-}
-
-const KEYFRAMES_NAME_PREFIX = 'gen_css_kf_';
-const TAB_SPACE = ' ';
-class CssKeyframesDriver {
-    constructor() {
-        this._count = 0;
-    }
-    validateStyleProperty(prop) {
-        return validateStyleProperty(prop);
-    }
-    matchesElement(_element, _selector) {
-        // This method is deprecated and no longer in use so we return false.
-        return false;
-    }
-    containsElement(elm1, elm2) {
-        return containsElement(elm1, elm2);
-    }
-    query(element, selector, multi) {
-        return invokeQuery(element, selector, multi);
-    }
-    computeStyle(element, prop, defaultValue) {
-        return window.getComputedStyle(element)[prop];
-    }
-    buildKeyframeElement(element, name, keyframes) {
-        keyframes = keyframes.map(kf => hypenatePropsKeys(kf));
-        let keyframeStr = `@keyframes ${name} {\n`;
-        let tab = '';
-        keyframes.forEach(kf => {
-            tab = TAB_SPACE;
-            const offset = parseFloat(kf.get('offset'));
-            keyframeStr += `${tab}${offset * 100}% {\n`;
-            tab += TAB_SPACE;
-            kf.forEach((value, prop) => {
-                if (prop === 'offset')
-                    return;
-                if (prop === 'easing') {
-                    if (value) {
-                        keyframeStr += `${tab}animation-timing-function: ${value};\n`;
-                    }
-                    return;
-                }
-                keyframeStr += `${tab}${prop}: ${value};\n`;
-                return;
-            });
-            keyframeStr += `${tab}}\n`;
-        });
-        keyframeStr += `}\n`;
-        const kfElm = document.createElement('style');
-        kfElm.textContent = keyframeStr;
-        return kfElm;
-    }
-    animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
-        if ((typeof ngDevMode === 'undefined' || ngDevMode) && scrubberAccessRequested) {
-            notifyFaultyScrubber();
-        }
-        const previousCssKeyframePlayers = previousPlayers.filter(player => player instanceof CssKeyframesPlayer);
-        const previousStyles = new Map();
-        if (allowPreviousPlayerStylesMerge(duration, delay)) {
-            previousCssKeyframePlayers.forEach(player => {
-                player.currentSnapshot.forEach((val, prop) => previousStyles.set(prop, val));
-            });
-        }
-        const _keyframes = balancePreviousStylesIntoKeyframes(element, normalizeKeyframes(keyframes), previousStyles);
-        const finalStyles = flattenKeyframesIntoStyles(_keyframes);
-        // if there is no animation then there is no point in applying
-        // styles and waiting for an event to get fired. This causes lag.
-        // It's better to just directly apply the styles to the element
-        // via the direct styling animation player.
-        if (duration == 0) {
-            return new DirectStylePlayer(element, finalStyles);
-        }
-        const animationName = `${KEYFRAMES_NAME_PREFIX}${this._count++}`;
-        const kfElm = this.buildKeyframeElement(element, animationName, _keyframes);
-        const nodeToAppendKfElm = findNodeToAppendKeyframeElement(element);
-        nodeToAppendKfElm.appendChild(kfElm);
-        const specialStyles = packageNonAnimatableStyles(element, _keyframes);
-        const player = new CssKeyframesPlayer(element, _keyframes, animationName, duration, delay, easing, finalStyles, specialStyles);
-        player.onDestroy(() => removeElement(kfElm));
-        return player;
-    }
-}
-function findNodeToAppendKeyframeElement(element) {
-    const rootNode = element.getRootNode?.();
-    if (typeof ShadowRoot !== 'undefined' && rootNode instanceof ShadowRoot) {
-        return rootNode;
-    }
-    return document.head;
-}
-function flattenKeyframesIntoStyles(keyframes) {
-    let flatKeyframes = new Map();
-    if (keyframes) {
-        const kfs = Array.isArray(keyframes) ? keyframes : [keyframes];
-        kfs.forEach(kf => {
-            kf.forEach((val, prop) => {
-                if (prop === 'offset' || prop === 'easing')
-                    return;
-                flatKeyframes.set(prop, val);
-            });
-        });
-    }
-    return flatKeyframes;
-}
-function removeElement(node) {
-    node.parentNode.removeChild(node);
-}
-let warningIssued = false;
-function notifyFaultyScrubber() {
-    if (warningIssued)
-        return;
-    console.warn('@angular/animations: please load the web-animations.js polyfill to allow programmatic access...\n', '  visit https://bit.ly/IWukam to learn more about using the web-animation-js polyfill.');
-    warningIssued = true;
-}
-
 class WebAnimationsPlayer {
     constructor(element, keyframes, options, _specialStyles) {
         this.element = element;
@@ -4554,10 +4127,6 @@ class WebAnimationsPlayer {
 }
 
 class WebAnimationsDriver {
-    constructor() {
-        this._isNativeImpl = /\{\s*\[native\s+code\]\s*\}/.test(getElementAnimateFn().toString());
-        this._cssKeyframesDriver = new CssKeyframesDriver();
-    }
     validateStyleProperty(prop) {
         return validateStyleProperty(prop);
     }
@@ -4574,14 +4143,7 @@ class WebAnimationsDriver {
     computeStyle(element, prop, defaultValue) {
         return window.getComputedStyle(element)[prop];
     }
-    overrideWebAnimationsSupport(supported) {
-        this._isNativeImpl = supported;
-    }
-    animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
-        const useKeyframes = !scrubberAccessRequested && !this._isNativeImpl;
-        if (useKeyframes) {
-            return this._cssKeyframesDriver.animate(element, keyframes, duration, delay, easing, previousPlayers);
-        }
+    animate(element, keyframes, duration, delay, easing, previousPlayers = []) {
         const fill = delay == 0 ? 'both' : 'forwards';
         const playerOptions = { duration, delay, fill };
         // we check for this to avoid having a null|undefined value be present
@@ -4601,12 +4163,6 @@ class WebAnimationsDriver {
         const specialStyles = packageNonAnimatableStyles(element, _keyframes);
         return new WebAnimationsPlayer(element, _keyframes, playerOptions, specialStyles);
     }
-}
-function supportsWebAnimations() {
-    return typeof getElementAnimateFn() === 'function';
-}
-function getElementAnimateFn() {
-    return (isBrowser() && Element.prototype['animate']) || {};
 }
 
 /**
@@ -4645,5 +4201,5 @@ function getElementAnimateFn() {
  * Generated bundle index. Do not edit.
  */
 
-export { AnimationDriver, Animation as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, CssKeyframesDriver as ɵCssKeyframesDriver, CssKeyframesPlayer as ɵCssKeyframesPlayer, NoopAnimationDriver as ɵNoopAnimationDriver, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, containsElement as ɵcontainsElement, invokeQuery as ɵinvokeQuery, normalizeKeyframes as ɵnormalizeKeyframes, supportsWebAnimations as ɵsupportsWebAnimations, validateStyleProperty as ɵvalidateStyleProperty };
+export { AnimationDriver, Animation as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationDriver as ɵNoopAnimationDriver, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, containsElement as ɵcontainsElement, invokeQuery as ɵinvokeQuery, normalizeKeyframes as ɵnormalizeKeyframes, validateStyleProperty as ɵvalidateStyleProperty };
 //# sourceMappingURL=browser.mjs.map
