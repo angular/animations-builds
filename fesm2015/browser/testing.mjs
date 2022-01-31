@@ -1,11 +1,11 @@
 /**
- * @license Angular v14.0.0-next.0+1052.sha-8d9eb99.with-local-changes
+ * @license Angular v14.0.0-next.0+1054.sha-7a81481.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { NoopAnimationPlayer, AUTO_STYLE } from '@angular/animations';
-import { ɵvalidateStyleProperty, ɵcontainsElement, ɵinvokeQuery, ɵallowPreviousPlayerStylesMerge } from '@angular/animations/browser';
+import { ɵvalidateStyleProperty, ɵcontainsElement, ɵinvokeQuery, ɵnormalizeKeyframes, ɵallowPreviousPlayerStylesMerge } from '@angular/animations/browser';
 
 /**
  * @license
@@ -54,14 +54,16 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         this.previousPlayers = previousPlayers;
         this.__finished = false;
         this.__started = false;
-        this.previousStyles = {};
+        this.previousStyles = new Map();
         this._onInitFns = [];
-        this.currentSnapshot = {};
+        this.currentSnapshot = new Map();
+        this._keyframes = [];
+        this._keyframes = ɵnormalizeKeyframes(keyframes);
         if (ɵallowPreviousPlayerStylesMerge(duration, delay)) {
             previousPlayers.forEach(player => {
                 if (player instanceof MockAnimationPlayer) {
                     const styles = player.currentSnapshot;
-                    Object.keys(styles).forEach(prop => this.previousStyles[prop] = styles[prop]);
+                    styles.forEach((val, prop) => this.previousStyles.set(prop, val));
                 }
             });
         }
@@ -98,20 +100,18 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         return this.__started;
     }
     beforeDestroy() {
-        const captures = {};
-        Object.keys(this.previousStyles).forEach(prop => {
-            captures[prop] = this.previousStyles[prop];
-        });
+        const captures = new Map();
+        this.previousStyles.forEach((val, prop) => captures.set(prop, val));
         if (this.hasStarted()) {
             // when assembling the captured styles, it's important that
             // we build the keyframe styles in the following order:
             // {other styles within keyframes, ... previousStyles }
-            this.keyframes.forEach(kf => {
-                Object.keys(kf).forEach(prop => {
-                    if (prop != 'offset') {
-                        captures[prop] = this.__finished ? kf[prop] : AUTO_STYLE;
+            this._keyframes.forEach(kf => {
+                for (let [prop, val] of kf) {
+                    if (prop !== 'offset') {
+                        captures.set(prop, this.__finished ? val : AUTO_STYLE);
                     }
-                });
+                }
             });
         }
         this.currentSnapshot = captures;

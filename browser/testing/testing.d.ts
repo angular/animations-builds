@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.0+1052.sha-8d9eb99.with-local-changes
+ * @license Angular v14.0.0-next.0+1054.sha-7a81481.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7,7 +7,7 @@
 import { AnimationDriver } from '@angular/animations/browser';
 import { AnimationPlayer } from '@angular/animations';
 import { NoopAnimationPlayer } from '@angular/animations';
-import { ɵStyleData } from '@angular/animations';
+import { ɵStyleDataMap } from '@angular/animations';
 
 /**
  * @publicApi
@@ -19,9 +19,7 @@ export declare class MockAnimationDriver implements AnimationDriver {
     containsElement(elm1: any, elm2: any): boolean;
     query(element: any, selector: string, multi: boolean): any[];
     computeStyle(element: any, prop: string, defaultValue?: string): string;
-    animate(element: any, keyframes: {
-        [key: string]: string | number;
-    }[], duration: number, delay: number, easing: string, previousPlayers?: any[]): MockAnimationPlayer;
+    animate(element: any, keyframes: Array<ɵStyleDataMap>, duration: number, delay: number, easing: string, previousPlayers?: any[]): MockAnimationPlayer;
 }
 
 /**
@@ -29,23 +27,18 @@ export declare class MockAnimationDriver implements AnimationDriver {
  */
 export declare class MockAnimationPlayer extends NoopAnimationPlayer {
     element: any;
-    keyframes: {
-        [key: string]: string | number;
-    }[];
+    keyframes: Array<ɵStyleDataMap>;
     duration: number;
     delay: number;
     easing: string;
     previousPlayers: any[];
     private __finished;
     private __started;
-    previousStyles: {
-        [key: string]: string | number;
-    };
+    previousStyles: ɵStyleDataMap;
     private _onInitFns;
-    currentSnapshot: ɵStyleData;
-    constructor(element: any, keyframes: {
-        [key: string]: string | number;
-    }[], duration: number, delay: number, easing: string, previousPlayers: any[]);
+    currentSnapshot: ɵStyleDataMap;
+    private _keyframes;
+    constructor(element: any, keyframes: Array<ɵStyleDataMap>, duration: number, delay: number, easing: string, previousPlayers: any[]);
     reset(): void;
     finish(): void;
     destroy(): void;

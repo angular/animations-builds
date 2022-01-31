@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.0+1052.sha-8d9eb99.with-local-changes
+ * @license Angular v14.0.0-next.0+1054.sha-7a81481.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1600,10 +1600,15 @@ export declare const ɵPRE_STYLE = "!";
 
 
 /**
- * Represents a set of CSS styles for use in an animation style.
+ * Represents a set of CSS styles for use in an animation style as a generic.
  */
 export declare interface ɵStyleData {
     [key: string]: string | number;
 }
+
+/**
+ * Represents a set of CSS styles for use in an animation style as a Map.
+ */
+export declare type ɵStyleDataMap = Map<string, string | number>;
 
 export { }

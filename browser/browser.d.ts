@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.0+1052.sha-8d9eb99.with-local-changes
+ * @license Angular v14.0.0-next.0+1054.sha-7a81481.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -10,6 +10,7 @@ import { AnimationPlayer } from '@angular/animations';
 import { AnimationTriggerMetadata } from '@angular/animations';
 import * as i0 from '@angular/core';
 import { ɵStyleData } from '@angular/animations';
+import { ɵStyleDataMap } from '@angular/animations';
 
 /**
  * @publicApi
@@ -24,9 +25,7 @@ export declare abstract class AnimationDriver {
     abstract containsElement(elm1: any, elm2: any): boolean;
     abstract query(element: any, selector: string, multi: boolean): any[];
     abstract computeStyle(element: any, prop: string, defaultValue?: string): string;
-    abstract animate(element: any, keyframes: {
-        [key: string]: string | number;
-    }[], duration: number, delay: number, easing?: string | null, previousPlayers?: any[], scrubberAccessRequested?: boolean): any;
+    abstract animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing?: string | null, previousPlayers?: any[], scrubberAccessRequested?: boolean): any;
 }
 
 declare interface AnimationEngineInstruction {
@@ -35,7 +34,7 @@ declare interface AnimationEngineInstruction {
 
 declare interface AnimationTimelineInstruction extends AnimationEngineInstruction {
     element: any;
-    keyframes: ɵStyleData[];
+    keyframes: Array<ɵStyleDataMap>;
     preStyleProps: string[];
     postStyleProps: string[];
     duration: number;
@@ -93,16 +92,10 @@ declare class SpecialCasedStyles {
     private _element;
     private _startStyles;
     private _endStyles;
-    static initialStylesByElement: WeakMap<any, {
-        [key: string]: any;
-    }>;
+    static initialStylesByElement: WeakMap<any, ɵStyleDataMap>;
     private _state;
     private _initialStyles;
-    constructor(_element: any, _startStyles: {
-        [key: string]: any;
-    } | null, _endStyles: {
-        [key: string]: any;
-    } | null);
+    constructor(_element: any, _startStyles: ɵStyleDataMap | null, _endStyles: ɵStyleDataMap | null);
     start(): void;
     finish(): void;
     destroy(): void;
@@ -114,7 +107,7 @@ export declare class ɵAnimation {
     private _driver;
     private _animationAst;
     constructor(_driver: AnimationDriver, input: AnimationMetadata | AnimationMetadata[]);
-    buildTimelines(element: any, startingStyles: ɵStyleData | ɵStyleData[], destinationStyles: ɵStyleData | ɵStyleData[], options: AnimationOptions, subInstructions?: ElementInstructionMap): AnimationTimelineInstruction[];
+    buildTimelines(element: any, startingStyles: ɵStyleDataMap | Array<ɵStyleDataMap>, destinationStyles: ɵStyleDataMap | Array<ɵStyleDataMap>, options: AnimationOptions, subInstructions?: ElementInstructionMap): AnimationTimelineInstruction[];
 }
 
 export declare class ɵAnimationEngine {
@@ -157,17 +150,13 @@ export declare class ɵCssKeyframesDriver implements AnimationDriver {
     containsElement(elm1: any, elm2: any): boolean;
     query(element: any, selector: string, multi: boolean): any[];
     computeStyle(element: any, prop: string, defaultValue?: string): string;
-    buildKeyframeElement(element: any, name: string, keyframes: {
-        [key: string]: any;
-    }[]): any;
-    animate(element: any, keyframes: ɵStyleData[], duration: number, delay: number, easing: string, previousPlayers?: AnimationPlayer[], scrubberAccessRequested?: boolean): AnimationPlayer;
+    buildKeyframeElement(element: any, name: string, keyframes: Array<ɵStyleDataMap>): any;
+    animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing: string, previousPlayers?: AnimationPlayer[], scrubberAccessRequested?: boolean): AnimationPlayer;
 }
 
 export declare class ɵCssKeyframesPlayer implements AnimationPlayer {
     readonly element: any;
-    readonly keyframes: {
-        [key: string]: string | number;
-    }[];
+    readonly keyframes: Array<ɵStyleDataMap>;
     readonly animationName: string;
     private readonly _duration;
     private readonly _delay;
@@ -180,15 +169,9 @@ export declare class ɵCssKeyframesPlayer implements AnimationPlayer {
     parentPlayer: AnimationPlayer;
     readonly totalTime: number;
     readonly easing: string;
-    currentSnapshot: {
-        [key: string]: string;
-    };
+    currentSnapshot: ɵStyleDataMap;
     private _state;
-    constructor(element: any, keyframes: {
-        [key: string]: string | number;
-    }[], animationName: string, _duration: number, _delay: number, easing: string, _finalStyles: {
-        [key: string]: any;
-    }, _specialStyles?: SpecialCasedStyles | null | undefined);
+    constructor(element: any, keyframes: Array<ɵStyleDataMap>, animationName: string, _duration: number, _delay: number, easing: string, _finalStyles: ɵStyleDataMap, _specialStyles?: SpecialCasedStyles | null | undefined);
     onStart(fn: () => void): void;
     onDone(fn: () => void): void;
     onDestroy(fn: () => void): void;
@@ -219,9 +202,7 @@ export declare class ɵNoopAnimationDriver implements AnimationDriver {
     containsElement(elm1: any, elm2: any): boolean;
     query(element: any, selector: string, multi: boolean): any[];
     computeStyle(element: any, prop: string, defaultValue?: string): string;
-    animate(element: any, keyframes: {
-        [key: string]: string | number;
-    }[], duration: number, delay: number, easing: string, previousPlayers?: any[], scrubberAccessRequested?: boolean): AnimationPlayer;
+    animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing: string, previousPlayers?: any[], scrubberAccessRequested?: boolean): AnimationPlayer;
     static ɵfac: i0.ɵɵFactoryDeclaration<ɵNoopAnimationDriver, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<ɵNoopAnimationDriver>;
 }
@@ -233,6 +214,8 @@ export declare class ɵNoopAnimationStyleNormalizer {
     normalizePropertyName(propertyName: string, errors: string[]): string;
     normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: string[]): string;
 }
+
+export declare function ɵnormalizeKeyframes(keyframes: Array<ɵStyleData> | Array<ɵStyleDataMap>): Array<ɵStyleDataMap>;
 
 export declare function ɵsupportsWebAnimations(): boolean;
 
@@ -247,14 +230,12 @@ export declare class ɵWebAnimationsDriver implements AnimationDriver {
     query(element: any, selector: string, multi: boolean): any[];
     computeStyle(element: any, prop: string, defaultValue?: string): string;
     overrideWebAnimationsSupport(supported: boolean): void;
-    animate(element: any, keyframes: ɵStyleData[], duration: number, delay: number, easing: string, previousPlayers?: AnimationPlayer[], scrubberAccessRequested?: boolean): AnimationPlayer;
+    animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing: string, previousPlayers?: AnimationPlayer[], scrubberAccessRequested?: boolean): AnimationPlayer;
 }
 
 export declare class ɵWebAnimationsPlayer implements AnimationPlayer {
     element: any;
-    keyframes: {
-        [key: string]: string | number;
-    }[];
+    keyframes: Array<ɵStyleDataMap>;
     options: {
         [key: string]: string | number;
     };
@@ -272,18 +253,15 @@ export declare class ɵWebAnimationsPlayer implements AnimationPlayer {
     readonly domPlayer: DOMAnimation;
     time: number;
     parentPlayer: AnimationPlayer | null;
-    currentSnapshot: {
-        [styleName: string]: string | number;
-    };
-    constructor(element: any, keyframes: {
-        [key: string]: string | number;
-    }[], options: {
+    currentSnapshot: ɵStyleDataMap;
+    constructor(element: any, keyframes: Array<ɵStyleDataMap>, options: {
         [key: string]: string | number;
     }, _specialStyles?: SpecialCasedStyles | null | undefined);
     private _onFinish;
     init(): void;
     private _buildPlayer;
     private _preparePlayerBeforeStart;
+    private _convertKeyframesToObject;
     onStart(fn: () => void): void;
     onDone(fn: () => void): void;
     onDestroy(fn: () => void): void;
