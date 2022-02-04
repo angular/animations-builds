@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.1+26.sha-6a5f2da.with-local-changes
+ * @license Angular v14.0.0-next.1+27.sha-e46b379.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -216,9 +216,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.1+26.sha-6a5f2da.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.1+26.sha-6a5f2da.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.1+26.sha-6a5f2da.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.1+27.sha-e46b379.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.1+27.sha-e46b379.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.1+27.sha-e46b379.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -1230,6 +1230,8 @@ class AnimationTimelineBuilderVisitor {
         subInstructions = subInstructions || new ElementInstructionMap();
         const context = new AnimationTimelineContext(driver, rootElement, subInstructions, enterClassName, leaveClassName, errors, []);
         context.options = options;
+        const delay = options.delay ? resolveTimingValue(options.delay) : 0;
+        context.currentTimeline.delayNextStep(delay);
         context.currentTimeline.setStyles([startingStyles], null, context.errors, options);
         visitDslNode(this, ast, context);
         // this checks to see if an actual animation happened
@@ -1251,8 +1253,9 @@ class AnimationTimelineBuilderVisitor {
                 lastRootTimeline.setStyles([finalStyles], null, context.errors, options);
             }
         }
-        return timelines.length ? timelines.map(timeline => timeline.buildKeyframes()) :
-            [createTimelineInstruction(rootElement, [], [], [], 0, 0, '', false)];
+        return timelines.length ?
+            timelines.map(timeline => timeline.buildKeyframes()) :
+            [createTimelineInstruction(rootElement, [], [], [], 0, delay, '', false)];
     }
     visitTrigger(ast, context) {
         // these values are not visited in this AST
@@ -2040,6 +2043,7 @@ class AnimationTransitionFactory {
         return styler ? styler.buildStyles(params, errors) : new Map();
     }
     build(driver, element, currentState, nextState, enterClassName, leaveClassName, currentOptions, nextOptions, subInstructions, skipAstBuild) {
+        var _a;
         const errors = [];
         const transitionAnimationParams = this.ast.options && this.ast.options.params || EMPTY_OBJECT;
         const currentAnimationParams = currentOptions && currentOptions.params || EMPTY_OBJECT;
@@ -2050,7 +2054,10 @@ class AnimationTransitionFactory {
         const preStyleMap = new Map();
         const postStyleMap = new Map();
         const isRemoval = nextState === 'void';
-        const animationOptions = { params: Object.assign(Object.assign({}, transitionAnimationParams), nextAnimationParams) };
+        const animationOptions = {
+            params: Object.assign(Object.assign({}, transitionAnimationParams), nextAnimationParams),
+            delay: (_a = this.ast.options) === null || _a === void 0 ? void 0 : _a.delay,
+        };
         const timelines = skipAstBuild ?
             [] :
             buildAnimationTimelines(driver, element, this.ast.animation, enterClassName, leaveClassName, currentStateStyles, nextStateStyles, animationOptions, subInstructions, errors);
