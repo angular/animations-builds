@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.2+19.sha-5ac5967.with-local-changes
+ * @license Angular v14.0.0-next.2+20.sha-4c778cd.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -137,8 +137,8 @@ export declare class ɵAnimationEngine {
  * @publicApi
  */
 export declare abstract class ɵAnimationStyleNormalizer {
-    abstract normalizePropertyName(propertyName: string, errors: string[]): string;
-    abstract normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: string[]): string;
+    abstract normalizePropertyName(propertyName: string, errors: Error[]): string;
+    abstract normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: Error[]): string;
 }
 
 export declare const ɵcontainsElement: (elm1: any, elm2: any) => boolean;
@@ -163,8 +163,8 @@ export declare class ɵNoopAnimationDriver implements AnimationDriver {
  * @publicApi
  */
 export declare class ɵNoopAnimationStyleNormalizer {
-    normalizePropertyName(propertyName: string, errors: string[]): string;
-    normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: string[]): string;
+    normalizePropertyName(propertyName: string, errors: Error[]): string;
+    normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: Error[]): string;
 }
 
 export declare function ɵnormalizeKeyframes(keyframes: Array<ɵStyleData> | Array<ɵStyleDataMap>): Array<ɵStyleDataMap>;
@@ -227,8 +227,8 @@ export declare class ɵWebAnimationsPlayer implements AnimationPlayer {
 }
 
 export declare class ɵWebAnimationsStyleNormalizer extends ɵAnimationStyleNormalizer {
-    normalizePropertyName(propertyName: string, errors: string[]): string;
-    normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: string[]): string;
+    normalizePropertyName(propertyName: string, errors: Error[]): string;
+    normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: Error[]): string;
 }
 
 export { }

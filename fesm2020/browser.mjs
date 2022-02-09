@@ -1,12 +1,146 @@
 /**
- * @license Angular v14.0.0-next.2+19.sha-5ac5967.with-local-changes
+ * @license Angular v14.0.0-next.2+20.sha-4c778cd.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { ɵAnimationGroupPlayer, NoopAnimationPlayer, AUTO_STYLE, ɵPRE_STYLE, sequence, style } from '@angular/animations';
 import * as i0 from '@angular/core';
-import { Injectable } from '@angular/core';
+import { ɵRuntimeError, Injectable } from '@angular/core';
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+const NG_DEV_MODE = typeof ngDevMode === 'undefined' || !!ngDevMode;
+const LINE_START = '\n - ';
+function invalidTimingValue(exp) {
+    return new ɵRuntimeError(3000 /* INVALID_TIMING_VALUE */, NG_DEV_MODE && `The provided timing value "${exp}" is invalid.`);
+}
+function negativeStepValue() {
+    return new ɵRuntimeError(3100 /* NEGATIVE_STEP_VALUE */, NG_DEV_MODE && 'Duration values below 0 are not allowed for this animation step.');
+}
+function negativeDelayValue() {
+    return new ɵRuntimeError(3101 /* NEGATIVE_DELAY_VALUE */, NG_DEV_MODE && 'Delay values below 0 are not allowed for this animation step.');
+}
+function invalidStyleParams(varName) {
+    return new ɵRuntimeError(3001 /* INVALID_STYLE_PARAMS */, NG_DEV_MODE &&
+        `Unable to resolve the local animation param ${varName} in the given list of values`);
+}
+function invalidParamValue(varName) {
+    return new ɵRuntimeError(3003 /* INVALID_PARAM_VALUE */, NG_DEV_MODE && `Please provide a value for the animation param ${varName}`);
+}
+function invalidNodeType(nodeType) {
+    return new ɵRuntimeError(3004 /* INVALID_NODE_TYPE */, NG_DEV_MODE && `Unable to resolve animation metadata node #${nodeType}`);
+}
+function invalidCssUnitValue(userProvidedProperty, value) {
+    return new ɵRuntimeError(3005 /* INVALID_CSS_UNIT_VALUE */, NG_DEV_MODE && `Please provide a CSS unit value for ${userProvidedProperty}:${value}`);
+}
+function invalidTrigger() {
+    return new ɵRuntimeError(3006 /* INVALID_TRIGGER */, NG_DEV_MODE &&
+        'animation triggers cannot be prefixed with an `@` sign (e.g. trigger(\'@foo\', [...]))');
+}
+function invalidDefinition() {
+    return new ɵRuntimeError(3007 /* INVALID_DEFINITION */, NG_DEV_MODE && 'only state() and transition() definitions can sit inside of a trigger()');
+}
+function invalidState(metadataName, missingSubs) {
+    return new ɵRuntimeError(3008 /* INVALID_STATE */, NG_DEV_MODE &&
+        `state("${metadataName}", ...) must define default values for all the following style substitutions: ${missingSubs.join(', ')}`);
+}
+function invalidStyleValue(value) {
+    return new ɵRuntimeError(3002 /* INVALID_STYLE_VALUE */, NG_DEV_MODE && `The provided style string value ${value} is not allowed.`);
+}
+function invalidProperty(prop) {
+    return new ɵRuntimeError(3009 /* INVALID_PROPERTY */, NG_DEV_MODE &&
+        `The provided animation property "${prop}" is not a supported CSS property for animations`);
+}
+function invalidParallelAnimation(prop, firstStart, firstEnd, secondStart, secondEnd) {
+    return new ɵRuntimeError(3010 /* INVALID_PARALLEL_ANIMATION */, NG_DEV_MODE &&
+        `The CSS property "${prop}" that exists between the times of "${firstStart}ms" and "${firstEnd}ms" is also being animated in a parallel animation between the times of "${secondStart}ms" and "${secondEnd}ms"`);
+}
+function invalidKeyframes() {
+    return new ɵRuntimeError(3011 /* INVALID_KEYFRAMES */, NG_DEV_MODE && `keyframes() must be placed inside of a call to animate()`);
+}
+function invalidOffset() {
+    return new ɵRuntimeError(3012 /* INVALID_OFFSET */, NG_DEV_MODE && `Please ensure that all keyframe offsets are between 0 and 1`);
+}
+function keyframeOffsetsOutOfOrder() {
+    return new ɵRuntimeError(3200 /* KEYFRAME_OFFSETS_OUT_OF_ORDER */, NG_DEV_MODE && `Please ensure that all keyframe offsets are in order`);
+}
+function keyframesMissingOffsets() {
+    return new ɵRuntimeError(3202 /* KEYFRAMES_MISSING_OFFSETS */, NG_DEV_MODE && `Not all style() steps within the declared keyframes() contain offsets`);
+}
+function invalidStagger() {
+    return new ɵRuntimeError(3013 /* INVALID_STAGGER */, NG_DEV_MODE && `stagger() can only be used inside of query()`);
+}
+function invalidQuery(selector) {
+    return new ɵRuntimeError(3014 /* INVALID_QUERY */, NG_DEV_MODE &&
+        `\`query("${selector}")\` returned zero elements. (Use \`query("${selector}", { optional: true })\` if you wish to allow this.)`);
+}
+function invalidExpression(expr) {
+    return new ɵRuntimeError(3015 /* INVALID_EXPRESSION */, NG_DEV_MODE && `The provided transition expression "${expr}" is not supported`);
+}
+function invalidTransitionAlias(alias) {
+    return new ɵRuntimeError(3016 /* INVALID_TRANSITION_ALIAS */, NG_DEV_MODE && `The transition alias value "${alias}" is not supported`);
+}
+function validationFailed(errors) {
+    return new ɵRuntimeError(3500 /* VALIDATION_FAILED */, NG_DEV_MODE && `animation validation failed:\n${errors.map(err => err.message).join('\n')}`);
+}
+function buildingFailed(errors) {
+    return new ɵRuntimeError(3501 /* BUILDING_FAILED */, NG_DEV_MODE && `animation building failed:\n${errors.map(err => err.message).join('\n')}`);
+}
+function triggerBuildFailed(name, errors) {
+    return new ɵRuntimeError(3404 /* TRIGGER_BUILD_FAILED */, NG_DEV_MODE &&
+        `The animation trigger "${name}" has failed to build due to the following errors:\n - ${errors.map(err => err.message).join('\n - ')}`);
+}
+function animationFailed(errors) {
+    return new ɵRuntimeError(3502 /* ANIMATION_FAILED */, NG_DEV_MODE &&
+        `Unable to animate due to the following errors:${LINE_START}${errors.map(err => err.message).join(LINE_START)}`);
+}
+function registerFailed(errors) {
+    return new ɵRuntimeError(3503 /* REGISTRATION_FAILED */, NG_DEV_MODE &&
+        `Unable to build the animation due to the following errors: ${errors.map(err => err.message).join('\n')}`);
+}
+function missingOrDestroyedAnimation() {
+    return new ɵRuntimeError(3300 /* MISSING_OR_DESTROYED_ANIMATION */, NG_DEV_MODE && 'The requested animation doesn\'t exist or has already been destroyed');
+}
+function createAnimationFailed(errors) {
+    return new ɵRuntimeError(3504 /* CREATE_ANIMATION_FAILED */, NG_DEV_MODE &&
+        `Unable to create the animation due to the following errors:${errors.map(err => err.message).join('\n')}`);
+}
+function missingPlayer(id) {
+    return new ɵRuntimeError(3301 /* MISSING_PLAYER */, NG_DEV_MODE && `Unable to find the timeline player referenced by ${id}`);
+}
+function missingTrigger(phase, name) {
+    return new ɵRuntimeError(3302 /* MISSING_TRIGGER */, NG_DEV_MODE &&
+        `Unable to listen on the animation trigger event "${phase}" because the animation trigger "${name}" doesn\'t exist!`);
+}
+function missingEvent(name) {
+    return new ɵRuntimeError(3303 /* MISSING_EVENT */, NG_DEV_MODE &&
+        `Unable to listen on the animation trigger "${name}" because the provided event is undefined!`);
+}
+function unsupportedTriggerEvent(phase, name) {
+    return new ɵRuntimeError(3400 /* UNSUPPORTED_TRIGGER_EVENT */, NG_DEV_MODE &&
+        `The provided animation trigger event "${phase}" for the animation trigger "${name}" is not supported!`);
+}
+function unregisteredTrigger(name) {
+    return new ɵRuntimeError(3401 /* UNREGISTERED_TRIGGER */, NG_DEV_MODE && `The provided animation trigger "${name}" has not been registered!`);
+}
+function triggerTransitionsFailed(errors) {
+    return new ɵRuntimeError(3402 /* TRIGGER_TRANSITIONS_FAILED */, NG_DEV_MODE &&
+        `Unable to process animations due to the following failed trigger transitions\n ${errors.map(err => err.message).join('\n')}`);
+}
+function triggerParsingFailed(name, errors) {
+    return new ɵRuntimeError(3403 /* TRIGGER_PARSING_FAILED */, NG_DEV_MODE &&
+        `Animation parsing for the ${name} trigger have failed:${LINE_START}${errors.map(err => err.message).join(LINE_START)}`);
+}
+function transitionFailed(name, errors) {
+    return new ɵRuntimeError(3505 /* TRANSITION_FAILED */, NG_DEV_MODE &&
+        `@${name} has failed due to:\n ${errors.map(err => err.message).join('\n- ')}`);
+}
 
 /**
  * @license
@@ -72,8 +206,7 @@ function normalizeKeyframes$1(driver, normalizer, element, keyframes, preStyles 
         previousOffset = offset;
     });
     if (errors.length) {
-        const LINE_START = '\n - ';
-        throw new Error(`Unable to animate due to the following errors:${LINE_START}${errors.join(LINE_START)}`);
+        throw animationFailed(errors);
     }
     return normalizedKeyframes;
 }
@@ -216,9 +349,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.2+19.sha-5ac5967.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.2+19.sha-5ac5967.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.2+19.sha-5ac5967.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.2+20.sha-4c778cd.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.2+20.sha-4c778cd.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.2+20.sha-4c778cd.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -273,7 +406,7 @@ function parseTimeExpression(exp, errors, allowNegativeValues) {
     if (typeof exp === 'string') {
         const matches = exp.match(regex);
         if (matches === null) {
-            errors.push(`The provided timing value "${exp}" is invalid.`);
+            errors.push(invalidTimingValue(exp));
             return { duration: 0, delay: 0, easing: '' };
         }
         duration = _convertTimeValueToMS(parseFloat(matches[1]), matches[2]);
@@ -293,15 +426,15 @@ function parseTimeExpression(exp, errors, allowNegativeValues) {
         let containsErrors = false;
         let startIndex = errors.length;
         if (duration < 0) {
-            errors.push(`Duration values below 0 are not allowed for this animation step.`);
+            errors.push(negativeStepValue());
             containsErrors = true;
         }
         if (delay < 0) {
-            errors.push(`Delay values below 0 are not allowed for this animation step.`);
+            errors.push(negativeDelayValue());
             containsErrors = true;
         }
         if (containsErrors) {
-            errors.splice(startIndex, 0, `The provided timing value "${exp}" is invalid.`);
+            errors.splice(startIndex, 0, invalidTimingValue(exp));
         }
     }
     return { duration, delay, easing };
@@ -421,7 +554,7 @@ function validateStyleParams(value, options, errors) {
     if (matches.length) {
         matches.forEach(varName => {
             if (!params.hasOwnProperty(varName)) {
-                errors.push(`Unable to resolve the local animation param ${varName} in the given list of values`);
+                errors.push(invalidStyleParams(varName));
             }
         });
     }
@@ -444,7 +577,7 @@ function interpolateParams(value, params, errors) {
         let localVal = params[varName];
         // this means that the value was never overridden by the data passed in by the user
         if (!params.hasOwnProperty(varName)) {
-            errors.push(`Please provide a value for the animation param ${varName}`);
+            errors.push(invalidParamValue(varName));
             localVal = '';
         }
         return localVal.toString();
@@ -519,7 +652,7 @@ function visitDslNode(visitor, node, context) {
         case 12 /* Stagger */:
             return visitor.visitStagger(node, context);
         default:
-            throw new Error(`Unable to resolve animation metadata node #${node.type}`);
+            throw invalidNodeType(node.type);
     }
 }
 function computeStyle(element, prop) {
@@ -555,7 +688,7 @@ function parseInnerTransitionStr(eventStr, expressions, errors) {
     }
     const match = eventStr.match(/^(\*|[-\w]+)\s*(<?[=-]>)\s*(\*|[-\w]+)$/);
     if (match == null || match.length < 4) {
-        errors.push(`The provided transition expression "${eventStr}" is not supported`);
+        errors.push(invalidExpression(eventStr));
         return expressions;
     }
     const fromState = match[1];
@@ -578,7 +711,7 @@ function parseAnimationAlias(alias, errors) {
         case ':decrement':
             return (fromState, toState) => parseFloat(toState) < parseFloat(fromState);
         default:
-            errors.push(`The transition alias value "${alias}" is not supported`);
+            errors.push(invalidTransitionAlias(alias));
             return '* => *';
     }
 }
@@ -674,7 +807,7 @@ class AnimationAstBuilderVisitor {
         const states = [];
         const transitions = [];
         if (metadata.name.charAt(0) == '@') {
-            context.errors.push('animation triggers cannot be prefixed with an `@` sign (e.g. trigger(\'@foo\', [...]))');
+            context.errors.push(invalidTrigger());
         }
         metadata.definitions.forEach(def => {
             this._resetContextStyleTimingState(context);
@@ -694,7 +827,7 @@ class AnimationAstBuilderVisitor {
                 transitions.push(transition);
             }
             else {
-                context.errors.push('only state() and transition() definitions can sit inside of a trigger()');
+                context.errors.push(invalidDefinition());
             }
         });
         return {
@@ -726,8 +859,7 @@ class AnimationAstBuilderVisitor {
             });
             if (missingSubs.size) {
                 const missingSubsArr = iteratorToArray(missingSubs.values());
-                context.errors.push(`state("${metadata
-                    .name}", ...) must define default values for all the following style substitutions: ${missingSubsArr.join(', ')}`);
+                context.errors.push(invalidState(metadata.name, missingSubsArr));
             }
         }
         return {
@@ -820,7 +952,7 @@ class AnimationAstBuilderVisitor {
                     styles.push(styleTuple);
                 }
                 else {
-                    context.errors.push(`The provided style string value ${styleTuple} is not allowed.`);
+                    context.errors.push(invalidStyleValue(styleTuple));
                 }
             }
             else {
@@ -866,7 +998,7 @@ class AnimationAstBuilderVisitor {
                 return;
             tuple.forEach((value, prop) => {
                 if (!this._driver.validateStyleProperty(prop)) {
-                    context.errors.push(`The provided animation property "${prop}" is not a supported CSS property for animations`);
+                    context.errors.push(invalidProperty(prop));
                     return;
                 }
                 // This is guaranteed to have a defined Map at this querySelector location making it
@@ -877,8 +1009,7 @@ class AnimationAstBuilderVisitor {
                 if (collectedEntry) {
                     if (startTime != endTime && startTime >= collectedEntry.startTime &&
                         endTime <= collectedEntry.endTime) {
-                        context.errors.push(`The CSS property "${prop}" that exists between the times of "${collectedEntry.startTime}ms" and "${collectedEntry
-                            .endTime}ms" is also being animated in a parallel animation between the times of "${startTime}ms" and "${endTime}ms"`);
+                        context.errors.push(invalidParallelAnimation(prop, collectedEntry.startTime, collectedEntry.endTime, startTime, endTime));
                         updateCollectedStyle = false;
                     }
                     // we always choose the smaller start time value since we
@@ -898,7 +1029,7 @@ class AnimationAstBuilderVisitor {
     visitKeyframes(metadata, context) {
         const ast = { type: 5 /* Keyframes */, styles: [], options: null };
         if (!context.currentAnimateTimings) {
-            context.errors.push(`keyframes() must be placed inside of a call to animate()`);
+            context.errors.push(invalidKeyframes());
             return ast;
         }
         const MAX_KEYFRAME_OFFSET = 1;
@@ -922,15 +1053,15 @@ class AnimationAstBuilderVisitor {
             return style;
         });
         if (keyframesOutOfRange) {
-            context.errors.push(`Please ensure that all keyframe offsets are between 0 and 1`);
+            context.errors.push(invalidOffset());
         }
         if (offsetsOutOfOrder) {
-            context.errors.push(`Please ensure that all keyframe offsets are in order`);
+            context.errors.push(keyframeOffsetsOutOfOrder());
         }
         const length = metadata.steps.length;
         let generatedOffset = 0;
         if (totalKeyframesWithOffsets > 0 && totalKeyframesWithOffsets < length) {
-            context.errors.push(`Not all style() steps within the declared keyframes() contain offsets`);
+            context.errors.push(keyframesMissingOffsets());
         }
         else if (totalKeyframesWithOffsets == 0) {
             generatedOffset = MAX_KEYFRAME_OFFSET / (length - 1);
@@ -996,7 +1127,7 @@ class AnimationAstBuilderVisitor {
     }
     visitStagger(metadata, context) {
         if (!context.currentQuery) {
-            context.errors.push(`stagger() can only be used inside of query()`);
+            context.errors.push(invalidStagger());
         }
         const timings = metadata.timings === 'full' ?
             { duration: 0, delay: 0, easing: 'full' } :
@@ -1614,7 +1745,7 @@ class AnimationTimelineContext {
             results.push(...elements);
         }
         if (!optional && results.length == 0) {
-            errors.push(`\`query("${originalSelector}")\` returned zero elements. (Use \`query("${originalSelector}", { optional: true })\` if you wish to allow this.)`);
+            errors.push(invalidQuery(originalSelector));
         }
         return results;
     }
@@ -1894,8 +2025,7 @@ class Animation {
         const errors = [];
         const ast = buildAnimationAst(_driver, input, errors);
         if (errors.length) {
-            const errorMessage = `animation validation failed:\n${errors.join('\n')}`;
-            throw new Error(errorMessage);
+            throw validationFailed(errors);
         }
         this._animationAst = ast;
     }
@@ -1908,8 +2038,7 @@ class Animation {
         subInstructions = subInstructions || new ElementInstructionMap();
         const result = buildAnimationTimelines(this._driver, element, this._animationAst, ENTER_CLASSNAME, LEAVE_CLASSNAME, start, dest, options, subInstructions, errors);
         if (errors.length) {
-            const errorMessage = `animation building failed:\n${errors.join('\n')}`;
-            throw new Error(errorMessage);
+            throw buildingFailed(errors);
         }
         return result;
     }
@@ -1991,7 +2120,7 @@ class WebAnimationsStyleNormalizer extends AnimationStyleNormalizer {
             else {
                 const valAndSuffixMatch = value.match(/^[+-]?[\d\.]+([a-z]*)$/);
                 if (valAndSuffixMatch && valAndSuffixMatch[1].length == 0) {
-                    errors.push(`Please provide a CSS unit value for ${userProvidedProperty}:${value}`);
+                    errors.push(invalidCssUnitValue(userProvidedProperty, value));
                 }
             }
         }
@@ -2192,7 +2321,7 @@ class TimelineAnimationEngine {
         const errors = [];
         const ast = buildAnimationAst(this._driver, metadata, errors);
         if (errors.length) {
-            throw new Error(`Unable to build the animation due to the following errors: ${errors.join('\n')}`);
+            throw registerFailed(errors);
         }
         else {
             this._animations.set(id, ast);
@@ -2216,11 +2345,11 @@ class TimelineAnimationEngine {
             });
         }
         else {
-            errors.push('The requested animation doesn\'t exist or has already been destroyed');
+            errors.push(missingOrDestroyedAnimation());
             instructions = [];
         }
         if (errors.length) {
-            throw new Error(`Unable to create the animation due to the following errors: ${errors.join('\n')}`);
+            throw createAnimationFailed(errors);
         }
         autoStylesMap.forEach((styles, element) => {
             styles.forEach((_, prop) => {
@@ -2249,7 +2378,7 @@ class TimelineAnimationEngine {
     _getPlayer(id) {
         const player = this._playersById.get(id);
         if (!player) {
-            throw new Error(`Unable to find the timeline player referenced by ${id}`);
+            throw missingPlayer(id);
         }
         return player;
     }
@@ -2377,13 +2506,13 @@ class AnimationTransitionNamespace {
     }
     listen(element, name, phase, callback) {
         if (!this._triggers.has(name)) {
-            throw new Error(`Unable to listen on the animation trigger event "${phase}" because the animation trigger "${name}" doesn\'t exist!`);
+            throw missingTrigger(phase, name);
         }
         if (phase == null || phase.length == 0) {
-            throw new Error(`Unable to listen on the animation trigger "${name}" because the provided event is undefined!`);
+            throw missingEvent(name);
         }
         if (!isTriggerEventValid(phase)) {
-            throw new Error(`The provided animation trigger event "${phase}" for the animation trigger "${name}" is not supported!`);
+            throw unsupportedTriggerEvent(phase, name);
         }
         const listeners = getOrSetDefaultValue(this._elementListeners, element, []);
         const data = { name, phase, callback };
@@ -2422,7 +2551,7 @@ class AnimationTransitionNamespace {
     _getTrigger(name) {
         const trigger = this._triggers.get(name);
         if (!trigger) {
-            throw new Error(`The provided animation trigger "${name}" has not been registered!`);
+            throw unregisteredTrigger(name);
         }
         return trigger;
     }
@@ -3058,7 +3187,7 @@ class TransitionAnimationEngine {
         }
     }
     reportError(errors) {
-        throw new Error(`Unable to process animations due to the following failed trigger transitions\n ${errors.join('\n')}`);
+        throw triggerTransitionsFailed(errors);
     }
     _flushAnimations(cleanupFns, microtaskId) {
         const subTimelines = new ElementInstructionMap();
@@ -3220,8 +3349,7 @@ class TransitionAnimationEngine {
         if (erroneousTransitions.length) {
             const errors = [];
             erroneousTransitions.forEach(instruction => {
-                errors.push(`@${instruction.triggerName} has failed due to:\n`);
-                instruction.errors.forEach(error => errors.push(`- ${error}\n`));
+                errors.push(transitionFailed(instruction.triggerName, instruction.errors));
             });
             allPlayers.forEach(player => player.destroy());
             this.reportError(errors);
@@ -3822,7 +3950,7 @@ class AnimationEngine {
             const errors = [];
             const ast = buildAnimationAst(this._driver, metadata, errors);
             if (errors.length) {
-                throw new Error(`The animation trigger "${name}" has failed to build due to the following errors:\n - ${errors.join('\n - ')}`);
+                throw triggerBuildFailed(name, errors);
             }
             trigger = buildTrigger(name, ast, this._normalizer);
             this._triggerCache[cacheKey] = trigger;
