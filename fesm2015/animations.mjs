@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.2+29.sha-bedb257.with-local-changes
+ * @license Angular v14.0.0-next.2+34.sha-787eaa7.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -771,7 +771,7 @@ function useAnimation(animation, options = null) {
  * (if their insertion/removal is simply a consequence of that of their parent they
  * should be queried via a different token in their parent's `:enter`/`:leave` transitions).
  *
- * The only elements Angular assumes can enter/leave on their own logic (thus the only
+ * The only elements Angular assumes can enter/leave based on their own logic (thus the only
  * ones that can be queried via the `:enter` and `:leave` tokens) are:
  *  - Those inserted dynamically (via `ViewContainerRef`)
  *  - Those that have a structural directive (which, under the hood, are a subset of the above ones)
@@ -781,6 +781,14 @@ function useAnimation(animation, options = null) {
  *  Note that elements will be successfully queried via `:enter`/`:leave` even if their
  *  insertion/removal is not done manually via `ViewContainerRef`or caused by their structural
  *  directive (e.g. they enter/exit alongside their parent).
+ *
+ * </div>
+ *
+ * <div class="alert is-important">
+ *
+ *  There is an exception to what previously mentioned, besides elements entering/leaving based on
+ *  their own logic, elements with an animation trigger can always be queried via `:leave` when
+ * their parent is also leaving.
  *
  * </div>
  *
