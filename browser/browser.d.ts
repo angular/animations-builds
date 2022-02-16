@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.2+43.sha-1eae65e.with-local-changes
+ * @license Angular v14.0.0-next.2+44.sha-5c7c56b.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -23,6 +23,14 @@ export declare abstract class AnimationDriver {
      */
     abstract matchesElement(element: any, selector: string): boolean;
     abstract containsElement(elm1: any, elm2: any): boolean;
+    /**
+     * Obtains the parent element, if any. `null` is returned if the element does not have a parent.
+     *
+     * This method is optional to avoid a breaking change where implementors of this interface would
+     * be required to implement this method. This method is to become required in a major version of
+     * Angular.
+     */
+    abstract getParentElement?(element: unknown): unknown;
     abstract query(element: any, selector: string, multi: boolean): any[];
     abstract computeStyle(element: any, prop: string, defaultValue?: string): string;
     abstract animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing?: string | null, previousPlayers?: any[], scrubberAccessRequested?: boolean): any;
@@ -143,6 +151,8 @@ export declare abstract class ɵAnimationStyleNormalizer {
 
 export declare const ɵcontainsElement: (elm1: any, elm2: any) => boolean;
 
+export declare function ɵgetParentElement(element: any): unknown | null;
+
 export declare const ɵinvokeQuery: (element: any, selector: string, multi: boolean) => any[];
 
 /**
@@ -152,6 +162,7 @@ export declare class ɵNoopAnimationDriver implements AnimationDriver {
     validateStyleProperty(prop: string): boolean;
     matchesElement(_element: any, _selector: string): boolean;
     containsElement(elm1: any, elm2: any): boolean;
+    getParentElement(element: unknown): unknown;
     query(element: any, selector: string, multi: boolean): any[];
     computeStyle(element: any, prop: string, defaultValue?: string): string;
     animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing: string, previousPlayers?: any[], scrubberAccessRequested?: boolean): AnimationPlayer;
@@ -175,6 +186,7 @@ export declare class ɵWebAnimationsDriver implements AnimationDriver {
     validateStyleProperty(prop: string): boolean;
     matchesElement(_element: any, _selector: string): boolean;
     containsElement(elm1: any, elm2: any): boolean;
+    getParentElement(element: unknown): unknown;
     query(element: any, selector: string, multi: boolean): any[];
     computeStyle(element: any, prop: string, defaultValue?: string): string;
     animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing: string, previousPlayers?: AnimationPlayer[]): AnimationPlayer;
