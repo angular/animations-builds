@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.2.2+32.sha-54d09a6.with-local-changes
+ * @license Angular v13.2.3+9.sha-4d2ef0f.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -262,6 +262,14 @@ let _contains = (elm1, elm2) => false;
 let _query = (element, selector, multi) => {
     return [];
 };
+let _documentElement = null;
+function getParentElement(element) {
+    const parent = element.parentNode || element.host; // consider host to support shadow DOM
+    if (parent === _documentElement) {
+        return null;
+    }
+    return parent;
+}
 // Define utility methods for browsers and platform-server(domino) where Element
 // and utility methods exist.
 const _isNode = isNode();
@@ -270,12 +278,15 @@ if (_isNode || typeof Element !== 'undefined') {
         _contains = (elm1, elm2) => elm1.contains(elm2);
     }
     else {
+        // Read the document element in an IIFE that's been marked pure to avoid a top-level property
+        // read that may prevent tree-shaking.
+        _documentElement = /* @__PURE__ */ (() => document.documentElement)();
         _contains = (elm1, elm2) => {
-            while (elm2 && elm2 !== document.documentElement) {
+            while (elm2) {
                 if (elm2 === elm1) {
                     return true;
                 }
-                elm2 = elm2.parentNode || elm2.host; // consider host to support shadow DOM
+                elm2 = getParentElement(elm2);
             }
             return false;
         };
@@ -348,6 +359,9 @@ class NoopAnimationDriver {
     containsElement(elm1, elm2) {
         return containsElement(elm1, elm2);
     }
+    getParentElement(element) {
+        return getParentElement(element);
+    }
     query(element, selector, multi) {
         return invokeQuery(element, selector, multi);
     }
@@ -358,9 +372,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.2+32.sha-54d09a6.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.2.2+32.sha-54d09a6.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.2+32.sha-54d09a6.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.3+9.sha-4d2ef0f.with-local-changes", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.2.3+9.sha-4d2ef0f.with-local-changes", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.3+9.sha-4d2ef0f.with-local-changes", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -2892,25 +2906,52 @@ class TransitionAnimationEngine {
         return this._namespaceLookup[namespaceId] = ns;
     }
     _balanceNamespaceList(ns, hostElement) {
-        const limit = this._namespaceList.length - 1;
+        const namespaceList = this._namespaceList;
+        const namespacesByHostElement = this.namespacesByHostElement;
+        const limit = namespaceList.length - 1;
         if (limit >= 0) {
             let found = false;
-            for (let i = limit; i >= 0; i--) {
-                const nextNamespace = this._namespaceList[i];
-                if (this.driver.containsElement(nextNamespace.hostElement, hostElement)) {
-                    this._namespaceList.splice(i + 1, 0, ns);
-                    found = true;
-                    break;
+            if (this.driver.getParentElement !== undefined) {
+                // Fast path for when the driver implements `getParentElement`, which allows us to find the
+                // closest ancestor with an existing namespace that we can then insert `ns` after, without
+                // having to inspect all existing namespaces.
+                let ancestor = this.driver.getParentElement(hostElement);
+                while (ancestor) {
+                    const ancestorNs = namespacesByHostElement.get(ancestor);
+                    if (ancestorNs) {
+                        // An animation namespace has been registered for this ancestor, so we insert `ns`
+                        // right after it to establish top-down ordering of animation namespaces.
+                        const index = namespaceList.indexOf(ancestorNs);
+                        namespaceList.splice(index + 1, 0, ns);
+                        found = true;
+                        break;
+                    }
+                    ancestor = this.driver.getParentElement(ancestor);
+                }
+            }
+            else {
+                // Slow path for backwards compatibility if the driver does not implement
+                // `getParentElement`, to be removed once `getParentElement` is a required method.
+                for (let i = limit; i >= 0; i--) {
+                    const nextNamespace = namespaceList[i];
+                    if (this.driver.containsElement(nextNamespace.hostElement, hostElement)) {
+                        namespaceList.splice(i + 1, 0, ns);
+                        found = true;
+                        break;
+                    }
                 }
             }
             if (!found) {
-                this._namespaceList.splice(0, 0, ns);
+                // No namespace exists that is an ancestor of `ns`, so `ns` is inserted at the front to
+                // ensure that any existing descendants are ordered after `ns`, retaining the desired
+                // top-down ordering.
+                namespaceList.unshift(ns);
             }
         }
         else {
-            this._namespaceList.push(ns);
+            namespaceList.push(ns);
         }
-        this.namespacesByHostElement.set(hostElement, ns);
+        namespacesByHostElement.set(hostElement, ns);
         return ns;
     }
     register(namespaceId, hostElement) {
@@ -4279,6 +4320,9 @@ class WebAnimationsDriver {
     containsElement(elm1, elm2) {
         return containsElement(elm1, elm2);
     }
+    getParentElement(element) {
+        return getParentElement(element);
+    }
     query(element, selector, multi) {
         return invokeQuery(element, selector, multi);
     }
@@ -4344,5 +4388,5 @@ class WebAnimationsDriver {
  * Generated bundle index. Do not edit.
  */
 
-export { AnimationDriver, Animation as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationDriver as ɵNoopAnimationDriver, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, containsElement as ɵcontainsElement, invokeQuery as ɵinvokeQuery, validateStyleProperty as ɵvalidateStyleProperty };
+export { AnimationDriver, Animation as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationDriver as ɵNoopAnimationDriver, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, containsElement as ɵcontainsElement, getParentElement as ɵgetParentElement, invokeQuery as ɵinvokeQuery, validateStyleProperty as ɵvalidateStyleProperty };
 //# sourceMappingURL=browser.mjs.map

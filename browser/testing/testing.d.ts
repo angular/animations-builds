@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.2.2+32.sha-54d09a6.with-local-changes
+ * @license Angular v13.2.3+9.sha-4d2ef0f.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -17,6 +17,7 @@ export declare class MockAnimationDriver implements AnimationDriver {
     validateStyleProperty(prop: string): boolean;
     matchesElement(_element: any, _selector: string): boolean;
     containsElement(elm1: any, elm2: any): boolean;
+    getParentElement(element: unknown): unknown;
     query(element: any, selector: string, multi: boolean): any[];
     computeStyle(element: any, prop: string, defaultValue?: string): string;
     animate(element: any, keyframes: {
