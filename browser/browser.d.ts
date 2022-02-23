@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.3+15.sha-ff6be32.with-local-changes
+ * @license Angular v14.0.0-next.3+18.sha-4fa5307.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -25,12 +25,8 @@ export declare abstract class AnimationDriver {
     abstract containsElement(elm1: any, elm2: any): boolean;
     /**
      * Obtains the parent element, if any. `null` is returned if the element does not have a parent.
-     *
-     * This method is optional to avoid a breaking change where implementors of this interface would
-     * be required to implement this method. This method is to become required in a major version of
-     * Angular.
      */
-    abstract getParentElement?(element: unknown): unknown;
+    abstract getParentElement(element: unknown): unknown;
     abstract query(element: any, selector: string, multi: boolean): any[];
     abstract computeStyle(element: any, prop: string, defaultValue?: string): string;
     abstract animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing?: string | null, previousPlayers?: any[], scrubberAccessRequested?: boolean): any;
