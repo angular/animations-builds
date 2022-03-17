@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.7+2.sha-59a5b54
+ * @license Angular v14.0.0-next.7+3.sha-2a75754
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -363,9 +363,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.7+2.sha-59a5b54", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.7+2.sha-59a5b54", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.7+2.sha-59a5b54", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.7+3.sha-2a75754", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.7+3.sha-2a75754", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.7+3.sha-2a75754", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -590,7 +590,7 @@ function interpolateParams(value, params, errors) {
     const str = original.replace(PARAM_REGEX, (_, varName) => {
         let localVal = params[varName];
         // this means that the value was never overridden by the data passed in by the user
-        if (!params.hasOwnProperty(varName)) {
+        if (localVal == null) {
             errors.push(invalidParamValue(varName));
             localVal = '';
         }
@@ -2240,7 +2240,7 @@ class AnimationTransitionFactory {
         const postStyleMap = new Map();
         const isRemoval = nextState === 'void';
         const animationOptions = {
-            params: { ...transitionAnimationParams, ...nextAnimationParams },
+            params: applyParamDefaults(nextAnimationParams, transitionAnimationParams),
             delay: this.ast.options?.delay,
         };
         const timelines = skipAstBuild ?
@@ -2269,6 +2269,15 @@ class AnimationTransitionFactory {
 }
 function oneOrMoreTransitionsMatch(matchFns, currentState, nextState, element, params) {
     return matchFns.some(fn => fn(currentState, nextState, element, params));
+}
+function applyParamDefaults(userParams, defaults) {
+    const result = copyObj(defaults);
+    for (const key in userParams) {
+        if (userParams.hasOwnProperty(key) && userParams[key] != null) {
+            result[key] = userParams[key];
+        }
+    }
+    return result;
 }
 class AnimationStateStyles {
     constructor(styles, defaultParams, normalizer) {
