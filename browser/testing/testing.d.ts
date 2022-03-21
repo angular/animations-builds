@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.7+4.sha-a049840
+ * @license Angular v14.0.0-next.7+5.sha-79d334b
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -15,6 +15,7 @@ import { ɵStyleDataMap } from '@angular/animations';
 export declare class MockAnimationDriver implements AnimationDriver {
     static log: AnimationPlayer[];
     validateStyleProperty(prop: string): boolean;
+    validateAnimatableStyleProperty(prop: string): boolean;
     matchesElement(_element: any, _selector: string): boolean;
     containsElement(elm1: any, elm2: any): boolean;
     getParentElement(element: unknown): unknown;

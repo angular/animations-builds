@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.7+4.sha-a049840
+ * @license Angular v14.0.0-next.7+5.sha-79d334b
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -18,6 +18,7 @@ import { ɵStyleDataMap } from '@angular/animations';
 export declare abstract class AnimationDriver {
     static NOOP: AnimationDriver;
     abstract validateStyleProperty(prop: string): boolean;
+    abstract validateAnimatableStyleProperty?: (prop: string) => boolean;
     /**
      * @deprecated No longer in use. Will be removed.
      */
@@ -180,6 +181,7 @@ export declare function ɵvalidateStyleProperty(prop: string): boolean;
 
 export declare class ɵWebAnimationsDriver implements AnimationDriver {
     validateStyleProperty(prop: string): boolean;
+    validateAnimatableStyleProperty(prop: string): boolean;
     matchesElement(_element: any, _selector: string): boolean;
     containsElement(elm1: any, elm2: any): boolean;
     getParentElement(element: unknown): unknown;
