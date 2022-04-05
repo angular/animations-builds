@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.10+10.sha-d56a537
+ * @license Angular v14.0.0-next.10+13.sha-a3f344f
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -580,9 +580,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.10+10.sha-d56a537", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.10+10.sha-d56a537", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.10+10.sha-d56a537", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.10+13.sha-a3f344f", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.10+13.sha-a3f344f", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.10+13.sha-a3f344f", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -1479,11 +1479,10 @@ function consumeOffset(styles) {
     return offset;
 }
 function constructTimingAst(value, errors) {
-    let timings = null;
     if (value.hasOwnProperty('duration')) {
-        timings = value;
+        return value;
     }
-    else if (typeof value == 'number') {
+    if (typeof value == 'number') {
         const duration = resolveTiming(value, errors).duration;
         return makeTimingAst(duration, 0, '');
     }
@@ -1495,7 +1494,7 @@ function constructTimingAst(value, errors) {
         ast.strValue = strValue;
         return ast;
     }
-    timings = timings || resolveTiming(strValue, errors);
+    const timings = resolveTiming(strValue, errors);
     return makeTimingAst(timings.duration, timings.delay, timings.easing);
 }
 function normalizeAnimationOptions(options) {
