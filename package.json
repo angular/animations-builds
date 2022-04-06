@@ -1,6 +1,6 @@
 {
   "name": "@angular/animations",
-  "version": "13.3.1+9.sha-05121c0",
+  "version": "13.3.1+10.sha-fb5e16e",
   "description": "Angular - animations integration with web-animations",
   "author": "angular",
   "license": "MIT",
@@ -11,7 +11,7 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/core": "13.3.1+9.sha-05121c0"
+    "@angular/core": "13.3.1+10.sha-fb5e16e"
   },
   "repository": {
     "type": "git",
