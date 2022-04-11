@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.11+30.sha-0facba5
+ * @license Angular v14.0.0-next.11+31.sha-3fceba4
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -580,9 +580,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+31.sha-3fceba4", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.11+31.sha-3fceba4", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+31.sha-3fceba4", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -918,7 +918,7 @@ function triggerParsingWarnings(name, warnings) {
         console.warn(`Animation parsing for the ${name} trigger presents the following warnings:${createListOfWarnings(warnings)}`);
 }
 function pushUnrecognizedPropertiesWarning(warnings, props) {
-    if (ngDevMode && props.length) {
+    if (props.length) {
         warnings.push(`The following provided properties are not recognized: ${props.join(', ')}`);
     }
 }
@@ -1063,12 +1063,13 @@ class AnimationAstBuilderVisitor {
         const context = new AnimationAstBuilderContext(errors);
         this._resetContextStyleTimingState(context);
         const ast = visitDslNode(this, normalizeAnimationEntry(metadata), context);
-        if (context.unsupportedCSSPropertiesFound.size) {
-            pushUnrecognizedPropertiesWarning(warnings, [...context.unsupportedCSSPropertiesFound.keys()]);
-        }
-        if ((typeof ngDevMode === 'undefined' || ngDevMode) &&
-            context.nonAnimatableCSSPropertiesFound.size) {
-            pushNonAnimatablePropertiesWarning(warnings, [...context.nonAnimatableCSSPropertiesFound.keys()]);
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            if (context.unsupportedCSSPropertiesFound.size) {
+                pushUnrecognizedPropertiesWarning(warnings, [...context.unsupportedCSSPropertiesFound.keys()]);
+            }
+            if (context.nonAnimatableCSSPropertiesFound.size) {
+                pushNonAnimatablePropertiesWarning(warnings, [...context.nonAnimatableCSSPropertiesFound.keys()]);
+            }
         }
         return ast;
     }
