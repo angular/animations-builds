@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.11+20.sha-b13a453
+ * @license Angular v14.0.0-next.11+22.sha-9572bb2
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -580,9 +580,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+20.sha-b13a453", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.11+20.sha-b13a453", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+20.sha-b13a453", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+22.sha-9572bb2", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.11+22.sha-9572bb2", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+22.sha-9572bb2", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -1274,18 +1274,19 @@ class AnimationAstBuilderVisitor {
             if (typeof tuple === 'string')
                 return;
             tuple.forEach((value, prop) => {
-                if (!this._driver.validateStyleProperty(prop)) {
-                    tuple.delete(prop);
-                    context.unsupportedCSSPropertiesFound.add(prop);
-                    return;
-                }
-                if ((typeof ngDevMode === 'undefined' || ngDevMode) &&
-                    this._driver.validateAnimatableStyleProperty) {
-                    if (!this._driver.validateAnimatableStyleProperty(prop)) {
-                        context.nonAnimatableCSSPropertiesFound.add(prop);
-                        // note: non animatable properties are not removed for the tuple just in case they are
-                        //       categorized as non animatable but can actually be animated
+                if (typeof ngDevMode === 'undefined' || ngDevMode) {
+                    if (!this._driver.validateStyleProperty(prop)) {
+                        tuple.delete(prop);
+                        context.unsupportedCSSPropertiesFound.add(prop);
                         return;
+                    }
+                    if (this._driver.validateAnimatableStyleProperty) {
+                        if (!this._driver.validateAnimatableStyleProperty(prop)) {
+                            context.nonAnimatableCSSPropertiesFound.add(prop);
+                            // note: non animatable properties are not removed for the tuple just in case they are
+                            //       categorized as non animatable but can actually be animated
+                            return;
+                        }
                     }
                 }
                 // This is guaranteed to have a defined Map at this querySelector location making it
@@ -4583,11 +4584,15 @@ class WebAnimationsPlayer {
 
 class WebAnimationsDriver {
     validateStyleProperty(prop) {
-        return validateStyleProperty(prop);
+        // Perform actual validation in dev mode only, in prod mode this check is a noop.
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            return validateStyleProperty(prop);
+        }
+        return true;
     }
     validateAnimatableStyleProperty(prop) {
         // Perform actual validation in dev mode only, in prod mode this check is a noop.
-        if (ngDevMode) {
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
             const cssProp = camelCaseToDashCase(prop);
             return validateWebAnimatableStyleProperty(cssProp);
         }
