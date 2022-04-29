@@ -265,31 +265,31 @@ export function balancePreviousStylesIntoKeyframes(element, keyframes, previousS
 }
 export function visitDslNode(visitor, node, context) {
     switch (node.type) {
-        case 7 /* Trigger */:
+        case 7 /* AnimationMetadataType.Trigger */:
             return visitor.visitTrigger(node, context);
-        case 0 /* State */:
+        case 0 /* AnimationMetadataType.State */:
             return visitor.visitState(node, context);
-        case 1 /* Transition */:
+        case 1 /* AnimationMetadataType.Transition */:
             return visitor.visitTransition(node, context);
-        case 2 /* Sequence */:
+        case 2 /* AnimationMetadataType.Sequence */:
             return visitor.visitSequence(node, context);
-        case 3 /* Group */:
+        case 3 /* AnimationMetadataType.Group */:
             return visitor.visitGroup(node, context);
-        case 4 /* Animate */:
+        case 4 /* AnimationMetadataType.Animate */:
             return visitor.visitAnimate(node, context);
-        case 5 /* Keyframes */:
+        case 5 /* AnimationMetadataType.Keyframes */:
             return visitor.visitKeyframes(node, context);
-        case 6 /* Style */:
+        case 6 /* AnimationMetadataType.Style */:
             return visitor.visitStyle(node, context);
-        case 8 /* Reference */:
+        case 8 /* AnimationMetadataType.Reference */:
             return visitor.visitReference(node, context);
-        case 9 /* AnimateChild */:
+        case 9 /* AnimationMetadataType.AnimateChild */:
             return visitor.visitAnimateChild(node, context);
-        case 10 /* AnimateRef */:
+        case 10 /* AnimationMetadataType.AnimateRef */:
             return visitor.visitAnimateRef(node, context);
-        case 11 /* Query */:
+        case 11 /* AnimationMetadataType.Query */:
             return visitor.visitQuery(node, context);
-        case 12 /* Stagger */:
+        case 12 /* AnimationMetadataType.Stagger */:
             return visitor.visitStagger(node, context);
         default:
             throw invalidNodeType(node.type);
