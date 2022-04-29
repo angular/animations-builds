@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.15+sha-fcc548a
+ * @license Angular v14.0.0-next.15+sha-e1454ae
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -18,127 +18,127 @@ import { ɵRuntimeError } from '@angular/core';
 const NG_DEV_MODE = typeof ngDevMode === 'undefined' || !!ngDevMode;
 const LINE_START = '\n - ';
 function invalidTimingValue(exp) {
-    return new ɵRuntimeError(3000 /* INVALID_TIMING_VALUE */, NG_DEV_MODE && `The provided timing value "${exp}" is invalid.`);
+    return new ɵRuntimeError(3000 /* RuntimeErrorCode.INVALID_TIMING_VALUE */, NG_DEV_MODE && `The provided timing value "${exp}" is invalid.`);
 }
 function negativeStepValue() {
-    return new ɵRuntimeError(3100 /* NEGATIVE_STEP_VALUE */, NG_DEV_MODE && 'Duration values below 0 are not allowed for this animation step.');
+    return new ɵRuntimeError(3100 /* RuntimeErrorCode.NEGATIVE_STEP_VALUE */, NG_DEV_MODE && 'Duration values below 0 are not allowed for this animation step.');
 }
 function negativeDelayValue() {
-    return new ɵRuntimeError(3101 /* NEGATIVE_DELAY_VALUE */, NG_DEV_MODE && 'Delay values below 0 are not allowed for this animation step.');
+    return new ɵRuntimeError(3101 /* RuntimeErrorCode.NEGATIVE_DELAY_VALUE */, NG_DEV_MODE && 'Delay values below 0 are not allowed for this animation step.');
 }
 function invalidStyleParams(varName) {
-    return new ɵRuntimeError(3001 /* INVALID_STYLE_PARAMS */, NG_DEV_MODE &&
+    return new ɵRuntimeError(3001 /* RuntimeErrorCode.INVALID_STYLE_PARAMS */, NG_DEV_MODE &&
         `Unable to resolve the local animation param ${varName} in the given list of values`);
 }
 function invalidParamValue(varName) {
-    return new ɵRuntimeError(3003 /* INVALID_PARAM_VALUE */, NG_DEV_MODE && `Please provide a value for the animation param ${varName}`);
+    return new ɵRuntimeError(3003 /* RuntimeErrorCode.INVALID_PARAM_VALUE */, NG_DEV_MODE && `Please provide a value for the animation param ${varName}`);
 }
 function invalidNodeType(nodeType) {
-    return new ɵRuntimeError(3004 /* INVALID_NODE_TYPE */, NG_DEV_MODE && `Unable to resolve animation metadata node #${nodeType}`);
+    return new ɵRuntimeError(3004 /* RuntimeErrorCode.INVALID_NODE_TYPE */, NG_DEV_MODE && `Unable to resolve animation metadata node #${nodeType}`);
 }
 function invalidCssUnitValue(userProvidedProperty, value) {
-    return new ɵRuntimeError(3005 /* INVALID_CSS_UNIT_VALUE */, NG_DEV_MODE && `Please provide a CSS unit value for ${userProvidedProperty}:${value}`);
+    return new ɵRuntimeError(3005 /* RuntimeErrorCode.INVALID_CSS_UNIT_VALUE */, NG_DEV_MODE && `Please provide a CSS unit value for ${userProvidedProperty}:${value}`);
 }
 function invalidTrigger() {
-    return new ɵRuntimeError(3006 /* INVALID_TRIGGER */, NG_DEV_MODE &&
+    return new ɵRuntimeError(3006 /* RuntimeErrorCode.INVALID_TRIGGER */, NG_DEV_MODE &&
         'animation triggers cannot be prefixed with an `@` sign (e.g. trigger(\'@foo\', [...]))');
 }
 function invalidDefinition() {
-    return new ɵRuntimeError(3007 /* INVALID_DEFINITION */, NG_DEV_MODE && 'only state() and transition() definitions can sit inside of a trigger()');
+    return new ɵRuntimeError(3007 /* RuntimeErrorCode.INVALID_DEFINITION */, NG_DEV_MODE && 'only state() and transition() definitions can sit inside of a trigger()');
 }
 function invalidState(metadataName, missingSubs) {
-    return new ɵRuntimeError(3008 /* INVALID_STATE */, NG_DEV_MODE &&
+    return new ɵRuntimeError(3008 /* RuntimeErrorCode.INVALID_STATE */, NG_DEV_MODE &&
         `state("${metadataName}", ...) must define default values for all the following style substitutions: ${missingSubs.join(', ')}`);
 }
 function invalidStyleValue(value) {
-    return new ɵRuntimeError(3002 /* INVALID_STYLE_VALUE */, NG_DEV_MODE && `The provided style string value ${value} is not allowed.`);
+    return new ɵRuntimeError(3002 /* RuntimeErrorCode.INVALID_STYLE_VALUE */, NG_DEV_MODE && `The provided style string value ${value} is not allowed.`);
 }
 function invalidProperty(prop) {
-    return new ɵRuntimeError(3009 /* INVALID_PROPERTY */, NG_DEV_MODE &&
+    return new ɵRuntimeError(3009 /* RuntimeErrorCode.INVALID_PROPERTY */, NG_DEV_MODE &&
         `The provided animation property "${prop}" is not a supported CSS property for animations`);
 }
 function invalidParallelAnimation(prop, firstStart, firstEnd, secondStart, secondEnd) {
-    return new ɵRuntimeError(3010 /* INVALID_PARALLEL_ANIMATION */, NG_DEV_MODE &&
+    return new ɵRuntimeError(3010 /* RuntimeErrorCode.INVALID_PARALLEL_ANIMATION */, NG_DEV_MODE &&
         `The CSS property "${prop}" that exists between the times of "${firstStart}ms" and "${firstEnd}ms" is also being animated in a parallel animation between the times of "${secondStart}ms" and "${secondEnd}ms"`);
 }
 function invalidKeyframes() {
-    return new ɵRuntimeError(3011 /* INVALID_KEYFRAMES */, NG_DEV_MODE && `keyframes() must be placed inside of a call to animate()`);
+    return new ɵRuntimeError(3011 /* RuntimeErrorCode.INVALID_KEYFRAMES */, NG_DEV_MODE && `keyframes() must be placed inside of a call to animate()`);
 }
 function invalidOffset() {
-    return new ɵRuntimeError(3012 /* INVALID_OFFSET */, NG_DEV_MODE && `Please ensure that all keyframe offsets are between 0 and 1`);
+    return new ɵRuntimeError(3012 /* RuntimeErrorCode.INVALID_OFFSET */, NG_DEV_MODE && `Please ensure that all keyframe offsets are between 0 and 1`);
 }
 function keyframeOffsetsOutOfOrder() {
-    return new ɵRuntimeError(3200 /* KEYFRAME_OFFSETS_OUT_OF_ORDER */, NG_DEV_MODE && `Please ensure that all keyframe offsets are in order`);
+    return new ɵRuntimeError(3200 /* RuntimeErrorCode.KEYFRAME_OFFSETS_OUT_OF_ORDER */, NG_DEV_MODE && `Please ensure that all keyframe offsets are in order`);
 }
 function keyframesMissingOffsets() {
-    return new ɵRuntimeError(3202 /* KEYFRAMES_MISSING_OFFSETS */, NG_DEV_MODE && `Not all style() steps within the declared keyframes() contain offsets`);
+    return new ɵRuntimeError(3202 /* RuntimeErrorCode.KEYFRAMES_MISSING_OFFSETS */, NG_DEV_MODE && `Not all style() steps within the declared keyframes() contain offsets`);
 }
 function invalidStagger() {
-    return new ɵRuntimeError(3013 /* INVALID_STAGGER */, NG_DEV_MODE && `stagger() can only be used inside of query()`);
+    return new ɵRuntimeError(3013 /* RuntimeErrorCode.INVALID_STAGGER */, NG_DEV_MODE && `stagger() can only be used inside of query()`);
 }
 function invalidQuery(selector) {
-    return new ɵRuntimeError(3014 /* INVALID_QUERY */, NG_DEV_MODE &&
+    return new ɵRuntimeError(3014 /* RuntimeErrorCode.INVALID_QUERY */, NG_DEV_MODE &&
         `\`query("${selector}")\` returned zero elements. (Use \`query("${selector}", { optional: true })\` if you wish to allow this.)`);
 }
 function invalidExpression(expr) {
-    return new ɵRuntimeError(3015 /* INVALID_EXPRESSION */, NG_DEV_MODE && `The provided transition expression "${expr}" is not supported`);
+    return new ɵRuntimeError(3015 /* RuntimeErrorCode.INVALID_EXPRESSION */, NG_DEV_MODE && `The provided transition expression "${expr}" is not supported`);
 }
 function invalidTransitionAlias(alias) {
-    return new ɵRuntimeError(3016 /* INVALID_TRANSITION_ALIAS */, NG_DEV_MODE && `The transition alias value "${alias}" is not supported`);
+    return new ɵRuntimeError(3016 /* RuntimeErrorCode.INVALID_TRANSITION_ALIAS */, NG_DEV_MODE && `The transition alias value "${alias}" is not supported`);
 }
 function validationFailed(errors) {
-    return new ɵRuntimeError(3500 /* VALIDATION_FAILED */, NG_DEV_MODE && `animation validation failed:\n${errors.map(err => err.message).join('\n')}`);
+    return new ɵRuntimeError(3500 /* RuntimeErrorCode.VALIDATION_FAILED */, NG_DEV_MODE && `animation validation failed:\n${errors.map(err => err.message).join('\n')}`);
 }
 function buildingFailed(errors) {
-    return new ɵRuntimeError(3501 /* BUILDING_FAILED */, NG_DEV_MODE && `animation building failed:\n${errors.map(err => err.message).join('\n')}`);
+    return new ɵRuntimeError(3501 /* RuntimeErrorCode.BUILDING_FAILED */, NG_DEV_MODE && `animation building failed:\n${errors.map(err => err.message).join('\n')}`);
 }
 function triggerBuildFailed(name, errors) {
-    return new ɵRuntimeError(3404 /* TRIGGER_BUILD_FAILED */, NG_DEV_MODE &&
+    return new ɵRuntimeError(3404 /* RuntimeErrorCode.TRIGGER_BUILD_FAILED */, NG_DEV_MODE &&
         `The animation trigger "${name}" has failed to build due to the following errors:\n - ${errors.map(err => err.message).join('\n - ')}`);
 }
 function animationFailed(errors) {
-    return new ɵRuntimeError(3502 /* ANIMATION_FAILED */, NG_DEV_MODE &&
+    return new ɵRuntimeError(3502 /* RuntimeErrorCode.ANIMATION_FAILED */, NG_DEV_MODE &&
         `Unable to animate due to the following errors:${LINE_START}${errors.map(err => err.message).join(LINE_START)}`);
 }
 function registerFailed(errors) {
-    return new ɵRuntimeError(3503 /* REGISTRATION_FAILED */, NG_DEV_MODE &&
+    return new ɵRuntimeError(3503 /* RuntimeErrorCode.REGISTRATION_FAILED */, NG_DEV_MODE &&
         `Unable to build the animation due to the following errors: ${errors.map(err => err.message).join('\n')}`);
 }
 function missingOrDestroyedAnimation() {
-    return new ɵRuntimeError(3300 /* MISSING_OR_DESTROYED_ANIMATION */, NG_DEV_MODE && 'The requested animation doesn\'t exist or has already been destroyed');
+    return new ɵRuntimeError(3300 /* RuntimeErrorCode.MISSING_OR_DESTROYED_ANIMATION */, NG_DEV_MODE && 'The requested animation doesn\'t exist or has already been destroyed');
 }
 function createAnimationFailed(errors) {
-    return new ɵRuntimeError(3504 /* CREATE_ANIMATION_FAILED */, NG_DEV_MODE &&
+    return new ɵRuntimeError(3504 /* RuntimeErrorCode.CREATE_ANIMATION_FAILED */, NG_DEV_MODE &&
         `Unable to create the animation due to the following errors:${errors.map(err => err.message).join('\n')}`);
 }
 function missingPlayer(id) {
-    return new ɵRuntimeError(3301 /* MISSING_PLAYER */, NG_DEV_MODE && `Unable to find the timeline player referenced by ${id}`);
+    return new ɵRuntimeError(3301 /* RuntimeErrorCode.MISSING_PLAYER */, NG_DEV_MODE && `Unable to find the timeline player referenced by ${id}`);
 }
 function missingTrigger(phase, name) {
-    return new ɵRuntimeError(3302 /* MISSING_TRIGGER */, NG_DEV_MODE &&
+    return new ɵRuntimeError(3302 /* RuntimeErrorCode.MISSING_TRIGGER */, NG_DEV_MODE &&
         `Unable to listen on the animation trigger event "${phase}" because the animation trigger "${name}" doesn\'t exist!`);
 }
 function missingEvent(name) {
-    return new ɵRuntimeError(3303 /* MISSING_EVENT */, NG_DEV_MODE &&
+    return new ɵRuntimeError(3303 /* RuntimeErrorCode.MISSING_EVENT */, NG_DEV_MODE &&
         `Unable to listen on the animation trigger "${name}" because the provided event is undefined!`);
 }
 function unsupportedTriggerEvent(phase, name) {
-    return new ɵRuntimeError(3400 /* UNSUPPORTED_TRIGGER_EVENT */, NG_DEV_MODE &&
+    return new ɵRuntimeError(3400 /* RuntimeErrorCode.UNSUPPORTED_TRIGGER_EVENT */, NG_DEV_MODE &&
         `The provided animation trigger event "${phase}" for the animation trigger "${name}" is not supported!`);
 }
 function unregisteredTrigger(name) {
-    return new ɵRuntimeError(3401 /* UNREGISTERED_TRIGGER */, NG_DEV_MODE && `The provided animation trigger "${name}" has not been registered!`);
+    return new ɵRuntimeError(3401 /* RuntimeErrorCode.UNREGISTERED_TRIGGER */, NG_DEV_MODE && `The provided animation trigger "${name}" has not been registered!`);
 }
 function triggerTransitionsFailed(errors) {
-    return new ɵRuntimeError(3402 /* TRIGGER_TRANSITIONS_FAILED */, NG_DEV_MODE &&
+    return new ɵRuntimeError(3402 /* RuntimeErrorCode.TRIGGER_TRANSITIONS_FAILED */, NG_DEV_MODE &&
         `Unable to process animations due to the following failed trigger transitions\n ${errors.map(err => err.message).join('\n')}`);
 }
 function triggerParsingFailed(name, errors) {
-    return new ɵRuntimeError(3403 /* TRIGGER_PARSING_FAILED */, NG_DEV_MODE &&
+    return new ɵRuntimeError(3403 /* RuntimeErrorCode.TRIGGER_PARSING_FAILED */, NG_DEV_MODE &&
         `Animation parsing for the ${name} trigger have failed:${LINE_START}${errors.map(err => err.message).join(LINE_START)}`);
 }
 function transitionFailed(name, errors) {
-    return new ɵRuntimeError(3505 /* TRANSITION_FAILED */, NG_DEV_MODE &&
+    return new ɵRuntimeError(3505 /* RuntimeErrorCode.TRANSITION_FAILED */, NG_DEV_MODE &&
         `@${name} has failed due to:\n ${errors.map(err => err.message).join('\n- ')}`);
 }
 
@@ -810,31 +810,31 @@ function balancePreviousStylesIntoKeyframes(element, keyframes, previousStyles) 
 }
 function visitDslNode(visitor, node, context) {
     switch (node.type) {
-        case 7 /* Trigger */:
+        case 7 /* AnimationMetadataType.Trigger */:
             return visitor.visitTrigger(node, context);
-        case 0 /* State */:
+        case 0 /* AnimationMetadataType.State */:
             return visitor.visitState(node, context);
-        case 1 /* Transition */:
+        case 1 /* AnimationMetadataType.Transition */:
             return visitor.visitTransition(node, context);
-        case 2 /* Sequence */:
+        case 2 /* AnimationMetadataType.Sequence */:
             return visitor.visitSequence(node, context);
-        case 3 /* Group */:
+        case 3 /* AnimationMetadataType.Group */:
             return visitor.visitGroup(node, context);
-        case 4 /* Animate */:
+        case 4 /* AnimationMetadataType.Animate */:
             return visitor.visitAnimate(node, context);
-        case 5 /* Keyframes */:
+        case 5 /* AnimationMetadataType.Keyframes */:
             return visitor.visitKeyframes(node, context);
-        case 6 /* Style */:
+        case 6 /* AnimationMetadataType.Style */:
             return visitor.visitStyle(node, context);
-        case 8 /* Reference */:
+        case 8 /* AnimationMetadataType.Reference */:
             return visitor.visitReference(node, context);
-        case 9 /* AnimateChild */:
+        case 9 /* AnimationMetadataType.AnimateChild */:
             return visitor.visitAnimateChild(node, context);
-        case 10 /* AnimateRef */:
+        case 10 /* AnimationMetadataType.AnimateRef */:
             return visitor.visitAnimateRef(node, context);
-        case 11 /* Query */:
+        case 11 /* AnimationMetadataType.Query */:
             return visitor.visitQuery(node, context);
-        case 12 /* Stagger */:
+        case 12 /* AnimationMetadataType.Stagger */:
             return visitor.visitStagger(node, context);
         default:
             throw invalidNodeType(node.type);
