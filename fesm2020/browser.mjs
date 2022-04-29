@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.15+sha-29039fc
+ * @license Angular v14.0.0-next.15+sha-fcc548a
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -18,127 +18,127 @@ import { ɵRuntimeError, Injectable } from '@angular/core';
 const NG_DEV_MODE$1 = typeof ngDevMode === 'undefined' || !!ngDevMode;
 const LINE_START = '\n - ';
 function invalidTimingValue(exp) {
-    return new ɵRuntimeError(3000 /* RuntimeErrorCode.INVALID_TIMING_VALUE */, NG_DEV_MODE$1 && `The provided timing value "${exp}" is invalid.`);
+    return new ɵRuntimeError(3000 /* INVALID_TIMING_VALUE */, NG_DEV_MODE$1 && `The provided timing value "${exp}" is invalid.`);
 }
 function negativeStepValue() {
-    return new ɵRuntimeError(3100 /* RuntimeErrorCode.NEGATIVE_STEP_VALUE */, NG_DEV_MODE$1 && 'Duration values below 0 are not allowed for this animation step.');
+    return new ɵRuntimeError(3100 /* NEGATIVE_STEP_VALUE */, NG_DEV_MODE$1 && 'Duration values below 0 are not allowed for this animation step.');
 }
 function negativeDelayValue() {
-    return new ɵRuntimeError(3101 /* RuntimeErrorCode.NEGATIVE_DELAY_VALUE */, NG_DEV_MODE$1 && 'Delay values below 0 are not allowed for this animation step.');
+    return new ɵRuntimeError(3101 /* NEGATIVE_DELAY_VALUE */, NG_DEV_MODE$1 && 'Delay values below 0 are not allowed for this animation step.');
 }
 function invalidStyleParams(varName) {
-    return new ɵRuntimeError(3001 /* RuntimeErrorCode.INVALID_STYLE_PARAMS */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3001 /* INVALID_STYLE_PARAMS */, NG_DEV_MODE$1 &&
         `Unable to resolve the local animation param ${varName} in the given list of values`);
 }
 function invalidParamValue(varName) {
-    return new ɵRuntimeError(3003 /* RuntimeErrorCode.INVALID_PARAM_VALUE */, NG_DEV_MODE$1 && `Please provide a value for the animation param ${varName}`);
+    return new ɵRuntimeError(3003 /* INVALID_PARAM_VALUE */, NG_DEV_MODE$1 && `Please provide a value for the animation param ${varName}`);
 }
 function invalidNodeType(nodeType) {
-    return new ɵRuntimeError(3004 /* RuntimeErrorCode.INVALID_NODE_TYPE */, NG_DEV_MODE$1 && `Unable to resolve animation metadata node #${nodeType}`);
+    return new ɵRuntimeError(3004 /* INVALID_NODE_TYPE */, NG_DEV_MODE$1 && `Unable to resolve animation metadata node #${nodeType}`);
 }
 function invalidCssUnitValue(userProvidedProperty, value) {
-    return new ɵRuntimeError(3005 /* RuntimeErrorCode.INVALID_CSS_UNIT_VALUE */, NG_DEV_MODE$1 && `Please provide a CSS unit value for ${userProvidedProperty}:${value}`);
+    return new ɵRuntimeError(3005 /* INVALID_CSS_UNIT_VALUE */, NG_DEV_MODE$1 && `Please provide a CSS unit value for ${userProvidedProperty}:${value}`);
 }
 function invalidTrigger() {
-    return new ɵRuntimeError(3006 /* RuntimeErrorCode.INVALID_TRIGGER */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3006 /* INVALID_TRIGGER */, NG_DEV_MODE$1 &&
         'animation triggers cannot be prefixed with an `@` sign (e.g. trigger(\'@foo\', [...]))');
 }
 function invalidDefinition() {
-    return new ɵRuntimeError(3007 /* RuntimeErrorCode.INVALID_DEFINITION */, NG_DEV_MODE$1 && 'only state() and transition() definitions can sit inside of a trigger()');
+    return new ɵRuntimeError(3007 /* INVALID_DEFINITION */, NG_DEV_MODE$1 && 'only state() and transition() definitions can sit inside of a trigger()');
 }
 function invalidState(metadataName, missingSubs) {
-    return new ɵRuntimeError(3008 /* RuntimeErrorCode.INVALID_STATE */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3008 /* INVALID_STATE */, NG_DEV_MODE$1 &&
         `state("${metadataName}", ...) must define default values for all the following style substitutions: ${missingSubs.join(', ')}`);
 }
 function invalidStyleValue(value) {
-    return new ɵRuntimeError(3002 /* RuntimeErrorCode.INVALID_STYLE_VALUE */, NG_DEV_MODE$1 && `The provided style string value ${value} is not allowed.`);
+    return new ɵRuntimeError(3002 /* INVALID_STYLE_VALUE */, NG_DEV_MODE$1 && `The provided style string value ${value} is not allowed.`);
 }
 function invalidProperty(prop) {
-    return new ɵRuntimeError(3009 /* RuntimeErrorCode.INVALID_PROPERTY */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3009 /* INVALID_PROPERTY */, NG_DEV_MODE$1 &&
         `The provided animation property "${prop}" is not a supported CSS property for animations`);
 }
 function invalidParallelAnimation(prop, firstStart, firstEnd, secondStart, secondEnd) {
-    return new ɵRuntimeError(3010 /* RuntimeErrorCode.INVALID_PARALLEL_ANIMATION */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3010 /* INVALID_PARALLEL_ANIMATION */, NG_DEV_MODE$1 &&
         `The CSS property "${prop}" that exists between the times of "${firstStart}ms" and "${firstEnd}ms" is also being animated in a parallel animation between the times of "${secondStart}ms" and "${secondEnd}ms"`);
 }
 function invalidKeyframes() {
-    return new ɵRuntimeError(3011 /* RuntimeErrorCode.INVALID_KEYFRAMES */, NG_DEV_MODE$1 && `keyframes() must be placed inside of a call to animate()`);
+    return new ɵRuntimeError(3011 /* INVALID_KEYFRAMES */, NG_DEV_MODE$1 && `keyframes() must be placed inside of a call to animate()`);
 }
 function invalidOffset() {
-    return new ɵRuntimeError(3012 /* RuntimeErrorCode.INVALID_OFFSET */, NG_DEV_MODE$1 && `Please ensure that all keyframe offsets are between 0 and 1`);
+    return new ɵRuntimeError(3012 /* INVALID_OFFSET */, NG_DEV_MODE$1 && `Please ensure that all keyframe offsets are between 0 and 1`);
 }
 function keyframeOffsetsOutOfOrder() {
-    return new ɵRuntimeError(3200 /* RuntimeErrorCode.KEYFRAME_OFFSETS_OUT_OF_ORDER */, NG_DEV_MODE$1 && `Please ensure that all keyframe offsets are in order`);
+    return new ɵRuntimeError(3200 /* KEYFRAME_OFFSETS_OUT_OF_ORDER */, NG_DEV_MODE$1 && `Please ensure that all keyframe offsets are in order`);
 }
 function keyframesMissingOffsets() {
-    return new ɵRuntimeError(3202 /* RuntimeErrorCode.KEYFRAMES_MISSING_OFFSETS */, NG_DEV_MODE$1 && `Not all style() steps within the declared keyframes() contain offsets`);
+    return new ɵRuntimeError(3202 /* KEYFRAMES_MISSING_OFFSETS */, NG_DEV_MODE$1 && `Not all style() steps within the declared keyframes() contain offsets`);
 }
 function invalidStagger() {
-    return new ɵRuntimeError(3013 /* RuntimeErrorCode.INVALID_STAGGER */, NG_DEV_MODE$1 && `stagger() can only be used inside of query()`);
+    return new ɵRuntimeError(3013 /* INVALID_STAGGER */, NG_DEV_MODE$1 && `stagger() can only be used inside of query()`);
 }
 function invalidQuery(selector) {
-    return new ɵRuntimeError(3014 /* RuntimeErrorCode.INVALID_QUERY */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3014 /* INVALID_QUERY */, NG_DEV_MODE$1 &&
         `\`query("${selector}")\` returned zero elements. (Use \`query("${selector}", { optional: true })\` if you wish to allow this.)`);
 }
 function invalidExpression(expr) {
-    return new ɵRuntimeError(3015 /* RuntimeErrorCode.INVALID_EXPRESSION */, NG_DEV_MODE$1 && `The provided transition expression "${expr}" is not supported`);
+    return new ɵRuntimeError(3015 /* INVALID_EXPRESSION */, NG_DEV_MODE$1 && `The provided transition expression "${expr}" is not supported`);
 }
 function invalidTransitionAlias(alias) {
-    return new ɵRuntimeError(3016 /* RuntimeErrorCode.INVALID_TRANSITION_ALIAS */, NG_DEV_MODE$1 && `The transition alias value "${alias}" is not supported`);
+    return new ɵRuntimeError(3016 /* INVALID_TRANSITION_ALIAS */, NG_DEV_MODE$1 && `The transition alias value "${alias}" is not supported`);
 }
 function validationFailed(errors) {
-    return new ɵRuntimeError(3500 /* RuntimeErrorCode.VALIDATION_FAILED */, NG_DEV_MODE$1 && `animation validation failed:\n${errors.map(err => err.message).join('\n')}`);
+    return new ɵRuntimeError(3500 /* VALIDATION_FAILED */, NG_DEV_MODE$1 && `animation validation failed:\n${errors.map(err => err.message).join('\n')}`);
 }
 function buildingFailed(errors) {
-    return new ɵRuntimeError(3501 /* RuntimeErrorCode.BUILDING_FAILED */, NG_DEV_MODE$1 && `animation building failed:\n${errors.map(err => err.message).join('\n')}`);
+    return new ɵRuntimeError(3501 /* BUILDING_FAILED */, NG_DEV_MODE$1 && `animation building failed:\n${errors.map(err => err.message).join('\n')}`);
 }
 function triggerBuildFailed(name, errors) {
-    return new ɵRuntimeError(3404 /* RuntimeErrorCode.TRIGGER_BUILD_FAILED */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3404 /* TRIGGER_BUILD_FAILED */, NG_DEV_MODE$1 &&
         `The animation trigger "${name}" has failed to build due to the following errors:\n - ${errors.map(err => err.message).join('\n - ')}`);
 }
 function animationFailed(errors) {
-    return new ɵRuntimeError(3502 /* RuntimeErrorCode.ANIMATION_FAILED */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3502 /* ANIMATION_FAILED */, NG_DEV_MODE$1 &&
         `Unable to animate due to the following errors:${LINE_START}${errors.map(err => err.message).join(LINE_START)}`);
 }
 function registerFailed(errors) {
-    return new ɵRuntimeError(3503 /* RuntimeErrorCode.REGISTRATION_FAILED */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3503 /* REGISTRATION_FAILED */, NG_DEV_MODE$1 &&
         `Unable to build the animation due to the following errors: ${errors.map(err => err.message).join('\n')}`);
 }
 function missingOrDestroyedAnimation() {
-    return new ɵRuntimeError(3300 /* RuntimeErrorCode.MISSING_OR_DESTROYED_ANIMATION */, NG_DEV_MODE$1 && 'The requested animation doesn\'t exist or has already been destroyed');
+    return new ɵRuntimeError(3300 /* MISSING_OR_DESTROYED_ANIMATION */, NG_DEV_MODE$1 && 'The requested animation doesn\'t exist or has already been destroyed');
 }
 function createAnimationFailed(errors) {
-    return new ɵRuntimeError(3504 /* RuntimeErrorCode.CREATE_ANIMATION_FAILED */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3504 /* CREATE_ANIMATION_FAILED */, NG_DEV_MODE$1 &&
         `Unable to create the animation due to the following errors:${errors.map(err => err.message).join('\n')}`);
 }
 function missingPlayer(id) {
-    return new ɵRuntimeError(3301 /* RuntimeErrorCode.MISSING_PLAYER */, NG_DEV_MODE$1 && `Unable to find the timeline player referenced by ${id}`);
+    return new ɵRuntimeError(3301 /* MISSING_PLAYER */, NG_DEV_MODE$1 && `Unable to find the timeline player referenced by ${id}`);
 }
 function missingTrigger(phase, name) {
-    return new ɵRuntimeError(3302 /* RuntimeErrorCode.MISSING_TRIGGER */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3302 /* MISSING_TRIGGER */, NG_DEV_MODE$1 &&
         `Unable to listen on the animation trigger event "${phase}" because the animation trigger "${name}" doesn\'t exist!`);
 }
 function missingEvent(name) {
-    return new ɵRuntimeError(3303 /* RuntimeErrorCode.MISSING_EVENT */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3303 /* MISSING_EVENT */, NG_DEV_MODE$1 &&
         `Unable to listen on the animation trigger "${name}" because the provided event is undefined!`);
 }
 function unsupportedTriggerEvent(phase, name) {
-    return new ɵRuntimeError(3400 /* RuntimeErrorCode.UNSUPPORTED_TRIGGER_EVENT */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3400 /* UNSUPPORTED_TRIGGER_EVENT */, NG_DEV_MODE$1 &&
         `The provided animation trigger event "${phase}" for the animation trigger "${name}" is not supported!`);
 }
 function unregisteredTrigger(name) {
-    return new ɵRuntimeError(3401 /* RuntimeErrorCode.UNREGISTERED_TRIGGER */, NG_DEV_MODE$1 && `The provided animation trigger "${name}" has not been registered!`);
+    return new ɵRuntimeError(3401 /* UNREGISTERED_TRIGGER */, NG_DEV_MODE$1 && `The provided animation trigger "${name}" has not been registered!`);
 }
 function triggerTransitionsFailed(errors) {
-    return new ɵRuntimeError(3402 /* RuntimeErrorCode.TRIGGER_TRANSITIONS_FAILED */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3402 /* TRIGGER_TRANSITIONS_FAILED */, NG_DEV_MODE$1 &&
         `Unable to process animations due to the following failed trigger transitions\n ${errors.map(err => err.message).join('\n')}`);
 }
 function triggerParsingFailed(name, errors) {
-    return new ɵRuntimeError(3403 /* RuntimeErrorCode.TRIGGER_PARSING_FAILED */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3403 /* TRIGGER_PARSING_FAILED */, NG_DEV_MODE$1 &&
         `Animation parsing for the ${name} trigger have failed:${LINE_START}${errors.map(err => err.message).join(LINE_START)}`);
 }
 function transitionFailed(name, errors) {
-    return new ɵRuntimeError(3505 /* RuntimeErrorCode.TRANSITION_FAILED */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3505 /* TRANSITION_FAILED */, NG_DEV_MODE$1 &&
         `@${name} has failed due to:\n ${errors.map(err => err.message).join('\n- ')}`);
 }
 
@@ -580,9 +580,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.15+sha-29039fc", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.15+sha-29039fc", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.15+sha-29039fc", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.15+sha-fcc548a", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.15+sha-fcc548a", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.15+sha-fcc548a", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -856,31 +856,31 @@ function balancePreviousStylesIntoKeyframes(element, keyframes, previousStyles) 
 }
 function visitDslNode(visitor, node, context) {
     switch (node.type) {
-        case 7 /* AnimationMetadataType.Trigger */:
+        case 7 /* Trigger */:
             return visitor.visitTrigger(node, context);
-        case 0 /* AnimationMetadataType.State */:
+        case 0 /* State */:
             return visitor.visitState(node, context);
-        case 1 /* AnimationMetadataType.Transition */:
+        case 1 /* Transition */:
             return visitor.visitTransition(node, context);
-        case 2 /* AnimationMetadataType.Sequence */:
+        case 2 /* Sequence */:
             return visitor.visitSequence(node, context);
-        case 3 /* AnimationMetadataType.Group */:
+        case 3 /* Group */:
             return visitor.visitGroup(node, context);
-        case 4 /* AnimationMetadataType.Animate */:
+        case 4 /* Animate */:
             return visitor.visitAnimate(node, context);
-        case 5 /* AnimationMetadataType.Keyframes */:
+        case 5 /* Keyframes */:
             return visitor.visitKeyframes(node, context);
-        case 6 /* AnimationMetadataType.Style */:
+        case 6 /* Style */:
             return visitor.visitStyle(node, context);
-        case 8 /* AnimationMetadataType.Reference */:
+        case 8 /* Reference */:
             return visitor.visitReference(node, context);
-        case 9 /* AnimationMetadataType.AnimateChild */:
+        case 9 /* AnimateChild */:
             return visitor.visitAnimateChild(node, context);
-        case 10 /* AnimationMetadataType.AnimateRef */:
+        case 10 /* AnimateRef */:
             return visitor.visitAnimateRef(node, context);
-        case 11 /* AnimationMetadataType.Query */:
+        case 11 /* Query */:
             return visitor.visitQuery(node, context);
-        case 12 /* AnimationMetadataType.Stagger */:
+        case 12 /* Stagger */:
             return visitor.visitStagger(node, context);
         default:
             throw invalidNodeType(node.type);
@@ -1089,7 +1089,7 @@ class AnimationAstBuilderVisitor {
         }
         metadata.definitions.forEach(def => {
             this._resetContextStyleTimingState(context);
-            if (def.type == 0 /* AnimationMetadataType.State */) {
+            if (def.type == 0 /* State */) {
                 const stateDef = def;
                 const name = stateDef.name;
                 name.toString().split(/\s*,\s*/).forEach(n => {
@@ -1098,7 +1098,7 @@ class AnimationAstBuilderVisitor {
                 });
                 stateDef.name = name;
             }
-            else if (def.type == 1 /* AnimationMetadataType.Transition */) {
+            else if (def.type == 1 /* Transition */) {
                 const transition = this.visitTransition(def, context);
                 queryCount += transition.queryCount;
                 depCount += transition.depCount;
@@ -1109,7 +1109,7 @@ class AnimationAstBuilderVisitor {
             }
         });
         return {
-            type: 7 /* AnimationMetadataType.Trigger */,
+            type: 7 /* Trigger */,
             name: metadata.name,
             states,
             transitions,
@@ -1141,7 +1141,7 @@ class AnimationAstBuilderVisitor {
             }
         }
         return {
-            type: 0 /* AnimationMetadataType.State */,
+            type: 0 /* State */,
             name: metadata.name,
             style: styleAst,
             options: astParams ? { params: astParams } : null
@@ -1153,7 +1153,7 @@ class AnimationAstBuilderVisitor {
         const animation = visitDslNode(this, normalizeAnimationEntry(metadata.animation), context);
         const matchers = parseTransitionExpr(metadata.expr, context.errors);
         return {
-            type: 1 /* AnimationMetadataType.Transition */,
+            type: 1 /* Transition */,
             matchers,
             animation,
             queryCount: context.queryCount,
@@ -1163,7 +1163,7 @@ class AnimationAstBuilderVisitor {
     }
     visitSequence(metadata, context) {
         return {
-            type: 2 /* AnimationMetadataType.Sequence */,
+            type: 2 /* Sequence */,
             steps: metadata.steps.map(s => visitDslNode(this, s, context)),
             options: normalizeAnimationOptions(metadata.options)
         };
@@ -1179,7 +1179,7 @@ class AnimationAstBuilderVisitor {
         });
         context.currentTime = furthestTime;
         return {
-            type: 3 /* AnimationMetadataType.Group */,
+            type: 3 /* Group */,
             steps,
             options: normalizeAnimationOptions(metadata.options)
         };
@@ -1189,7 +1189,7 @@ class AnimationAstBuilderVisitor {
         context.currentAnimateTimings = timingAst;
         let styleAst;
         let styleMetadata = metadata.styles ? metadata.styles : style({});
-        if (styleMetadata.type == 5 /* AnimationMetadataType.Keyframes */) {
+        if (styleMetadata.type == 5 /* Keyframes */) {
             styleAst = this.visitKeyframes(styleMetadata, context);
         }
         else {
@@ -1210,7 +1210,7 @@ class AnimationAstBuilderVisitor {
         }
         context.currentAnimateTimings = null;
         return {
-            type: 4 /* AnimationMetadataType.Animate */,
+            type: 4 /* Animate */,
             timings: timingAst,
             style: styleAst,
             options: null
@@ -1256,7 +1256,7 @@ class AnimationAstBuilderVisitor {
             }
         });
         return {
-            type: 6 /* AnimationMetadataType.Style */,
+            type: 6 /* Style */,
             styles,
             easing: collectedEasing,
             offset: metadata.offset,
@@ -1316,7 +1316,7 @@ class AnimationAstBuilderVisitor {
         });
     }
     visitKeyframes(metadata, context) {
-        const ast = { type: 5 /* AnimationMetadataType.Keyframes */, styles: [], options: null };
+        const ast = { type: 5 /* Keyframes */, styles: [], options: null };
         if (!context.currentAnimateTimings) {
             context.errors.push(invalidKeyframes());
             return ast;
@@ -1372,7 +1372,7 @@ class AnimationAstBuilderVisitor {
     }
     visitReference(metadata, context) {
         return {
-            type: 8 /* AnimationMetadataType.Reference */,
+            type: 8 /* Reference */,
             animation: visitDslNode(this, normalizeAnimationEntry(metadata.animation), context),
             options: normalizeAnimationOptions(metadata.options)
         };
@@ -1380,13 +1380,13 @@ class AnimationAstBuilderVisitor {
     visitAnimateChild(metadata, context) {
         context.depCount++;
         return {
-            type: 9 /* AnimationMetadataType.AnimateChild */,
+            type: 9 /* AnimateChild */,
             options: normalizeAnimationOptions(metadata.options)
         };
     }
     visitAnimateRef(metadata, context) {
         return {
-            type: 10 /* AnimationMetadataType.AnimateRef */,
+            type: 10 /* AnimateRef */,
             animation: this.visitReference(metadata.animation, context),
             options: normalizeAnimationOptions(metadata.options)
         };
@@ -1404,7 +1404,7 @@ class AnimationAstBuilderVisitor {
         context.currentQuery = null;
         context.currentQuerySelector = parentSelector;
         return {
-            type: 11 /* AnimationMetadataType.Query */,
+            type: 11 /* Query */,
             selector,
             limit: options.limit || 0,
             optional: !!options.optional,
@@ -1422,7 +1422,7 @@ class AnimationAstBuilderVisitor {
             { duration: 0, delay: 0, easing: 'full' } :
             resolveTiming(metadata.timings, context.errors, true);
         return {
-            type: 12 /* AnimationMetadataType.Stagger */,
+            type: 12 /* Stagger */,
             animation: visitDslNode(this, normalizeAnimationEntry(metadata.animation), context),
             timings,
             options: null
@@ -1517,7 +1517,7 @@ function makeTimingAst(duration, delay, easing) {
 
 function createTimelineInstruction(element, keyframes, preStyleProps, postStyleProps, duration, delay, easing = null, subTimeline = false) {
     return {
-        type: 1 /* AnimationTransitionInstructionType.TimelineAnimation */,
+        type: 1 /* TimelineAnimation */,
         element,
         keyframes,
         preStyleProps,
@@ -1737,7 +1737,7 @@ class AnimationTimelineBuilderVisitor {
             ctx = context.createSubContext(options);
             ctx.transformIntoNewTimeline();
             if (options.delay != null) {
-                if (ctx.previousNode.type == 6 /* AnimationMetadataType.Style */) {
+                if (ctx.previousNode.type == 6 /* Style */) {
                     ctx.currentTimeline.snapshotCurrentStyles();
                     ctx.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
                 }
@@ -1796,7 +1796,7 @@ class AnimationTimelineBuilderVisitor {
             timeline.snapshotCurrentStyles();
         }
         const style = ast.style;
-        if (style.type == 5 /* AnimationMetadataType.Keyframes */) {
+        if (style.type == 5 /* Keyframes */) {
             this.visitKeyframes(style, context);
         }
         else {
@@ -1852,7 +1852,7 @@ class AnimationTimelineBuilderVisitor {
         const options = (ast.options || {});
         const delay = options.delay ? resolveTimingValue(options.delay) : 0;
         if (delay &&
-            (context.previousNode.type === 6 /* AnimationMetadataType.Style */ ||
+            (context.previousNode.type === 6 /* Style */ ||
                 (startTime == 0 && context.currentTimeline.hasCurrentStyleProperties()))) {
             context.currentTimeline.snapshotCurrentStyles();
             context.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
@@ -2431,7 +2431,7 @@ class WebAnimationsStyleNormalizer extends AnimationStyleNormalizer {
  */
 function createTransitionInstruction(element, triggerName, fromState, toState, isRemovalTransition, fromStyles, toStyles, timelines, queriedElements, preStyleProps, postStyleProps, totalTime, errors) {
     return {
-        type: 0 /* AnimationTransitionInstructionType.TransitionAnimation */,
+        type: 0 /* TransitionAnimation */,
         element,
         triggerName,
         isRemovalTransition,
@@ -2581,9 +2581,9 @@ class AnimationTrigger {
 }
 function createFallbackTransition(triggerName, states, normalizer) {
     const matchers = [(fromState, toState) => true];
-    const animation = { type: 2 /* AnimationMetadataType.Sequence */, steps: [], options: null };
+    const animation = { type: 2 /* Sequence */, steps: [], options: null };
     const transition = {
-        type: 1 /* AnimationMetadataType.Transition */,
+        type: 1 /* Transition */,
         animation,
         matchers,
         options: null,
@@ -4364,7 +4364,7 @@ class SpecialCasedStyles {
         this._element = _element;
         this._startStyles = _startStyles;
         this._endStyles = _endStyles;
-        this._state = 0 /* SpecialCasedStylesState.Pending */;
+        this._state = 0 /* Pending */;
         let initialStyles = SpecialCasedStyles.initialStylesByElement.get(_element);
         if (!initialStyles) {
             SpecialCasedStyles.initialStylesByElement.set(_element, initialStyles = new Map());
@@ -4372,27 +4372,27 @@ class SpecialCasedStyles {
         this._initialStyles = initialStyles;
     }
     start() {
-        if (this._state < 1 /* SpecialCasedStylesState.Started */) {
+        if (this._state < 1 /* Started */) {
             if (this._startStyles) {
                 setStyles(this._element, this._startStyles, this._initialStyles);
             }
-            this._state = 1 /* SpecialCasedStylesState.Started */;
+            this._state = 1 /* Started */;
         }
     }
     finish() {
         this.start();
-        if (this._state < 2 /* SpecialCasedStylesState.Finished */) {
+        if (this._state < 2 /* Finished */) {
             setStyles(this._element, this._initialStyles);
             if (this._endStyles) {
                 setStyles(this._element, this._endStyles);
                 this._endStyles = null;
             }
-            this._state = 1 /* SpecialCasedStylesState.Started */;
+            this._state = 1 /* Started */;
         }
     }
     destroy() {
         this.finish();
-        if (this._state < 3 /* SpecialCasedStylesState.Destroyed */) {
+        if (this._state < 3 /* Destroyed */) {
             SpecialCasedStyles.initialStylesByElement.delete(this._element);
             if (this._startStyles) {
                 eraseStyles(this._element, this._startStyles);
@@ -4403,7 +4403,7 @@ class SpecialCasedStyles {
                 this._endStyles = null;
             }
             setStyles(this._element, this._initialStyles);
-            this._state = 3 /* SpecialCasedStylesState.Destroyed */;
+            this._state = 3 /* Destroyed */;
         }
     }
 }

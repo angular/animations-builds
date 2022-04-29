@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.15+sha-29039fc
+ * @license Angular v14.0.0-next.15+sha-fcc548a
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -224,7 +224,7 @@ const AUTO_STYLE = '*';
  * @publicApi
  */
 function trigger(name, definitions) {
-    return { type: 7 /* AnimationMetadataType.Trigger */, name, definitions, options: {} };
+    return { type: 7 /* Trigger */, name, definitions, options: {} };
 }
 /**
  * Defines an animation step that combines styling information with timing information.
@@ -285,7 +285,7 @@ function trigger(name, definitions) {
  * @publicApi
  */
 function animate(timings, styles = null) {
-    return { type: 4 /* AnimationMetadataType.Animate */, styles, timings };
+    return { type: 4 /* Animate */, styles, timings };
 }
 /**
  * @description Defines a list of animation steps to be run in parallel.
@@ -321,7 +321,7 @@ function animate(timings, styles = null) {
  * @publicApi
  */
 function group(steps, options = null) {
-    return { type: 3 /* AnimationMetadataType.Group */, steps, options };
+    return { type: 3 /* Group */, steps, options };
 }
 /**
  * Defines a list of animation steps to be run sequentially, one by one.
@@ -357,7 +357,7 @@ function group(steps, options = null) {
  * @publicApi
  **/
 function sequence(steps, options = null) {
-    return { type: 2 /* AnimationMetadataType.Sequence */, steps, options };
+    return { type: 2 /* Sequence */, steps, options };
 }
 /**
  * Declares a key/value object containing CSS properties/styles that
@@ -399,7 +399,7 @@ function sequence(steps, options = null) {
  * @publicApi
  **/
 function style(tokens) {
-    return { type: 6 /* AnimationMetadataType.Style */, styles: tokens, offset: null };
+    return { type: 6 /* Style */, styles: tokens, offset: null };
 }
 /**
  * Declares an animation state within a trigger attached to an element.
@@ -431,7 +431,7 @@ function style(tokens) {
  * @publicApi
  **/
 function state(name, styles, options) {
-    return { type: 0 /* AnimationMetadataType.State */, name, styles, options };
+    return { type: 0 /* State */, name, styles, options };
 }
 /**
  * Defines a set of animation styles, associating each style with an optional `offset` value.
@@ -479,7 +479,7 @@ function state(name, styles, options) {
  * @publicApi
  */
 function keyframes(steps) {
-    return { type: 5 /* AnimationMetadataType.Keyframes */, steps };
+    return { type: 5 /* Keyframes */, steps };
 }
 /**
  * Declares an animation transition which is played when a certain specified condition is met.
@@ -628,7 +628,7 @@ function keyframes(steps) {
  * @publicApi
  **/
 function transition(stateChangeExpr, steps, options = null) {
-    return { type: 1 /* AnimationMetadataType.Transition */, expr: stateChangeExpr, animation: steps, options };
+    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, options };
 }
 /**
  * Produces a reusable animation that can be invoked in another animation or sequence,
@@ -676,7 +676,7 @@ function transition(stateChangeExpr, steps, options = null) {
  * @publicApi
  */
 function animation(steps, options = null) {
-    return { type: 8 /* AnimationMetadataType.Reference */, animation: steps, options };
+    return { type: 8 /* Reference */, animation: steps, options };
 }
 /**
  * Executes a queried inner animation element within an animation sequence.
@@ -698,7 +698,7 @@ function animation(steps, options = null) {
  * @publicApi
  */
 function animateChild(options = null) {
-    return { type: 9 /* AnimationMetadataType.AnimateChild */, options };
+    return { type: 9 /* AnimateChild */, options };
 }
 /**
  * Starts a reusable animation that is created using the `animation()` function.
@@ -711,7 +711,7 @@ function animateChild(options = null) {
  * @publicApi
  */
 function useAnimation(animation, options = null) {
-    return { type: 10 /* AnimationMetadataType.AnimateRef */, animation, options };
+    return { type: 10 /* AnimateRef */, animation, options };
 }
 /**
  * Finds one or more inner elements within the current element that is
@@ -834,7 +834,7 @@ function useAnimation(animation, options = null) {
  * @publicApi
  */
 function query(selector, animation, options = null) {
-    return { type: 11 /* AnimationMetadataType.Query */, selector, animation, options };
+    return { type: 11 /* Query */, selector, animation, options };
 }
 /**
  * Use within an animation `query()` call to issue a timing gap after
@@ -917,7 +917,7 @@ function query(selector, animation, options = null) {
  * @publicApi
  */
 function stagger(timings, animation) {
-    return { type: 12 /* AnimationMetadataType.Stagger */, timings, animation };
+    return { type: 12 /* Stagger */, timings, animation };
 }
 
 /**
