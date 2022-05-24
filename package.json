@@ -1,17 +1,17 @@
 {
   "name": "@angular/animations",
-  "version": "14.1.0-next.0+sha-8629f2d",
+  "version": "13.3.9+18.sha-3e3f8fc",
   "description": "Angular - animations integration with web-animations",
   "author": "angular",
   "license": "MIT",
   "engines": {
-    "node": "^14.15.0 || >=16.10.0"
+    "node": "^12.20.0 || ^14.15.0 || >=16.10.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/core": "14.1.0-next.0+sha-8629f2d"
+    "@angular/core": "13.3.9+18.sha-3e3f8fc"
   },
   "repository": {
     "type": "git",
@@ -42,7 +42,7 @@
   "fesm2020": "./fesm2020/animations.mjs",
   "fesm2015": "./fesm2015/animations.mjs",
   "esm2020": "./esm2020/animations.mjs",
-  "typings": "./index.d.ts",
+  "typings": "./animations.d.ts",
   "module": "./fesm2015/animations.mjs",
   "es2020": "./fesm2020/animations.mjs",
   "type": "module",
@@ -51,7 +51,7 @@
       "default": "./package.json"
     },
     ".": {
-      "types": "./index.d.ts",
+      "types": "./animations.d.ts",
       "esm2020": "./esm2020/animations.mjs",
       "es2020": "./fesm2020/animations.mjs",
       "es2015": "./fesm2015/animations.mjs",
@@ -59,7 +59,7 @@
       "default": "./fesm2020/animations.mjs"
     },
     "./browser": {
-      "types": "./browser/index.d.ts",
+      "types": "./browser/browser.d.ts",
       "esm2020": "./esm2020/browser/browser.mjs",
       "es2020": "./fesm2020/browser.mjs",
       "es2015": "./fesm2015/browser.mjs",
@@ -67,7 +67,7 @@
       "default": "./fesm2020/browser.mjs"
     },
     "./browser/testing": {
-      "types": "./browser/testing/index.d.ts",
+      "types": "./browser/testing/testing.d.ts",
       "esm2020": "./esm2020/browser/testing/testing.mjs",
       "es2020": "./fesm2020/browser/testing.mjs",
       "es2015": "./fesm2015/browser/testing.mjs",
