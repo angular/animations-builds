@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.2+sha-79a973a
+ * @license Angular v14.0.2+sha-c086653
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -208,6 +208,8 @@ export declare class ɵWebAnimationsPlayer implements AnimationPlayer {
     private _started;
     private _destroyed;
     private _finalKeyframe?;
+    private _originalOnDoneFns;
+    private _originalOnStartFns;
     readonly domPlayer: DOMAnimation;
     time: number;
     parentPlayer: AnimationPlayer | null;
