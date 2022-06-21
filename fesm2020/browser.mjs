@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0-next.1+sha-d2648d9
+ * @license Angular v14.1.0-next.1+sha-342effe
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -578,9 +578,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.1.0-next.1+sha-d2648d9", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.1.0-next.1+sha-d2648d9", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.1.0-next.1+sha-d2648d9", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.1.0-next.1+sha-342effe", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.1.0-next.1+sha-342effe", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.1.0-next.1+sha-342effe", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -4433,6 +4433,11 @@ class WebAnimationsPlayer {
         this._finished = false;
         this._started = false;
         this._destroyed = false;
+        // the following original fns are persistent copies of the _onStartFns and _onDoneFns
+        // and are used to reset the fns to their original values upon reset()
+        // (since the _onStartFns and _onDoneFns get deleted after they are called)
+        this._originalOnDoneFns = [];
+        this._originalOnStartFns = [];
         this.time = 0;
         this.parentPlayer = null;
         this.currentSnapshot = new Map();
@@ -4484,9 +4489,11 @@ class WebAnimationsPlayer {
         return element['animate'](this._convertKeyframesToObject(keyframes), options);
     }
     onStart(fn) {
+        this._originalOnStartFns.push(fn);
         this._onStartFns.push(fn);
     }
     onDone(fn) {
+        this._originalOnDoneFns.push(fn);
         this._onDoneFns.push(fn);
     }
     onDestroy(fn) {
@@ -4521,6 +4528,8 @@ class WebAnimationsPlayer {
         this._destroyed = false;
         this._finished = false;
         this._started = false;
+        this._onStartFns = this._originalOnStartFns;
+        this._onDoneFns = this._originalOnDoneFns;
     }
     _resetDomPlayerState() {
         if (this.domPlayer) {

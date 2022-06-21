@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0-next.1+sha-d2648d9
+ * @license Angular v14.1.0-next.1+sha-342effe
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -912,6 +912,8 @@ export declare class NoopAnimationPlayer implements AnimationPlayer {
     private _onDoneFns;
     private _onStartFns;
     private _onDestroyFns;
+    private _originalOnDoneFns;
+    private _originalOnStartFns;
     private _started;
     private _destroyed;
     private _finished;
