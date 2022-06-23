@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0-next.2+sha-a7db899
+ * @license Angular v14.1.0-next.2+sha-b417370
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -578,9 +578,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.1.0-next.2+sha-a7db899", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.1.0-next.2+sha-a7db899", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.1.0-next.2+sha-a7db899", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.1.0-next.2+sha-b417370", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.1.0-next.2+sha-b417370", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.1.0-next.2+sha-b417370", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -2968,10 +2968,13 @@ class AnimationTransitionNamespace {
     }
     _signalRemovalForInnerTriggers(rootElement, context) {
         const elements = this._engine.driver.query(rootElement, NG_TRIGGER_SELECTOR, true);
+        const shadowElements = rootElement.shadowRoot ?
+            this._engine.driver.query(rootElement.shadowRoot, NG_TRIGGER_SELECTOR, true) :
+            [];
         // emulate a leave animation for all inner nodes within this node.
         // If there are no animations found for any of the nodes then clear the cache
         // for the element.
-        elements.forEach(elm => {
+        [...elements, ...shadowElements].forEach(elm => {
             // this means that an inner remove() operation has already kicked off
             // the animation on this element...
             if (elm[REMOVAL_FLAG])
@@ -3046,7 +3049,9 @@ class AnimationTransitionNamespace {
     }
     removeNode(element, context) {
         const engine = this._engine;
-        if (element.childElementCount) {
+        const elementHasChildren = !!element.childElementCount;
+        const elementHasShadowChildren = !!(element.shadowRoot && element.shadowRoot.childElementCount);
+        if (elementHasChildren || elementHasShadowChildren) {
             this._signalRemovalForInnerTriggers(element, context);
         }
         // this means that a * => VOID animation was detected and kicked off
