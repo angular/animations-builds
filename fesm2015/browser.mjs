@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.5+sha-99697da
+ * @license Angular v14.0.5+sha-862dd03
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -578,9 +578,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.5+sha-99697da", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.5+sha-99697da", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.5+sha-99697da", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.5+sha-862dd03", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.5+sha-862dd03", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.5+sha-862dd03", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -920,11 +920,6 @@ function pushUnrecognizedPropertiesWarning(warnings, props) {
         warnings.push(`The following provided properties are not recognized: ${props.join(', ')}`);
     }
 }
-function pushNonAnimatablePropertiesWarning(warnings, props) {
-    if (props.length) {
-        warnings.push(`The following provided properties are not animatable: ${props.join(', ')}\n   (see: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties)`);
-    }
-}
 
 /**
  * @license
@@ -1064,9 +1059,6 @@ class AnimationAstBuilderVisitor {
         if (typeof ngDevMode === 'undefined' || ngDevMode) {
             if (context.unsupportedCSSPropertiesFound.size) {
                 pushUnrecognizedPropertiesWarning(warnings, [...context.unsupportedCSSPropertiesFound.keys()]);
-            }
-            if (context.nonAnimatableCSSPropertiesFound.size) {
-                pushNonAnimatablePropertiesWarning(warnings, [...context.nonAnimatableCSSPropertiesFound.keys()]);
             }
         }
         return ast;
@@ -1279,14 +1271,6 @@ class AnimationAstBuilderVisitor {
                         context.unsupportedCSSPropertiesFound.add(prop);
                         return;
                     }
-                    if (this._driver.validateAnimatableStyleProperty) {
-                        if (!this._driver.validateAnimatableStyleProperty(prop)) {
-                            context.nonAnimatableCSSPropertiesFound.add(prop);
-                            // note: non animatable properties are not removed for the tuple just in case they are
-                            //       categorized as non animatable but can actually be animated
-                            return;
-                        }
-                    }
                 }
                 // This is guaranteed to have a defined Map at this querySelector location making it
                 // safe to add the assertion here. It is set as a default empty map in prior methods.
@@ -1455,7 +1439,6 @@ class AnimationAstBuilderContext {
         this.collectedStyles = new Map();
         this.options = null;
         this.unsupportedCSSPropertiesFound = new Set();
-        this.nonAnimatableCSSPropertiesFound = new Set();
     }
 }
 function consumeOffset(styles) {
@@ -2499,8 +2482,54 @@ class AnimationTransitionFactory {
                 queriedElements.add(elm);
             }
         });
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            checkNonAnimatableInTimelines(timelines, this._triggerName, driver);
+        }
         const queriedElementsList = iteratorToArray(queriedElements.values());
         return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, timelines, queriedElementsList, preStyleMap, postStyleMap, totalTime);
+    }
+}
+/**
+ * Checks inside a set of timelines if they try to animate a css property which is not considered
+ * animatable, in that case it prints a warning on the console.
+ * Besides that the function doesn't have any other effect.
+ *
+ * Note: this check is done here after the timelines are built instead of doing on a lower level so
+ * that we can make sure that the warning appears only once per instruction (we can aggregate here
+ * all the issues instead of finding them separately).
+ *
+ * @param timelines The built timelines for the current instruction.
+ * @param triggerName The name of the trigger for the current instruction.
+ * @param driver Animation driver used to perform the check.
+ *
+ */
+function checkNonAnimatableInTimelines(timelines, triggerName, driver) {
+    if (!driver.validateAnimatableStyleProperty) {
+        return;
+    }
+    const invalidNonAnimatableProps = new Set();
+    timelines.forEach(({ keyframes }) => {
+        const nonAnimatablePropsInitialValues = new Map();
+        keyframes.forEach(keyframe => {
+            for (const [prop, value] of keyframe.entries()) {
+                if (!driver.validateAnimatableStyleProperty(prop)) {
+                    if (nonAnimatablePropsInitialValues.has(prop) && !invalidNonAnimatableProps.has(prop)) {
+                        const propInitialValue = nonAnimatablePropsInitialValues.get(prop);
+                        if (propInitialValue !== value) {
+                            invalidNonAnimatableProps.add(prop);
+                        }
+                    }
+                    else {
+                        nonAnimatablePropsInitialValues.set(prop, value);
+                    }
+                }
+            }
+        });
+    });
+    if (invalidNonAnimatableProps.size > 0) {
+        console.warn(`Warning: The animation trigger "${triggerName}" is attempting to animate the following` +
+            ' not animatable properties: ' + Array.from(invalidNonAnimatableProps).join(', ') + '\n' +
+            '(to check the list of all animatable properties visit https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties)');
     }
 }
 function oneOrMoreTransitionsMatch(matchFns, currentState, nextState, element, params) {
