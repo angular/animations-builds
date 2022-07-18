@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.6+sha-76badad
+ * @license Angular v14.0.6+sha-91b3ad1
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -578,9 +578,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.6+sha-76badad", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.6+sha-76badad", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.6+sha-76badad", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.6+sha-91b3ad1", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.6+sha-91b3ad1", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.6+sha-91b3ad1", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -2126,6 +2126,7 @@ class TimelineBuilder {
         this._currentEmptyStepKeyframe = this._currentKeyframe;
     }
     setStyles(input, easing, errors, options) {
+        var _a;
         if (easing) {
             this._previousKeyframe.set('easing', easing);
         }
@@ -2135,7 +2136,7 @@ class TimelineBuilder {
             const val = interpolateParams(value, params, errors);
             this._pendingStyles.set(prop, val);
             if (!this._localTimelineStyles.has(prop)) {
-                this._backFill.set(prop, this._globalTimelineStyles.get(prop) || AUTO_STYLE);
+                this._backFill.set(prop, (_a = this._globalTimelineStyles.get(prop)) !== null && _a !== void 0 ? _a : AUTO_STYLE);
             }
             this._updateStyle(prop, val);
         }
