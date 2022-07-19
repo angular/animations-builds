@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0-next.0+sha-1314b1c
+ * @license Angular v14.2.0-next.0+sha-186245a
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -15,131 +15,129 @@ import { ɵRuntimeError, Injectable } from '@angular/core';
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$1 = typeof ngDevMode === 'undefined' || !!ngDevMode;
 const LINE_START = '\n - ';
 function invalidTimingValue(exp) {
-    return new ɵRuntimeError(3000 /* RuntimeErrorCode.INVALID_TIMING_VALUE */, NG_DEV_MODE$1 && `The provided timing value "${exp}" is invalid.`);
+    return new ɵRuntimeError(3000 /* RuntimeErrorCode.INVALID_TIMING_VALUE */, ngDevMode && `The provided timing value "${exp}" is invalid.`);
 }
 function negativeStepValue() {
-    return new ɵRuntimeError(3100 /* RuntimeErrorCode.NEGATIVE_STEP_VALUE */, NG_DEV_MODE$1 && 'Duration values below 0 are not allowed for this animation step.');
+    return new ɵRuntimeError(3100 /* RuntimeErrorCode.NEGATIVE_STEP_VALUE */, ngDevMode && 'Duration values below 0 are not allowed for this animation step.');
 }
 function negativeDelayValue() {
-    return new ɵRuntimeError(3101 /* RuntimeErrorCode.NEGATIVE_DELAY_VALUE */, NG_DEV_MODE$1 && 'Delay values below 0 are not allowed for this animation step.');
+    return new ɵRuntimeError(3101 /* RuntimeErrorCode.NEGATIVE_DELAY_VALUE */, ngDevMode && 'Delay values below 0 are not allowed for this animation step.');
 }
 function invalidStyleParams(varName) {
-    return new ɵRuntimeError(3001 /* RuntimeErrorCode.INVALID_STYLE_PARAMS */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3001 /* RuntimeErrorCode.INVALID_STYLE_PARAMS */, ngDevMode &&
         `Unable to resolve the local animation param ${varName} in the given list of values`);
 }
 function invalidParamValue(varName) {
-    return new ɵRuntimeError(3003 /* RuntimeErrorCode.INVALID_PARAM_VALUE */, NG_DEV_MODE$1 && `Please provide a value for the animation param ${varName}`);
+    return new ɵRuntimeError(3003 /* RuntimeErrorCode.INVALID_PARAM_VALUE */, ngDevMode && `Please provide a value for the animation param ${varName}`);
 }
 function invalidNodeType(nodeType) {
-    return new ɵRuntimeError(3004 /* RuntimeErrorCode.INVALID_NODE_TYPE */, NG_DEV_MODE$1 && `Unable to resolve animation metadata node #${nodeType}`);
+    return new ɵRuntimeError(3004 /* RuntimeErrorCode.INVALID_NODE_TYPE */, ngDevMode && `Unable to resolve animation metadata node #${nodeType}`);
 }
 function invalidCssUnitValue(userProvidedProperty, value) {
-    return new ɵRuntimeError(3005 /* RuntimeErrorCode.INVALID_CSS_UNIT_VALUE */, NG_DEV_MODE$1 && `Please provide a CSS unit value for ${userProvidedProperty}:${value}`);
+    return new ɵRuntimeError(3005 /* RuntimeErrorCode.INVALID_CSS_UNIT_VALUE */, ngDevMode && `Please provide a CSS unit value for ${userProvidedProperty}:${value}`);
 }
 function invalidTrigger() {
-    return new ɵRuntimeError(3006 /* RuntimeErrorCode.INVALID_TRIGGER */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3006 /* RuntimeErrorCode.INVALID_TRIGGER */, ngDevMode &&
         'animation triggers cannot be prefixed with an `@` sign (e.g. trigger(\'@foo\', [...]))');
 }
 function invalidDefinition() {
-    return new ɵRuntimeError(3007 /* RuntimeErrorCode.INVALID_DEFINITION */, NG_DEV_MODE$1 && 'only state() and transition() definitions can sit inside of a trigger()');
+    return new ɵRuntimeError(3007 /* RuntimeErrorCode.INVALID_DEFINITION */, ngDevMode && 'only state() and transition() definitions can sit inside of a trigger()');
 }
 function invalidState(metadataName, missingSubs) {
-    return new ɵRuntimeError(3008 /* RuntimeErrorCode.INVALID_STATE */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3008 /* RuntimeErrorCode.INVALID_STATE */, ngDevMode &&
         `state("${metadataName}", ...) must define default values for all the following style substitutions: ${missingSubs.join(', ')}`);
 }
 function invalidStyleValue(value) {
-    return new ɵRuntimeError(3002 /* RuntimeErrorCode.INVALID_STYLE_VALUE */, NG_DEV_MODE$1 && `The provided style string value ${value} is not allowed.`);
+    return new ɵRuntimeError(3002 /* RuntimeErrorCode.INVALID_STYLE_VALUE */, ngDevMode && `The provided style string value ${value} is not allowed.`);
 }
 function invalidProperty(prop) {
-    return new ɵRuntimeError(3009 /* RuntimeErrorCode.INVALID_PROPERTY */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3009 /* RuntimeErrorCode.INVALID_PROPERTY */, ngDevMode &&
         `The provided animation property "${prop}" is not a supported CSS property for animations`);
 }
 function invalidParallelAnimation(prop, firstStart, firstEnd, secondStart, secondEnd) {
-    return new ɵRuntimeError(3010 /* RuntimeErrorCode.INVALID_PARALLEL_ANIMATION */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3010 /* RuntimeErrorCode.INVALID_PARALLEL_ANIMATION */, ngDevMode &&
         `The CSS property "${prop}" that exists between the times of "${firstStart}ms" and "${firstEnd}ms" is also being animated in a parallel animation between the times of "${secondStart}ms" and "${secondEnd}ms"`);
 }
 function invalidKeyframes() {
-    return new ɵRuntimeError(3011 /* RuntimeErrorCode.INVALID_KEYFRAMES */, NG_DEV_MODE$1 && `keyframes() must be placed inside of a call to animate()`);
+    return new ɵRuntimeError(3011 /* RuntimeErrorCode.INVALID_KEYFRAMES */, ngDevMode && `keyframes() must be placed inside of a call to animate()`);
 }
 function invalidOffset() {
-    return new ɵRuntimeError(3012 /* RuntimeErrorCode.INVALID_OFFSET */, NG_DEV_MODE$1 && `Please ensure that all keyframe offsets are between 0 and 1`);
+    return new ɵRuntimeError(3012 /* RuntimeErrorCode.INVALID_OFFSET */, ngDevMode && `Please ensure that all keyframe offsets are between 0 and 1`);
 }
 function keyframeOffsetsOutOfOrder() {
-    return new ɵRuntimeError(3200 /* RuntimeErrorCode.KEYFRAME_OFFSETS_OUT_OF_ORDER */, NG_DEV_MODE$1 && `Please ensure that all keyframe offsets are in order`);
+    return new ɵRuntimeError(3200 /* RuntimeErrorCode.KEYFRAME_OFFSETS_OUT_OF_ORDER */, ngDevMode && `Please ensure that all keyframe offsets are in order`);
 }
 function keyframesMissingOffsets() {
-    return new ɵRuntimeError(3202 /* RuntimeErrorCode.KEYFRAMES_MISSING_OFFSETS */, NG_DEV_MODE$1 && `Not all style() steps within the declared keyframes() contain offsets`);
+    return new ɵRuntimeError(3202 /* RuntimeErrorCode.KEYFRAMES_MISSING_OFFSETS */, ngDevMode && `Not all style() steps within the declared keyframes() contain offsets`);
 }
 function invalidStagger() {
-    return new ɵRuntimeError(3013 /* RuntimeErrorCode.INVALID_STAGGER */, NG_DEV_MODE$1 && `stagger() can only be used inside of query()`);
+    return new ɵRuntimeError(3013 /* RuntimeErrorCode.INVALID_STAGGER */, ngDevMode && `stagger() can only be used inside of query()`);
 }
 function invalidQuery(selector) {
-    return new ɵRuntimeError(3014 /* RuntimeErrorCode.INVALID_QUERY */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3014 /* RuntimeErrorCode.INVALID_QUERY */, ngDevMode &&
         `\`query("${selector}")\` returned zero elements. (Use \`query("${selector}", { optional: true })\` if you wish to allow this.)`);
 }
 function invalidExpression(expr) {
-    return new ɵRuntimeError(3015 /* RuntimeErrorCode.INVALID_EXPRESSION */, NG_DEV_MODE$1 && `The provided transition expression "${expr}" is not supported`);
+    return new ɵRuntimeError(3015 /* RuntimeErrorCode.INVALID_EXPRESSION */, ngDevMode && `The provided transition expression "${expr}" is not supported`);
 }
 function invalidTransitionAlias(alias) {
-    return new ɵRuntimeError(3016 /* RuntimeErrorCode.INVALID_TRANSITION_ALIAS */, NG_DEV_MODE$1 && `The transition alias value "${alias}" is not supported`);
+    return new ɵRuntimeError(3016 /* RuntimeErrorCode.INVALID_TRANSITION_ALIAS */, ngDevMode && `The transition alias value "${alias}" is not supported`);
 }
 function validationFailed(errors) {
-    return new ɵRuntimeError(3500 /* RuntimeErrorCode.VALIDATION_FAILED */, NG_DEV_MODE$1 && `animation validation failed:\n${errors.map(err => err.message).join('\n')}`);
+    return new ɵRuntimeError(3500 /* RuntimeErrorCode.VALIDATION_FAILED */, ngDevMode && `animation validation failed:\n${errors.map(err => err.message).join('\n')}`);
 }
 function buildingFailed(errors) {
-    return new ɵRuntimeError(3501 /* RuntimeErrorCode.BUILDING_FAILED */, NG_DEV_MODE$1 && `animation building failed:\n${errors.map(err => err.message).join('\n')}`);
+    return new ɵRuntimeError(3501 /* RuntimeErrorCode.BUILDING_FAILED */, ngDevMode && `animation building failed:\n${errors.map(err => err.message).join('\n')}`);
 }
 function triggerBuildFailed(name, errors) {
-    return new ɵRuntimeError(3404 /* RuntimeErrorCode.TRIGGER_BUILD_FAILED */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3404 /* RuntimeErrorCode.TRIGGER_BUILD_FAILED */, ngDevMode &&
         `The animation trigger "${name}" has failed to build due to the following errors:\n - ${errors.map(err => err.message).join('\n - ')}`);
 }
 function animationFailed(errors) {
-    return new ɵRuntimeError(3502 /* RuntimeErrorCode.ANIMATION_FAILED */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3502 /* RuntimeErrorCode.ANIMATION_FAILED */, ngDevMode &&
         `Unable to animate due to the following errors:${LINE_START}${errors.map(err => err.message).join(LINE_START)}`);
 }
 function registerFailed(errors) {
-    return new ɵRuntimeError(3503 /* RuntimeErrorCode.REGISTRATION_FAILED */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3503 /* RuntimeErrorCode.REGISTRATION_FAILED */, ngDevMode &&
         `Unable to build the animation due to the following errors: ${errors.map(err => err.message).join('\n')}`);
 }
 function missingOrDestroyedAnimation() {
-    return new ɵRuntimeError(3300 /* RuntimeErrorCode.MISSING_OR_DESTROYED_ANIMATION */, NG_DEV_MODE$1 && 'The requested animation doesn\'t exist or has already been destroyed');
+    return new ɵRuntimeError(3300 /* RuntimeErrorCode.MISSING_OR_DESTROYED_ANIMATION */, ngDevMode && 'The requested animation doesn\'t exist or has already been destroyed');
 }
 function createAnimationFailed(errors) {
-    return new ɵRuntimeError(3504 /* RuntimeErrorCode.CREATE_ANIMATION_FAILED */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3504 /* RuntimeErrorCode.CREATE_ANIMATION_FAILED */, ngDevMode &&
         `Unable to create the animation due to the following errors:${errors.map(err => err.message).join('\n')}`);
 }
 function missingPlayer(id) {
-    return new ɵRuntimeError(3301 /* RuntimeErrorCode.MISSING_PLAYER */, NG_DEV_MODE$1 && `Unable to find the timeline player referenced by ${id}`);
+    return new ɵRuntimeError(3301 /* RuntimeErrorCode.MISSING_PLAYER */, ngDevMode && `Unable to find the timeline player referenced by ${id}`);
 }
 function missingTrigger(phase, name) {
-    return new ɵRuntimeError(3302 /* RuntimeErrorCode.MISSING_TRIGGER */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3302 /* RuntimeErrorCode.MISSING_TRIGGER */, ngDevMode &&
         `Unable to listen on the animation trigger event "${phase}" because the animation trigger "${name}" doesn\'t exist!`);
 }
 function missingEvent(name) {
-    return new ɵRuntimeError(3303 /* RuntimeErrorCode.MISSING_EVENT */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3303 /* RuntimeErrorCode.MISSING_EVENT */, ngDevMode &&
         `Unable to listen on the animation trigger "${name}" because the provided event is undefined!`);
 }
 function unsupportedTriggerEvent(phase, name) {
-    return new ɵRuntimeError(3400 /* RuntimeErrorCode.UNSUPPORTED_TRIGGER_EVENT */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3400 /* RuntimeErrorCode.UNSUPPORTED_TRIGGER_EVENT */, ngDevMode &&
         `The provided animation trigger event "${phase}" for the animation trigger "${name}" is not supported!`);
 }
 function unregisteredTrigger(name) {
-    return new ɵRuntimeError(3401 /* RuntimeErrorCode.UNREGISTERED_TRIGGER */, NG_DEV_MODE$1 && `The provided animation trigger "${name}" has not been registered!`);
+    return new ɵRuntimeError(3401 /* RuntimeErrorCode.UNREGISTERED_TRIGGER */, ngDevMode && `The provided animation trigger "${name}" has not been registered!`);
 }
 function triggerTransitionsFailed(errors) {
-    return new ɵRuntimeError(3402 /* RuntimeErrorCode.TRIGGER_TRANSITIONS_FAILED */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3402 /* RuntimeErrorCode.TRIGGER_TRANSITIONS_FAILED */, ngDevMode &&
         `Unable to process animations due to the following failed trigger transitions\n ${errors.map(err => err.message).join('\n')}`);
 }
 function triggerParsingFailed(name, errors) {
-    return new ɵRuntimeError(3403 /* RuntimeErrorCode.TRIGGER_PARSING_FAILED */, NG_DEV_MODE$1 &&
+    return new ɵRuntimeError(3403 /* RuntimeErrorCode.TRIGGER_PARSING_FAILED */, ngDevMode &&
         `Animation parsing for the ${name} trigger have failed:${LINE_START}${errors.map(err => err.message).join(LINE_START)}`);
 }
 function transitionFailed(name, errors) {
-    return new ɵRuntimeError(3505 /* RuntimeErrorCode.TRANSITION_FAILED */, NG_DEV_MODE$1 &&
-        `@${name} has failed due to:\n ${errors.map(err => err.message).join('\n- ')}`);
+    return new ɵRuntimeError(3505 /* RuntimeErrorCode.TRANSITION_FAILED */, ngDevMode && `@${name} has failed due to:\n ${errors.map(err => err.message).join('\n- ')}`);
 }
 
 /**
@@ -580,9 +578,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.1.0-next.0+sha-1314b1c", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.1.0-next.0+sha-1314b1c", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.1.0-next.0+sha-1314b1c", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.0+sha-186245a", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.0+sha-186245a", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.0+sha-186245a", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -922,11 +920,6 @@ function pushUnrecognizedPropertiesWarning(warnings, props) {
         warnings.push(`The following provided properties are not recognized: ${props.join(', ')}`);
     }
 }
-function pushNonAnimatablePropertiesWarning(warnings, props) {
-    if (props.length) {
-        warnings.push(`The following provided properties are not animatable: ${props.join(', ')}\n   (see: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties)`);
-    }
-}
 
 /**
  * @license
@@ -1066,9 +1059,6 @@ class AnimationAstBuilderVisitor {
         if (typeof ngDevMode === 'undefined' || ngDevMode) {
             if (context.unsupportedCSSPropertiesFound.size) {
                 pushUnrecognizedPropertiesWarning(warnings, [...context.unsupportedCSSPropertiesFound.keys()]);
-            }
-            if (context.nonAnimatableCSSPropertiesFound.size) {
-                pushNonAnimatablePropertiesWarning(warnings, [...context.nonAnimatableCSSPropertiesFound.keys()]);
             }
         }
         return ast;
@@ -1281,14 +1271,6 @@ class AnimationAstBuilderVisitor {
                         context.unsupportedCSSPropertiesFound.add(prop);
                         return;
                     }
-                    if (this._driver.validateAnimatableStyleProperty) {
-                        if (!this._driver.validateAnimatableStyleProperty(prop)) {
-                            context.nonAnimatableCSSPropertiesFound.add(prop);
-                            // note: non animatable properties are not removed for the tuple just in case they are
-                            //       categorized as non animatable but can actually be animated
-                            return;
-                        }
-                    }
                 }
                 // This is guaranteed to have a defined Map at this querySelector location making it
                 // safe to add the assertion here. It is set as a default empty map in prior methods.
@@ -1457,7 +1439,6 @@ class AnimationAstBuilderContext {
         this.collectedStyles = new Map();
         this.options = null;
         this.unsupportedCSSPropertiesFound = new Set();
-        this.nonAnimatableCSSPropertiesFound = new Set();
     }
 }
 function consumeOffset(styles) {
@@ -2145,6 +2126,7 @@ class TimelineBuilder {
         this._currentEmptyStepKeyframe = this._currentKeyframe;
     }
     setStyles(input, easing, errors, options) {
+        var _a;
         if (easing) {
             this._previousKeyframe.set('easing', easing);
         }
@@ -2154,7 +2136,7 @@ class TimelineBuilder {
             const val = interpolateParams(value, params, errors);
             this._pendingStyles.set(prop, val);
             if (!this._localTimelineStyles.has(prop)) {
-                this._backFill.set(prop, this._globalTimelineStyles.get(prop) || AUTO_STYLE);
+                this._backFill.set(prop, (_a = this._globalTimelineStyles.get(prop)) !== null && _a !== void 0 ? _a : AUTO_STYLE);
             }
             this._updateStyle(prop, val);
         }
@@ -2501,8 +2483,54 @@ class AnimationTransitionFactory {
                 queriedElements.add(elm);
             }
         });
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            checkNonAnimatableInTimelines(timelines, this._triggerName, driver);
+        }
         const queriedElementsList = iteratorToArray(queriedElements.values());
         return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, timelines, queriedElementsList, preStyleMap, postStyleMap, totalTime);
+    }
+}
+/**
+ * Checks inside a set of timelines if they try to animate a css property which is not considered
+ * animatable, in that case it prints a warning on the console.
+ * Besides that the function doesn't have any other effect.
+ *
+ * Note: this check is done here after the timelines are built instead of doing on a lower level so
+ * that we can make sure that the warning appears only once per instruction (we can aggregate here
+ * all the issues instead of finding them separately).
+ *
+ * @param timelines The built timelines for the current instruction.
+ * @param triggerName The name of the trigger for the current instruction.
+ * @param driver Animation driver used to perform the check.
+ *
+ */
+function checkNonAnimatableInTimelines(timelines, triggerName, driver) {
+    if (!driver.validateAnimatableStyleProperty) {
+        return;
+    }
+    const invalidNonAnimatableProps = new Set();
+    timelines.forEach(({ keyframes }) => {
+        const nonAnimatablePropsInitialValues = new Map();
+        keyframes.forEach(keyframe => {
+            for (const [prop, value] of keyframe.entries()) {
+                if (!driver.validateAnimatableStyleProperty(prop)) {
+                    if (nonAnimatablePropsInitialValues.has(prop) && !invalidNonAnimatableProps.has(prop)) {
+                        const propInitialValue = nonAnimatablePropsInitialValues.get(prop);
+                        if (propInitialValue !== value) {
+                            invalidNonAnimatableProps.add(prop);
+                        }
+                    }
+                    else {
+                        nonAnimatablePropsInitialValues.set(prop, value);
+                    }
+                }
+            }
+        });
+    });
+    if (invalidNonAnimatableProps.size > 0) {
+        console.warn(`Warning: The animation trigger "${triggerName}" is attempting to animate the following` +
+            ' not animatable properties: ' + Array.from(invalidNonAnimatableProps).join(', ') + '\n' +
+            '(to check the list of all animatable properties visit https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties)');
     }
 }
 function oneOrMoreTransitionsMatch(matchFns, currentState, nextState, element, params) {
@@ -4440,6 +4468,11 @@ class WebAnimationsPlayer {
         this._finished = false;
         this._started = false;
         this._destroyed = false;
+        // the following original fns are persistent copies of the _onStartFns and _onDoneFns
+        // and are used to reset the fns to their original values upon reset()
+        // (since the _onStartFns and _onDoneFns get deleted after they are called)
+        this._originalOnDoneFns = [];
+        this._originalOnStartFns = [];
         this.time = 0;
         this.parentPlayer = null;
         this.currentSnapshot = new Map();
@@ -4491,9 +4524,11 @@ class WebAnimationsPlayer {
         return element['animate'](this._convertKeyframesToObject(keyframes), options);
     }
     onStart(fn) {
+        this._originalOnStartFns.push(fn);
         this._onStartFns.push(fn);
     }
     onDone(fn) {
+        this._originalOnDoneFns.push(fn);
         this._onDoneFns.push(fn);
     }
     onDestroy(fn) {
@@ -4528,6 +4563,8 @@ class WebAnimationsPlayer {
         this._destroyed = false;
         this._finished = false;
         this._started = false;
+        this._onStartFns = this._originalOnStartFns;
+        this._onDoneFns = this._originalOnDoneFns;
     }
     _resetDomPlayerState() {
         if (this.domPlayer) {

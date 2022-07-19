@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0-next.0+sha-1314b1c
+ * @license Angular v14.2.0-next.0+sha-186245a
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -954,6 +954,8 @@ class NoopAnimationPlayer {
         this._onDoneFns = [];
         this._onStartFns = [];
         this._onDestroyFns = [];
+        this._originalOnDoneFns = [];
+        this._originalOnStartFns = [];
         this._started = false;
         this._destroyed = false;
         this._finished = false;
@@ -969,9 +971,11 @@ class NoopAnimationPlayer {
         }
     }
     onStart(fn) {
+        this._originalOnStartFns.push(fn);
         this._onStartFns.push(fn);
     }
     onDone(fn) {
+        this._originalOnDoneFns.push(fn);
         this._onDoneFns.push(fn);
     }
     onDestroy(fn) {
@@ -1014,6 +1018,9 @@ class NoopAnimationPlayer {
     }
     reset() {
         this._started = false;
+        this._finished = false;
+        this._onStartFns = this._originalOnStartFns;
+        this._onDoneFns = this._originalOnDoneFns;
     }
     setPosition(position) {
         this._position = this.totalTime ? position * this.totalTime : 1;
