@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.3+sha-baaf1d1
+ * @license Angular v14.1.3+sha-791fa9a
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -578,9 +578,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.1.3+sha-baaf1d1", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.1.3+sha-baaf1d1", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.1.3+sha-baaf1d1", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.1.3+sha-791fa9a", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.1.3+sha-791fa9a", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.1.3+sha-791fa9a", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -1402,7 +1402,7 @@ class AnimationAstBuilderVisitor {
         }
         const timings = metadata.timings === 'full' ?
             { duration: 0, delay: 0, easing: 'full' } :
-            constructTimingAst(metadata.timings, context.errors);
+            resolveTiming(metadata.timings, context.errors, true);
         return {
             type: 12 /* AnimationMetadataType.Stagger */,
             animation: visitDslNode(this, normalizeAnimationEntry(metadata.animation), context),
@@ -1759,11 +1759,11 @@ class AnimationTimelineBuilderVisitor {
         context.transformIntoNewTimeline(furthestTime);
         context.previousNode = ast;
     }
-    _visitTiming(ast, context, allowNegativeValues = false) {
+    _visitTiming(ast, context) {
         if (ast.dynamic) {
             const strValue = ast.strValue;
             const timingValue = context.params ? interpolateParams(strValue, context.params, context.errors) : strValue;
-            return resolveTiming(timingValue, context.errors, allowNegativeValues);
+            return resolveTiming(timingValue, context.errors);
         }
         else {
             return { duration: ast.duration, delay: ast.delay, easing: ast.easing };
@@ -1871,7 +1871,7 @@ class AnimationTimelineBuilderVisitor {
     visitStagger(ast, context) {
         const parentContext = context.parentContext;
         const tl = context.currentTimeline;
-        const timings = this._visitTiming(ast.timings, context, true);
+        const timings = ast.timings;
         const duration = Math.abs(timings.duration);
         const maxTime = duration * (context.currentQueryTotal - 1);
         let delay = duration * context.currentQueryIndex;
