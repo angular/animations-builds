@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.0-next.2+sha-32cad55
+ * @license Angular v15.0.0-next.2+sha-d11b1d9
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -578,9 +578,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.0-next.2+sha-32cad55", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.0.0-next.2+sha-32cad55", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0-next.2+sha-32cad55", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.0-next.2+sha-d11b1d9", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.0.0-next.2+sha-d11b1d9", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0-next.2+sha-d11b1d9", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -1685,25 +1685,21 @@ class AnimationTimelineBuilderVisitor {
     visitAnimateRef(ast, context) {
         const innerContext = context.createSubContext(ast.options);
         innerContext.transformIntoNewTimeline();
-        this._applyAnimateRefDelay(ast.animation, context, innerContext);
+        this._applyAnimationRefDelays([ast.options, ast.animation.options], context, innerContext);
         this.visitReference(ast.animation, innerContext);
         context.transformIntoNewTimeline(innerContext.currentTimeline.currentTime);
         context.previousNode = ast;
     }
-    _applyAnimateRefDelay(animation, context, innerContext) {
-        const animationDelay = animation.options?.delay;
-        if (!animationDelay) {
-            return;
+    _applyAnimationRefDelays(animationsRefsOptions, context, innerContext) {
+        for (const animationRefOptions of animationsRefsOptions) {
+            const animationDelay = animationRefOptions?.delay;
+            if (animationDelay) {
+                const animationDelayValue = typeof animationDelay === 'number' ?
+                    animationDelay :
+                    resolveTimingValue(interpolateParams(animationDelay, animationRefOptions?.params ?? {}, context.errors));
+                innerContext.delayNextStep(animationDelayValue);
+            }
         }
-        let animationDelayValue;
-        if (typeof animationDelay === 'string') {
-            const interpolatedDelay = interpolateParams(animationDelay, animation.options?.params ?? {}, context.errors);
-            animationDelayValue = resolveTimingValue(interpolatedDelay);
-        }
-        else {
-            animationDelayValue = animationDelay;
-        }
-        innerContext.delayNextStep(animationDelayValue);
     }
     _visitSubInstructions(instructions, context, options) {
         const startTime = context.currentTimeline.currentTime;
