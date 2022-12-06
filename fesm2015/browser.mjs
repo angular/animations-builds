@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-next.1+sha-8656ac0
+ * @license Angular v15.1.0-next.1+sha-dd42974
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -578,9 +578,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.1+sha-8656ac0", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.1+sha-8656ac0", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.1+sha-8656ac0", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.1+sha-dd42974", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.1+sha-dd42974", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.1+sha-dd42974", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -2807,6 +2807,9 @@ const NULL_REMOVED_QUERIED_STATE = {
 };
 const REMOVAL_FLAG = '__ng_removed';
 class StateValue {
+    get params() {
+        return this.options.params;
+    }
     constructor(input, namespaceId = '') {
         this.namespaceId = namespaceId;
         const isObj = input && input.hasOwnProperty('value');
@@ -2823,9 +2826,6 @@ class StateValue {
         if (!this.options.params) {
             this.options.params = {};
         }
-    }
-    get params() {
-        return this.options.params;
     }
     absorbOptions(options) {
         const newParams = options.params;
@@ -3197,6 +3197,10 @@ class AnimationTransitionNamespace {
     }
 }
 class TransitionAnimationEngine {
+    /** @internal */
+    _onRemovalComplete(element, context) {
+        this.onRemovalComplete(element, context);
+    }
     constructor(bodyNode, driver, _normalizer) {
         this.bodyNode = bodyNode;
         this.driver = driver;
@@ -3218,10 +3222,6 @@ class TransitionAnimationEngine {
         this.collectedLeaveElements = [];
         // this method is designed to be overridden by the code that uses this engine
         this.onRemovalComplete = (element, context) => { };
-    }
-    /** @internal */
-    _onRemovalComplete(element, context) {
-        this.onRemovalComplete(element, context);
     }
     get queuedPlayers() {
         const players = [];
