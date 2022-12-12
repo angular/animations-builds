@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.3+sha-8ca95b8
+ * @license Angular v15.0.3+sha-6c1064c
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -578,9 +578,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.3+sha-8ca95b8", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.0.3+sha-8ca95b8", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.3+sha-8ca95b8", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.3+sha-6c1064c", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.0.3+sha-6c1064c", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.3+sha-6c1064c", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -2578,7 +2578,7 @@ class AnimationStateStyles {
                     }
                     const normalizedProp = this.normalizer.normalizePropertyName(prop, errors);
                     val = this.normalizer.normalizeStyleValue(prop, normalizedProp, val, errors);
-                    finalStyles.set(normalizedProp, val);
+                    finalStyles.set(prop, val);
                 });
             }
         });
