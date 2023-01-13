@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0+sha-dd54f6b
+ * @license Angular v15.1.0+sha-5978eed
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,13 +8,6 @@ import { ɵAnimationGroupPlayer, NoopAnimationPlayer, AUTO_STYLE, ɵPRE_STYLE, s
 import * as i0 from '@angular/core';
 import { ɵRuntimeError, Injectable } from '@angular/core';
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const LINE_START = '\n - ';
 function invalidTimingValue(exp) {
     return new ɵRuntimeError(3000 /* RuntimeErrorCode.INVALID_TIMING_VALUE */, ngDevMode && `The provided timing value "${exp}" is invalid.`);
@@ -140,13 +133,6 @@ function transitionFailed(name, errors) {
     return new ɵRuntimeError(3505 /* RuntimeErrorCode.TRANSITION_FAILED */, ngDevMode && `@${name} has failed due to:\n ${errors.map(err => err.message).join('\n- ')}`);
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Set of all animatable CSS properties
  *
@@ -354,13 +340,6 @@ const ANIMATABLE_PROP_SET = new Set([
     'zoom',
 ]);
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 function isBrowser() {
     return (typeof window !== 'undefined' && typeof window.document !== 'undefined');
 }
@@ -545,13 +524,6 @@ function hypenatePropsKeys(original) {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * @publicApi
  */
 class NoopAnimationDriver {
@@ -578,9 +550,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0+sha-dd54f6b", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0+sha-dd54f6b", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0+sha-dd54f6b", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0+sha-5978eed", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0+sha-5978eed", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0+sha-5978eed", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -590,13 +562,6 @@ class AnimationDriver {
 }
 AnimationDriver.NOOP = ( /* @__PURE__ */new NoopAnimationDriver());
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const ONE_SECOND = 1000;
 const SUBSTITUTION_EXPR_START = '{{';
 const SUBSTITUTION_EXPR_END = '}}';
@@ -888,13 +853,6 @@ function computeStyle(element, prop) {
     return window.getComputedStyle(element)[prop];
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const NG_DEV_MODE = typeof ngDevMode === 'undefined' || !!ngDevMode;
 function createListOfWarnings(warnings) {
     const LINE_START = '\n - ';
@@ -921,13 +879,6 @@ function pushUnrecognizedPropertiesWarning(warnings, props) {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const ANY_STATE = '*';
 function parseTransitionExpr(transitionValue, errors) {
     const expressions = [];
@@ -999,13 +950,6 @@ function makeLambdaFromStates(lhs, rhs) {
     };
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const SELF_TOKEN = ':self';
 const SELF_TOKEN_REGEX = new RegExp(`\s*${SELF_TOKEN}\s*,?`, 'g');
 /*
@@ -1533,13 +1477,6 @@ class ElementInstructionMap {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const ONE_FRAME_IN_MILLISECONDS = 1;
 const ENTER_TOKEN = ':enter';
 const ENTER_TOKEN_REGEX = new RegExp(ENTER_TOKEN, 'g');
@@ -2334,13 +2271,6 @@ class Animation {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * @publicApi
  */
 class AnimationStyleNormalizer {
@@ -2357,13 +2287,6 @@ class NoopAnimationStyleNormalizer {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const DIMENSIONAL_PROP_SET = new Set([
     'width',
     'height',
@@ -2417,13 +2340,6 @@ class WebAnimationsStyleNormalizer extends AnimationStyleNormalizer {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 function createTransitionInstruction(element, triggerName, fromState, toState, isRemovalTransition, fromStyles, toStyles, timelines, queriedElements, preStyleProps, postStyleProps, totalTime, errors) {
     return {
         type: 0 /* AnimationTransitionInstructionType.TransitionAnimation */,
@@ -2645,13 +2561,6 @@ function balanceProperties(stateMap, key1, key2) {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const EMPTY_INSTRUCTION_MAP = new ElementInstructionMap();
 class TimelineAnimationEngine {
     constructor(bodyNode, _driver, _normalizer) {
@@ -2777,13 +2686,6 @@ class TimelineAnimationEngine {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const QUEUED_CLASSNAME = 'ng-animate-queued';
 const QUEUED_SELECTOR = '.ng-animate-queued';
 const DISABLED_CLASSNAME = 'ng-animate-disabled';
@@ -4693,36 +4595,18 @@ class WebAnimationsDriver {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @module
+ * @description
+ * Entry point for all animation APIs of the animation browser package.
  */
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @module
+ * @description
+ * Entry point for all public APIs of this package.
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
+// This file is not used to build this module. It is only used during editing
 
 /**
  * Generated bundle index. Do not edit.
