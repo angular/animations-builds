@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.2+sha-9e86dd2
+ * @license Angular v15.1.2+sha-d36dfd4
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -550,9 +550,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.2+sha-9e86dd2", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.2+sha-9e86dd2", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.2+sha-9e86dd2", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.2+sha-d36dfd4", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.2+sha-d36dfd4", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.2+sha-d36dfd4", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -2434,11 +2434,19 @@ function checkNonAnimatableInTimelines(timelines, triggerName, driver) {
     if (!driver.validateAnimatableStyleProperty) {
         return;
     }
+    const allowedNonAnimatableProps = new Set([
+        // 'easing' is a utility/synthetic prop we use to represent
+        // easing functions, it represents a property of the animation
+        // which is not animatable but different values can be used
+        // in different steps
+        'easing'
+    ]);
     const invalidNonAnimatableProps = new Set();
     timelines.forEach(({ keyframes }) => {
         const nonAnimatablePropsInitialValues = new Map();
         keyframes.forEach(keyframe => {
-            for (const [prop, value] of keyframe.entries()) {
+            const entriesToCheck = Array.from(keyframe.entries()).filter(([prop]) => !allowedNonAnimatableProps.has(prop));
+            for (const [prop, value] of entriesToCheck) {
                 if (!driver.validateAnimatableStyleProperty(prop)) {
                     if (nonAnimatablePropsInitialValues.has(prop) && !invalidNonAnimatableProps.has(prop)) {
                         const propInitialValue = nonAnimatablePropsInitialValues.get(prop);
