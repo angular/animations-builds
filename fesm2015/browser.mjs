@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.1+sha-2312eb5
+ * @license Angular v16.0.0-next.1+sha-477237a
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -550,9 +550,9 @@ class NoopAnimationDriver {
         return new NoopAnimationPlayer(duration, delay);
     }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.1+sha-2312eb5", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.1+sha-2312eb5", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.1+sha-2312eb5", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.1+sha-477237a", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.1+sha-477237a", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.1+sha-477237a", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -1978,6 +1978,7 @@ class TimelineBuilder {
         this.startTime = startTime;
         this._elementTimelineStylesLookup = _elementTimelineStylesLookup;
         this.duration = 0;
+        this.easing = null;
         this._previousKeyframe = new Map();
         this._currentKeyframe = new Map();
         this._keyframes = new Map();
@@ -3960,6 +3961,7 @@ class TransitionAnimationPlayer {
         this._containsRealPlayer = false;
         this._queuedCallbacks = new Map();
         this.destroyed = false;
+        this.parentPlayer = null;
         this.markedForDestroy = false;
         this.disabled = false;
         this.queued = true;
@@ -4419,8 +4421,8 @@ class WebAnimationsPlayer {
             return;
         this._initialized = true;
         const keyframes = this.keyframes;
-        this.domPlayer =
-            this._triggerWebAnimation(this.element, keyframes, this.options);
+        // @ts-expect-error overwriting a readonly property
+        this.domPlayer = this._triggerWebAnimation(this.element, keyframes, this.options);
         this._finalKeyframe = keyframes.length ? keyframes[keyframes.length - 1] : new Map();
         this.domPlayer.addEventListener('finish', () => this._onFinish());
     }
