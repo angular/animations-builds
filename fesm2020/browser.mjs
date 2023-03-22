@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.4+sha-132c00c
+ * @license Angular v16.0.0-next.4+sha-07cbaa3
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -549,18 +549,18 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.4+sha-132c00c", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.4+sha-132c00c", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.4+sha-132c00c", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.4+sha-07cbaa3", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.4+sha-07cbaa3", ngImport: i0, type: NoopAnimationDriver });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.4+sha-07cbaa3", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
  * @publicApi
  */
 class AnimationDriver {
-    static { this.NOOP = ( /* @__PURE__ */new NoopAnimationDriver()); }
 }
+AnimationDriver.NOOP = ( /* @__PURE__ */new NoopAnimationDriver());
 
 const ONE_SECOND = 1000;
 const SUBSTITUTION_EXPR_START = '{{';
@@ -853,24 +853,24 @@ function computeStyle(element, prop) {
     return window.getComputedStyle(element)[prop];
 }
 
-const NG_DEV_MODE = typeof ngDevMode === 'undefined' || !!ngDevMode;
 function createListOfWarnings(warnings) {
     const LINE_START = '\n - ';
     return `${LINE_START}${warnings.filter(Boolean).map(warning => warning).join(LINE_START)}`;
 }
 function warnValidation(warnings) {
-    NG_DEV_MODE && console.warn(`animation validation warnings:${createListOfWarnings(warnings)}`);
+    (typeof ngDevMode === 'undefined' || ngDevMode) &&
+        console.warn(`animation validation warnings:${createListOfWarnings(warnings)}`);
 }
 function warnTriggerBuild(name, warnings) {
-    NG_DEV_MODE &&
+    (typeof ngDevMode === 'undefined' || ngDevMode) &&
         console.warn(`The animation trigger "${name}" has built with the following warnings:${createListOfWarnings(warnings)}`);
 }
 function warnRegister(warnings) {
-    NG_DEV_MODE &&
+    (typeof ngDevMode === 'undefined' || ngDevMode) &&
         console.warn(`Animation built with the following warnings:${createListOfWarnings(warnings)}`);
 }
 function triggerParsingWarnings(name, warnings) {
-    NG_DEV_MODE &&
+    (typeof ngDevMode === 'undefined' || ngDevMode) &&
         console.warn(`Animation parsing for the ${name} trigger presents the following warnings:${createListOfWarnings(warnings)}`);
 }
 function pushUnrecognizedPropertiesWarning(warnings, props) {
@@ -4311,7 +4311,6 @@ function packageNonAnimatableStyles(element, styles) {
  * `destroy()` is called then all styles will be removed.
  */
 class SpecialCasedStyles {
-    static { this.initialStylesByElement = ( /* @__PURE__ */new WeakMap()); }
     constructor(_element, _startStyles, _endStyles) {
         this._element = _element;
         this._startStyles = _startStyles;
@@ -4359,6 +4358,7 @@ class SpecialCasedStyles {
         }
     }
 }
+SpecialCasedStyles.initialStylesByElement = ( /* @__PURE__ */new WeakMap());
 function filterNonAnimatableStyles(styles) {
     let result = null;
     styles.forEach((val, prop) => {
