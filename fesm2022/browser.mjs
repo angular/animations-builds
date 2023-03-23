@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.4+sha-07cbaa3
+ * @license Angular v16.0.0-next.4+sha-6161c50
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -549,18 +549,18 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.4+sha-6161c50", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.4+sha-6161c50", ngImport: i0, type: NoopAnimationDriver }); }
 }
-NoopAnimationDriver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.4+sha-07cbaa3", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoopAnimationDriver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.4+sha-07cbaa3", ngImport: i0, type: NoopAnimationDriver });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.4+sha-07cbaa3", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.4+sha-6161c50", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
  * @publicApi
  */
 class AnimationDriver {
+    static { this.NOOP = ( /* @__PURE__ */new NoopAnimationDriver()); }
 }
-AnimationDriver.NOOP = ( /* @__PURE__ */new NoopAnimationDriver());
 
 const ONE_SECOND = 1000;
 const SUBSTITUTION_EXPR_START = '{{';
@@ -4311,6 +4311,7 @@ function packageNonAnimatableStyles(element, styles) {
  * `destroy()` is called then all styles will be removed.
  */
 class SpecialCasedStyles {
+    static { this.initialStylesByElement = ( /* @__PURE__ */new WeakMap()); }
     constructor(_element, _startStyles, _endStyles) {
         this._element = _element;
         this._startStyles = _startStyles;
@@ -4358,7 +4359,6 @@ class SpecialCasedStyles {
         }
     }
 }
-SpecialCasedStyles.initialStylesByElement = ( /* @__PURE__ */new WeakMap());
 function filterNonAnimatableStyles(styles) {
     let result = null;
     styles.forEach((val, prop) => {
