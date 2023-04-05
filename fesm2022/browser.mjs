@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.6+sha-a6fc8b3
+ * @license Angular v16.0.0-next.6+sha-dc9651b
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -340,17 +340,6 @@ const ANIMATABLE_PROP_SET = new Set([
     'zoom',
 ]);
 
-function isBrowser() {
-    return (typeof window !== 'undefined' && typeof window.document !== 'undefined');
-}
-function isNode() {
-    // Checking only for `process` isn't enough to identify whether or not we're in a Node
-    // environment, because Webpack by default will polyfill the `process`. While we can discern
-    // that Webpack polyfilled it by looking at `process.browser`, it's very Webpack-specific and
-    // might not be future-proof. Instead we look at the stringified version of `process` which
-    // is `[object process]` in Node and `[object Object]` when polyfilled.
-    return typeof process !== 'undefined' && {}.toString.call(process) === '[object process]';
-}
 function optimizeGroupPlayer(players) {
     switch (players.length) {
         case 0:
@@ -440,46 +429,14 @@ function parseTimelineCommand(command) {
     const action = command.slice(separatorPos + 1);
     return [id, action];
 }
-let _contains = (elm1, elm2) => false;
-let _query = (element, selector, multi) => {
-    return [];
-};
-let _documentElement = null;
+const documentElement = 
+/* @__PURE__ */ (() => typeof document === 'undefined' ? null : document.documentElement)();
 function getParentElement(element) {
-    const parent = element.parentNode || element.host; // consider host to support shadow DOM
-    if (parent === _documentElement) {
+    const parent = element.parentNode || element.host || null; // consider host to support shadow DOM
+    if (parent === documentElement) {
         return null;
     }
     return parent;
-}
-// Define utility methods for browsers and platform-server(domino) where Element
-// and utility methods exist.
-const _isNode = isNode();
-if (_isNode || typeof Element !== 'undefined') {
-    if (!isBrowser()) {
-        _contains = (elm1, elm2) => elm1.contains(elm2);
-    }
-    else {
-        // Read the document element in an IIFE that's been marked pure to avoid a top-level property
-        // read that may prevent tree-shaking.
-        _documentElement = /* @__PURE__ */ (() => document.documentElement)();
-        _contains = (elm1, elm2) => {
-            while (elm2) {
-                if (elm2 === elm1) {
-                    return true;
-                }
-                elm2 = getParentElement(elm2);
-            }
-            return false;
-        };
-    }
-    _query = (element, selector, multi) => {
-        if (multi) {
-            return Array.from(element.querySelectorAll(selector));
-        }
-        const elem = element.querySelector(selector);
-        return elem ? [elem] : [];
-    };
 }
 function containsVendorPrefix(prop) {
     // Webkit is the only real popular vendor prefix nowadays
@@ -512,8 +469,22 @@ function getBodyNode() {
     }
     return null;
 }
-const containsElement = _contains;
-const invokeQuery = _query;
+function containsElement(elm1, elm2) {
+    while (elm2) {
+        if (elm2 === elm1) {
+            return true;
+        }
+        elm2 = getParentElement(elm2);
+    }
+    return false;
+}
+function invokeQuery(element, selector, multi) {
+    if (multi) {
+        return Array.from(element.querySelectorAll(selector));
+    }
+    const elem = element.querySelector(selector);
+    return elem ? [elem] : [];
+}
 function hypenatePropsKeys(original) {
     const newMap = new Map();
     original.forEach((val, prop) => {
@@ -549,10 +520,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.6+sha-a6fc8b3", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.6+sha-a6fc8b3", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.6+sha-dc9651b", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.6+sha-dc9651b", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.6+sha-a6fc8b3", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.6+sha-dc9651b", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -677,62 +648,20 @@ function copyStyles(styles, destination = new Map(), backfill) {
     }
     return destination;
 }
-function getStyleAttributeString(element, key, value) {
-    // Return the key-value pair string to be added to the style attribute for the
-    // given CSS style key.
-    if (value) {
-        return key + ':' + value + ';';
-    }
-    else {
-        return '';
-    }
-}
-function writeStyleAttribute(element) {
-    // Read the style property of the element and manually reflect it to the
-    // style attribute. This is needed because Domino on platform-server doesn't
-    // understand the full set of allowed CSS properties and doesn't reflect some
-    // of them automatically.
-    let styleAttrValue = '';
-    for (let i = 0; i < element.style.length; i++) {
-        const key = element.style.item(i);
-        styleAttrValue += getStyleAttributeString(element, key, element.style.getPropertyValue(key));
-    }
-    for (const key in element.style) {
-        // Skip internal Domino properties that don't need to be reflected.
-        if (!element.style.hasOwnProperty(key) || key.startsWith('_')) {
-            continue;
-        }
-        const dashKey = camelCaseToDashCase(key);
-        styleAttrValue += getStyleAttributeString(element, dashKey, element.style[key]);
-    }
-    element.setAttribute('style', styleAttrValue);
-}
 function setStyles(element, styles, formerStyles) {
-    if (element['style']) {
-        styles.forEach((val, prop) => {
-            const camelProp = dashCaseToCamelCase(prop);
-            if (formerStyles && !formerStyles.has(prop)) {
-                formerStyles.set(prop, element.style[camelProp]);
-            }
-            element.style[camelProp] = val;
-        });
-        // On the server set the 'style' attribute since it's not automatically reflected.
-        if (isNode()) {
-            writeStyleAttribute(element);
+    styles.forEach((val, prop) => {
+        const camelProp = dashCaseToCamelCase(prop);
+        if (formerStyles && !formerStyles.has(prop)) {
+            formerStyles.set(prop, element.style[camelProp]);
         }
-    }
+        element.style[camelProp] = val;
+    });
 }
 function eraseStyles(element, styles) {
-    if (element['style']) {
-        styles.forEach((_, prop) => {
-            const camelProp = dashCaseToCamelCase(prop);
-            element.style[camelProp] = '';
-        });
-        // On the server set the 'style' attribute since it's not automatically reflected.
-        if (isNode()) {
-            writeStyleAttribute(element);
-        }
-    }
+    styles.forEach((_, prop) => {
+        const camelProp = dashCaseToCamelCase(prop);
+        element.style[camelProp] = '';
+    });
 }
 function normalizeAnimationEntry(steps) {
     if (Array.isArray(steps)) {

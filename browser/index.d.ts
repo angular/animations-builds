@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.6+sha-a6fc8b3
+ * @license Angular v16.0.0-next.6+sha-dc9651b
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -147,11 +147,11 @@ export declare abstract class ɵAnimationStyleNormalizer {
     abstract normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: Error[]): string;
 }
 
-export declare const ɵcontainsElement: (elm1: any, elm2: any) => boolean;
+export declare function ɵcontainsElement(elm1: any, elm2: any): boolean;
 
 export declare function ɵgetParentElement(element: any): unknown | null;
 
-export declare const ɵinvokeQuery: (element: any, selector: string, multi: boolean) => any[];
+export declare function ɵinvokeQuery(element: any, selector: string, multi: boolean): any[];
 
 /**
  * @publicApi
