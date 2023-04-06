@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.6+sha-9bd9a11
+ * @license Angular v16.0.0-next.6+sha-40ed152
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -589,7 +589,7 @@ export declare interface AnimationPlayer {
      * Sets the position of the animation.
      * @param position A 0-based offset into the duration, in milliseconds.
      */
-    setPosition(position: any /** TODO #9100 */): void;
+    setPosition(position: number): void;
     /**
      * Reports the current position of the animation.
      * @returns A 0-based offset into the duration, in milliseconds.
