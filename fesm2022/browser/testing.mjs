@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0+sha-f3bb680
+ * @license Angular v16.0.0+sha-f28580a
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -350,7 +350,7 @@ function optimizeGroupPlayer(players) {
             return new ɵAnimationGroupPlayer(players);
     }
 }
-function normalizeKeyframes$1(driver, normalizer, element, keyframes, preStyles = new Map(), postStyles = new Map()) {
+function normalizeKeyframes$1(normalizer, keyframes, preStyles = new Map(), postStyles = new Map()) {
     const errors = [];
     const normalizedKeyframes = [];
     let previousOffset = -1;

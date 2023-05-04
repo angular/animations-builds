@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0+sha-f3bb680
+ * @license Angular v16.0.0+sha-f28580a
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -350,7 +350,7 @@ function optimizeGroupPlayer(players) {
             return new ɵAnimationGroupPlayer(players);
     }
 }
-function normalizeKeyframes$1(driver, normalizer, element, keyframes, preStyles = new Map(), postStyles = new Map()) {
+function normalizeKeyframes$1(normalizer, keyframes, preStyles = new Map(), postStyles = new Map()) {
     const errors = [];
     const normalizedKeyframes = [];
     let previousOffset = -1;
@@ -520,10 +520,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0+sha-f3bb680", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0+sha-f3bb680", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0+sha-f28580a", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0+sha-f28580a", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0+sha-f3bb680", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0+sha-f28580a", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -2522,7 +2522,7 @@ class TimelineAnimationEngine {
     }
     _buildPlayer(i, preStyles, postStyles) {
         const element = i.element;
-        const keyframes = normalizeKeyframes$1(this._driver, this._normalizer, element, i.keyframes, preStyles, postStyles);
+        const keyframes = normalizeKeyframes$1(this._normalizer, i.keyframes, preStyles, postStyles);
         return this._driver.animate(element, keyframes, i.duration, i.delay, i.easing, [], true);
     }
     create(id, element, options = {}) {
@@ -3836,7 +3836,7 @@ class TransitionAnimationEngine {
             });
             const preStyles = preStylesMap.get(element);
             const postStyles = postStylesMap.get(element);
-            const keyframes = normalizeKeyframes$1(this.driver, this._normalizer, element, timelineInstruction.keyframes, preStyles, postStyles);
+            const keyframes = normalizeKeyframes$1(this._normalizer, timelineInstruction.keyframes, preStyles, postStyles);
             const player = this._buildPlayer(timelineInstruction, keyframes, previousPlayers);
             // this means that this particular player belongs to a sub trigger. It is
             // important that we match this player up with the corresponding (@trigger.listener)
