@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.2+sha-d963ecd
+ * @license Angular v16.0.2+sha-5574e47
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -520,10 +520,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.2+sha-d963ecd", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.2+sha-d963ecd", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.2+sha-5574e47", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.2+sha-5574e47", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.2+sha-d963ecd", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.2+sha-5574e47", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -3599,7 +3599,7 @@ class TransitionAnimationEngine {
         replaceNodes.forEach(node => {
             const post = postStylesMap.get(node);
             const pre = preStylesMap.get(node);
-            postStylesMap.set(node, new Map([...Array.from(post?.entries() ?? []), ...Array.from(pre?.entries() ?? [])]));
+            postStylesMap.set(node, new Map([...(post?.entries() ?? []), ...(pre?.entries() ?? [])]));
         });
         const rootPlayers = [];
         const subPlayers = [];
