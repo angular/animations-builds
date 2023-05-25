@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.3+sha-fc6b10c
+ * @license Angular v16.0.3+sha-df65c4f
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -129,7 +129,7 @@ export declare class ɵAnimationEngine {
     register(namespaceId: string, hostElement: any): void;
     destroy(namespaceId: string, context: any): void;
     onInsert(namespaceId: string, element: any, parent: any, insertBefore: boolean): void;
-    onRemove(namespaceId: string, element: any, context: any, isHostElement?: boolean): void;
+    onRemove(namespaceId: string, element: any, context: any): void;
     disableAnimations(element: any, disable: boolean): void;
     process(namespaceId: string, element: any, property: string, value: any): void;
     listen(namespaceId: string, element: any, eventName: string, eventPhase: string, callback: (event: any) => any): () => any;
