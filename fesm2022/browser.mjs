@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.1.0-next.2+sha-4f5f496
+ * @license Angular v16.1.0-next.2+sha-bada919
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -520,10 +520,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.0-next.2+sha-4f5f496", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.0-next.2+sha-4f5f496", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.0-next.2+sha-bada919", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.0-next.2+sha-bada919", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.0-next.2+sha-4f5f496", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.0-next.2+sha-bada919", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -3233,7 +3233,7 @@ class TransitionAnimationEngine {
             removeClass(element, DISABLED_CLASSNAME);
         }
     }
-    removeNode(namespaceId, element, isHostElement, context) {
+    removeNode(namespaceId, element, context) {
         if (isElementNode(element)) {
             const ns = namespaceId ? this._fetchNamespace(namespaceId) : null;
             if (ns) {
@@ -3242,11 +3242,9 @@ class TransitionAnimationEngine {
             else {
                 this.markElementAsRemoved(namespaceId, element, false, context);
             }
-            if (isHostElement) {
-                const hostNS = this.namespacesByHostElement.get(element);
-                if (hostNS && hostNS.id !== namespaceId) {
-                    hostNS.removeNode(element, context);
-                }
+            const hostNS = this.namespacesByHostElement.get(element);
+            if (hostNS && hostNS.id !== namespaceId) {
+                hostNS.removeNode(element, context);
             }
         }
         else {
@@ -4169,8 +4167,8 @@ class AnimationEngine {
     onInsert(namespaceId, element, parent, insertBefore) {
         this._transitionEngine.insertNode(namespaceId, element, parent, insertBefore);
     }
-    onRemove(namespaceId, element, context, isHostElement) {
-        this._transitionEngine.removeNode(namespaceId, element, isHostElement || false, context);
+    onRemove(namespaceId, element, context) {
+        this._transitionEngine.removeNode(namespaceId, element, context);
     }
     disableAnimations(element, disable) {
         this._transitionEngine.markElementAsDisabled(element, disable);
