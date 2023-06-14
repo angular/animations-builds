@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.1.0+sha-f48c0bc
+ * @license Angular v16.1.0+sha-0a72df6
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -922,9 +922,9 @@ function scheduleMicroTask(cb) {
  * Used internally when animations are disabled, to avoid
  * checking for the null case when an animation player is expected.
  *
- * @see `animate()`
- * @see `AnimationPlayer`
- * @see `GroupPlayer`
+ * @see {@link animate}
+ * @see {@link AnimationPlayer}
+ * @see {@link ɵAnimationGroupPlayer AnimationGroupPlayer}
  *
  * @publicApi
  */
@@ -1019,8 +1019,8 @@ class NoopAnimationPlayer {
  * A programmatic controller for a group of reusable animations.
  * Used internally to control animations.
  *
- * @see `AnimationPlayer`
- * @see `{@link animations/group group()}`
+ * @see {@link AnimationPlayer}
+ * @see {@link animations/group group}
  *
  */
 class AnimationGroupPlayer {

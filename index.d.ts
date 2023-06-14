@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.1.0+sha-f48c0bc
+ * @license Angular v16.1.0+sha-0a72df6
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -89,7 +89,7 @@ export declare function animateChild(options?: AnimateChildOptions | null): Anim
 /**
  * Adds duration options to control animation styling and timing for a child animation.
  *
- * @see `animateChild()`
+ * @see {@link animateChild}
  *
  * @publicApi
  */
@@ -99,7 +99,7 @@ export declare interface AnimateChildOptions extends AnimationOptions {
 
 /**
  * Represents animation-step timing parameters for an animation step.
- * @see `animate()`
+ * @see {@link animate}
  *
  * @publicApi
  */
@@ -275,7 +275,7 @@ export declare abstract class AnimationBuilder {
      * Builds a factory for producing a defined animation.
      * @param animation A reusable animation definition.
      * @returns A factory object that can create a player for the defined animation.
-     * @see `animate()`
+     * @see {@link animate}
      */
     abstract build(animation: AnimationMetadata | AnimationMetadata[]): AnimationFactory;
 }
@@ -525,9 +525,9 @@ export declare interface AnimationOptions {
  * <code>[create](api/animations/AnimationFactory#create)()</code> method instantiates and
  * initializes this interface.
  *
- * @see `AnimationBuilder`
- * @see `AnimationFactory`
- * @see `animate()`
+ * @see {@link AnimationBuilder}
+ * @see {@link AnimationFactory}
+ * @see {@link animate}
  *
  * @publicApi
  */
@@ -535,20 +535,20 @@ export declare interface AnimationPlayer {
     /**
      * Provides a callback to invoke when the animation finishes.
      * @param fn The callback function.
-     * @see `finish()`
+     * @see {@link #finish}
      */
     onDone(fn: () => void): void;
     /**
      * Provides a callback to invoke when the animation starts.
      * @param fn The callback function.
-     * @see `run()`
+     * @see {@link #play}
      */
     onStart(fn: () => void): void;
     /**
      * Provides a callback to invoke after the animation is destroyed.
      * @param fn The callback function.
-     * @see `destroy()`
-     * @see `beforeDestroy()`
+     * @see {@link #destroy}
+     * @see {@link #beforeDestroy}
      */
     onDestroy(fn: () => void): void;
     /**
@@ -902,9 +902,9 @@ export declare function keyframes(steps: AnimationStyleMetadata[]): AnimationKey
  * Used internally when animations are disabled, to avoid
  * checking for the null case when an animation player is expected.
  *
- * @see `animate()`
- * @see `AnimationPlayer`
- * @see `GroupPlayer`
+ * @see {@link animate}
+ * @see {@link AnimationPlayer}
+ * @see {@link ɵAnimationGroupPlayer AnimationGroupPlayer}
  *
  * @publicApi
  */
@@ -1573,8 +1573,8 @@ export declare function useAnimation(animation: AnimationReferenceMetadata, opti
  * A programmatic controller for a group of reusable animations.
  * Used internally to control animations.
  *
- * @see `AnimationPlayer`
- * @see `{@link animations/group group()}`
+ * @see {@link AnimationPlayer}
+ * @see {@link animations/group group}
  *
  */
 export declare class ɵAnimationGroupPlayer implements AnimationPlayer {
