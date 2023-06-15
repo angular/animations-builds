@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.1.1+sha-1d3e96b
+ * @license Angular v16.1.1+sha-463e04c
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -913,10 +913,6 @@ function stagger(timings, animation) {
     return { type: 12 /* AnimationMetadataType.Stagger */, timings, animation };
 }
 
-function scheduleMicroTask(cb) {
-    Promise.resolve().then(cb);
-}
-
 /**
  * An empty programmatic controller for reusable animations.
  * Used internally when animations are disabled, to avoid
@@ -973,7 +969,7 @@ class NoopAnimationPlayer {
     }
     /** @internal */
     triggerMicrotask() {
-        scheduleMicroTask(() => this._onFinish());
+        queueMicrotask(() => this._onFinish());
     }
     _onStart() {
         this._onStartFns.forEach(fn => fn());
@@ -1039,7 +1035,7 @@ class AnimationGroupPlayer {
         let startCount = 0;
         const total = this.players.length;
         if (total == 0) {
-            scheduleMicroTask(() => this._onFinish());
+            queueMicrotask(() => this._onFinish());
         }
         else {
             this.players.forEach(player => {
