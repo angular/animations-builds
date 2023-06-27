@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.2.0-next.0+sha-39935ee
+ * @license Angular v16.2.0-next.0+sha-29f6912
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -136,6 +136,7 @@ export declare class ɵAnimationEngine {
     flush(microtaskId?: number): void;
     get players(): AnimationPlayer[];
     whenRenderingDone(): Promise<any>;
+    afterFlushAnimationsDone(cb: VoidFunction): void;
 }
 
 
