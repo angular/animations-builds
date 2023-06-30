@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.2.0-next.1+sha-0bfd3f5
+ * @license Angular v16.2.0-next.1+sha-125fe19
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -804,11 +804,11 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
             });
         }
     }
-    /* @internal */
+    /** @internal */
     onInit(fn) {
         this._onInitFns.push(fn);
     }
-    /* @internal */
+    /** @internal */
     init() {
         super.init();
         this._onInitFns.forEach(fn => fn());
@@ -826,7 +826,7 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         super.destroy();
         this.__finished = true;
     }
-    /* @internal */
+    /** @internal */
     triggerMicrotask() { }
     play() {
         super.play();
