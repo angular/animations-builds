@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.1.3+sha-4073cc0
+ * @license Angular v16.1.3+sha-b9c28ca
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -520,10 +520,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.3+sha-4073cc0", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.3+sha-4073cc0", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.3+sha-b9c28ca", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.3+sha-b9c28ca", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.3+sha-4073cc0", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.3+sha-b9c28ca", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
