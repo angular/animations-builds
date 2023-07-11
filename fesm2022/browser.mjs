@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.1.4+sha-e35cc07
+ * @license Angular v16.1.4+sha-de01f75
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -520,10 +520,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.4+sha-e35cc07", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.4+sha-e35cc07", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.4+sha-de01f75", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.4+sha-de01f75", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.4+sha-e35cc07", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.4+sha-de01f75", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -3024,14 +3024,6 @@ class AnimationTransitionNamespace {
         this.players.forEach(p => p.destroy());
         this._signalRemovalForInnerTriggers(this.hostElement, context);
     }
-    elementContainsData(element) {
-        let containsData = false;
-        if (this._elementListeners.has(element))
-            containsData = true;
-        containsData =
-            (this._queue.find(entry => entry.element === element) ? true : false) || containsData;
-        return containsData;
-    }
 }
 class TransitionAnimationEngine {
     /** @internal */
@@ -3140,16 +3132,17 @@ class TransitionAnimationEngine {
     destroy(namespaceId, context) {
         if (!namespaceId)
             return;
-        const ns = this._fetchNamespace(namespaceId);
-        this.afterFlush(() => {
+        this.afterFlush(() => { });
+        this.afterFlushAnimationsDone(() => {
+            const ns = this._fetchNamespace(namespaceId);
             this.namespacesByHostElement.delete(ns.hostElement);
-            delete this._namespaceLookup[namespaceId];
             const index = this._namespaceList.indexOf(ns);
             if (index >= 0) {
                 this._namespaceList.splice(index, 1);
             }
+            ns.destroy(context);
+            delete this._namespaceLookup[namespaceId];
         });
-        this.afterFlushAnimationsDone(() => ns.destroy(context));
     }
     _fetchNamespace(id) {
         return this._namespaceLookup[id];
@@ -3729,19 +3722,6 @@ class TransitionAnimationEngine {
             player.play();
         });
         return rootPlayers;
-    }
-    elementContainsData(namespaceId, element) {
-        let containsData = false;
-        const details = element[REMOVAL_FLAG];
-        if (details && details.setForRemoval)
-            containsData = true;
-        if (this.playersByElement.has(element))
-            containsData = true;
-        if (this.playersByQueriedElement.has(element))
-            containsData = true;
-        if (this.statesByElement.has(element))
-            containsData = true;
-        return this._fetchNamespace(namespaceId).elementContainsData(element) || containsData;
     }
     afterFlush(callback) {
         this._flushFns.push(callback);
