@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.3.0-next.0+sha-10bab47
+ * @license Angular v16.3.0-next.0+sha-6a7c1ab
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -55,6 +55,27 @@ declare interface AnimationTimelineInstruction extends AnimationEngineInstructio
 declare const enum AnimationTransitionInstructionType {
     TransitionAnimation = 0,
     TimelineAnimation = 1
+}
+
+
+/**
+ * DOMAnimation represents the Animation Web API.
+ *
+ * It is an external API by the browser, and must thus use "declare interface",
+ * to prevent renaming by Closure Compiler.
+ *
+ * @see https://developer.mozilla.org/de/docs/Web/API/Animation
+ */
+declare interface DOMAnimation {
+    cancel(): void;
+    play(): void;
+    pause(): void;
+    finish(): void;
+    onfinish: Function;
+    position: number;
+    currentTime: number;
+    addEventListener(eventName: string, handler: (event: any) => any): any;
+    dispatchEvent(eventName: string): any;
 }
 
 declare class ElementInstructionMap {
@@ -190,7 +211,7 @@ export declare class ɵWebAnimationsPlayer implements AnimationPlayer {
     private _finalKeyframe?;
     private _originalOnDoneFns;
     private _originalOnStartFns;
-    readonly domPlayer: Animation;
+    readonly domPlayer: DOMAnimation;
     time: number;
     parentPlayer: AnimationPlayer | null;
     currentSnapshot: ɵStyleDataMap;
