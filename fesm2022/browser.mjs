@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.3.0-next.0+sha-55965cb
+ * @license Angular v16.3.0-next.0+sha-10bab47
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -520,10 +520,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.3.0-next.0+sha-55965cb", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.3.0-next.0+sha-55965cb", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.3.0-next.0+sha-10bab47", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.3.0-next.0+sha-10bab47", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.3.0-next.0+sha-55965cb", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.3.0-next.0+sha-10bab47", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -4349,9 +4349,7 @@ class WebAnimationsPlayer {
     }
     /** @internal */
     _triggerWebAnimation(element, keyframes, options) {
-        // jscompiler doesn't seem to know animate is a native property because it's not fully
-        // supported yet across common browsers (we polyfill it for Edge/Safari) [CL #143630929]
-        return element['animate'](this._convertKeyframesToObject(keyframes), options);
+        return element.animate(this._convertKeyframesToObject(keyframes), options);
     }
     onStart(fn) {
         this._originalOnStartFns.push(fn);
@@ -4427,7 +4425,8 @@ class WebAnimationsPlayer {
         this.domPlayer.currentTime = p * this.time;
     }
     getPosition() {
-        return this.domPlayer.currentTime / this.time;
+        // tsc is complaining with TS2362 without the conversion to number
+        return +(this.domPlayer.currentTime ?? 0) / this.time;
     }
     get totalTime() {
         return this._delay + this._duration;
