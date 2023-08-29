@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.1+sha-7ed4c56
+ * @license Angular v17.0.0-next.1+sha-5ee6c7e
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -127,6 +127,8 @@ export declare abstract class ɵAnimationStyleNormalizer {
     abstract normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: Error[]): string;
 }
 
+export declare function ɵcamelCaseToDashCase(input: string): string;
+
 export declare function ɵcontainsElement(elm1: any, elm2: any): boolean;
 
 export declare function ɵgetParentElement(element: any): unknown | null;
@@ -159,6 +161,8 @@ export declare class ɵNoopAnimationStyleNormalizer {
 export declare function ɵnormalizeKeyframes(keyframes: Array<ɵStyleData> | Array<ɵStyleDataMap>): Array<ɵStyleDataMap>;
 
 export declare function ɵvalidateStyleProperty(prop: string): boolean;
+
+export declare function ɵvalidateWebAnimatableStyleProperty(prop: string): boolean;
 
 export declare class ɵWebAnimationsDriver implements AnimationDriver {
     validateStyleProperty(prop: string): boolean;
