@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.2+sha-78afe88
+ * @license Angular v17.0.0-next.2+sha-a1bad49
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -96,14 +96,13 @@ export declare class ɵAnimation {
 }
 
 export declare class ɵAnimationEngine {
-    private bodyNode;
     private _driver;
     private _normalizer;
     private _transitionEngine;
     private _timelineEngine;
     private _triggerCache;
     onRemovalComplete: (element: any, context: any) => void;
-    constructor(bodyNode: any, _driver: AnimationDriver, _normalizer: ɵAnimationStyleNormalizer);
+    constructor(doc: Document, _driver: AnimationDriver, _normalizer: ɵAnimationStyleNormalizer);
     registerTrigger(componentId: string, namespaceId: string, hostElement: any, name: string, metadata: AnimationTriggerMetadata): void;
     register(namespaceId: string, hostElement: any): void;
     destroy(namespaceId: string, context: any): void;
@@ -119,9 +118,6 @@ export declare class ɵAnimationEngine {
 }
 
 
-/**
- * @publicApi
- */
 export declare abstract class ɵAnimationStyleNormalizer {
     abstract normalizePropertyName(propertyName: string, errors: Error[]): string;
     abstract normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: Error[]): string;
@@ -135,9 +131,6 @@ export declare function ɵgetParentElement(element: any): unknown | null;
 
 export declare function ɵinvokeQuery(element: any, selector: string, multi: boolean): any[];
 
-/**
- * @publicApi
- */
 export declare class ɵNoopAnimationDriver implements AnimationDriver {
     validateStyleProperty(prop: string): boolean;
     matchesElement(_element: any, _selector: string): boolean;
@@ -150,9 +143,6 @@ export declare class ɵNoopAnimationDriver implements AnimationDriver {
     static ɵprov: i0.ɵɵInjectableDeclaration<ɵNoopAnimationDriver>;
 }
 
-/**
- * @publicApi
- */
 export declare class ɵNoopAnimationStyleNormalizer {
     normalizePropertyName(propertyName: string, errors: Error[]): string;
     normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: Error[]): string;

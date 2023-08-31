@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.2+sha-78afe88
+ * @license Angular v17.0.0-next.2+sha-a1bad49
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -494,9 +494,6 @@ function hypenatePropsKeys(original) {
     return newMap;
 }
 
-/**
- * @publicApi
- */
 class NoopAnimationDriver {
     validateStyleProperty(prop) {
         return validateStyleProperty(prop);
@@ -520,10 +517,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0-next.2+sha-78afe88", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0-next.2+sha-78afe88", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0-next.2+sha-a1bad49", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0-next.2+sha-a1bad49", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-next.2+sha-78afe88", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-next.2+sha-a1bad49", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -2198,14 +2195,8 @@ class Animation {
     }
 }
 
-/**
- * @publicApi
- */
 class AnimationStyleNormalizer {
 }
-/**
- * @publicApi
- */
 class NoopAnimationStyleNormalizer {
     normalizePropertyName(propertyName, errors) {
         return propertyName;
@@ -4109,15 +4100,14 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
 }
 
 class AnimationEngine {
-    constructor(bodyNode, _driver, _normalizer) {
-        this.bodyNode = bodyNode;
+    constructor(doc, _driver, _normalizer) {
         this._driver = _driver;
         this._normalizer = _normalizer;
         this._triggerCache = {};
         // this method is designed to be overridden by the code that uses this engine
         this.onRemovalComplete = (element, context) => { };
-        this._transitionEngine = new TransitionAnimationEngine(bodyNode, _driver, _normalizer);
-        this._timelineEngine = new TimelineAnimationEngine(bodyNode, _driver, _normalizer);
+        this._transitionEngine = new TransitionAnimationEngine(doc.body, _driver, _normalizer);
+        this._timelineEngine = new TimelineAnimationEngine(doc.body, _driver, _normalizer);
         this._transitionEngine.onRemovalComplete = (element, context) => this.onRemovalComplete(element, context);
     }
     registerTrigger(componentId, namespaceId, hostElement, name, metadata) {
