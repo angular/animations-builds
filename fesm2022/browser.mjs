@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.5+sha-e5d327d
+ * @license Angular v17.0.0-next.5+sha-0598613
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -494,39 +494,70 @@ function hypenatePropsKeys(original) {
     return newMap;
 }
 
+/**
+ * @publicApi
+ *
+ * `AnimationDriver` implentation for Noop animations
+ */
 class NoopAnimationDriver {
+    /**
+     * @returns Whether `prop` is a valid CSS property
+     */
     validateStyleProperty(prop) {
         return validateStyleProperty(prop);
     }
+    /**
+     * @deprecated unused
+     */
     matchesElement(_element, _selector) {
         // This method is deprecated and no longer in use so we return false.
         return false;
     }
+    /**
+     *
+     * @returns Whether elm1 contains elm2.
+     */
     containsElement(elm1, elm2) {
         return containsElement(elm1, elm2);
     }
+    /**
+     * @returns Rhe parent of the given element or `null` if the element is the `document`
+     */
     getParentElement(element) {
         return getParentElement(element);
     }
+    /**
+     * @returns The result of the query selector on the element. The array will contain up to 1 item
+     *     if `multi` is  `false`.
+     */
     query(element, selector, multi) {
         return invokeQuery(element, selector, multi);
     }
+    /**
+     * @returns The `defaultValue` or empty string
+     */
     computeStyle(element, prop, defaultValue) {
         return defaultValue || '';
     }
+    /**
+     * @returns An `NoopAnimationPlayer`
+     */
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-e5d327d", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-e5d327d", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-0598613", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-0598613", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-e5d327d", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-0598613", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
  * @publicApi
  */
 class AnimationDriver {
+    /**
+     * @deprecated Use the NoopAnimationDriver class.
+     */
     static { this.NOOP = ( /* @__PURE__ */new NoopAnimationDriver()); }
 }
 
@@ -4517,5 +4548,5 @@ class WebAnimationsDriver {
  * Generated bundle index. Do not edit.
  */
 
-export { AnimationDriver, Animation as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationDriver as ɵNoopAnimationDriver, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, camelCaseToDashCase as ɵcamelCaseToDashCase, containsElement as ɵcontainsElement, getParentElement as ɵgetParentElement, invokeQuery as ɵinvokeQuery, normalizeKeyframes as ɵnormalizeKeyframes, validateStyleProperty as ɵvalidateStyleProperty, validateWebAnimatableStyleProperty as ɵvalidateWebAnimatableStyleProperty };
+export { AnimationDriver, NoopAnimationDriver, Animation as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, camelCaseToDashCase as ɵcamelCaseToDashCase, containsElement as ɵcontainsElement, getParentElement as ɵgetParentElement, invokeQuery as ɵinvokeQuery, normalizeKeyframes as ɵnormalizeKeyframes, validateStyleProperty as ɵvalidateStyleProperty, validateWebAnimatableStyleProperty as ɵvalidateWebAnimatableStyleProperty };
 //# sourceMappingURL=browser.mjs.map

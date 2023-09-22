@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.5+sha-e5d327d
+ * @license Angular v17.0.0-next.5+sha-0598613
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -17,6 +17,9 @@ import { ɵStyleDataMap } from '@angular/animations';
  * @publicApi
  */
 export declare abstract class AnimationDriver {
+    /**
+     * @deprecated Use the NoopAnimationDriver class.
+     */
     static NOOP: AnimationDriver;
     abstract validateStyleProperty(prop: string): boolean;
     abstract validateAnimatableStyleProperty?: (prop: string) => boolean;
@@ -63,6 +66,46 @@ declare class ElementInstructionMap {
     append(element: any, instructions: AnimationTimelineInstruction[]): void;
     has(element: any): boolean;
     clear(): void;
+}
+
+/**
+ * @publicApi
+ *
+ * `AnimationDriver` implentation for Noop animations
+ */
+export declare class NoopAnimationDriver implements AnimationDriver {
+    /**
+     * @returns Whether `prop` is a valid CSS property
+     */
+    validateStyleProperty(prop: string): boolean;
+    /**
+     * @deprecated unused
+     */
+    matchesElement(_element: any, _selector: string): boolean;
+    /**
+     *
+     * @returns Whether elm1 contains elm2.
+     */
+    containsElement(elm1: any, elm2: any): boolean;
+    /**
+     * @returns Rhe parent of the given element or `null` if the element is the `document`
+     */
+    getParentElement(element: unknown): unknown;
+    /**
+     * @returns The result of the query selector on the element. The array will contain up to 1 item
+     *     if `multi` is  `false`.
+     */
+    query(element: any, selector: string, multi: boolean): any[];
+    /**
+     * @returns The `defaultValue` or empty string
+     */
+    computeStyle(element: any, prop: string, defaultValue?: string): string;
+    /**
+     * @returns An `NoopAnimationPlayer`
+     */
+    animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing: string, previousPlayers?: any[], scrubberAccessRequested?: boolean): AnimationPlayer;
+    static ɵfac: i0.ɵɵFactoryDeclaration<NoopAnimationDriver, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<NoopAnimationDriver>;
 }
 
 /**
@@ -130,18 +173,6 @@ export declare function ɵcontainsElement(elm1: any, elm2: any): boolean;
 export declare function ɵgetParentElement(element: any): unknown | null;
 
 export declare function ɵinvokeQuery(element: any, selector: string, multi: boolean): any[];
-
-export declare class ɵNoopAnimationDriver implements AnimationDriver {
-    validateStyleProperty(prop: string): boolean;
-    matchesElement(_element: any, _selector: string): boolean;
-    containsElement(elm1: any, elm2: any): boolean;
-    getParentElement(element: unknown): unknown;
-    query(element: any, selector: string, multi: boolean): any[];
-    computeStyle(element: any, prop: string, defaultValue?: string): string;
-    animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing: string, previousPlayers?: any[], scrubberAccessRequested?: boolean): AnimationPlayer;
-    static ɵfac: i0.ɵɵFactoryDeclaration<ɵNoopAnimationDriver, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<ɵNoopAnimationDriver>;
-}
 
 export declare class ɵNoopAnimationStyleNormalizer {
     normalizePropertyName(propertyName: string, errors: Error[]): string;
