@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.5+sha-31295a3
+ * @license Angular v17.0.0-next.5+sha-ac1afd8
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -545,10 +545,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-31295a3", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-31295a3", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-ac1afd8", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-ac1afd8", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-31295a3", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-ac1afd8", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -4210,6 +4210,263 @@ class AnimationEngine {
     }
 }
 
+const ANIMATION_PREFIX = '@';
+const DISABLE_ANIMATIONS_FLAG = '@.disabled';
+class AnimationRendererFactory {
+    constructor(delegate, engine, _zone) {
+        this.delegate = delegate;
+        this.engine = engine;
+        this._zone = _zone;
+        this._currentId = 0;
+        this._microtaskId = 1;
+        this._animationCallbacksBuffer = [];
+        this._rendererCache = new Map();
+        this._cdRecurDepth = 0;
+        engine.onRemovalComplete = (element, delegate) => {
+            // Note: if a component element has a leave animation, and a host leave animation,
+            // the view engine will call `removeChild` for the parent
+            // component renderer as well as for the child component renderer.
+            // Therefore, we need to check if we already removed the element.
+            const parentNode = delegate?.parentNode(element);
+            if (parentNode) {
+                delegate.removeChild(parentNode, element);
+            }
+        };
+    }
+    createRenderer(hostElement, type) {
+        const EMPTY_NAMESPACE_ID = '';
+        // cache the delegates to find out which cached delegate can
+        // be used by which cached renderer
+        const delegate = this.delegate.createRenderer(hostElement, type);
+        if (!hostElement || !type || !type.data || !type.data['animation']) {
+            let renderer = this._rendererCache.get(delegate);
+            if (!renderer) {
+                // Ensure that the renderer is removed from the cache on destroy
+                // since it may contain references to detached DOM nodes.
+                const onRendererDestroy = () => this._rendererCache.delete(delegate);
+                renderer =
+                    new BaseAnimationRenderer(EMPTY_NAMESPACE_ID, delegate, this.engine, onRendererDestroy);
+                // only cache this result when the base renderer is used
+                this._rendererCache.set(delegate, renderer);
+            }
+            return renderer;
+        }
+        const componentId = type.id;
+        const namespaceId = type.id + '-' + this._currentId;
+        this._currentId++;
+        this.engine.register(namespaceId, hostElement);
+        const registerTrigger = (trigger) => {
+            if (Array.isArray(trigger)) {
+                trigger.forEach(registerTrigger);
+            }
+            else {
+                this.engine.registerTrigger(componentId, namespaceId, hostElement, trigger.name, trigger);
+            }
+        };
+        const animationTriggers = type.data['animation'];
+        animationTriggers.forEach(registerTrigger);
+        return new AnimationRenderer(this, namespaceId, delegate, this.engine);
+    }
+    begin() {
+        this._cdRecurDepth++;
+        if (this.delegate.begin) {
+            this.delegate.begin();
+        }
+    }
+    _scheduleCountTask() {
+        queueMicrotask(() => {
+            this._microtaskId++;
+        });
+    }
+    /** @internal */
+    scheduleListenerCallback(count, fn, data) {
+        if (count >= 0 && count < this._microtaskId) {
+            this._zone.run(() => fn(data));
+            return;
+        }
+        if (this._animationCallbacksBuffer.length == 0) {
+            queueMicrotask(() => {
+                this._zone.run(() => {
+                    this._animationCallbacksBuffer.forEach(tuple => {
+                        const [fn, data] = tuple;
+                        fn(data);
+                    });
+                    this._animationCallbacksBuffer = [];
+                });
+            });
+        }
+        this._animationCallbacksBuffer.push([fn, data]);
+    }
+    end() {
+        this._cdRecurDepth--;
+        // this is to prevent animations from running twice when an inner
+        // component does CD when a parent component instead has inserted it
+        if (this._cdRecurDepth == 0) {
+            this._zone.runOutsideAngular(() => {
+                this._scheduleCountTask();
+                this.engine.flush(this._microtaskId);
+            });
+        }
+        if (this.delegate.end) {
+            this.delegate.end();
+        }
+    }
+    whenRenderingDone() {
+        return this.engine.whenRenderingDone();
+    }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-ac1afd8", ngImport: i0, type: AnimationRendererFactory, deps: [{ token: i0.RendererFactory2 }, { token: AnimationEngine }, { token: i0.NgZone }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-ac1afd8", ngImport: i0, type: AnimationRendererFactory }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-ac1afd8", ngImport: i0, type: AnimationRendererFactory, decorators: [{
+            type: Injectable
+        }], ctorParameters: () => [{ type: i0.RendererFactory2 }, { type: AnimationEngine }, { type: i0.NgZone }] });
+class BaseAnimationRenderer {
+    constructor(namespaceId, delegate, engine, _onDestroy) {
+        this.namespaceId = namespaceId;
+        this.delegate = delegate;
+        this.engine = engine;
+        this._onDestroy = _onDestroy;
+    }
+    get data() {
+        return this.delegate.data;
+    }
+    destroyNode(node) {
+        this.delegate.destroyNode?.(node);
+    }
+    destroy() {
+        this.engine.destroy(this.namespaceId, this.delegate);
+        this.engine.afterFlushAnimationsDone(() => {
+            // Call the renderer destroy method after the animations has finished as otherwise
+            // styles will be removed too early which will cause an unstyled animation.
+            queueMicrotask(() => {
+                this.delegate.destroy();
+            });
+        });
+        this._onDestroy?.();
+    }
+    createElement(name, namespace) {
+        return this.delegate.createElement(name, namespace);
+    }
+    createComment(value) {
+        return this.delegate.createComment(value);
+    }
+    createText(value) {
+        return this.delegate.createText(value);
+    }
+    appendChild(parent, newChild) {
+        this.delegate.appendChild(parent, newChild);
+        this.engine.onInsert(this.namespaceId, newChild, parent, false);
+    }
+    insertBefore(parent, newChild, refChild, isMove = true) {
+        this.delegate.insertBefore(parent, newChild, refChild);
+        // If `isMove` true than we should animate this insert.
+        this.engine.onInsert(this.namespaceId, newChild, parent, isMove);
+    }
+    removeChild(parent, oldChild, isHostElement) {
+        this.engine.onRemove(this.namespaceId, oldChild, this.delegate);
+    }
+    selectRootElement(selectorOrNode, preserveContent) {
+        return this.delegate.selectRootElement(selectorOrNode, preserveContent);
+    }
+    parentNode(node) {
+        return this.delegate.parentNode(node);
+    }
+    nextSibling(node) {
+        return this.delegate.nextSibling(node);
+    }
+    setAttribute(el, name, value, namespace) {
+        this.delegate.setAttribute(el, name, value, namespace);
+    }
+    removeAttribute(el, name, namespace) {
+        this.delegate.removeAttribute(el, name, namespace);
+    }
+    addClass(el, name) {
+        this.delegate.addClass(el, name);
+    }
+    removeClass(el, name) {
+        this.delegate.removeClass(el, name);
+    }
+    setStyle(el, style, value, flags) {
+        this.delegate.setStyle(el, style, value, flags);
+    }
+    removeStyle(el, style, flags) {
+        this.delegate.removeStyle(el, style, flags);
+    }
+    setProperty(el, name, value) {
+        if (name.charAt(0) == ANIMATION_PREFIX && name == DISABLE_ANIMATIONS_FLAG) {
+            this.disableAnimations(el, !!value);
+        }
+        else {
+            this.delegate.setProperty(el, name, value);
+        }
+    }
+    setValue(node, value) {
+        this.delegate.setValue(node, value);
+    }
+    listen(target, eventName, callback) {
+        return this.delegate.listen(target, eventName, callback);
+    }
+    disableAnimations(element, value) {
+        this.engine.disableAnimations(element, value);
+    }
+}
+class AnimationRenderer extends BaseAnimationRenderer {
+    constructor(factory, namespaceId, delegate, engine, onDestroy) {
+        super(namespaceId, delegate, engine, onDestroy);
+        this.factory = factory;
+        this.namespaceId = namespaceId;
+    }
+    setProperty(el, name, value) {
+        if (name.charAt(0) == ANIMATION_PREFIX) {
+            if (name.charAt(1) == '.' && name == DISABLE_ANIMATIONS_FLAG) {
+                value = value === undefined ? true : !!value;
+                this.disableAnimations(el, value);
+            }
+            else {
+                this.engine.process(this.namespaceId, el, name.slice(1), value);
+            }
+        }
+        else {
+            this.delegate.setProperty(el, name, value);
+        }
+    }
+    listen(target, eventName, callback) {
+        if (eventName.charAt(0) == ANIMATION_PREFIX) {
+            const element = resolveElementFromTarget(target);
+            let name = eventName.slice(1);
+            let phase = '';
+            // @listener.phase is for trigger animation callbacks
+            // @@listener is for animation builder callbacks
+            if (name.charAt(0) != ANIMATION_PREFIX) {
+                [name, phase] = parseTriggerCallbackName(name);
+            }
+            return this.engine.listen(this.namespaceId, element, name, phase, event => {
+                const countId = event['_data'] || -1;
+                this.factory.scheduleListenerCallback(countId, callback, event);
+            });
+        }
+        return this.delegate.listen(target, eventName, callback);
+    }
+}
+function resolveElementFromTarget(target) {
+    switch (target) {
+        case 'body':
+            return document.body;
+        case 'document':
+            return document;
+        case 'window':
+            return window;
+        default:
+            return target;
+    }
+}
+function parseTriggerCallbackName(triggerName) {
+    const dotIndex = triggerName.indexOf('.');
+    const trigger = triggerName.substring(0, dotIndex);
+    const phase = triggerName.slice(dotIndex + 1);
+    return [trigger, phase];
+}
+
 /**
  * Returns an instance of `SpecialCasedStyles` if and when any special (non animateable) styles are
  * detected.
@@ -4548,5 +4805,5 @@ class WebAnimationsDriver {
  * Generated bundle index. Do not edit.
  */
 
-export { AnimationDriver, NoopAnimationDriver, Animation as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, camelCaseToDashCase as ɵcamelCaseToDashCase, containsElement as ɵcontainsElement, getParentElement as ɵgetParentElement, invokeQuery as ɵinvokeQuery, normalizeKeyframes as ɵnormalizeKeyframes, validateStyleProperty as ɵvalidateStyleProperty, validateWebAnimatableStyleProperty as ɵvalidateWebAnimatableStyleProperty };
+export { AnimationDriver, NoopAnimationDriver, Animation as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationRenderer as ɵAnimationRenderer, AnimationRendererFactory as ɵAnimationRendererFactory, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, camelCaseToDashCase as ɵcamelCaseToDashCase, containsElement as ɵcontainsElement, getParentElement as ɵgetParentElement, invokeQuery as ɵinvokeQuery, normalizeKeyframes as ɵnormalizeKeyframes, validateStyleProperty as ɵvalidateStyleProperty, validateWebAnimatableStyleProperty as ɵvalidateWebAnimatableStyleProperty };
 //# sourceMappingURL=browser.mjs.map
