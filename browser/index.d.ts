@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.6+sha-ee0d04b
+ * @license Angular v17.0.0-next.7+sha-0d3373b
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -10,11 +10,11 @@ import { AnimationOptions } from '@angular/animations';
 import { AnimationPlayer } from '@angular/animations';
 import { AnimationTriggerMetadata } from '@angular/animations';
 import * as i0 from '@angular/core';
-import { NgZone } from '@angular/core';
-import { Renderer2 } from '@angular/core';
-import { RendererFactory2 } from '@angular/core';
-import { RendererStyleFlags2 } from '@angular/core';
-import { RendererType2 } from '@angular/core';
+import type { NgZone } from '@angular/core';
+import type { Renderer2 } from '@angular/core';
+import type { RendererFactory2 } from '@angular/core';
+import type { RendererStyleFlags2 } from '@angular/core';
+import type { RendererType2 } from '@angular/core';
 import { ɵStyleData } from '@angular/animations';
 import { ɵStyleDataMap } from '@angular/animations';
 
@@ -46,6 +46,10 @@ declare interface AnimationEngineInstruction {
     type: AnimationTransitionInstructionType;
 }
 
+declare type AnimationFactoryWithListenerCallback = RendererFactory2 & {
+    scheduleListenerCallback: (count: number, fn: (e: any) => any, data: any) => void;
+};
+
 declare interface AnimationTimelineInstruction extends AnimationEngineInstruction {
     element: any;
     keyframes: Array<ɵStyleDataMap>;
@@ -63,38 +67,6 @@ declare interface AnimationTimelineInstruction extends AnimationEngineInstructio
 declare const enum AnimationTransitionInstructionType {
     TransitionAnimation = 0,
     TimelineAnimation = 1
-}
-
-declare class BaseAnimationRenderer implements Renderer2 {
-    protected namespaceId: string;
-    delegate: Renderer2;
-    engine: ɵAnimationEngine;
-    private _onDestroy?;
-    constructor(namespaceId: string, delegate: Renderer2, engine: ɵAnimationEngine, _onDestroy?: (() => void) | undefined);
-    get data(): {
-        [key: string]: any;
-    };
-    destroyNode(node: any): void;
-    destroy(): void;
-    createElement(name: string, namespace?: string | null | undefined): any;
-    createComment(value: string): any;
-    createText(value: string): any;
-    appendChild(parent: any, newChild: any): void;
-    insertBefore(parent: any, newChild: any, refChild: any, isMove?: boolean): void;
-    removeChild(parent: any, oldChild: any, isHostElement: boolean): void;
-    selectRootElement(selectorOrNode: any, preserveContent?: boolean): any;
-    parentNode(node: any): any;
-    nextSibling(node: any): any;
-    setAttribute(el: any, name: string, value: string, namespace?: string | null | undefined): void;
-    removeAttribute(el: any, name: string, namespace?: string | null | undefined): void;
-    addClass(el: any, name: string): void;
-    removeClass(el: any, name: string): void;
-    setStyle(el: any, style: string, value: any, flags?: RendererStyleFlags2 | undefined): void;
-    removeStyle(el: any, style: string, flags?: RendererStyleFlags2 | undefined): void;
-    setProperty(el: any, name: string, value: any): void;
-    setValue(node: any, value: string): void;
-    listen(target: any, eventName: string, callback: (event: any) => boolean | void): () => void;
-    protected disableAnimations(element: any, value: boolean): void;
 }
 
 declare class ElementInstructionMap {
@@ -197,9 +169,9 @@ export declare class ɵAnimationEngine {
     afterFlushAnimationsDone(cb: VoidFunction): void;
 }
 
-export declare class ɵAnimationRenderer extends BaseAnimationRenderer implements Renderer2 {
-    factory: ɵAnimationRendererFactory;
-    constructor(factory: ɵAnimationRendererFactory, namespaceId: string, delegate: Renderer2, engine: ɵAnimationEngine, onDestroy?: () => void);
+export declare class ɵAnimationRenderer extends ɵBaseAnimationRenderer implements Renderer2 {
+    factory: AnimationFactoryWithListenerCallback;
+    constructor(factory: AnimationFactoryWithListenerCallback, namespaceId: string, delegate: Renderer2, engine: ɵAnimationEngine, onDestroy?: () => void);
     setProperty(el: any, name: string, value: any): void;
     listen(target: 'window' | 'document' | 'body' | any, eventName: string, callback: (event: any) => any): () => void;
 }
@@ -219,8 +191,6 @@ export declare class ɵAnimationRendererFactory implements RendererFactory2 {
     private _scheduleCountTask;
     end(): void;
     whenRenderingDone(): Promise<any>;
-    static ɵfac: i0.ɵɵFactoryDeclaration<ɵAnimationRendererFactory, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<ɵAnimationRendererFactory>;
 }
 
 
@@ -229,9 +199,44 @@ export declare abstract class ɵAnimationStyleNormalizer {
     abstract normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: Error[]): string;
 }
 
+export declare class ɵBaseAnimationRenderer implements Renderer2 {
+    protected namespaceId: string;
+    delegate: Renderer2;
+    engine: ɵAnimationEngine;
+    private _onDestroy?;
+    readonly isAnimationRenderer = true;
+    constructor(namespaceId: string, delegate: Renderer2, engine: ɵAnimationEngine, _onDestroy?: (() => void) | undefined);
+    get data(): {
+        [key: string]: any;
+    };
+    destroyNode(node: any): void;
+    destroy(): void;
+    createElement(name: string, namespace?: string | null | undefined): any;
+    createComment(value: string): any;
+    createText(value: string): any;
+    appendChild(parent: any, newChild: any): void;
+    insertBefore(parent: any, newChild: any, refChild: any, isMove?: boolean): void;
+    removeChild(parent: any, oldChild: any, isHostElement: boolean): void;
+    selectRootElement(selectorOrNode: any, preserveContent?: boolean): any;
+    parentNode(node: any): any;
+    nextSibling(node: any): any;
+    setAttribute(el: any, name: string, value: string, namespace?: string | null | undefined): void;
+    removeAttribute(el: any, name: string, namespace?: string | null | undefined): void;
+    addClass(el: any, name: string): void;
+    removeClass(el: any, name: string): void;
+    setStyle(el: any, style: string, value: any, flags?: RendererStyleFlags2 | undefined): void;
+    removeStyle(el: any, style: string, flags?: RendererStyleFlags2 | undefined): void;
+    setProperty(el: any, name: string, value: any): void;
+    setValue(node: any, value: string): void;
+    listen(target: any, eventName: string, callback: (event: any) => boolean | void): () => void;
+    protected disableAnimations(element: any, value: boolean): void;
+}
+
 export declare function ɵcamelCaseToDashCase(input: string): string;
 
 export declare function ɵcontainsElement(elm1: any, elm2: any): boolean;
+
+export declare function ɵcreateEngine(type: 'animations' | 'noop', doc: Document): ɵAnimationEngine;
 
 export declare function ɵgetParentElement(element: any): unknown | null;
 
