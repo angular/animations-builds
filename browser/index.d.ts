@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.7+sha-21b085d
+ * @license Angular v17.0.0-next.7+sha-75d610d
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -186,7 +186,7 @@ export declare class ɵAnimationRendererFactory implements RendererFactory2 {
     private _rendererCache;
     private _cdRecurDepth;
     constructor(delegate: RendererFactory2, engine: ɵAnimationEngine, _zone: NgZone);
-    createRenderer(hostElement: any, type: RendererType2): Renderer2;
+    createRenderer(hostElement: any, type: RendererType2): ɵBaseAnimationRenderer;
     begin(): void;
     private _scheduleCountTask;
     end(): void;
@@ -216,7 +216,7 @@ export declare class ɵBaseAnimationRenderer implements Renderer2 {
     createText(value: string): any;
     appendChild(parent: any, newChild: any): void;
     insertBefore(parent: any, newChild: any, refChild: any, isMove?: boolean): void;
-    removeChild(parent: any, oldChild: any, isHostElement: boolean): void;
+    removeChild(parent: any, oldChild: any, isHostElement?: boolean): void;
     selectRootElement(selectorOrNode: any, preserveContent?: boolean): any;
     parentNode(node: any): any;
     nextSibling(node: any): any;
