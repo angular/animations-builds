@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.8+sha-5c70148
+ * @license Angular v17.0.0-next.8+sha-0792424
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -545,10 +545,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0-next.8+sha-5c70148", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0-next.8+sha-5c70148", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0-next.8+sha-0792424", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0-next.8+sha-0792424", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-next.8+sha-5c70148", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-next.8+sha-0792424", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -4546,7 +4546,9 @@ class BaseAnimationRenderer {
         this.delegate = delegate;
         this.engine = engine;
         this._onDestroy = _onDestroy;
-        this.isAnimationRenderer = true;
+        // We need to explicitly type this property because of an api-extractor bug
+        // See https://github.com/microsoft/rushstack/issues/4390
+        this.ɵtype = 0 /* AnimationRendererType.Regular */;
     }
     get data() {
         return this.delegate.data;
