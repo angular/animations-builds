@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.1.0-next.0+sha-f3eebaf
+ * @license Angular v17.1.0-next.0+sha-1c4a367
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -11,10 +11,11 @@ import { AnimationPlayer } from '@angular/animations';
 import { AnimationTriggerMetadata } from '@angular/animations';
 import * as i0 from '@angular/core';
 import type { NgZone } from '@angular/core';
-import type { Renderer2 } from '@angular/core';
-import type { RendererFactory2 } from '@angular/core';
-import type { RendererStyleFlags2 } from '@angular/core';
+import { Renderer2 } from '@angular/core';
+import { RendererFactory2 } from '@angular/core';
+import { RendererStyleFlags2 } from '@angular/core';
 import type { RendererType2 } from '@angular/core';
+import { ɵAnimationRendererType } from '@angular/core';
 import { ɵStyleData } from '@angular/animations';
 import { ɵStyleDataMap } from '@angular/animations';
 
@@ -204,7 +205,7 @@ export declare class ɵBaseAnimationRenderer implements Renderer2 {
     delegate: Renderer2;
     engine: ɵAnimationEngine;
     private _onDestroy?;
-    readonly isAnimationRenderer = true;
+    readonly ɵtype: ɵAnimationRendererType.Regular;
     constructor(namespaceId: string, delegate: Renderer2, engine: ɵAnimationEngine, _onDestroy?: (() => void) | undefined);
     get data(): {
         [key: string]: any;
