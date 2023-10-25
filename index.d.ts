@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.1.0-next.0+sha-9692aeb
+ * @license Angular v17.1.0-next.0+sha-ebbc7a2
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -419,7 +419,7 @@ export declare interface AnimationMetadata {
  *
  * @publicApi
  */
-export declare const enum AnimationMetadataType {
+export declare enum AnimationMetadataType {
     /**
      * Associates a named animation state with a set of CSS styles.
      * See [`state()`](api/animations/state)

@@ -1,10 +1,10 @@
 /**
- * @license Angular v17.1.0-next.0+sha-9692aeb
+ * @license Angular v17.1.0-next.0+sha-ebbc7a2
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { ɵAnimationGroupPlayer, NoopAnimationPlayer, AUTO_STYLE, ɵPRE_STYLE, sequence, style } from '@angular/animations';
+import { ɵAnimationGroupPlayer, NoopAnimationPlayer, AUTO_STYLE, ɵPRE_STYLE, sequence, AnimationMetadataType, style } from '@angular/animations';
 import * as i0 from '@angular/core';
 import { ɵRuntimeError, Injectable } from '@angular/core';
 
@@ -545,10 +545,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-9692aeb", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-9692aeb", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-ebbc7a2", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-ebbc7a2", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-9692aeb", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-ebbc7a2", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -787,31 +787,31 @@ function balancePreviousStylesIntoKeyframes(element, keyframes, previousStyles) 
 }
 function visitDslNode(visitor, node, context) {
     switch (node.type) {
-        case 7 /* AnimationMetadataType.Trigger */:
+        case AnimationMetadataType.Trigger:
             return visitor.visitTrigger(node, context);
-        case 0 /* AnimationMetadataType.State */:
+        case AnimationMetadataType.State:
             return visitor.visitState(node, context);
-        case 1 /* AnimationMetadataType.Transition */:
+        case AnimationMetadataType.Transition:
             return visitor.visitTransition(node, context);
-        case 2 /* AnimationMetadataType.Sequence */:
+        case AnimationMetadataType.Sequence:
             return visitor.visitSequence(node, context);
-        case 3 /* AnimationMetadataType.Group */:
+        case AnimationMetadataType.Group:
             return visitor.visitGroup(node, context);
-        case 4 /* AnimationMetadataType.Animate */:
+        case AnimationMetadataType.Animate:
             return visitor.visitAnimate(node, context);
-        case 5 /* AnimationMetadataType.Keyframes */:
+        case AnimationMetadataType.Keyframes:
             return visitor.visitKeyframes(node, context);
-        case 6 /* AnimationMetadataType.Style */:
+        case AnimationMetadataType.Style:
             return visitor.visitStyle(node, context);
-        case 8 /* AnimationMetadataType.Reference */:
+        case AnimationMetadataType.Reference:
             return visitor.visitReference(node, context);
-        case 9 /* AnimationMetadataType.AnimateChild */:
+        case AnimationMetadataType.AnimateChild:
             return visitor.visitAnimateChild(node, context);
-        case 10 /* AnimationMetadataType.AnimateRef */:
+        case AnimationMetadataType.AnimateRef:
             return visitor.visitAnimateRef(node, context);
-        case 11 /* AnimationMetadataType.Query */:
+        case AnimationMetadataType.Query:
             return visitor.visitQuery(node, context);
-        case 12 /* AnimationMetadataType.Stagger */:
+        case AnimationMetadataType.Stagger:
             return visitor.visitStagger(node, context);
         default:
             throw invalidNodeType(node.type);
@@ -1045,7 +1045,7 @@ class AnimationAstBuilderVisitor {
         }
         metadata.definitions.forEach(def => {
             this._resetContextStyleTimingState(context);
-            if (def.type == 0 /* AnimationMetadataType.State */) {
+            if (def.type == AnimationMetadataType.State) {
                 const stateDef = def;
                 const name = stateDef.name;
                 name.toString().split(/\s*,\s*/).forEach(n => {
@@ -1054,7 +1054,7 @@ class AnimationAstBuilderVisitor {
                 });
                 stateDef.name = name;
             }
-            else if (def.type == 1 /* AnimationMetadataType.Transition */) {
+            else if (def.type == AnimationMetadataType.Transition) {
                 const transition = this.visitTransition(def, context);
                 queryCount += transition.queryCount;
                 depCount += transition.depCount;
@@ -1065,7 +1065,7 @@ class AnimationAstBuilderVisitor {
             }
         });
         return {
-            type: 7 /* AnimationMetadataType.Trigger */,
+            type: AnimationMetadataType.Trigger,
             name: metadata.name,
             states,
             transitions,
@@ -1097,7 +1097,7 @@ class AnimationAstBuilderVisitor {
             }
         }
         return {
-            type: 0 /* AnimationMetadataType.State */,
+            type: AnimationMetadataType.State,
             name: metadata.name,
             style: styleAst,
             options: astParams ? { params: astParams } : null
@@ -1109,7 +1109,7 @@ class AnimationAstBuilderVisitor {
         const animation = visitDslNode(this, normalizeAnimationEntry(metadata.animation), context);
         const matchers = parseTransitionExpr(metadata.expr, context.errors);
         return {
-            type: 1 /* AnimationMetadataType.Transition */,
+            type: AnimationMetadataType.Transition,
             matchers,
             animation,
             queryCount: context.queryCount,
@@ -1119,7 +1119,7 @@ class AnimationAstBuilderVisitor {
     }
     visitSequence(metadata, context) {
         return {
-            type: 2 /* AnimationMetadataType.Sequence */,
+            type: AnimationMetadataType.Sequence,
             steps: metadata.steps.map(s => visitDslNode(this, s, context)),
             options: normalizeAnimationOptions(metadata.options)
         };
@@ -1135,7 +1135,7 @@ class AnimationAstBuilderVisitor {
         });
         context.currentTime = furthestTime;
         return {
-            type: 3 /* AnimationMetadataType.Group */,
+            type: AnimationMetadataType.Group,
             steps,
             options: normalizeAnimationOptions(metadata.options)
         };
@@ -1145,7 +1145,7 @@ class AnimationAstBuilderVisitor {
         context.currentAnimateTimings = timingAst;
         let styleAst;
         let styleMetadata = metadata.styles ? metadata.styles : style({});
-        if (styleMetadata.type == 5 /* AnimationMetadataType.Keyframes */) {
+        if (styleMetadata.type == AnimationMetadataType.Keyframes) {
             styleAst = this.visitKeyframes(styleMetadata, context);
         }
         else {
@@ -1166,7 +1166,7 @@ class AnimationAstBuilderVisitor {
         }
         context.currentAnimateTimings = null;
         return {
-            type: 4 /* AnimationMetadataType.Animate */,
+            type: AnimationMetadataType.Animate,
             timings: timingAst,
             style: styleAst,
             options: null
@@ -1212,7 +1212,7 @@ class AnimationAstBuilderVisitor {
             }
         });
         return {
-            type: 6 /* AnimationMetadataType.Style */,
+            type: AnimationMetadataType.Style,
             styles,
             easing: collectedEasing,
             offset: metadata.offset,
@@ -1264,7 +1264,7 @@ class AnimationAstBuilderVisitor {
         });
     }
     visitKeyframes(metadata, context) {
-        const ast = { type: 5 /* AnimationMetadataType.Keyframes */, styles: [], options: null };
+        const ast = { type: AnimationMetadataType.Keyframes, styles: [], options: null };
         if (!context.currentAnimateTimings) {
             context.errors.push(invalidKeyframes());
             return ast;
@@ -1320,7 +1320,7 @@ class AnimationAstBuilderVisitor {
     }
     visitReference(metadata, context) {
         return {
-            type: 8 /* AnimationMetadataType.Reference */,
+            type: AnimationMetadataType.Reference,
             animation: visitDslNode(this, normalizeAnimationEntry(metadata.animation), context),
             options: normalizeAnimationOptions(metadata.options)
         };
@@ -1328,13 +1328,13 @@ class AnimationAstBuilderVisitor {
     visitAnimateChild(metadata, context) {
         context.depCount++;
         return {
-            type: 9 /* AnimationMetadataType.AnimateChild */,
+            type: AnimationMetadataType.AnimateChild,
             options: normalizeAnimationOptions(metadata.options)
         };
     }
     visitAnimateRef(metadata, context) {
         return {
-            type: 10 /* AnimationMetadataType.AnimateRef */,
+            type: AnimationMetadataType.AnimateRef,
             animation: this.visitReference(metadata.animation, context),
             options: normalizeAnimationOptions(metadata.options)
         };
@@ -1352,7 +1352,7 @@ class AnimationAstBuilderVisitor {
         context.currentQuery = null;
         context.currentQuerySelector = parentSelector;
         return {
-            type: 11 /* AnimationMetadataType.Query */,
+            type: AnimationMetadataType.Query,
             selector,
             limit: options.limit || 0,
             optional: !!options.optional,
@@ -1370,7 +1370,7 @@ class AnimationAstBuilderVisitor {
             { duration: 0, delay: 0, easing: 'full' } :
             resolveTiming(metadata.timings, context.errors, true);
         return {
-            type: 12 /* AnimationMetadataType.Stagger */,
+            type: AnimationMetadataType.Stagger,
             animation: visitDslNode(this, normalizeAnimationEntry(metadata.animation), context),
             timings,
             options: null
@@ -1689,7 +1689,7 @@ class AnimationTimelineBuilderVisitor {
             ctx = context.createSubContext(options);
             ctx.transformIntoNewTimeline();
             if (options.delay != null) {
-                if (ctx.previousNode.type == 6 /* AnimationMetadataType.Style */) {
+                if (ctx.previousNode.type == AnimationMetadataType.Style) {
                     ctx.currentTimeline.snapshotCurrentStyles();
                     ctx.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
                 }
@@ -1748,7 +1748,7 @@ class AnimationTimelineBuilderVisitor {
             timeline.snapshotCurrentStyles();
         }
         const style = ast.style;
-        if (style.type == 5 /* AnimationMetadataType.Keyframes */) {
+        if (style.type == AnimationMetadataType.Keyframes) {
             this.visitKeyframes(style, context);
         }
         else {
@@ -1804,7 +1804,7 @@ class AnimationTimelineBuilderVisitor {
         const options = (ast.options || {});
         const delay = options.delay ? resolveTimingValue(options.delay) : 0;
         if (delay &&
-            (context.previousNode.type === 6 /* AnimationMetadataType.Style */ ||
+            (context.previousNode.type === AnimationMetadataType.Style ||
                 (startTime == 0 && context.currentTimeline.hasCurrentStyleProperties()))) {
             context.currentTimeline.snapshotCurrentStyles();
             context.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
@@ -2468,9 +2468,9 @@ class AnimationTrigger {
 }
 function createFallbackTransition(triggerName, states, normalizer) {
     const matchers = [(fromState, toState) => true];
-    const animation = { type: 2 /* AnimationMetadataType.Sequence */, steps: [], options: null };
+    const animation = { type: AnimationMetadataType.Sequence, steps: [], options: null };
     const transition = {
-        type: 1 /* AnimationMetadataType.Transition */,
+        type: AnimationMetadataType.Transition,
         animation,
         matchers,
         options: null,

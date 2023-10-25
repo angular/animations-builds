@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.1.0-next.0+sha-9692aeb
+ * @license Angular v17.1.0-next.0+sha-ebbc7a2
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,6 +8,82 @@ import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
 import { inject, Injectable, ANIMATION_MODULE_TYPE, ViewEncapsulation, ɵRuntimeError, Inject } from '@angular/core';
 
+/**
+ * @description Constants for the categories of parameters that can be defined for animations.
+ *
+ * A corresponding function defines a set of parameters for each category, and
+ * collects them into a corresponding `AnimationMetadata` object.
+ *
+ * @publicApi
+ */
+var AnimationMetadataType;
+(function (AnimationMetadataType) {
+    /**
+     * Associates a named animation state with a set of CSS styles.
+     * See [`state()`](api/animations/state)
+     */
+    AnimationMetadataType[AnimationMetadataType["State"] = 0] = "State";
+    /**
+     * Data for a transition from one animation state to another.
+     * See `transition()`
+     */
+    AnimationMetadataType[AnimationMetadataType["Transition"] = 1] = "Transition";
+    /**
+     * Contains a set of animation steps.
+     * See `sequence()`
+     */
+    AnimationMetadataType[AnimationMetadataType["Sequence"] = 2] = "Sequence";
+    /**
+     * Contains a set of animation steps.
+     * See `{@link animations/group group()}`
+     */
+    AnimationMetadataType[AnimationMetadataType["Group"] = 3] = "Group";
+    /**
+     * Contains an animation step.
+     * See `animate()`
+     */
+    AnimationMetadataType[AnimationMetadataType["Animate"] = 4] = "Animate";
+    /**
+     * Contains a set of animation steps.
+     * See `keyframes()`
+     */
+    AnimationMetadataType[AnimationMetadataType["Keyframes"] = 5] = "Keyframes";
+    /**
+     * Contains a set of CSS property-value pairs into a named style.
+     * See `style()`
+     */
+    AnimationMetadataType[AnimationMetadataType["Style"] = 6] = "Style";
+    /**
+     * Associates an animation with an entry trigger that can be attached to an element.
+     * See `trigger()`
+     */
+    AnimationMetadataType[AnimationMetadataType["Trigger"] = 7] = "Trigger";
+    /**
+     * Contains a re-usable animation.
+     * See `animation()`
+     */
+    AnimationMetadataType[AnimationMetadataType["Reference"] = 8] = "Reference";
+    /**
+     * Contains data to use in executing child animations returned by a query.
+     * See `animateChild()`
+     */
+    AnimationMetadataType[AnimationMetadataType["AnimateChild"] = 9] = "AnimateChild";
+    /**
+     * Contains animation parameters for a re-usable animation.
+     * See `useAnimation()`
+     */
+    AnimationMetadataType[AnimationMetadataType["AnimateRef"] = 10] = "AnimateRef";
+    /**
+     * Contains child-animation query data.
+     * See `query()`
+     */
+    AnimationMetadataType[AnimationMetadataType["Query"] = 11] = "Query";
+    /**
+     * Contains data for staggering an animation sequence.
+     * See `stagger()`
+     */
+    AnimationMetadataType[AnimationMetadataType["Stagger"] = 12] = "Stagger";
+})(AnimationMetadataType || (AnimationMetadataType = {}));
 /**
  * Specifies automatic styling.
  *
@@ -163,7 +239,7 @@ const AUTO_STYLE = '*';
  * @publicApi
  */
 function trigger(name, definitions) {
-    return { type: 7 /* AnimationMetadataType.Trigger */, name, definitions, options: {} };
+    return { type: AnimationMetadataType.Trigger, name, definitions, options: {} };
 }
 /**
  * Defines an animation step that combines styling information with timing information.
@@ -224,7 +300,7 @@ function trigger(name, definitions) {
  * @publicApi
  */
 function animate(timings, styles = null) {
-    return { type: 4 /* AnimationMetadataType.Animate */, styles, timings };
+    return { type: AnimationMetadataType.Animate, styles, timings };
 }
 /**
  * @description Defines a list of animation steps to be run in parallel.
@@ -260,7 +336,7 @@ function animate(timings, styles = null) {
  * @publicApi
  */
 function group(steps, options = null) {
-    return { type: 3 /* AnimationMetadataType.Group */, steps, options };
+    return { type: AnimationMetadataType.Group, steps, options };
 }
 /**
  * Defines a list of animation steps to be run sequentially, one by one.
@@ -296,7 +372,7 @@ function group(steps, options = null) {
  * @publicApi
  **/
 function sequence(steps, options = null) {
-    return { type: 2 /* AnimationMetadataType.Sequence */, steps, options };
+    return { type: AnimationMetadataType.Sequence, steps, options };
 }
 /**
  * Declares a key/value object containing CSS properties/styles that
@@ -338,7 +414,7 @@ function sequence(steps, options = null) {
  * @publicApi
  **/
 function style(tokens) {
-    return { type: 6 /* AnimationMetadataType.Style */, styles: tokens, offset: null };
+    return { type: AnimationMetadataType.Style, styles: tokens, offset: null };
 }
 /**
  * Declares an animation state within a trigger attached to an element.
@@ -370,7 +446,7 @@ function style(tokens) {
  * @publicApi
  **/
 function state(name, styles, options) {
-    return { type: 0 /* AnimationMetadataType.State */, name, styles, options };
+    return { type: AnimationMetadataType.State, name, styles, options };
 }
 /**
  * Defines a set of animation styles, associating each style with an optional `offset` value.
@@ -418,7 +494,7 @@ function state(name, styles, options) {
  * @publicApi
  */
 function keyframes(steps) {
-    return { type: 5 /* AnimationMetadataType.Keyframes */, steps };
+    return { type: AnimationMetadataType.Keyframes, steps };
 }
 /**
  * Declares an animation transition which is played when a certain specified condition is met.
@@ -567,7 +643,7 @@ function keyframes(steps) {
  * @publicApi
  **/
 function transition(stateChangeExpr, steps, options = null) {
-    return { type: 1 /* AnimationMetadataType.Transition */, expr: stateChangeExpr, animation: steps, options };
+    return { type: AnimationMetadataType.Transition, expr: stateChangeExpr, animation: steps, options };
 }
 /**
  * Produces a reusable animation that can be invoked in another animation or sequence,
@@ -615,7 +691,7 @@ function transition(stateChangeExpr, steps, options = null) {
  * @publicApi
  */
 function animation(steps, options = null) {
-    return { type: 8 /* AnimationMetadataType.Reference */, animation: steps, options };
+    return { type: AnimationMetadataType.Reference, animation: steps, options };
 }
 /**
  * Executes a queried inner animation element within an animation sequence.
@@ -637,7 +713,7 @@ function animation(steps, options = null) {
  * @publicApi
  */
 function animateChild(options = null) {
-    return { type: 9 /* AnimationMetadataType.AnimateChild */, options };
+    return { type: AnimationMetadataType.AnimateChild, options };
 }
 /**
  * Starts a reusable animation that is created using the `animation()` function.
@@ -650,7 +726,7 @@ function animateChild(options = null) {
  * @publicApi
  */
 function useAnimation(animation, options = null) {
-    return { type: 10 /* AnimationMetadataType.AnimateRef */, animation, options };
+    return { type: AnimationMetadataType.AnimateRef, animation, options };
 }
 /**
  * Finds one or more inner elements within the current element that is
@@ -773,7 +849,7 @@ function useAnimation(animation, options = null) {
  * @publicApi
  */
 function query(selector, animation, options = null) {
-    return { type: 11 /* AnimationMetadataType.Query */, selector, animation, options };
+    return { type: AnimationMetadataType.Query, selector, animation, options };
 }
 /**
  * Use within an animation `query()` call to issue a timing gap after
@@ -856,7 +932,7 @@ function query(selector, animation, options = null) {
  * @publicApi
  */
 function stagger(timings, animation) {
-    return { type: 12 /* AnimationMetadataType.Stagger */, timings, animation };
+    return { type: AnimationMetadataType.Stagger, timings, animation };
 }
 
 /**
@@ -906,10 +982,10 @@ function stagger(timings, animation) {
  * @publicApi
  */
 class AnimationBuilder {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-9692aeb", ngImport: i0, type: AnimationBuilder, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-9692aeb", ngImport: i0, type: AnimationBuilder, providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-ebbc7a2", ngImport: i0, type: AnimationBuilder, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-ebbc7a2", ngImport: i0, type: AnimationBuilder, providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-9692aeb", ngImport: i0, type: AnimationBuilder, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-ebbc7a2", ngImport: i0, type: AnimationBuilder, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) }]
         }] });
@@ -948,10 +1024,10 @@ class BrowserAnimationBuilder extends AnimationBuilder {
         issueAnimationCommand(this._renderer, null, id, 'register', [entry]);
         return new BrowserAnimationFactory(id, this._renderer);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-9692aeb", ngImport: i0, type: BrowserAnimationBuilder, deps: [{ token: i0.RendererFactory2 }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-9692aeb", ngImport: i0, type: BrowserAnimationBuilder, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-ebbc7a2", ngImport: i0, type: BrowserAnimationBuilder, deps: [{ token: i0.RendererFactory2 }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-ebbc7a2", ngImport: i0, type: BrowserAnimationBuilder, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-9692aeb", ngImport: i0, type: BrowserAnimationBuilder, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-ebbc7a2", ngImport: i0, type: BrowserAnimationBuilder, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [{ type: i0.RendererFactory2 }, { type: Document, decorators: [{
@@ -1306,5 +1382,5 @@ const ɵPRE_STYLE = '!';
  * Generated bundle index. Do not edit.
  */
 
-export { AUTO_STYLE, AnimationBuilder, AnimationFactory, NoopAnimationPlayer, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, AnimationGroupPlayer as ɵAnimationGroupPlayer, BrowserAnimationBuilder as ɵBrowserAnimationBuilder, ɵPRE_STYLE };
+export { AUTO_STYLE, AnimationBuilder, AnimationFactory, AnimationMetadataType, NoopAnimationPlayer, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, AnimationGroupPlayer as ɵAnimationGroupPlayer, BrowserAnimationBuilder as ɵBrowserAnimationBuilder, ɵPRE_STYLE };
 //# sourceMappingURL=animations.mjs.map
