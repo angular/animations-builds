@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.1.0-next.0+sha-664099b
+ * @license Angular v17.1.0-next.0+sha-0045f02
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -545,10 +545,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-664099b", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-664099b", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-0045f02", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-0045f02", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-664099b", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.1.0-next.0+sha-0045f02", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -4322,7 +4322,14 @@ class WebAnimationsPlayer {
         // @ts-expect-error overwriting a readonly property
         this.domPlayer = this._triggerWebAnimation(this.element, keyframes, this.options);
         this._finalKeyframe = keyframes.length ? keyframes[keyframes.length - 1] : new Map();
-        this.domPlayer.addEventListener('finish', () => this._onFinish());
+        const onFinish = () => this._onFinish();
+        this.domPlayer.addEventListener('finish', onFinish);
+        this.onDestroy(() => {
+            // We must remove the `finish` event listener once an animation has completed all its
+            // iterations. This action is necessary to prevent a memory leak since the listener captures
+            // `this`, creating a closure that prevents `this` from being garbage collected.
+            this.domPlayer.removeEventListener('finish', onFinish);
+        });
     }
     _preparePlayerBeforeStart() {
         // this is required so that the player doesn't start to animate right away
