@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.1.0-next.4+sha-e8f0042
+ * @license Angular v17.1.0-next.4+sha-d7e7409
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -545,10 +545,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.1.0-next.4+sha-e8f0042", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.1.0-next.4+sha-e8f0042", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.1.0-next.4+sha-d7e7409", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.1.0-next.4+sha-d7e7409", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.1.0-next.4+sha-e8f0042", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.1.0-next.4+sha-d7e7409", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -643,20 +643,6 @@ function parseTimeExpression(exp, errors, allowNegativeValues) {
     }
     return { duration, delay, easing };
 }
-function copyObj(obj, destination = {}) {
-    Object.keys(obj).forEach(prop => {
-        destination[prop] = obj[prop];
-    });
-    return destination;
-}
-function convertToMap(obj) {
-    const styleMap = new Map();
-    Object.keys(obj).forEach(prop => {
-        const val = obj[prop];
-        styleMap.set(prop, val);
-    });
-    return styleMap;
-}
 function normalizeKeyframes(keyframes) {
     if (!keyframes.length) {
         return [];
@@ -664,28 +650,10 @@ function normalizeKeyframes(keyframes) {
     if (keyframes[0] instanceof Map) {
         return keyframes;
     }
-    return keyframes.map(kf => convertToMap(kf));
+    return keyframes.map(kf => new Map(Object.entries(kf)));
 }
 function normalizeStyles(styles) {
-    const normalizedStyles = new Map();
-    if (Array.isArray(styles)) {
-        styles.forEach(data => copyStyles(data, normalizedStyles));
-    }
-    else {
-        copyStyles(styles, normalizedStyles);
-    }
-    return normalizedStyles;
-}
-function copyStyles(styles, destination = new Map(), backfill) {
-    if (backfill) {
-        for (let [prop, val] of backfill) {
-            destination.set(prop, val);
-        }
-    }
-    for (let [prop, val] of styles) {
-        destination.set(prop, val);
-    }
-    return destination;
+    return Array.isArray(styles) ? new Map(...styles) : new Map(styles);
 }
 function setStyles(element, styles, formerStyles) {
     styles.forEach((val, prop) => {
@@ -734,7 +702,7 @@ function extractStyleParams(value) {
     return params;
 }
 function interpolateParams(value, params, errors) {
-    const original = value.toString();
+    const original = `${value}`;
     const str = original.replace(PARAM_REGEX, (_, varName) => {
         let localVal = params[varName];
         // this means that the value was never overridden by the data passed in by the user
@@ -746,15 +714,6 @@ function interpolateParams(value, params, errors) {
     });
     // we do this to assert that numeric values stay as they are
     return str == original ? value : str;
-}
-function iteratorToArray(iterator) {
-    const arr = [];
-    let item = iterator.next();
-    while (!item.done) {
-        arr.push(item.value);
-        item = iterator.next();
-    }
-    return arr;
 }
 const DASH_CASE_REGEXP = /-+([a-z0-9])/g;
 function dashCaseToCamelCase(input) {
@@ -1092,8 +1051,7 @@ class AnimationAstBuilderVisitor {
                 }
             });
             if (missingSubs.size) {
-                const missingSubsArr = iteratorToArray(missingSubs.values());
-                context.errors.push(invalidState(metadata.name, missingSubsArr));
+                context.errors.push(invalidState(metadata.name, [...missingSubs.values()]));
             }
         }
         return {
@@ -1190,7 +1148,7 @@ class AnimationAstBuilderVisitor {
                 }
             }
             else {
-                styles.push(convertToMap(styleTuple));
+                styles.push(new Map(Object.entries(styleTuple)));
             }
         }
         let containsDynamicStyles = false;
@@ -1390,7 +1348,7 @@ function normalizeSelector(selector) {
     return [selector, hasAmpersand];
 }
 function normalizeParams(obj) {
-    return obj ? copyObj(obj) : null;
+    return obj ? { ...obj } : null;
 }
 class AnimationAstBuilderContext {
     constructor(errors) {
@@ -1448,7 +1406,7 @@ function constructTimingAst(value, errors) {
 }
 function normalizeAnimationOptions(options) {
     if (options) {
-        options = copyObj(options);
+        options = { ...options };
         if (options['params']) {
             options['params'] = normalizeParams(options['params']);
         }
@@ -1572,8 +1530,7 @@ const LEAVE_TOKEN_REGEX = new RegExp(LEAVE_TOKEN, 'g');
  * from all previous animation steps. Therefore when a keyframe is created it would also be missing
  * from all previous keyframes up until where it is first used. For the timeline keyframe generation
  * to properly fill in the style it will place the previous value (the value from the parent
- * timeline) or a default value of `*` into the backFill map. The `copyStyles` method in util.ts
- * handles propagating that backfill map to the styles object.
+ * timeline) or a default value of `*` into the backFill map.
  *
  * When a sub-timeline is created it will have its own backFill property. This is done so that
  * styles present within the sub-timeline do not accidentally seep into the previous/future timeline
@@ -2156,7 +2113,7 @@ class TimelineBuilder {
         const isEmpty = this._keyframes.size === 1 && this.duration === 0;
         let finalKeyframes = [];
         this._keyframes.forEach((keyframe, time) => {
-            const finalKeyframe = copyStyles(keyframe, new Map(), this._backFill);
+            const finalKeyframe = new Map([...this._backFill, ...keyframe]);
             finalKeyframe.forEach((value, prop) => {
                 if (value === ɵPRE_STYLE) {
                     preStyleProps.add(prop);
@@ -2170,8 +2127,8 @@ class TimelineBuilder {
             }
             finalKeyframes.push(finalKeyframe);
         });
-        const preProps = preStyleProps.size ? iteratorToArray(preStyleProps.values()) : [];
-        const postProps = postStyleProps.size ? iteratorToArray(postStyleProps.values()) : [];
+        const preProps = [...preStyleProps.values()];
+        const postProps = [...postStyleProps.values()];
         // special case for a 0-second animation (which is designed just to place styles onscreen)
         if (isEmpty) {
             const kf0 = finalKeyframes[0];
@@ -2203,10 +2160,10 @@ class SubTimelineBuilder extends TimelineBuilder {
             const totalTime = duration + delay;
             const startingGap = delay / totalTime;
             // the original starting keyframe now starts once the delay is done
-            const newFirstKeyframe = copyStyles(keyframes[0]);
+            const newFirstKeyframe = new Map(keyframes[0]);
             newFirstKeyframe.set('offset', 0);
             newKeyframes.push(newFirstKeyframe);
-            const oldFirstKeyframe = copyStyles(keyframes[0]);
+            const oldFirstKeyframe = new Map(keyframes[0]);
             oldFirstKeyframe.set('offset', roundOffset(startingGap));
             newKeyframes.push(oldFirstKeyframe);
             /*
@@ -2226,7 +2183,7 @@ class SubTimelineBuilder extends TimelineBuilder {
             // offsets between 1 ... n -1 are all warped by the keyframe stretch
             const limit = keyframes.length - 1;
             for (let i = 1; i <= limit; i++) {
-                let kf = copyStyles(keyframes[i]);
+                let kf = new Map(keyframes[i]);
                 const oldOffset = kf.get('offset');
                 const timeAtKeyframe = delay + oldOffset * duration;
                 kf.set('offset', roundOffset(timeAtKeyframe / totalTime));
@@ -2250,13 +2207,15 @@ function flattenStyles(input, allStyles) {
     let allProperties;
     input.forEach(token => {
         if (token === '*') {
-            allProperties = allProperties || allStyles.keys();
+            allProperties ??= allStyles.keys();
             for (let prop of allProperties) {
                 styles.set(prop, AUTO_STYLE);
             }
         }
         else {
-            copyStyles(token, styles);
+            for (let [prop, val] of token) {
+                styles.set(prop, val);
+            }
         }
     });
     return styles;
@@ -2336,8 +2295,7 @@ class AnimationTransitionFactory {
         if (typeof ngDevMode === 'undefined' || ngDevMode) {
             checkNonAnimatableInTimelines(timelines, this._triggerName, driver);
         }
-        const queriedElementsList = iteratorToArray(queriedElements.values());
-        return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, timelines, queriedElementsList, preStyleMap, postStyleMap, totalTime);
+        return createTransitionInstruction(element, this._triggerName, currentState, nextState, isRemoval, currentStateStyles, nextStateStyles, timelines, [...queriedElements.values()], preStyleMap, postStyleMap, totalTime);
     }
 }
 /**
@@ -2395,12 +2353,12 @@ function oneOrMoreTransitionsMatch(matchFns, currentState, nextState, element, p
     return matchFns.some(fn => fn(currentState, nextState, element, params));
 }
 function applyParamDefaults(userParams, defaults) {
-    const result = copyObj(defaults);
-    for (const key in userParams) {
-        if (userParams.hasOwnProperty(key) && userParams[key] != null) {
-            result[key] = userParams[key];
+    const result = { ...defaults };
+    Object.entries(userParams).forEach(([key, value]) => {
+        if (value != null) {
+            result[key] = value;
         }
-    }
+    });
     return result;
 }
 class AnimationStateStyles {
@@ -2411,13 +2369,7 @@ class AnimationStateStyles {
     }
     buildStyles(params, errors) {
         const finalStyles = new Map();
-        const combinedParams = copyObj(this.defaultParams);
-        Object.keys(params).forEach(key => {
-            const value = params[key];
-            if (value !== null) {
-                combinedParams[key] = value;
-            }
-        });
+        const combinedParams = applyParamDefaults(params, this.defaultParams);
         this.styles.styles.forEach(value => {
             if (typeof value !== 'string') {
                 value.forEach((val, prop) => {
@@ -2647,8 +2599,8 @@ class StateValue {
         const value = isObj ? input['value'] : input;
         this.value = normalizeTriggerValue(value);
         if (isObj) {
-            const options = copyObj(input);
-            delete options['value'];
+            // we drop the value property from options.
+            const { value, ...options } = input;
             this.options = options;
         }
         else {
@@ -4484,7 +4436,7 @@ class WebAnimationsDriver {
         return invokeQuery(element, selector, multi);
     }
     computeStyle(element, prop, defaultValue) {
-        return window.getComputedStyle(element)[prop];
+        return computeStyle(element, prop);
     }
     animate(element, keyframes, duration, delay, easing, previousPlayers = []) {
         const fill = delay == 0 ? 'both' : 'forwards';
@@ -4501,7 +4453,7 @@ class WebAnimationsDriver {
                 player.currentSnapshot.forEach((val, prop) => previousStyles.set(prop, val));
             });
         }
-        let _keyframes = normalizeKeyframes(keyframes).map(styles => copyStyles(styles));
+        let _keyframes = normalizeKeyframes(keyframes).map(styles => new Map(styles));
         _keyframes = balancePreviousStylesIntoKeyframes(element, _keyframes, previousStyles);
         const specialStyles = packageNonAnimatableStyles(element, _keyframes);
         return new WebAnimationsPlayer(element, _keyframes, playerOptions, specialStyles);
