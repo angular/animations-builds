@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.2.0-next.0+sha-711cb41
+ * @license Angular v17.2.0-next.0+sha-bbbe477
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -982,10 +982,10 @@ function stagger(timings, animation) {
  * @publicApi
  */
 class AnimationBuilder {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.0-next.0+sha-711cb41", ngImport: i0, type: AnimationBuilder, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.2.0-next.0+sha-711cb41", ngImport: i0, type: AnimationBuilder, providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.0-next.0+sha-bbbe477", ngImport: i0, type: AnimationBuilder, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.2.0-next.0+sha-bbbe477", ngImport: i0, type: AnimationBuilder, providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0-next.0+sha-711cb41", ngImport: i0, type: AnimationBuilder, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0-next.0+sha-bbbe477", ngImport: i0, type: AnimationBuilder, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) }]
         }] });
@@ -1024,10 +1024,10 @@ class BrowserAnimationBuilder extends AnimationBuilder {
         issueAnimationCommand(this._renderer, null, id, 'register', [entry]);
         return new BrowserAnimationFactory(id, this._renderer);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.0-next.0+sha-711cb41", ngImport: i0, type: BrowserAnimationBuilder, deps: [{ token: i0.RendererFactory2 }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.2.0-next.0+sha-711cb41", ngImport: i0, type: BrowserAnimationBuilder, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.0-next.0+sha-bbbe477", ngImport: i0, type: BrowserAnimationBuilder, deps: [{ token: i0.RendererFactory2 }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.2.0-next.0+sha-bbbe477", ngImport: i0, type: BrowserAnimationBuilder, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0-next.0+sha-711cb41", ngImport: i0, type: BrowserAnimationBuilder, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0-next.0+sha-bbbe477", ngImport: i0, type: BrowserAnimationBuilder, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [{ type: i0.RendererFactory2 }, { type: Document, decorators: [{
@@ -1152,7 +1152,7 @@ class NoopAnimationPlayer {
     _onFinish() {
         if (!this._finished) {
             this._finished = true;
-            this._onDoneFns.forEach(fn => fn());
+            this._onDoneFns.forEach((fn) => fn());
             this._onDoneFns = [];
         }
     }
@@ -1183,7 +1183,7 @@ class NoopAnimationPlayer {
         queueMicrotask(() => this._onFinish());
     }
     _onStart() {
-        this._onStartFns.forEach(fn => fn());
+        this._onStartFns.forEach((fn) => fn());
         this._onStartFns = [];
     }
     pause() { }
@@ -1198,7 +1198,7 @@ class NoopAnimationPlayer {
                 this._onStart();
             }
             this.finish();
-            this._onDestroyFns.forEach(fn => fn());
+            this._onDestroyFns.forEach((fn) => fn());
             this._onDestroyFns = [];
         }
     }
@@ -1217,7 +1217,7 @@ class NoopAnimationPlayer {
     /** @internal */
     triggerCallback(phaseName) {
         const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
-        methods.forEach(fn => fn());
+        methods.forEach((fn) => fn());
         methods.length = 0;
     }
 }
@@ -1249,7 +1249,7 @@ class AnimationGroupPlayer {
             queueMicrotask(() => this._onFinish());
         }
         else {
-            this.players.forEach(player => {
+            this.players.forEach((player) => {
                 player.onDone(() => {
                     if (++doneCount == total) {
                         this._onFinish();
@@ -1272,12 +1272,12 @@ class AnimationGroupPlayer {
     _onFinish() {
         if (!this._finished) {
             this._finished = true;
-            this._onDoneFns.forEach(fn => fn());
+            this._onDoneFns.forEach((fn) => fn());
             this._onDoneFns = [];
         }
     }
     init() {
-        this.players.forEach(player => player.init());
+        this.players.forEach((player) => player.init());
     }
     onStart(fn) {
         this._onStartFns.push(fn);
@@ -1285,7 +1285,7 @@ class AnimationGroupPlayer {
     _onStart() {
         if (!this.hasStarted()) {
             this._started = true;
-            this._onStartFns.forEach(fn => fn());
+            this._onStartFns.forEach((fn) => fn());
             this._onStartFns = [];
         }
     }
@@ -1303,17 +1303,17 @@ class AnimationGroupPlayer {
             this.init();
         }
         this._onStart();
-        this.players.forEach(player => player.play());
+        this.players.forEach((player) => player.play());
     }
     pause() {
-        this.players.forEach(player => player.pause());
+        this.players.forEach((player) => player.pause());
     }
     restart() {
-        this.players.forEach(player => player.restart());
+        this.players.forEach((player) => player.restart());
     }
     finish() {
         this._onFinish();
-        this.players.forEach(player => player.finish());
+        this.players.forEach((player) => player.finish());
     }
     destroy() {
         this._onDestroy();
@@ -1322,20 +1322,20 @@ class AnimationGroupPlayer {
         if (!this._destroyed) {
             this._destroyed = true;
             this._onFinish();
-            this.players.forEach(player => player.destroy());
-            this._onDestroyFns.forEach(fn => fn());
+            this.players.forEach((player) => player.destroy());
+            this._onDestroyFns.forEach((fn) => fn());
             this._onDestroyFns = [];
         }
     }
     reset() {
-        this.players.forEach(player => player.reset());
+        this.players.forEach((player) => player.reset());
         this._destroyed = false;
         this._finished = false;
         this._started = false;
     }
     setPosition(p) {
         const timeAtPosition = p * this.totalTime;
-        this.players.forEach(player => {
+        this.players.forEach((player) => {
             const position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
             player.setPosition(position);
         });
@@ -1348,7 +1348,7 @@ class AnimationGroupPlayer {
         return longestPlayer != null ? longestPlayer.getPosition() : 0;
     }
     beforeDestroy() {
-        this.players.forEach(player => {
+        this.players.forEach((player) => {
             if (player.beforeDestroy) {
                 player.beforeDestroy();
             }
@@ -1357,7 +1357,7 @@ class AnimationGroupPlayer {
     /** @internal */
     triggerCallback(phaseName) {
         const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
-        methods.forEach(fn => fn());
+        methods.forEach((fn) => fn());
         methods.length = 0;
     }
 }

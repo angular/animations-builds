@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.2.0-next.0+sha-711cb41
+ * @license Angular v17.2.0-next.0+sha-bbbe477
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -60,7 +60,7 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         this._keyframes = [];
         this._keyframes = ɵnormalizeKeyframes(keyframes);
         if (ɵallowPreviousPlayerStylesMerge(duration, delay)) {
-            previousPlayers.forEach(player => {
+            previousPlayers.forEach((player) => {
                 if (player instanceof MockAnimationPlayer) {
                     const styles = player.currentSnapshot;
                     styles.forEach((val, prop) => this.previousStyles.set(prop, val));
@@ -75,7 +75,7 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
     /** @internal */
     init() {
         super.init();
-        this._onInitFns.forEach(fn => fn());
+        this._onInitFns.forEach((fn) => fn());
         this._onInitFns = [];
     }
     reset() {
@@ -106,7 +106,7 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
             // when assembling the captured styles, it's important that
             // we build the keyframe styles in the following order:
             // {other styles within keyframes, ... previousStyles }
-            this._keyframes.forEach(kf => {
+            this._keyframes.forEach((kf) => {
                 for (let [prop, val] of kf) {
                     if (prop !== 'offset') {
                         captures.set(prop, this.__finished ? val : AUTO_STYLE);
