@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.0-next.5+sha-d34c033
+ * @license Angular v18.0.0-next.5+sha-5948193
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -30,10 +30,6 @@ export declare abstract class AnimationDriver {
     static NOOP: AnimationDriver;
     abstract validateStyleProperty(prop: string): boolean;
     abstract validateAnimatableStyleProperty?: (prop: string) => boolean;
-    /**
-     * @deprecated No longer in use. Will be removed.
-     */
-    abstract matchesElement(element: any, selector: string): boolean;
     abstract containsElement(elm1: any, elm2: any): boolean;
     /**
      * Obtains the parent element, if any. `null` is returned if the element does not have a parent.
@@ -89,10 +85,6 @@ export declare class NoopAnimationDriver implements AnimationDriver {
      * @returns Whether `prop` is a valid CSS property
      */
     validateStyleProperty(prop: string): boolean;
-    /**
-     * @deprecated unused
-     */
-    matchesElement(_element: any, _selector: string): boolean;
     /**
      *
      * @returns Whether elm1 contains elm2.
@@ -258,7 +250,6 @@ export declare function ɵvalidateWebAnimatableStyleProperty(prop: string): bool
 export declare class ɵWebAnimationsDriver implements AnimationDriver {
     validateStyleProperty(prop: string): boolean;
     validateAnimatableStyleProperty(prop: string): boolean;
-    matchesElement(_element: any, _selector: string): boolean;
     containsElement(elm1: any, elm2: any): boolean;
     getParentElement(element: unknown): unknown;
     query(element: any, selector: string, multi: boolean): any[];

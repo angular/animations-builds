@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.0-next.5+sha-d34c033
+ * @license Angular v18.0.0-next.5+sha-5948193
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -517,13 +517,6 @@ class NoopAnimationDriver {
         return validateStyleProperty(prop);
     }
     /**
-     * @deprecated unused
-     */
-    matchesElement(_element, _selector) {
-        // This method is deprecated and no longer in use so we return false.
-        return false;
-    }
-    /**
      *
      * @returns Whether elm1 contains elm2.
      */
@@ -555,10 +548,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.5+sha-d34c033", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.0.0-next.5+sha-d34c033", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.5+sha-5948193", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.0.0-next.5+sha-5948193", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.5+sha-d34c033", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.5+sha-5948193", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -4469,10 +4462,6 @@ class WebAnimationsDriver {
             return validateWebAnimatableStyleProperty(cssProp);
         }
         return true;
-    }
-    matchesElement(_element, _selector) {
-        // This method is deprecated and no longer in use so we return false.
-        return false;
     }
     containsElement(elm1, elm2) {
         return containsElement(elm1, elm2);

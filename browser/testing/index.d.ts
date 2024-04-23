@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.0-next.5+sha-d34c033
+ * @license Angular v18.0.0-next.5+sha-5948193
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -17,7 +17,6 @@ export declare class MockAnimationDriver implements AnimationDriver {
     static log: AnimationPlayer[];
     validateStyleProperty(prop: string): boolean;
     validateAnimatableStyleProperty(prop: string): boolean;
-    matchesElement(_element: any, _selector: string): boolean;
     containsElement(elm1: any, elm2: any): boolean;
     getParentElement(element: unknown): unknown;
     query(element: any, selector: string, multi: boolean): any[];
