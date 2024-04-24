@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.0-next.5+sha-617bc33
+ * @license Angular v18.0.0-next.5+sha-e3d5607
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -548,10 +548,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.5+sha-617bc33", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.0.0-next.5+sha-617bc33", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.5+sha-e3d5607", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.0.0-next.5+sha-e3d5607", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.5+sha-617bc33", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.5+sha-e3d5607", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -3012,10 +3012,11 @@ class TransitionAnimationEngine {
     _onRemovalComplete(element, context) {
         this.onRemovalComplete(element, context);
     }
-    constructor(bodyNode, driver, _normalizer) {
+    constructor(bodyNode, driver, _normalizer, scheduler) {
         this.bodyNode = bodyNode;
         this.driver = driver;
         this._normalizer = _normalizer;
+        this.scheduler = scheduler;
         this.players = [];
         this.newHostElements = new Map();
         this.playersByElement = new Map();
@@ -3210,6 +3211,7 @@ class TransitionAnimationEngine {
     }
     removeNode(namespaceId, element, context) {
         if (isElementNode(element)) {
+            this.scheduler?.notify();
             const ns = namespaceId ? this._fetchNamespace(namespaceId) : null;
             if (ns) {
                 ns.removeNode(element, context);
@@ -4098,13 +4100,13 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
 }
 
 class AnimationEngine {
-    constructor(doc, _driver, _normalizer) {
+    constructor(doc, _driver, _normalizer, scheduler) {
         this._driver = _driver;
         this._normalizer = _normalizer;
         this._triggerCache = {};
         // this method is designed to be overridden by the code that uses this engine
         this.onRemovalComplete = (element, context) => { };
-        this._transitionEngine = new TransitionAnimationEngine(doc.body, _driver, _normalizer);
+        this._transitionEngine = new TransitionAnimationEngine(doc.body, _driver, _normalizer, scheduler);
         this._timelineEngine = new TimelineAnimationEngine(doc.body, _driver, _normalizer);
         this._transitionEngine.onRemovalComplete = (element, context) => this.onRemovalComplete(element, context);
     }
@@ -4495,12 +4497,12 @@ class WebAnimationsDriver {
     }
 }
 
-function createEngine(type, doc) {
+function createEngine(type, doc, scheduler) {
     // TODO: find a way to make this tree shakable.
     if (type === 'noop') {
-        return new AnimationEngine(doc, new NoopAnimationDriver(), new NoopAnimationStyleNormalizer());
+        return new AnimationEngine(doc, new NoopAnimationDriver(), new NoopAnimationStyleNormalizer(), scheduler);
     }
-    return new AnimationEngine(doc, new WebAnimationsDriver(), new WebAnimationsStyleNormalizer());
+    return new AnimationEngine(doc, new WebAnimationsDriver(), new WebAnimationsStyleNormalizer(), scheduler);
 }
 
 class Animation {

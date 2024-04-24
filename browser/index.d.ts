@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.0-next.5+sha-617bc33
+ * @license Angular v18.0.0-next.5+sha-e3d5607
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -16,6 +16,7 @@ import { RendererFactory2 } from '@angular/core';
 import { RendererStyleFlags2 } from '@angular/core';
 import type { RendererType2 } from '@angular/core';
 import { ɵAnimationRendererType } from '@angular/core';
+import { ɵChangeDetectionScheduler } from '@angular/core';
 import { ɵStyleData } from '@angular/animations';
 import { ɵStyleDataMap } from '@angular/animations';
 
@@ -147,7 +148,7 @@ export declare class ɵAnimationEngine {
     private _timelineEngine;
     private _triggerCache;
     onRemovalComplete: (element: any, context: any) => void;
-    constructor(doc: Document, _driver: AnimationDriver, _normalizer: ɵAnimationStyleNormalizer);
+    constructor(doc: Document, _driver: AnimationDriver, _normalizer: ɵAnimationStyleNormalizer, scheduler: ɵChangeDetectionScheduler | null);
     registerTrigger(componentId: string, namespaceId: string, hostElement: any, name: string, metadata: AnimationTriggerMetadata): void;
     register(namespaceId: string, hostElement: any): void;
     destroy(namespaceId: string, context: any): void;
@@ -229,7 +230,7 @@ export declare function ɵcamelCaseToDashCase(input: string): string;
 
 export declare function ɵcontainsElement(elm1: any, elm2: any): boolean;
 
-export declare function ɵcreateEngine(type: 'animations' | 'noop', doc: Document): ɵAnimationEngine;
+export declare function ɵcreateEngine(type: 'animations' | 'noop', doc: Document, scheduler: ɵChangeDetectionScheduler | null): ɵAnimationEngine;
 
 export declare function ɵgetParentElement(element: any): unknown | null;
 
