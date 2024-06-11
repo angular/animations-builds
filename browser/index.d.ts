@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.1.0-next.0+sha-1360110
+ * @license Angular v18.1.0-next.1+sha-567c2f6
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -281,7 +281,7 @@ export declare class ɵWebAnimationsPlayer implements AnimationPlayer {
     currentSnapshot: ɵStyleDataMap;
     constructor(element: any, keyframes: Array<ɵStyleDataMap>, options: {
         [key: string]: string | number;
-    }, _specialStyles?: SpecialCasedStyles | null | undefined);
+    }, _specialStyles?: (SpecialCasedStyles | null) | undefined);
     private _onFinish;
     init(): void;
     private _buildPlayer;
