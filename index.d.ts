@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.2.0-next.0+sha-02da71c
+ * @license Angular v18.2.0-next.0+sha-176b26f
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -910,7 +910,6 @@ export declare function keyframes(steps: AnimationStyleMetadata[]): AnimationKey
  *
  * @see {@link animate}
  * @see {@link AnimationPlayer}
- * @see {@link ɵAnimationGroupPlayer AnimationGroupPlayer}
  *
  * @publicApi
  */
