@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.1.1+sha-8bb5937
+ * @license Angular v18.1.1+sha-3d0ee73
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1368,7 +1368,7 @@ export declare function style(tokens: '*' | {
  *  - Transition animations applied based on
  *    the trigger's expression value
  *
- *   ```HTML
+ *   ```html
  *   <div [@myAnimationTrigger]="myStatusExp">
  *    ...
  *   </div>
@@ -1385,7 +1385,7 @@ export declare function style(tokens: '*' | {
  *  - Transition animations applied based on custom logic dependent
  *    on the trigger's expression value and provided parameters
  *
- *    ```HTML
+ *    ```html
  *    <div [@myAnimationTrigger]="{
  *     value: stepName,
  *     params: { target: currentTarget }
