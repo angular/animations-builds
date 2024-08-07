@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.2.0-next.4+sha-7919982
+ * @license Angular v18.2.0-next.4+sha-0b1dd39
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -548,10 +548,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.0-next.4+sha-7919982", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.2.0-next.4+sha-7919982", ngImport: i0, type: NoopAnimationDriver }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.0-next.4+sha-0b1dd39", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.2.0-next.4+sha-0b1dd39", ngImport: i0, type: NoopAnimationDriver }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.0-next.4+sha-7919982", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.0-next.4+sha-0b1dd39", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -4582,7 +4582,13 @@ class BaseAnimationRenderer {
         this.engine.onInsert(this.namespaceId, newChild, parent, isMove);
     }
     removeChild(parent, oldChild, isHostElement) {
-        this.engine.onRemove(this.namespaceId, oldChild, this.delegate);
+        // Prior to the changes in #57203, this method wasn't being called at all by `core` if the child
+        // doesn't have a parent. There appears to be some animation-specific downstream logic that
+        // depends on the null check happening before the animation engine. This check keeps the old
+        // behavior while allowing `core` to not have to check for the parent element anymore.
+        if (this.parentNode(oldChild)) {
+            this.engine.onRemove(this.namespaceId, oldChild, this.delegate);
+        }
     }
     selectRootElement(selectorOrNode, preserveContent) {
         return this.delegate.selectRootElement(selectorOrNode, preserveContent);
@@ -4697,14 +4703,7 @@ class AnimationRendererFactory {
         this._rendererCache = new Map();
         this._cdRecurDepth = 0;
         engine.onRemovalComplete = (element, delegate) => {
-            // Note: if a component element has a leave animation, and a host leave animation,
-            // the view engine will call `removeChild` for the parent
-            // component renderer as well as for the child component renderer.
-            // Therefore, we need to check if we already removed the element.
-            const parentNode = delegate?.parentNode(element);
-            if (parentNode) {
-                delegate.removeChild(parentNode, element);
-            }
+            delegate?.removeChild(null, element);
         };
     }
     createRenderer(hostElement, type) {
