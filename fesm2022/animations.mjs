@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.1.0-next.0+sha-0f2f7ec
+ * @license Angular v19.1.0-next.0+sha-db467e1
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -982,10 +982,10 @@ function stagger(timings, animation) {
  * @publicApi
  */
 class AnimationBuilder {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-next.0+sha-0f2f7ec", ngImport: i0, type: AnimationBuilder, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.1.0-next.0+sha-0f2f7ec", ngImport: i0, type: AnimationBuilder, providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-next.0+sha-db467e1", ngImport: i0, type: AnimationBuilder, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.1.0-next.0+sha-db467e1", ngImport: i0, type: AnimationBuilder, providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.0+sha-0f2f7ec", ngImport: i0, type: AnimationBuilder, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.0+sha-db467e1", ngImport: i0, type: AnimationBuilder, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) }]
         }] });
@@ -999,10 +999,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.0+sh
 class AnimationFactory {
 }
 class BrowserAnimationBuilder extends AnimationBuilder {
+    animationModuleType = inject(ANIMATION_MODULE_TYPE, { optional: true });
+    _nextAnimationId = 0;
+    _renderer;
     constructor(rootRenderer, doc) {
         super();
-        this.animationModuleType = inject(ANIMATION_MODULE_TYPE, { optional: true });
-        this._nextAnimationId = 0;
         const typeData = {
             id: '0',
             encapsulation: ViewEncapsulation.None,
@@ -1024,10 +1025,10 @@ class BrowserAnimationBuilder extends AnimationBuilder {
         issueAnimationCommand(this._renderer, null, id, 'register', [entry]);
         return new BrowserAnimationFactory(id, this._renderer);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-next.0+sha-0f2f7ec", ngImport: i0, type: BrowserAnimationBuilder, deps: [{ token: i0.RendererFactory2 }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.1.0-next.0+sha-0f2f7ec", ngImport: i0, type: BrowserAnimationBuilder, providedIn: 'root' }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-next.0+sha-db467e1", ngImport: i0, type: BrowserAnimationBuilder, deps: [{ token: i0.RendererFactory2 }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.1.0-next.0+sha-db467e1", ngImport: i0, type: BrowserAnimationBuilder, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.0+sha-0f2f7ec", ngImport: i0, type: BrowserAnimationBuilder, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.0+sha-db467e1", ngImport: i0, type: BrowserAnimationBuilder, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [{ type: i0.RendererFactory2 }, { type: Document, decorators: [{
@@ -1035,6 +1036,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.0+sh
                     args: [DOCUMENT]
                 }] }] });
 class BrowserAnimationFactory extends AnimationFactory {
+    _id;
+    _renderer;
     constructor(_id, _renderer) {
         super();
         this._id = _id;
@@ -1045,13 +1048,15 @@ class BrowserAnimationFactory extends AnimationFactory {
     }
 }
 class RendererAnimationPlayer {
+    id;
+    element;
+    _renderer;
+    parentPlayer = null;
+    _started = false;
     constructor(id, element, options, _renderer) {
         this.id = id;
         this.element = element;
         this._renderer = _renderer;
-        this.parentPlayer = null;
-        this._started = false;
-        this.totalTime = 0;
         this._command('create', options);
     }
     _listen(eventName, callback) {
@@ -1101,6 +1106,7 @@ class RendererAnimationPlayer {
     getPosition() {
         return unwrapAnimationRenderer(this._renderer)?.engine?.players[this.id]?.getPosition() ?? 0;
     }
+    totalTime = 0;
 }
 function issueAnimationCommand(renderer, element, id, command, args) {
     renderer.setProperty(element, `@@${id}:${command}`, args);
@@ -1135,17 +1141,18 @@ function isAnimationRenderer(renderer) {
  * @publicApi
  */
 class NoopAnimationPlayer {
+    _onDoneFns = [];
+    _onStartFns = [];
+    _onDestroyFns = [];
+    _originalOnDoneFns = [];
+    _originalOnStartFns = [];
+    _started = false;
+    _destroyed = false;
+    _finished = false;
+    _position = 0;
+    parentPlayer = null;
+    totalTime;
     constructor(duration = 0, delay = 0) {
-        this._onDoneFns = [];
-        this._onStartFns = [];
-        this._onDestroyFns = [];
-        this._originalOnDoneFns = [];
-        this._originalOnStartFns = [];
-        this._started = false;
-        this._destroyed = false;
-        this._finished = false;
-        this._position = 0;
-        this.parentPlayer = null;
         this.totalTime = duration + delay;
     }
     _onFinish() {
@@ -1230,15 +1237,16 @@ class NoopAnimationPlayer {
  *
  */
 class AnimationGroupPlayer {
+    _onDoneFns = [];
+    _onStartFns = [];
+    _finished = false;
+    _started = false;
+    _destroyed = false;
+    _onDestroyFns = [];
+    parentPlayer = null;
+    totalTime = 0;
+    players;
     constructor(_players) {
-        this._onDoneFns = [];
-        this._onStartFns = [];
-        this._finished = false;
-        this._started = false;
-        this._destroyed = false;
-        this._onDestroyFns = [];
-        this.parentPlayer = null;
-        this.totalTime = 0;
         this.players = _players;
         let doneCount = 0;
         let destroyCount = 0;

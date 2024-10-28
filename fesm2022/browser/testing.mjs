@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.1.0-next.0+sha-0f2f7ec
+ * @license Angular v19.1.0-next.0+sha-db467e1
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -11,7 +11,7 @@ import { ɵvalidateStyleProperty, ɵcamelCaseToDashCase, ɵvalidateWebAnimatable
  * @publicApi
  */
 class MockAnimationDriver {
-    static { this.log = []; }
+    static log = [];
     validateStyleProperty(prop) {
         return ɵvalidateStyleProperty(prop);
     }
@@ -41,6 +41,18 @@ class MockAnimationDriver {
  * @publicApi
  */
 class MockAnimationPlayer extends NoopAnimationPlayer {
+    element;
+    keyframes;
+    duration;
+    delay;
+    easing;
+    previousPlayers;
+    __finished = false;
+    __started = false;
+    previousStyles = new Map();
+    _onInitFns = [];
+    currentSnapshot = new Map();
+    _keyframes = [];
     constructor(element, keyframes, duration, delay, easing, previousPlayers) {
         super(duration, delay);
         this.element = element;
@@ -49,12 +61,6 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         this.delay = delay;
         this.easing = easing;
         this.previousPlayers = previousPlayers;
-        this.__finished = false;
-        this.__started = false;
-        this.previousStyles = new Map();
-        this._onInitFns = [];
-        this.currentSnapshot = new Map();
-        this._keyframes = [];
         this._keyframes = ɵnormalizeKeyframes(keyframes);
         if (ɵallowPreviousPlayerStylesMerge(duration, delay)) {
             previousPlayers.forEach((player) => {
