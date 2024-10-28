@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.0.0-next.11+sha-395cb34
+ * @license Angular v19.0.0-next.11+sha-f815d7b
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -548,10 +548,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.11+sha-395cb34", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.11+sha-395cb34", ngImport: i0, type: NoopAnimationDriver }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.11+sha-f815d7b", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.11+sha-f815d7b", ngImport: i0, type: NoopAnimationDriver });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.11+sha-395cb34", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.11+sha-f815d7b", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -561,7 +561,7 @@ class AnimationDriver {
     /**
      * @deprecated Use the NoopAnimationDriver class.
      */
-    static { this.NOOP = new NoopAnimationDriver(); }
+    static NOOP = new NoopAnimationDriver();
 }
 
 class AnimationStyleNormalizer {
@@ -982,6 +982,7 @@ function buildAnimationAst(driver, metadata, errors, warnings) {
 }
 const ROOT_SELECTOR = '';
 class AnimationAstBuilderVisitor {
+    _driver;
     constructor(_driver) {
         this._driver = _driver;
     }
@@ -1371,18 +1372,19 @@ function normalizeParams(obj) {
     return obj ? { ...obj } : null;
 }
 class AnimationAstBuilderContext {
+    errors;
+    queryCount = 0;
+    depCount = 0;
+    currentTransition = null;
+    currentQuery = null;
+    currentQuerySelector = null;
+    currentAnimateTimings = null;
+    currentTime = 0;
+    collectedStyles = new Map();
+    options = null;
+    unsupportedCSSPropertiesFound = new Set();
     constructor(errors) {
         this.errors = errors;
-        this.queryCount = 0;
-        this.depCount = 0;
-        this.currentTransition = null;
-        this.currentQuery = null;
-        this.currentQuerySelector = null;
-        this.currentAnimateTimings = null;
-        this.currentTime = 0;
-        this.collectedStyles = new Map();
-        this.options = null;
-        this.unsupportedCSSPropertiesFound = new Set();
     }
 }
 function consumeOffset(styles) {
@@ -1456,9 +1458,7 @@ function createTimelineInstruction(element, keyframes, preStyleProps, postStyleP
 }
 
 class ElementInstructionMap {
-    constructor() {
-        this._map = new Map();
-    }
+    _map = new Map();
     get(element) {
         return this._map.get(element) || [];
     }
@@ -1850,6 +1850,22 @@ class AnimationTimelineBuilderVisitor {
 }
 const DEFAULT_NOOP_PREVIOUS_NODE = {};
 class AnimationTimelineContext {
+    _driver;
+    element;
+    subInstructions;
+    _enterClassName;
+    _leaveClassName;
+    errors;
+    timelines;
+    parentContext = null;
+    currentTimeline;
+    currentAnimateTimings = null;
+    previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
+    subContextCount = 0;
+    options = {};
+    currentQueryIndex = 0;
+    currentQueryTotal = 0;
+    currentStaggerTime = 0;
     constructor(_driver, element, subInstructions, _enterClassName, _leaveClassName, errors, timelines, initialTimeline) {
         this._driver = _driver;
         this.element = element;
@@ -1858,14 +1874,6 @@ class AnimationTimelineContext {
         this._leaveClassName = _leaveClassName;
         this.errors = errors;
         this.timelines = timelines;
-        this.parentContext = null;
-        this.currentAnimateTimings = null;
-        this.previousNode = DEFAULT_NOOP_PREVIOUS_NODE;
-        this.subContextCount = 0;
-        this.options = {};
-        this.currentQueryIndex = 0;
-        this.currentQueryTotal = 0;
-        this.currentStaggerTime = 0;
         this.currentTimeline = initialTimeline || new TimelineBuilder(this._driver, element, 0);
         timelines.push(this.currentTimeline);
     }
@@ -1974,21 +1982,26 @@ class AnimationTimelineContext {
     }
 }
 class TimelineBuilder {
+    _driver;
+    element;
+    startTime;
+    _elementTimelineStylesLookup;
+    duration = 0;
+    easing = null;
+    _previousKeyframe = new Map();
+    _currentKeyframe = new Map();
+    _keyframes = new Map();
+    _styleSummary = new Map();
+    _localTimelineStyles = new Map();
+    _globalTimelineStyles;
+    _pendingStyles = new Map();
+    _backFill = new Map();
+    _currentEmptyStepKeyframe = null;
     constructor(_driver, element, startTime, _elementTimelineStylesLookup) {
         this._driver = _driver;
         this.element = element;
         this.startTime = startTime;
         this._elementTimelineStylesLookup = _elementTimelineStylesLookup;
-        this.duration = 0;
-        this.easing = null;
-        this._previousKeyframe = new Map();
-        this._currentKeyframe = new Map();
-        this._keyframes = new Map();
-        this._styleSummary = new Map();
-        this._localTimelineStyles = new Map();
-        this._pendingStyles = new Map();
-        this._backFill = new Map();
-        this._currentEmptyStepKeyframe = null;
         if (!this._elementTimelineStylesLookup) {
             this._elementTimelineStylesLookup = new Map();
         }
@@ -2165,6 +2178,11 @@ class TimelineBuilder {
     }
 }
 class SubTimelineBuilder extends TimelineBuilder {
+    keyframes;
+    preStyleProps;
+    postStyleProps;
+    _stretchStartingKeyframe;
+    timings;
     constructor(driver, element, keyframes, preStyleProps, postStyleProps, timings, _stretchStartingKeyframe = false) {
         super(driver, element, timings.delay);
         this.keyframes = keyframes;
@@ -2266,6 +2284,9 @@ function createTransitionInstruction(element, triggerName, fromState, toState, i
 
 const EMPTY_OBJECT = {};
 class AnimationTransitionFactory {
+    _triggerName;
+    ast;
+    _stateStyles;
     constructor(_triggerName, ast, _stateStyles) {
         this._triggerName = _triggerName;
         this.ast = ast;
@@ -2388,6 +2409,9 @@ function applyParamDefaults(userParams, defaults) {
     return result;
 }
 class AnimationStateStyles {
+    styles;
+    defaultParams;
+    normalizer;
     constructor(styles, defaultParams, normalizer) {
         this.styles = styles;
         this.defaultParams = defaultParams;
@@ -2416,12 +2440,16 @@ function buildTrigger(name, ast, normalizer) {
     return new AnimationTrigger(name, ast, normalizer);
 }
 class AnimationTrigger {
+    name;
+    ast;
+    _normalizer;
+    transitionFactories = [];
+    fallbackTransition;
+    states = new Map();
     constructor(name, ast, _normalizer) {
         this.name = name;
         this.ast = ast;
         this._normalizer = _normalizer;
-        this.transitionFactories = [];
-        this.states = new Map();
         ast.states.forEach((ast) => {
             const defaultParams = (ast.options && ast.options.params) || {};
             this.states.set(ast.name, new AnimationStateStyles(ast.style, defaultParams, _normalizer));
@@ -2470,13 +2498,16 @@ function balanceProperties(stateMap, key1, key2) {
 
 const EMPTY_INSTRUCTION_MAP = new ElementInstructionMap();
 class TimelineAnimationEngine {
+    bodyNode;
+    _driver;
+    _normalizer;
+    _animations = new Map();
+    _playersById = new Map();
+    players = [];
     constructor(bodyNode, _driver, _normalizer) {
         this.bodyNode = bodyNode;
         this._driver = _driver;
         this._normalizer = _normalizer;
-        this._animations = new Map();
-        this._playersById = new Map();
-        this.players = [];
     }
     register(id, metadata) {
         const errors = [];
@@ -2616,6 +2647,9 @@ const NULL_REMOVED_QUERIED_STATE = {
 };
 const REMOVAL_FLAG = '__ng_removed';
 class StateValue {
+    namespaceId;
+    value;
+    options;
     get params() {
         return this.options.params;
     }
@@ -2651,14 +2685,18 @@ class StateValue {
 const VOID_VALUE = 'void';
 const DEFAULT_STATE_VALUE = new StateValue(VOID_VALUE);
 class AnimationTransitionNamespace {
+    id;
+    hostElement;
+    _engine;
+    players = [];
+    _triggers = new Map();
+    _queue = [];
+    _elementListeners = new Map();
+    _hostClassName;
     constructor(id, hostElement, _engine) {
         this.id = id;
         this.hostElement = hostElement;
         this._engine = _engine;
-        this.players = [];
-        this._triggers = new Map();
-        this._queue = [];
-        this._elementListeners = new Map();
         this._hostClassName = 'ng-tns-' + id;
         addClass(hostElement, this._hostClassName);
     }
@@ -3008,6 +3046,26 @@ class AnimationTransitionNamespace {
     }
 }
 class TransitionAnimationEngine {
+    bodyNode;
+    driver;
+    _normalizer;
+    players = [];
+    newHostElements = new Map();
+    playersByElement = new Map();
+    playersByQueriedElement = new Map();
+    statesByElement = new Map();
+    disabledNodes = new Set();
+    totalAnimations = 0;
+    totalQueuedPlayers = 0;
+    _namespaceLookup = {};
+    _namespaceList = [];
+    _flushFns = [];
+    _whenQuietFns = [];
+    namespacesByHostElement = new Map();
+    collectedEnterElements = [];
+    collectedLeaveElements = [];
+    // this method is designed to be overridden by the code that uses this engine
+    onRemovalComplete = (element, context) => { };
     /** @internal */
     _onRemovalComplete(element, context) {
         this.onRemovalComplete(element, context);
@@ -3016,23 +3074,6 @@ class TransitionAnimationEngine {
         this.bodyNode = bodyNode;
         this.driver = driver;
         this._normalizer = _normalizer;
-        this.players = [];
-        this.newHostElements = new Map();
-        this.playersByElement = new Map();
-        this.playersByQueriedElement = new Map();
-        this.statesByElement = new Map();
-        this.disabledNodes = new Set();
-        this.totalAnimations = 0;
-        this.totalQueuedPlayers = 0;
-        this._namespaceLookup = {};
-        this._namespaceList = [];
-        this._flushFns = [];
-        this._whenQuietFns = [];
-        this.namespacesByHostElement = new Map();
-        this.collectedEnterElements = [];
-        this.collectedLeaveElements = [];
-        // this method is designed to be overridden by the code that uses this engine
-        this.onRemovalComplete = (element, context) => { };
     }
     get queuedPlayers() {
         const players = [];
@@ -3841,19 +3882,22 @@ class TransitionAnimationEngine {
     }
 }
 class TransitionAnimationPlayer {
+    namespaceId;
+    triggerName;
+    element;
+    _player = new NoopAnimationPlayer();
+    _containsRealPlayer = false;
+    _queuedCallbacks = new Map();
+    destroyed = false;
+    parentPlayer = null;
+    markedForDestroy = false;
+    disabled = false;
+    queued = true;
+    totalTime = 0;
     constructor(namespaceId, triggerName, element) {
         this.namespaceId = namespaceId;
         this.triggerName = triggerName;
         this.element = element;
-        this._player = new NoopAnimationPlayer();
-        this._containsRealPlayer = false;
-        this._queuedCallbacks = new Map();
-        this.destroyed = false;
-        this.parentPlayer = null;
-        this.markedForDestroy = false;
-        this.disabled = false;
-        this.queued = true;
-        this.totalTime = 0;
     }
     setRealPlayer(player) {
         if (this._containsRealPlayer)
@@ -4098,12 +4142,16 @@ function replacePostStylesAsPre(element, allPreStyleElements, allPostStyleElemen
 }
 
 class AnimationEngine {
+    _driver;
+    _normalizer;
+    _transitionEngine;
+    _timelineEngine;
+    _triggerCache = {};
+    // this method is designed to be overridden by the code that uses this engine
+    onRemovalComplete = (element, context) => { };
     constructor(doc, _driver, _normalizer) {
         this._driver = _driver;
         this._normalizer = _normalizer;
-        this._triggerCache = {};
-        // this method is designed to be overridden by the code that uses this engine
-        this.onRemovalComplete = (element, context) => { };
         this._transitionEngine = new TransitionAnimationEngine(doc.body, _driver, _normalizer);
         this._timelineEngine = new TimelineAnimationEngine(doc.body, _driver, _normalizer);
         this._transitionEngine.onRemovalComplete = (element, context) => this.onRemovalComplete(element, context);
@@ -4207,12 +4255,16 @@ function packageNonAnimatableStyles(element, styles) {
  * `destroy()` is called then all styles will be removed.
  */
 class SpecialCasedStyles {
-    static { this.initialStylesByElement = new WeakMap(); }
+    _element;
+    _startStyles;
+    _endStyles;
+    static initialStylesByElement = /* @__PURE__ */ new WeakMap();
+    _state = 0 /* SpecialCasedStylesState.Pending */;
+    _initialStyles;
     constructor(_element, _startStyles, _endStyles) {
         this._element = _element;
         this._startStyles = _startStyles;
         this._endStyles = _endStyles;
-        this._state = 0 /* SpecialCasedStylesState.Pending */;
         let initialStyles = SpecialCasedStyles.initialStylesByElement.get(_element);
         if (!initialStyles) {
             SpecialCasedStyles.initialStylesByElement.set(_element, (initialStyles = new Map()));
@@ -4270,26 +4322,35 @@ function isNonAnimatableStyle(prop) {
 }
 
 class WebAnimationsPlayer {
+    element;
+    keyframes;
+    options;
+    _specialStyles;
+    _onDoneFns = [];
+    _onStartFns = [];
+    _onDestroyFns = [];
+    _duration;
+    _delay;
+    _initialized = false;
+    _finished = false;
+    _started = false;
+    _destroyed = false;
+    _finalKeyframe;
+    // the following original fns are persistent copies of the _onStartFns and _onDoneFns
+    // and are used to reset the fns to their original values upon reset()
+    // (since the _onStartFns and _onDoneFns get deleted after they are called)
+    _originalOnDoneFns = [];
+    _originalOnStartFns = [];
+    // using non-null assertion because it's re(set) by init();
+    domPlayer;
+    time = 0;
+    parentPlayer = null;
+    currentSnapshot = new Map();
     constructor(element, keyframes, options, _specialStyles) {
         this.element = element;
         this.keyframes = keyframes;
         this.options = options;
         this._specialStyles = _specialStyles;
-        this._onDoneFns = [];
-        this._onStartFns = [];
-        this._onDestroyFns = [];
-        this._initialized = false;
-        this._finished = false;
-        this._started = false;
-        this._destroyed = false;
-        // the following original fns are persistent copies of the _onStartFns and _onDoneFns
-        // and are used to reset the fns to their original values upon reset()
-        // (since the _onStartFns and _onDoneFns get deleted after they are called)
-        this._originalOnDoneFns = [];
-        this._originalOnStartFns = [];
-        this.time = 0;
-        this.parentPlayer = null;
-        this.currentSnapshot = new Map();
         this._duration = options['duration'];
         this._delay = options['delay'] || 0;
         this.time = this._duration + this._delay;
@@ -4504,6 +4565,8 @@ function createEngine(type, doc) {
 }
 
 class Animation {
+    _driver;
+    _animationAst;
     constructor(_driver, input) {
         this._driver = _driver;
         const errors = [];
@@ -4537,14 +4600,18 @@ class Animation {
 const ANIMATION_PREFIX = '@';
 const DISABLE_ANIMATIONS_FLAG = '@.disabled';
 class BaseAnimationRenderer {
+    namespaceId;
+    delegate;
+    engine;
+    _onDestroy;
+    // We need to explicitly type this property because of an api-extractor bug
+    // See https://github.com/microsoft/rushstack/issues/4390
+    ɵtype = 0 /* AnimationRendererType.Regular */;
     constructor(namespaceId, delegate, engine, _onDestroy) {
         this.namespaceId = namespaceId;
         this.delegate = delegate;
         this.engine = engine;
         this._onDestroy = _onDestroy;
-        // We need to explicitly type this property because of an api-extractor bug
-        // See https://github.com/microsoft/rushstack/issues/4390
-        this.ɵtype = 0 /* AnimationRendererType.Regular */;
     }
     get data() {
         return this.delegate.data;
@@ -4636,6 +4703,7 @@ class BaseAnimationRenderer {
     }
 }
 class AnimationRenderer extends BaseAnimationRenderer {
+    factory;
     constructor(factory, namespaceId, delegate, engine, onDestroy) {
         super(namespaceId, delegate, engine, onDestroy);
         this.factory = factory;
@@ -4693,15 +4761,18 @@ function parseTriggerCallbackName(triggerName) {
 }
 
 class AnimationRendererFactory {
+    delegate;
+    engine;
+    _zone;
+    _currentId = 0;
+    _microtaskId = 1;
+    _animationCallbacksBuffer = [];
+    _rendererCache = new Map();
+    _cdRecurDepth = 0;
     constructor(delegate, engine, _zone) {
         this.delegate = delegate;
         this.engine = engine;
         this._zone = _zone;
-        this._currentId = 0;
-        this._microtaskId = 1;
-        this._animationCallbacksBuffer = [];
-        this._rendererCache = new Map();
-        this._cdRecurDepth = 0;
         engine.onRemovalComplete = (element, delegate) => {
             delegate?.removeChild(null, element);
         };
