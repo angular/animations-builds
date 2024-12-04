@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.0.2+sha-6ae3ce7
+ * @license Angular v19.0.2+sha-5f3ba06
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -548,10 +548,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.2+sha-6ae3ce7", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.2+sha-6ae3ce7", ngImport: i0, type: NoopAnimationDriver });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.2+sha-5f3ba06", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.2+sha-5f3ba06", ngImport: i0, type: NoopAnimationDriver });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.2+sha-6ae3ce7", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.2+sha-5f3ba06", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -1488,7 +1488,7 @@ const LEAVE_TOKEN_REGEX = new RegExp(LEAVE_TOKEN, 'g');
  *
  * The code below will be converted from:
  *
- * ```
+ * ```ts
  * sequence([
  *   style({ opacity: 0 }),
  *   animate(1000, style({ opacity: 0 }))
@@ -1496,7 +1496,7 @@ const LEAVE_TOKEN_REGEX = new RegExp(LEAVE_TOKEN, 'g');
  * ```
  *
  * To:
- * ```
+ * ```ts
  * keyframes = [{ opacity: 0, offset: 0 }, { opacity: 1, offset: 1 }]
  * duration = 1000
  * delay = 0
@@ -1535,7 +1535,7 @@ const LEAVE_TOKEN_REGEX = new RegExp(LEAVE_TOKEN, 'g');
  * Each timeline has a `backFill` property which is responsible for filling in new styles into
  * already processed keyframes if a new style shows up later within the animation sequence.
  *
- * ```
+ * ```ts
  * sequence([
  *   style({ width: 0 }),
  *   animate(1000, style({ width: 100 })),

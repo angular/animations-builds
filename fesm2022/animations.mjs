@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.0.2+sha-6ae3ce7
+ * @license Angular v19.0.2+sha-5f3ba06
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -119,7 +119,7 @@ const AUTO_STYLE = '*';
  * The provided animation value is expected to be an array consisting of state and
  * transition declarations.
  *
- * ```typescript
+ * ```ts
  * @Component({
  *   selector: "my-component",
  *   templateUrl: "my-component-tpl.html",
@@ -149,7 +149,7 @@ const AUTO_STYLE = '*';
  * The `transition` animation method also supports reading an inline function which can decide
  * if its associated animation should be run.
  *
- * ```typescript
+ * ```ts
  * // this method is run each time the `myAnimationTrigger` trigger value changes.
  * function myInlineMatcherFn(fromState: string, toState: string, element: any, params: {[key:
  string]: any}): boolean {
@@ -182,7 +182,7 @@ const AUTO_STYLE = '*';
  *
  * The following example shows how to use this feature:
  *
- * ```typescript
+ * ```angular-ts
  * @Component({
  *   selector: 'my-component',
  *   template: `
@@ -211,7 +211,7 @@ const AUTO_STYLE = '*';
  * This means that you can disable all animations for an app
  * by placing a host binding set on `@.disabled` on the topmost Angular component.
  *
- * ```typescript
+ * ```ts
  * import {Component, HostBinding} from '@angular/core';
  *
  * @Component({
@@ -284,12 +284,12 @@ function trigger(name, definitions) {
  * **Style examples**
  *
  * The following example calls `style()` to set a single CSS style.
- * ```typescript
+ * ```ts
  * animate(500, style({ background: "red" }))
  * ```
  * The following example calls `keyframes()` to set a CSS style
  * to different values for successive keyframes.
- * ```typescript
+ * ```ts
  * animate(500, keyframes(
  *  [
  *   style({ background: "blue" }),
@@ -312,7 +312,7 @@ function animate(timings, styles = null) {
  * `keyframes()`, or use `animate()` calls with a delay value.
  * For example:
  *
- * ```typescript
+ * ```ts
  * group([
  *   animate("1s", style({ background: "black" })),
  *   animate("2s", style({ color: "white" }))
@@ -346,7 +346,7 @@ function group(steps, options = null) {
  * - Steps defined by `animate()` calls apply the styling data over time
  *   as specified by the timing data.
  *
- * ```typescript
+ * ```ts
  * sequence([
  *   style({ opacity: 0 }),
  *   animate("1s", style({ opacity: 1 }))
@@ -395,7 +395,7 @@ function sequence(steps, options = null) {
  * The following examples create animation styles that collect a set of
  * CSS property values:
  *
- * ```typescript
+ * ```ts
  * // string values for CSS properties
  * style({ background: "red", color: "blue" })
  *
@@ -406,7 +406,7 @@ function sequence(steps, options = null) {
  * The following example uses auto-styling to allow an element to animate from
  * a height of 0 up to its full height:
  *
- * ```
+ * ```ts
  * style({ height: 0 }),
  * animate("1s", style({ height: "*" }))
  * ```
@@ -469,7 +469,7 @@ function state(name, styles, options) {
  * when each `backgroundColor` value is applied. The color is red at the start, and changes to
  * blue when 20% of the total time has elapsed.
  *
- * ```typescript
+ * ```ts
  * // the provided offset values
  * animate("5s", keyframes([
  *   style({ backgroundColor: "red", offset: 0 }),
@@ -482,7 +482,7 @@ function state(name, styles, options) {
  * If there are no `offset` values specified in the style entries, the offsets
  * are calculated automatically.
  *
- * ```typescript
+ * ```ts
  * animate("5s", keyframes([
  *   style({ backgroundColor: "red" }) // offset = 0
  *   style({ backgroundColor: "blue" }) // offset = 0.33
@@ -524,7 +524,7 @@ function keyframes(steps) {
  *    expression bound to the trigger's element goes from `fromState` to `toState`
  *
  *    _Example:_
- *      ```typescript
+ *      ```ts
  *        transition('open => closed', animate('.5s ease-out', style({ height: 0 }) ))
  *      ```
  *
@@ -532,7 +532,7 @@ function keyframes(steps) {
  *    the expression bound to the trigger's element goes from `fromState` to `toState` or vice versa
  *
  *    _Example:_
- *      ```typescript
+ *      ```ts
  *        transition('enabled <=> disabled', animate('1s cubic-bezier(0.8,0.3,0,1)'))
  *      ```
  *
@@ -540,7 +540,7 @@ function keyframes(steps) {
  *    element enters or exists the DOM
  *
  *    _Example:_
- *      ```typescript
+ *      ```ts
  *        transition(':enter', [
  *          style({ opacity: 0 }),
  *          animate('500ms', style({ opacity: 1 }))
@@ -551,7 +551,7 @@ function keyframes(steps) {
  *    the numerical expression bound to the trigger's element has increased in value or decreased
  *
  *    _Example:_
- *      ```typescript
+ *      ```ts
  *        transition(':increment', query('@counter', animateChild()))
  *      ```
  *
@@ -559,7 +559,7 @@ function keyframes(steps) {
  *    should occur whenever one of the state change expressions matches
  *
  *    _Example:_
- *      ```typescript
+ *      ```ts
  *        transition(':increment, * => enabled, :enter', animate('1s ease', keyframes([
  *          style({ transform: 'scale(1)', offset: 0}),
  *          style({ transform: 'scale(1.1)', offset: 0.7}),
@@ -608,7 +608,7 @@ function keyframes(steps) {
  *   </div>
  *   ```
  *
- *   ```typescript
+ *   ```ts
  *   trigger("myAnimationTrigger", [
  *     ..., // states
  *     transition("on => off, open => closed", animate(500)),
@@ -628,7 +628,7 @@ function keyframes(steps) {
  *    </div>
  *    ```
  *
- *    ```typescript
+ *    ```ts
  *    trigger("myAnimationTrigger", [
  *      ..., // states
  *      transition(
@@ -662,7 +662,7 @@ function transition(stateChangeExpr, steps, options = null) {
  * The following example defines a reusable animation, providing some default parameter
  * values.
  *
- * ```typescript
+ * ```ts
  * var fadeAnimation = animation([
  *   style({ opacity: '{{ start }}' }),
  *   animate('{{ time }}',
@@ -754,7 +754,7 @@ function useAnimation(animation, options = null) {
  *
  * Tokens can be merged into a combined query selector string. For example:
  *
- * ```typescript
+ * ```ts
  *  query(':self, .record:enter, .record:leave, @subTrigger', [...])
  * ```
  *
@@ -812,7 +812,7 @@ function useAnimation(animation, options = null) {
  * The following example queries for inner elements and animates them
  * individually using `animate()`.
  *
- * ```typescript
+ * ```angular-ts
  * @Component({
  *   selector: 'inner',
  *   template: `
@@ -882,7 +882,7 @@ function query(selector, animation, options = null) {
  *
  * Here is the component code:
  *
- * ```typescript
+ * ```ts
  * import {trigger, transition, style, animate, query, stagger} from '@angular/animations';
  * @Component({
  *   templateUrl: 'list.component.html',
@@ -911,7 +911,7 @@ function query(selector, animation, options = null) {
  *
  * Here is the animation trigger code:
  *
- * ```typescript
+ * ```ts
  * trigger('listAnimation', [
  *   transition('* => *', [ // each time the binding value changes
  *     query(':leave', [
@@ -982,10 +982,10 @@ function stagger(timings, animation) {
  * @publicApi
  */
 class AnimationBuilder {
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.2+sha-6ae3ce7", ngImport: i0, type: AnimationBuilder, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.2+sha-6ae3ce7", ngImport: i0, type: AnimationBuilder, providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.2+sha-5f3ba06", ngImport: i0, type: AnimationBuilder, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.2+sha-5f3ba06", ngImport: i0, type: AnimationBuilder, providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.2+sha-6ae3ce7", ngImport: i0, type: AnimationBuilder, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.2+sha-5f3ba06", ngImport: i0, type: AnimationBuilder, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) }]
         }] });
@@ -1025,10 +1025,10 @@ class BrowserAnimationBuilder extends AnimationBuilder {
         issueAnimationCommand(this._renderer, null, id, 'register', [entry]);
         return new BrowserAnimationFactory(id, this._renderer);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.2+sha-6ae3ce7", ngImport: i0, type: BrowserAnimationBuilder, deps: [{ token: i0.RendererFactory2 }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.2+sha-6ae3ce7", ngImport: i0, type: BrowserAnimationBuilder, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.2+sha-5f3ba06", ngImport: i0, type: BrowserAnimationBuilder, deps: [{ token: i0.RendererFactory2 }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.2+sha-5f3ba06", ngImport: i0, type: BrowserAnimationBuilder, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.2+sha-6ae3ce7", ngImport: i0, type: BrowserAnimationBuilder, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.2+sha-5f3ba06", ngImport: i0, type: BrowserAnimationBuilder, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [{ type: i0.RendererFactory2 }, { type: Document, decorators: [{
