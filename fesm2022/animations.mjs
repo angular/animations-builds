@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.0.1+sha-ad927bc
+ * @license Angular v19.0.1+sha-b8a2ae0
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -575,7 +575,7 @@ function keyframes(steps) {
  *  - `true` and `false` also match expression values of `1` and `0` respectively (but do not match
  *    _truthy_ and _falsy_ values)
  *
- * <div class="alert is-helpful">
+ * <div class="docs-alert docs-alert-helpful">
  *
  *  Be careful about entering end leaving elements as their transitions present a common
  *  pitfall for developers.
@@ -791,7 +791,7 @@ function useAnimation(animation, options = null) {
  *  - Those inserted dynamically (via `ViewContainerRef`)
  *  - Those that have a structural directive (which, under the hood, are a subset of the above ones)
  *
- * <div class="alert is-helpful">
+ * <div class="docs-alert docs-alert-helpful">
  *
  *  Note that elements will be successfully queried via `:enter`/`:leave` even if their
  *  insertion/removal is not done manually via `ViewContainerRef`or caused by their structural
@@ -799,7 +799,7 @@ function useAnimation(animation, options = null) {
  *
  * </div>
  *
- * <div class="alert is-important">
+ * <div class="docs-alert docs-alert-important">
  *
  *  There is an exception to what previously mentioned, besides elements entering/leaving based on
  *  their own logic, elements with an animation trigger can always be queried via `:leave` when
@@ -982,10 +982,10 @@ function stagger(timings, animation) {
  * @publicApi
  */
 class AnimationBuilder {
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.1+sha-ad927bc", ngImport: i0, type: AnimationBuilder, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.1+sha-ad927bc", ngImport: i0, type: AnimationBuilder, providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.1+sha-b8a2ae0", ngImport: i0, type: AnimationBuilder, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.1+sha-b8a2ae0", ngImport: i0, type: AnimationBuilder, providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.1+sha-ad927bc", ngImport: i0, type: AnimationBuilder, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.1+sha-b8a2ae0", ngImport: i0, type: AnimationBuilder, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) }]
         }] });
@@ -1025,10 +1025,10 @@ class BrowserAnimationBuilder extends AnimationBuilder {
         issueAnimationCommand(this._renderer, null, id, 'register', [entry]);
         return new BrowserAnimationFactory(id, this._renderer);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.1+sha-ad927bc", ngImport: i0, type: BrowserAnimationBuilder, deps: [{ token: i0.RendererFactory2 }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.1+sha-ad927bc", ngImport: i0, type: BrowserAnimationBuilder, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.1+sha-b8a2ae0", ngImport: i0, type: BrowserAnimationBuilder, deps: [{ token: i0.RendererFactory2 }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.1+sha-b8a2ae0", ngImport: i0, type: BrowserAnimationBuilder, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.1+sha-ad927bc", ngImport: i0, type: BrowserAnimationBuilder, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.1+sha-b8a2ae0", ngImport: i0, type: BrowserAnimationBuilder, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [{ type: i0.RendererFactory2 }, { type: Document, decorators: [{

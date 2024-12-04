@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.0.1+sha-ad927bc
+ * @license Angular v19.0.1+sha-b8a2ae0
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1006,7 +1006,7 @@ export declare class NoopAnimationPlayer implements AnimationPlayer {
  *  - Those inserted dynamically (via `ViewContainerRef`)
  *  - Those that have a structural directive (which, under the hood, are a subset of the above ones)
  *
- * <div class="alert is-helpful">
+ * <div class="docs-alert docs-alert-helpful">
  *
  *  Note that elements will be successfully queried via `:enter`/`:leave` even if their
  *  insertion/removal is not done manually via `ViewContainerRef`or caused by their structural
@@ -1014,7 +1014,7 @@ export declare class NoopAnimationPlayer implements AnimationPlayer {
  *
  * </div>
  *
- * <div class="alert is-important">
+ * <div class="docs-alert docs-alert-important">
  *
  *  There is an exception to what previously mentioned, besides elements entering/leaving based on
  *  their own logic, elements with an animation trigger can always be queried via `:leave` when
@@ -1341,7 +1341,7 @@ export declare function style(tokens: '*' | {
  *  - `true` and `false` also match expression values of `1` and `0` respectively (but do not match
  *    _truthy_ and _falsy_ values)
  *
- * <div class="alert is-helpful">
+ * <div class="docs-alert docs-alert-helpful">
  *
  *  Be careful about entering end leaving elements as their transitions present a common
  *  pitfall for developers.
