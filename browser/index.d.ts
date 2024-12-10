@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.1.0-next.2+sha-46f00f9
+ * @license Angular v19.1.0-next.2+sha-f3729ce
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -10,6 +10,7 @@ import { AnimationOptions } from '@angular/animations';
 import { AnimationPlayer } from '@angular/animations';
 import { AnimationTriggerMetadata } from '@angular/animations';
 import * as i0 from '@angular/core';
+import { ListenerOptions } from '@angular/core';
 import type { NgZone } from '@angular/core';
 import { Renderer2 } from '@angular/core';
 import { RendererFactory2 } from '@angular/core';
@@ -166,7 +167,7 @@ export declare class ɵAnimationRenderer extends ɵBaseAnimationRenderer impleme
     factory: AnimationFactoryWithListenerCallback;
     constructor(factory: AnimationFactoryWithListenerCallback, namespaceId: string, delegate: Renderer2, engine: ɵAnimationEngine, onDestroy?: () => void);
     setProperty(el: any, name: string, value: any): void;
-    listen(target: 'window' | 'document' | 'body' | any, eventName: string, callback: (event: any) => any): () => void;
+    listen(target: 'window' | 'document' | 'body' | any, eventName: string, callback: (event: any) => any, options?: ListenerOptions): () => void;
 }
 
 export declare class ɵAnimationRendererFactory implements RendererFactory2 {
@@ -221,7 +222,7 @@ export declare class ɵBaseAnimationRenderer implements Renderer2 {
     removeStyle(el: any, style: string, flags?: RendererStyleFlags2 | undefined): void;
     setProperty(el: any, name: string, value: any): void;
     setValue(node: any, value: string): void;
-    listen(target: any, eventName: string, callback: (event: any) => boolean | void): () => void;
+    listen(target: any, eventName: string, callback: (event: any) => boolean | void, options?: ListenerOptions): () => void;
     protected disableAnimations(element: any, value: boolean): void;
 }
 
