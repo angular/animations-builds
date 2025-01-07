@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.1.0-next.4+sha-adc56b7
+ * @license Angular v19.1.0-next.4+sha-0e23f20
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -185,6 +185,11 @@ export declare class ɵAnimationRendererFactory implements RendererFactory2 {
     private _scheduleCountTask;
     end(): void;
     whenRenderingDone(): Promise<any>;
+    /**
+     * Used during HMR to clear any cached data about a component.
+     * @param componentId ID of the component that is being replaced.
+     */
+    protected componentReplaced(componentId: string): void;
 }
 
 
