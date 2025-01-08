@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.1.0-next.4+sha-5e8ee7a
+ * @license Angular v19.1.0-next.4+sha-c69f12f
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -548,10 +548,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-next.4+sha-5e8ee7a", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.1.0-next.4+sha-5e8ee7a", ngImport: i0, type: NoopAnimationDriver });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-next.4+sha-c69f12f", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.1.0-next.4+sha-c69f12f", ngImport: i0, type: NoopAnimationDriver });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.4+sha-5e8ee7a", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.4+sha-c69f12f", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
