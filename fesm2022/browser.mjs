@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.1.0-rc.0+sha-988a6b2
+ * @license Angular v19.1.0-rc.0+sha-bfaeefe
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -548,10 +548,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-rc.0+sha-988a6b2", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.1.0-rc.0+sha-988a6b2", ngImport: i0, type: NoopAnimationDriver });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-rc.0+sha-bfaeefe", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.1.0-rc.0+sha-bfaeefe", ngImport: i0, type: NoopAnimationDriver });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-rc.0+sha-988a6b2", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-rc.0+sha-bfaeefe", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -844,20 +844,16 @@ function createListOfWarnings(warnings) {
         .join(LINE_START)}`;
 }
 function warnValidation(warnings) {
-    (typeof ngDevMode === 'undefined' || ngDevMode) &&
-        console.warn(`animation validation warnings:${createListOfWarnings(warnings)}`);
+    console.warn(`animation validation warnings:${createListOfWarnings(warnings)}`);
 }
 function warnTriggerBuild(name, warnings) {
-    (typeof ngDevMode === 'undefined' || ngDevMode) &&
-        console.warn(`The animation trigger "${name}" has built with the following warnings:${createListOfWarnings(warnings)}`);
+    console.warn(`The animation trigger "${name}" has built with the following warnings:${createListOfWarnings(warnings)}`);
 }
 function warnRegister(warnings) {
-    (typeof ngDevMode === 'undefined' || ngDevMode) &&
-        console.warn(`Animation built with the following warnings:${createListOfWarnings(warnings)}`);
+    console.warn(`Animation built with the following warnings:${createListOfWarnings(warnings)}`);
 }
 function triggerParsingWarnings(name, warnings) {
-    (typeof ngDevMode === 'undefined' || ngDevMode) &&
-        console.warn(`Animation parsing for the ${name} trigger presents the following warnings:${createListOfWarnings(warnings)}`);
+    console.warn(`Animation parsing for the ${name} trigger presents the following warnings:${createListOfWarnings(warnings)}`);
 }
 function pushUnrecognizedPropertiesWarning(warnings, props) {
     if (props.length) {
@@ -2517,8 +2513,10 @@ class TimelineAnimationEngine {
             throw registerFailed(errors);
         }
         else {
-            if (warnings.length) {
-                warnRegister(warnings);
+            if (typeof ngDevMode === 'undefined' || ngDevMode) {
+                if (warnings.length) {
+                    warnRegister(warnings);
+                }
             }
             this._animations.set(id, ast);
         }
@@ -4166,8 +4164,10 @@ class AnimationEngine {
             if (errors.length) {
                 throw triggerBuildFailed(name, errors);
             }
-            if (warnings.length) {
-                warnTriggerBuild(name, warnings);
+            if (typeof ngDevMode === 'undefined' || ngDevMode) {
+                if (warnings.length) {
+                    warnTriggerBuild(name, warnings);
+                }
             }
             trigger = buildTrigger(name, ast, this._normalizer);
             this._triggerCache[cacheKey] = trigger;
@@ -4575,8 +4575,10 @@ class Animation {
         if (errors.length) {
             throw validationFailed(errors);
         }
-        if (warnings.length) {
-            warnValidation(warnings);
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            if (warnings.length) {
+                warnValidation(warnings);
+            }
         }
         this._animationAst = ast;
     }
