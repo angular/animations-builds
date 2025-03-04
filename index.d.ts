@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.2.0+sha-26b3a8f
+ * @license Angular v19.2.0+sha-31bbbe9
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -33,7 +33,7 @@ import { RendererFactory2 } from '@angular/core';
  * @returns An object that encapsulates the animation step.
  *
  * @usageNotes
- * Call within an animation `sequence()`, `{@link animations/group group()}`, or
+ * Call within an animation `sequence()`, {@link /api/animations/group group()}, or
  * `transition()` call to specify an animation step
  * that applies given style data to the parent animation for a given amount of time.
  *
@@ -437,7 +437,7 @@ export declare enum AnimationMetadataType {
     Sequence = 2,
     /**
      * Contains a set of animation steps.
-     * See `{@link animations/group group()}`
+     * See `{@link /api/animations/group group()}`
      */
     Group = 3,
     /**
@@ -494,7 +494,7 @@ export declare enum AnimationMetadataType {
  *
  * - `transition()`
  * - `sequence()`
- * - `{@link animations/group group()}`
+ * - `{@link /api/animations/group group()}`
  * - `query()`
  * - `animation()`
  * - `useAnimation()`
@@ -1089,10 +1089,10 @@ export declare function query(selector: string, animation: AnimationMetadata | A
  * @usageNotes
  * When you pass an array of steps to a
  * `transition()` call, the steps run sequentially by default.
- * Compare this to the `{@link animations/group group()}` call, which runs animation steps in
+ * Compare this to the  {@link /api/animations/group group()} call, which runs animation steps in
  *parallel.
  *
- * When a sequence is used within a `{@link animations/group group()}` or a `transition()` call,
+ * When a sequence is used within a  {@link /api/animations/group group()} or a `transition()` call,
  * execution continues to the next instruction only after each of the inner animation
  * steps have completed.
  *
