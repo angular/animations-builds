@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.2.1+sha-dad02c6
+ * @license Angular v19.2.1+sha-48dc0d6
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -44,10 +44,6 @@ function invalidState(metadataName, missingSubs) {
 }
 function invalidStyleValue(value) {
     return new ɵRuntimeError(3002 /* RuntimeErrorCode.INVALID_STYLE_VALUE */, ngDevMode && `The provided style string value ${value} is not allowed.`);
-}
-function invalidProperty(prop) {
-    return new ɵRuntimeError(3009 /* RuntimeErrorCode.INVALID_PROPERTY */, ngDevMode &&
-        `The provided animation property "${prop}" is not a supported CSS property for animations`);
 }
 function invalidParallelAnimation(prop, firstStart, firstEnd, secondStart, secondEnd) {
     return new ɵRuntimeError(3010 /* RuntimeErrorCode.INVALID_PARALLEL_ANIMATION */, ngDevMode &&
@@ -134,12 +130,6 @@ function triggerTransitionsFailed(errors) {
         `Unable to process animations due to the following failed trigger transitions\n ${errors
             .map((err) => err.message)
             .join('\n')}`);
-}
-function triggerParsingFailed(name, errors) {
-    return new ɵRuntimeError(3403 /* RuntimeErrorCode.TRIGGER_PARSING_FAILED */, ngDevMode &&
-        `Animation parsing for the ${name} trigger have failed:${LINE_START}${errors
-            .map((err) => err.message)
-            .join(LINE_START)}`);
 }
 function transitionFailed(name, errors) {
     return new ɵRuntimeError(3505 /* RuntimeErrorCode.TRANSITION_FAILED */, ngDevMode && `@${name} has failed due to:\n ${errors.map((err) => err.message).join('\n- ')}`);
@@ -495,14 +485,6 @@ function invokeQuery(element, selector, multi) {
     const elem = element.querySelector(selector);
     return elem ? [elem] : [];
 }
-function hypenatePropsKeys(original) {
-    const newMap = new Map();
-    original.forEach((val, prop) => {
-        const newProp = prop.replace(/([a-z])([A-Z])/g, '$1-$2');
-        newMap.set(newProp, val);
-    });
-    return newMap;
-}
 
 /**
  * @publicApi
@@ -548,10 +530,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.1+sha-dad02c6", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.1+sha-dad02c6", ngImport: i0, type: NoopAnimationDriver });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.1+sha-48dc0d6", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.1+sha-48dc0d6", ngImport: i0, type: NoopAnimationDriver });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.1+sha-dad02c6", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.1+sha-48dc0d6", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -851,9 +833,6 @@ function warnTriggerBuild(name, warnings) {
 }
 function warnRegister(warnings) {
     console.warn(`Animation built with the following warnings:${createListOfWarnings(warnings)}`);
-}
-function triggerParsingWarnings(name, warnings) {
-    console.warn(`Animation parsing for the ${name} trigger presents the following warnings:${createListOfWarnings(warnings)}`);
 }
 function pushUnrecognizedPropertiesWarning(warnings, props) {
     if (props.length) {
@@ -2455,7 +2434,7 @@ class AnimationTrigger {
         ast.transitions.forEach((ast) => {
             this.transitionFactories.push(new AnimationTransitionFactory(name, ast, this.states));
         });
-        this.fallbackTransition = createFallbackTransition(name, this.states, this._normalizer);
+        this.fallbackTransition = createFallbackTransition(name, this.states);
     }
     get containsQueries() {
         return this.ast.queryCount > 0;
@@ -4871,24 +4850,6 @@ class AnimationRendererFactory {
         this.delegate.componentReplaced?.(componentId);
     }
 }
-
-/**
- * @module
- * @description
- * Entry point for all animation APIs of the animation browser package.
- */
-
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-
-// This file is not used to build this module. It is only used during editing
-
-/**
- * Generated bundle index. Do not edit.
- */
 
 export { AnimationDriver, NoopAnimationDriver, Animation as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationRenderer as ɵAnimationRenderer, AnimationRendererFactory as ɵAnimationRendererFactory, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, BaseAnimationRenderer as ɵBaseAnimationRenderer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, camelCaseToDashCase as ɵcamelCaseToDashCase, containsElement as ɵcontainsElement, createEngine as ɵcreateEngine, getParentElement as ɵgetParentElement, invokeQuery as ɵinvokeQuery, normalizeKeyframes as ɵnormalizeKeyframes, validateStyleProperty as ɵvalidateStyleProperty, validateWebAnimatableStyleProperty as ɵvalidateWebAnimatableStyleProperty };
 //# sourceMappingURL=browser.mjs.map
