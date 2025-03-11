@@ -1,19 +1,16 @@
 /**
- * @license Angular v20.0.0-next.1+sha-8be6e38
+ * @license Angular v20.0.0-next.1+sha-4fa5d18
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-
+import { AnimationPlayer, ɵStyleDataMap as _StyleDataMap, NoopAnimationPlayer } from '@angular/animations';
 import { AnimationDriver } from '@angular/animations/browser';
-import { AnimationPlayer } from '@angular/animations';
-import { NoopAnimationPlayer } from '@angular/animations';
-import { ɵStyleDataMap } from '@angular/animations';
 
 /**
  * @publicApi
  */
-export declare class MockAnimationDriver implements AnimationDriver {
+declare class MockAnimationDriver implements AnimationDriver {
     static log: AnimationPlayer[];
     validateStyleProperty(prop: string): boolean;
     validateAnimatableStyleProperty(prop: string): boolean;
@@ -21,26 +18,25 @@ export declare class MockAnimationDriver implements AnimationDriver {
     getParentElement(element: unknown): unknown;
     query(element: any, selector: string, multi: boolean): any[];
     computeStyle(element: any, prop: string, defaultValue?: string): string;
-    animate(element: any, keyframes: Array<ɵStyleDataMap>, duration: number, delay: number, easing: string, previousPlayers?: any[]): MockAnimationPlayer;
+    animate(element: any, keyframes: Array<_StyleDataMap>, duration: number, delay: number, easing: string, previousPlayers?: any[]): MockAnimationPlayer;
 }
-
 /**
  * @publicApi
  */
-export declare class MockAnimationPlayer extends NoopAnimationPlayer {
+declare class MockAnimationPlayer extends NoopAnimationPlayer {
     element: any;
-    keyframes: Array<ɵStyleDataMap>;
+    keyframes: Array<_StyleDataMap>;
     duration: number;
     delay: number;
     easing: string;
     previousPlayers: any[];
     private __finished;
     private __started;
-    previousStyles: ɵStyleDataMap;
+    previousStyles: _StyleDataMap;
     private _onInitFns;
-    currentSnapshot: ɵStyleDataMap;
+    currentSnapshot: _StyleDataMap;
     private _keyframes;
-    constructor(element: any, keyframes: Array<ɵStyleDataMap>, duration: number, delay: number, easing: string, previousPlayers: any[]);
+    constructor(element: any, keyframes: Array<_StyleDataMap>, duration: number, delay: number, easing: string, previousPlayers: any[]);
     reset(): void;
     finish(): void;
     destroy(): void;
@@ -49,4 +45,4 @@ export declare class MockAnimationPlayer extends NoopAnimationPlayer {
     beforeDestroy(): void;
 }
 
-export { }
+export { MockAnimationDriver, MockAnimationPlayer };

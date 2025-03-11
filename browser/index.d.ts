@@ -1,86 +1,19 @@
 /**
- * @license Angular v20.0.0-next.1+sha-8be6e38
+ * @license Angular v20.0.0-next.1+sha-4fa5d18
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-
-import { AnimationMetadata } from '@angular/animations';
-import { AnimationOptions } from '@angular/animations';
-import { AnimationPlayer } from '@angular/animations';
-import { AnimationTriggerMetadata } from '@angular/animations';
+import { AnimationPlayer, AnimationTriggerMetadata, ɵStyleDataMap as _StyleDataMap, AnimationMetadata, AnimationOptions, ɵStyleData as _StyleData } from '@angular/animations';
 import * as i0 from '@angular/core';
-import { ListenerOptions } from '@angular/core';
-import type { NgZone } from '@angular/core';
-import { Renderer2 } from '@angular/core';
-import { RendererFactory2 } from '@angular/core';
-import { RendererStyleFlags2 } from '@angular/core';
-import type { RendererType2 } from '@angular/core';
-import { ɵAnimationRendererType } from '@angular/core';
-import { ɵStyleData } from '@angular/animations';
-import { ɵStyleDataMap } from '@angular/animations';
-
-/**
- * @publicApi
- */
-export declare abstract class AnimationDriver {
-    /**
-     * @deprecated Use the NoopAnimationDriver class.
-     */
-    static NOOP: AnimationDriver;
-    abstract validateStyleProperty(prop: string): boolean;
-    abstract validateAnimatableStyleProperty?: (prop: string) => boolean;
-    abstract containsElement(elm1: any, elm2: any): boolean;
-    /**
-     * Obtains the parent element, if any. `null` is returned if the element does not have a parent.
-     */
-    abstract getParentElement(element: unknown): unknown;
-    abstract query(element: any, selector: string, multi: boolean): any[];
-    abstract computeStyle(element: any, prop: string, defaultValue?: string): string;
-    abstract animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing?: string | null, previousPlayers?: any[], scrubberAccessRequested?: boolean): any;
-}
-
-declare interface AnimationEngineInstruction {
-    type: AnimationTransitionInstructionType;
-}
-
-declare type AnimationFactoryWithListenerCallback = RendererFactory2 & {
-    scheduleListenerCallback: (count: number, fn: (e: any) => any, data: any) => void;
-};
-
-declare interface AnimationTimelineInstruction extends AnimationEngineInstruction {
-    element: any;
-    keyframes: Array<ɵStyleDataMap>;
-    preStyleProps: string[];
-    postStyleProps: string[];
-    duration: number;
-    delay: number;
-    totalTime: number;
-    easing: string | null;
-    stretchStartingKeyframe?: boolean;
-    subTimeline: boolean;
-}
-
-
-declare const enum AnimationTransitionInstructionType {
-    TransitionAnimation = 0,
-    TimelineAnimation = 1
-}
-
-declare class ElementInstructionMap {
-    private _map;
-    get(element: any): AnimationTimelineInstruction[];
-    append(element: any, instructions: AnimationTimelineInstruction[]): void;
-    has(element: any): boolean;
-    clear(): void;
-}
+import { Renderer2, ɵAnimationRendererType as _AnimationRendererType, RendererStyleFlags2, ListenerOptions, RendererFactory2, NgZone, RendererType2 } from '@angular/core';
 
 /**
  * @publicApi
  *
  * `AnimationDriver` implentation for Noop animations
  */
-export declare class NoopAnimationDriver implements AnimationDriver {
+declare class NoopAnimationDriver implements AnimationDriver {
     /**
      * @returns Whether `prop` is a valid CSS property
      */
@@ -110,45 +43,43 @@ export declare class NoopAnimationDriver implements AnimationDriver {
     static ɵfac: i0.ɵɵFactoryDeclaration<NoopAnimationDriver, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<NoopAnimationDriver>;
 }
-
 /**
- * Designed to be executed during a keyframe-based animation to apply any special-cased styles.
- *
- * When started (when the `start()` method is run) then the provided `startStyles`
- * will be applied. When finished (when the `finish()` method is called) the
- * `endStyles` will be applied as well any any starting styles. Finally when
- * `destroy()` is called then all styles will be removed.
+ * @publicApi
  */
-declare class SpecialCasedStyles {
-    private _element;
-    private _startStyles;
-    private _endStyles;
-    static initialStylesByElement: WeakMap<any, ɵStyleDataMap>;
-    private _state;
-    private _initialStyles;
-    constructor(_element: any, _startStyles: ɵStyleDataMap | null, _endStyles: ɵStyleDataMap | null);
-    start(): void;
-    finish(): void;
-    destroy(): void;
+declare abstract class AnimationDriver {
+    /**
+     * @deprecated Use the NoopAnimationDriver class.
+     */
+    static NOOP: AnimationDriver;
+    abstract validateStyleProperty(prop: string): boolean;
+    abstract validateAnimatableStyleProperty?: (prop: string) => boolean;
+    abstract containsElement(elm1: any, elm2: any): boolean;
+    /**
+     * Obtains the parent element, if any. `null` is returned if the element does not have a parent.
+     */
+    abstract getParentElement(element: unknown): unknown;
+    abstract query(element: any, selector: string, multi: boolean): any[];
+    abstract computeStyle(element: any, prop: string, defaultValue?: string): string;
+    abstract animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing?: string | null, previousPlayers?: any[], scrubberAccessRequested?: boolean): any;
 }
 
-export declare function ɵallowPreviousPlayerStylesMerge(duration: number, delay: number): boolean;
-
-export declare class ɵAnimation {
-    private _driver;
-    private _animationAst;
-    constructor(_driver: AnimationDriver, input: AnimationMetadata | AnimationMetadata[]);
-    buildTimelines(element: any, startingStyles: ɵStyleDataMap | Array<ɵStyleDataMap>, destinationStyles: ɵStyleDataMap | Array<ɵStyleDataMap>, options: AnimationOptions, subInstructions?: ElementInstructionMap): AnimationTimelineInstruction[];
+declare abstract class AnimationStyleNormalizer {
+    abstract normalizePropertyName(propertyName: string, errors: Error[]): string;
+    abstract normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: Error[]): string;
+}
+declare class NoopAnimationStyleNormalizer {
+    normalizePropertyName(propertyName: string, errors: Error[]): string;
+    normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: Error[]): string;
 }
 
-export declare class ɵAnimationEngine {
+declare class AnimationEngine {
     private _driver;
     private _normalizer;
     private _transitionEngine;
     private _timelineEngine;
     private _triggerCache;
     onRemovalComplete: (element: any, context: any) => void;
-    constructor(doc: Document, _driver: AnimationDriver, _normalizer: ɵAnimationStyleNormalizer);
+    constructor(doc: Document, _driver: AnimationDriver, _normalizer: AnimationStyleNormalizer);
     registerTrigger(componentId: string, namespaceId: string, hostElement: any, name: string, metadata: AnimationTriggerMetadata): void;
     register(namespaceId: string, hostElement: any): void;
     destroy(namespaceId: string, context: any): void;
@@ -163,48 +94,59 @@ export declare class ɵAnimationEngine {
     afterFlushAnimationsDone(cb: VoidFunction): void;
 }
 
-export declare class ɵAnimationRenderer extends ɵBaseAnimationRenderer implements Renderer2 {
-    factory: AnimationFactoryWithListenerCallback;
-    constructor(factory: AnimationFactoryWithListenerCallback, namespaceId: string, delegate: Renderer2, engine: ɵAnimationEngine, onDestroy?: () => void);
-    setProperty(el: any, name: string, value: any): void;
-    listen(target: 'window' | 'document' | 'body' | any, eventName: string, callback: (event: any) => any, options?: ListenerOptions): () => void;
+declare function createEngine(type: 'animations' | 'noop', doc: Document): AnimationEngine;
+
+declare const enum AnimationTransitionInstructionType {
+    TransitionAnimation = 0,
+    TimelineAnimation = 1
+}
+interface AnimationEngineInstruction {
+    type: AnimationTransitionInstructionType;
 }
 
-export declare class ɵAnimationRendererFactory implements RendererFactory2 {
-    private delegate;
-    private engine;
-    private _zone;
-    private _currentId;
-    private _microtaskId;
-    private _animationCallbacksBuffer;
-    private _rendererCache;
-    private _cdRecurDepth;
-    constructor(delegate: RendererFactory2, engine: ɵAnimationEngine, _zone: NgZone);
-    createRenderer(hostElement: any, type: RendererType2): ɵBaseAnimationRenderer;
-    begin(): void;
-    private _scheduleCountTask;
-    end(): void;
-    whenRenderingDone(): Promise<any>;
-    /**
-     * Used during HMR to clear any cached data about a component.
-     * @param componentId ID of the component that is being replaced.
-     */
-    protected componentReplaced(componentId: string): void;
+interface AnimationTimelineInstruction extends AnimationEngineInstruction {
+    element: any;
+    keyframes: Array<_StyleDataMap>;
+    preStyleProps: string[];
+    postStyleProps: string[];
+    duration: number;
+    delay: number;
+    totalTime: number;
+    easing: string | null;
+    stretchStartingKeyframe?: boolean;
+    subTimeline: boolean;
 }
 
-
-export declare abstract class ɵAnimationStyleNormalizer {
-    abstract normalizePropertyName(propertyName: string, errors: Error[]): string;
-    abstract normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: Error[]): string;
+declare class ElementInstructionMap {
+    private _map;
+    get(element: any): AnimationTimelineInstruction[];
+    append(element: any, instructions: AnimationTimelineInstruction[]): void;
+    has(element: any): boolean;
+    clear(): void;
 }
 
-export declare class ɵBaseAnimationRenderer implements Renderer2 {
+declare class Animation$1 {
+    private _driver;
+    private _animationAst;
+    constructor(_driver: AnimationDriver, input: AnimationMetadata | AnimationMetadata[]);
+    buildTimelines(element: any, startingStyles: _StyleDataMap | Array<_StyleDataMap>, destinationStyles: _StyleDataMap | Array<_StyleDataMap>, options: AnimationOptions, subInstructions?: ElementInstructionMap): AnimationTimelineInstruction[];
+}
+
+declare class WebAnimationsStyleNormalizer extends AnimationStyleNormalizer {
+    normalizePropertyName(propertyName: string, errors: Error[]): string;
+    normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: Error[]): string;
+}
+
+type AnimationFactoryWithListenerCallback = RendererFactory2 & {
+    scheduleListenerCallback: (count: number, fn: (e: any) => any, data: any) => void;
+};
+declare class BaseAnimationRenderer implements Renderer2 {
     protected namespaceId: string;
     delegate: Renderer2;
-    engine: ɵAnimationEngine;
+    engine: AnimationEngine;
     private _onDestroy?;
-    readonly ɵtype: ɵAnimationRendererType.Regular;
-    constructor(namespaceId: string, delegate: Renderer2, engine: ɵAnimationEngine, _onDestroy?: (() => void) | undefined);
+    readonly ɵtype: _AnimationRendererType.Regular;
+    constructor(namespaceId: string, delegate: Renderer2, engine: AnimationEngine, _onDestroy?: (() => void) | undefined);
     get data(): {
         [key: string]: any;
     };
@@ -230,29 +172,42 @@ export declare class ɵBaseAnimationRenderer implements Renderer2 {
     listen(target: any, eventName: string, callback: (event: any) => boolean | void, options?: ListenerOptions): () => void;
     protected disableAnimations(element: any, value: boolean): void;
 }
-
-export declare function ɵcamelCaseToDashCase(input: string): string;
-
-export declare function ɵcontainsElement(elm1: any, elm2: any): boolean;
-
-export declare function ɵcreateEngine(type: 'animations' | 'noop', doc: Document): ɵAnimationEngine;
-
-export declare function ɵgetParentElement(element: any): unknown | null;
-
-export declare function ɵinvokeQuery(element: any, selector: string, multi: boolean): any[];
-
-export declare class ɵNoopAnimationStyleNormalizer {
-    normalizePropertyName(propertyName: string, errors: Error[]): string;
-    normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: Error[]): string;
+declare class AnimationRenderer extends BaseAnimationRenderer implements Renderer2 {
+    factory: AnimationFactoryWithListenerCallback;
+    constructor(factory: AnimationFactoryWithListenerCallback, namespaceId: string, delegate: Renderer2, engine: AnimationEngine, onDestroy?: () => void);
+    setProperty(el: any, name: string, value: any): void;
+    listen(target: 'window' | 'document' | 'body' | any, eventName: string, callback: (event: any) => any, options?: ListenerOptions): () => void;
 }
 
-export declare function ɵnormalizeKeyframes(keyframes: Array<ɵStyleData> | Array<ɵStyleDataMap>): Array<ɵStyleDataMap>;
+declare class AnimationRendererFactory implements RendererFactory2 {
+    private delegate;
+    private engine;
+    private _zone;
+    private _currentId;
+    private _microtaskId;
+    private _animationCallbacksBuffer;
+    private _rendererCache;
+    private _cdRecurDepth;
+    constructor(delegate: RendererFactory2, engine: AnimationEngine, _zone: NgZone);
+    createRenderer(hostElement: any, type: RendererType2): BaseAnimationRenderer;
+    begin(): void;
+    private _scheduleCountTask;
+    end(): void;
+    whenRenderingDone(): Promise<any>;
+    /**
+     * Used during HMR to clear any cached data about a component.
+     * @param componentId ID of the component that is being replaced.
+     */
+    protected componentReplaced(componentId: string): void;
+}
 
-export declare function ɵvalidateStyleProperty(prop: string): boolean;
+declare function getParentElement(element: any): unknown | null;
+declare function validateStyleProperty(prop: string): boolean;
+declare function validateWebAnimatableStyleProperty(prop: string): boolean;
+declare function containsElement(elm1: any, elm2: any): boolean;
+declare function invokeQuery(element: any, selector: string, multi: boolean): any[];
 
-export declare function ɵvalidateWebAnimatableStyleProperty(prop: string): boolean;
-
-export declare class ɵWebAnimationsDriver implements AnimationDriver {
+declare class WebAnimationsDriver implements AnimationDriver {
     validateStyleProperty(prop: string): boolean;
     validateAnimatableStyleProperty(prop: string): boolean;
     containsElement(elm1: any, elm2: any): boolean;
@@ -262,9 +217,30 @@ export declare class ɵWebAnimationsDriver implements AnimationDriver {
     animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing: string, previousPlayers?: AnimationPlayer[]): AnimationPlayer;
 }
 
-export declare class ɵWebAnimationsPlayer implements AnimationPlayer {
+/**
+ * Designed to be executed during a keyframe-based animation to apply any special-cased styles.
+ *
+ * When started (when the `start()` method is run) then the provided `startStyles`
+ * will be applied. When finished (when the `finish()` method is called) the
+ * `endStyles` will be applied as well any any starting styles. Finally when
+ * `destroy()` is called then all styles will be removed.
+ */
+declare class SpecialCasedStyles {
+    private _element;
+    private _startStyles;
+    private _endStyles;
+    static initialStylesByElement: WeakMap<any, _StyleDataMap>;
+    private _state;
+    private _initialStyles;
+    constructor(_element: any, _startStyles: _StyleDataMap | null, _endStyles: _StyleDataMap | null);
+    start(): void;
+    finish(): void;
+    destroy(): void;
+}
+
+declare class WebAnimationsPlayer implements AnimationPlayer {
     element: any;
-    keyframes: Array<ɵStyleDataMap>;
+    keyframes: Array<_StyleDataMap>;
     options: {
         [key: string]: string | number;
     };
@@ -284,8 +260,8 @@ export declare class ɵWebAnimationsPlayer implements AnimationPlayer {
     readonly domPlayer: Animation;
     time: number;
     parentPlayer: AnimationPlayer | null;
-    currentSnapshot: ɵStyleDataMap;
-    constructor(element: any, keyframes: Array<ɵStyleDataMap>, options: {
+    currentSnapshot: _StyleDataMap;
+    constructor(element: any, keyframes: Array<_StyleDataMap>, options: {
         [key: string]: string | number;
     }, _specialStyles?: (SpecialCasedStyles | null) | undefined);
     private _onFinish;
@@ -310,9 +286,8 @@ export declare class ɵWebAnimationsPlayer implements AnimationPlayer {
     beforeDestroy(): void;
 }
 
-export declare class ɵWebAnimationsStyleNormalizer extends ɵAnimationStyleNormalizer {
-    normalizePropertyName(propertyName: string, errors: Error[]): string;
-    normalizeStyleValue(userProvidedProperty: string, normalizedProperty: string, value: string | number, errors: Error[]): string;
-}
+declare function normalizeKeyframes(keyframes: Array<_StyleData> | Array<_StyleDataMap>): Array<_StyleDataMap>;
+declare function camelCaseToDashCase(input: string): string;
+declare function allowPreviousPlayerStylesMerge(duration: number, delay: number): boolean;
 
-export { }
+export { AnimationDriver, NoopAnimationDriver, Animation$1 as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationRenderer as ɵAnimationRenderer, AnimationRendererFactory as ɵAnimationRendererFactory, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, BaseAnimationRenderer as ɵBaseAnimationRenderer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, camelCaseToDashCase as ɵcamelCaseToDashCase, containsElement as ɵcontainsElement, createEngine as ɵcreateEngine, getParentElement as ɵgetParentElement, invokeQuery as ɵinvokeQuery, normalizeKeyframes as ɵnormalizeKeyframes, validateStyleProperty as ɵvalidateStyleProperty, validateWebAnimatableStyleProperty as ɵvalidateWebAnimatableStyleProperty };
