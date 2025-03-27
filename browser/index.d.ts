@@ -1,67 +1,13 @@
 /**
- * @license Angular v20.0.0-next.4+sha-f7385b4
+ * @license Angular v20.0.0-next.4+sha-76c60a6
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { AnimationPlayer, AnimationTriggerMetadata, ɵStyleDataMap as _StyleDataMap, AnimationMetadata, AnimationOptions, ɵStyleData as _StyleData } from '@angular/animations';
-import * as i0 from '@angular/core';
+import { A as AnimationDriver } from '../animation_driver.d-Chtv1cvS.js';
+export { N as NoopAnimationDriver } from '../animation_driver.d-Chtv1cvS.js';
+import { v as AnimationTriggerMetadata, b as AnimationPlayer, I as _StyleDataMap, A as AnimationMetadata, a as AnimationOptions, ɵ as _StyleData } from '../animation_player.d-BR41_NcW.js';
 import { Renderer2, ɵAnimationRendererType as _AnimationRendererType, RendererStyleFlags2, ListenerOptions, RendererFactory2, NgZone, RendererType2 } from '@angular/core';
-
-/**
- * @publicApi
- *
- * `AnimationDriver` implentation for Noop animations
- */
-declare class NoopAnimationDriver implements AnimationDriver {
-    /**
-     * @returns Whether `prop` is a valid CSS property
-     */
-    validateStyleProperty(prop: string): boolean;
-    /**
-     *
-     * @returns Whether elm1 contains elm2.
-     */
-    containsElement(elm1: any, elm2: any): boolean;
-    /**
-     * @returns Rhe parent of the given element or `null` if the element is the `document`
-     */
-    getParentElement(element: unknown): unknown;
-    /**
-     * @returns The result of the query selector on the element. The array will contain up to 1 item
-     *     if `multi` is  `false`.
-     */
-    query(element: any, selector: string, multi: boolean): any[];
-    /**
-     * @returns The `defaultValue` or empty string
-     */
-    computeStyle(element: any, prop: string, defaultValue?: string): string;
-    /**
-     * @returns An `NoopAnimationPlayer`
-     */
-    animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing: string, previousPlayers?: any[], scrubberAccessRequested?: boolean): AnimationPlayer;
-    static ɵfac: i0.ɵɵFactoryDeclaration<NoopAnimationDriver, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<NoopAnimationDriver>;
-}
-/**
- * @publicApi
- */
-declare abstract class AnimationDriver {
-    /**
-     * @deprecated Use the NoopAnimationDriver class.
-     */
-    static NOOP: AnimationDriver;
-    abstract validateStyleProperty(prop: string): boolean;
-    abstract validateAnimatableStyleProperty?: (prop: string) => boolean;
-    abstract containsElement(elm1: any, elm2: any): boolean;
-    /**
-     * Obtains the parent element, if any. `null` is returned if the element does not have a parent.
-     */
-    abstract getParentElement(element: unknown): unknown;
-    abstract query(element: any, selector: string, multi: boolean): any[];
-    abstract computeStyle(element: any, prop: string, defaultValue?: string): string;
-    abstract animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing?: string | null, previousPlayers?: any[], scrubberAccessRequested?: boolean): any;
-}
 
 declare abstract class AnimationStyleNormalizer {
     abstract normalizePropertyName(propertyName: string, errors: Error[]): string;
@@ -290,4 +236,4 @@ declare function normalizeKeyframes(keyframes: Array<_StyleData> | Array<_StyleD
 declare function camelCaseToDashCase(input: string): string;
 declare function allowPreviousPlayerStylesMerge(duration: number, delay: number): boolean;
 
-export { AnimationDriver, NoopAnimationDriver, Animation$1 as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationRenderer as ɵAnimationRenderer, AnimationRendererFactory as ɵAnimationRendererFactory, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, BaseAnimationRenderer as ɵBaseAnimationRenderer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, camelCaseToDashCase as ɵcamelCaseToDashCase, containsElement as ɵcontainsElement, createEngine as ɵcreateEngine, getParentElement as ɵgetParentElement, invokeQuery as ɵinvokeQuery, normalizeKeyframes as ɵnormalizeKeyframes, validateStyleProperty as ɵvalidateStyleProperty, validateWebAnimatableStyleProperty as ɵvalidateWebAnimatableStyleProperty };
+export { AnimationDriver, Animation$1 as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationRenderer as ɵAnimationRenderer, AnimationRendererFactory as ɵAnimationRendererFactory, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, BaseAnimationRenderer as ɵBaseAnimationRenderer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, camelCaseToDashCase as ɵcamelCaseToDashCase, containsElement as ɵcontainsElement, createEngine as ɵcreateEngine, getParentElement as ɵgetParentElement, invokeQuery as ɵinvokeQuery, normalizeKeyframes as ɵnormalizeKeyframes, validateStyleProperty as ɵvalidateStyleProperty, validateWebAnimatableStyleProperty as ɵvalidateWebAnimatableStyleProperty };

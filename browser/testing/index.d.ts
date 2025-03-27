@@ -1,11 +1,12 @@
 /**
- * @license Angular v20.0.0-next.4+sha-f7385b4
+ * @license Angular v20.0.0-next.4+sha-76c60a6
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { AnimationPlayer, ɵStyleDataMap as _StyleDataMap, NoopAnimationPlayer } from '@angular/animations';
-import { AnimationDriver } from '@angular/animations/browser';
+import { b as AnimationPlayer, I as _StyleDataMap, N as NoopAnimationPlayer } from '../../animation_player.d-BR41_NcW.js';
+import { A as AnimationDriver } from '../../animation_driver.d-Chtv1cvS.js';
+import '@angular/core';
 
 /**
  * @publicApi
