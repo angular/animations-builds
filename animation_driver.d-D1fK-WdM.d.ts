@@ -1,11 +1,11 @@
 /**
- * @license Angular v19.2.4+sha-fdde642
+ * @license Angular v19.2.4+sha-84f3ba0
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
-import { b as AnimationPlayer } from './animation_player.d-BR41_NcW.js';
+import { b as AnimationPlayer } from './animation_player.d-D5d9jwCX.js';
 
 /**
  * @publicApi

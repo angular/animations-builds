@@ -1,13 +1,13 @@
 /**
- * @license Angular v19.2.4+sha-fdde642
+ * @license Angular v19.2.4+sha-84f3ba0
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
 import { RendererFactory2 } from '@angular/core';
-import { A as AnimationMetadata, a as AnimationOptions, b as AnimationPlayer } from './animation_player.d-BR41_NcW.js';
-export { w as AUTO_STYLE, e as AnimateChildOptions, f as AnimateTimings, h as AnimationAnimateChildMetadata, i as AnimationAnimateMetadata, j as AnimationAnimateRefMetadata, k as AnimationGroupMetadata, l as AnimationKeyframesSequenceMetadata, m as AnimationMetadataType, n as AnimationQueryMetadata, o as AnimationQueryOptions, p as AnimationReferenceMetadata, q as AnimationSequenceMetadata, r as AnimationStaggerMetadata, s as AnimationStateMetadata, t as AnimationStyleMetadata, u as AnimationTransitionMetadata, v as AnimationTriggerMetadata, N as NoopAnimationPlayer, c as animate, d as animateChild, g as animation, x as group, y as keyframes, z as query, B as sequence, C as stagger, D as state, E as style, F as transition, G as trigger, H as useAnimation, ɵ as ɵStyleData, I as ɵStyleDataMap } from './animation_player.d-BR41_NcW.js';
+import { A as AnimationMetadata, a as AnimationOptions, b as AnimationPlayer } from './animation_player.d-D5d9jwCX.js';
+export { w as AUTO_STYLE, e as AnimateChildOptions, f as AnimateTimings, h as AnimationAnimateChildMetadata, i as AnimationAnimateMetadata, j as AnimationAnimateRefMetadata, k as AnimationGroupMetadata, l as AnimationKeyframesSequenceMetadata, m as AnimationMetadataType, n as AnimationQueryMetadata, o as AnimationQueryOptions, p as AnimationReferenceMetadata, q as AnimationSequenceMetadata, r as AnimationStaggerMetadata, s as AnimationStateMetadata, t as AnimationStyleMetadata, u as AnimationTransitionMetadata, v as AnimationTriggerMetadata, N as NoopAnimationPlayer, c as animate, d as animateChild, g as animation, x as group, y as keyframes, z as query, B as sequence, C as stagger, D as state, E as style, F as transition, G as trigger, H as useAnimation, ɵ as ɵStyleData, I as ɵStyleDataMap } from './animation_player.d-D5d9jwCX.js';
 
 /**
  * An injectable service that produces an animation sequence programmatically within an
@@ -242,4 +242,5 @@ declare class AnimationGroupPlayer implements AnimationPlayer {
 
 declare const ɵPRE_STYLE = "!";
 
-export { AnimationBuilder, type AnimationEvent, AnimationFactory, AnimationMetadata, AnimationOptions, AnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, BrowserAnimationBuilder as ɵBrowserAnimationBuilder, ɵPRE_STYLE, RuntimeErrorCode as ɵRuntimeErrorCode };
+export { AnimationBuilder, AnimationFactory, AnimationMetadata, AnimationOptions, AnimationPlayer, AnimationGroupPlayer as ɵAnimationGroupPlayer, BrowserAnimationBuilder as ɵBrowserAnimationBuilder, ɵPRE_STYLE, RuntimeErrorCode as ɵRuntimeErrorCode };
+export type { AnimationEvent };

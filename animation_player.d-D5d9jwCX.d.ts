@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.2.4+sha-fdde642
+ * @license Angular v19.2.4+sha-84f3ba0
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1403,4 +1403,5 @@ declare class NoopAnimationPlayer implements AnimationPlayer {
     getPosition(): number;
 }
 
-export { type AnimationMetadata as A, sequence as B, stagger as C, state as D, style as E, transition as F, trigger as G, useAnimation as H, type ɵStyleDataMap as I, NoopAnimationPlayer as N, type AnimationOptions as a, type AnimationPlayer as b, animate as c, animateChild as d, type AnimateChildOptions as e, type AnimateTimings as f, animation as g, type AnimationAnimateChildMetadata as h, type AnimationAnimateMetadata as i, type AnimationAnimateRefMetadata as j, type AnimationGroupMetadata as k, type AnimationKeyframesSequenceMetadata as l, AnimationMetadataType as m, type AnimationQueryMetadata as n, type AnimationQueryOptions as o, type AnimationReferenceMetadata as p, type AnimationSequenceMetadata as q, type AnimationStaggerMetadata as r, type AnimationStateMetadata as s, type AnimationStyleMetadata as t, type AnimationTransitionMetadata as u, type AnimationTriggerMetadata as v, AUTO_STYLE as w, group as x, keyframes as y, query as z, type ɵStyleData as ɵ };
+export { sequence as B, stagger as C, state as D, style as E, transition as F, trigger as G, useAnimation as H, NoopAnimationPlayer as N, animate as c, animateChild as d, animation as g, AnimationMetadataType as m, AUTO_STYLE as w, group as x, keyframes as y, query as z };
+export type { AnimationMetadata as A, ɵStyleDataMap as I, AnimationOptions as a, AnimationPlayer as b, AnimateChildOptions as e, AnimateTimings as f, AnimationAnimateChildMetadata as h, AnimationAnimateMetadata as i, AnimationAnimateRefMetadata as j, AnimationGroupMetadata as k, AnimationKeyframesSequenceMetadata as l, AnimationQueryMetadata as n, AnimationQueryOptions as o, AnimationReferenceMetadata as p, AnimationSequenceMetadata as q, AnimationStaggerMetadata as r, AnimationStateMetadata as s, AnimationStyleMetadata as t, AnimationTransitionMetadata as u, AnimationTriggerMetadata as v, ɵStyleData as ɵ };
