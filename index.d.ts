@@ -1,13 +1,13 @@
 /**
- * @license Angular v20.0.0-next.5+sha-1899358
+ * @license Angular v20.0.0-next.5+sha-3ea0163
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
 import { RendererFactory2 } from '@angular/core';
-import { A as AnimationMetadata, a as AnimationOptions, b as AnimationPlayer } from './animation_player.d-D5d9jwCX.js';
-export { w as AUTO_STYLE, e as AnimateChildOptions, f as AnimateTimings, h as AnimationAnimateChildMetadata, i as AnimationAnimateMetadata, j as AnimationAnimateRefMetadata, k as AnimationGroupMetadata, l as AnimationKeyframesSequenceMetadata, m as AnimationMetadataType, n as AnimationQueryMetadata, o as AnimationQueryOptions, p as AnimationReferenceMetadata, q as AnimationSequenceMetadata, r as AnimationStaggerMetadata, s as AnimationStateMetadata, t as AnimationStyleMetadata, u as AnimationTransitionMetadata, v as AnimationTriggerMetadata, N as NoopAnimationPlayer, c as animate, d as animateChild, g as animation, x as group, y as keyframes, z as query, B as sequence, C as stagger, D as state, E as style, F as transition, G as trigger, H as useAnimation, ɵ as ɵStyleData, I as ɵStyleDataMap } from './animation_player.d-D5d9jwCX.js';
+import { AnimationMetadata, AnimationOptions, AnimationPlayer } from './animation_player.d-CTCg5nkL.js';
+export { AUTO_STYLE, AnimateChildOptions, AnimateTimings, AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationAnimateRefMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadataType, AnimationQueryMetadata, AnimationQueryOptions, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata, NoopAnimationPlayer, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, ɵStyleData, ɵStyleDataMap } from './animation_player.d-CTCg5nkL.js';
 
 /**
  * An injectable service that produces an animation sequence programmatically within an

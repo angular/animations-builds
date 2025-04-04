@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-next.5+sha-1899358
+ * @license Angular v20.0.0-next.5+sha-3ea0163
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1403,5 +1403,5 @@ declare class NoopAnimationPlayer implements AnimationPlayer {
     getPosition(): number;
 }
 
-export { sequence as B, stagger as C, state as D, style as E, transition as F, trigger as G, useAnimation as H, NoopAnimationPlayer as N, animate as c, animateChild as d, animation as g, AnimationMetadataType as m, AUTO_STYLE as w, group as x, keyframes as y, query as z };
-export type { AnimationMetadata as A, ɵStyleDataMap as I, AnimationOptions as a, AnimationPlayer as b, AnimateChildOptions as e, AnimateTimings as f, AnimationAnimateChildMetadata as h, AnimationAnimateMetadata as i, AnimationAnimateRefMetadata as j, AnimationGroupMetadata as k, AnimationKeyframesSequenceMetadata as l, AnimationQueryMetadata as n, AnimationQueryOptions as o, AnimationReferenceMetadata as p, AnimationSequenceMetadata as q, AnimationStaggerMetadata as r, AnimationStateMetadata as s, AnimationStyleMetadata as t, AnimationTransitionMetadata as u, AnimationTriggerMetadata as v, ɵStyleData as ɵ };
+export { AUTO_STYLE, AnimationMetadataType, NoopAnimationPlayer, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation };
+export type { AnimateChildOptions, AnimateTimings, AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationAnimateRefMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationOptions, AnimationPlayer, AnimationQueryMetadata, AnimationQueryOptions, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata, ɵStyleData, ɵStyleDataMap };
