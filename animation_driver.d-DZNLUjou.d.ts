@@ -1,11 +1,11 @@
 /**
- * @license Angular v19.2.5+sha-1b36f6e
+ * @license Angular v19.2.5+sha-e9a719e
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
-import { b as AnimationPlayer } from './animation_player.d-D5d9jwCX.js';
+import { AnimationPlayer } from './animation_player.d-CTCg5nkL.js';
 
 /**
  * @publicApi
@@ -62,4 +62,4 @@ declare abstract class AnimationDriver {
     abstract animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing?: string | null, previousPlayers?: any[], scrubberAccessRequested?: boolean): any;
 }
 
-export { AnimationDriver as A, NoopAnimationDriver as N };
+export { AnimationDriver, NoopAnimationDriver };

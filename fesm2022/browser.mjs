@@ -1,13 +1,13 @@
 /**
- * @license Angular v19.2.5+sha-1b36f6e
+ * @license Angular v19.2.5+sha-e9a719e
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
 import { Injectable } from '@angular/core';
-import { v as validateStyleProperty, c as containsElement, g as getParentElement, i as invokeQuery, d as dashCaseToCamelCase, a as invalidCssUnitValue, b as invalidExpression, e as invalidTransitionAlias, f as visitDslNode, h as invalidTrigger, j as invalidDefinition, k as extractStyleParams, l as invalidState, m as invalidStyleValue, S as SUBSTITUTION_EXPR_START, n as invalidParallelAnimation, o as validateStyleParams, p as invalidKeyframes, q as invalidOffset, r as keyframeOffsetsOutOfOrder, s as keyframesMissingOffsets, t as getOrSetDefaultValue, u as invalidStagger, w as resolveTiming, x as normalizeAnimationEntry, N as NG_TRIGGER_SELECTOR, y as NG_ANIMATING_SELECTOR, z as resolveTimingValue, A as interpolateParams, B as invalidQuery, C as registerFailed, D as normalizeKeyframes, L as LEAVE_CLASSNAME, E as ENTER_CLASSNAME, F as missingOrDestroyedAnimation, G as createAnimationFailed, H as optimizeGroupPlayer, I as missingPlayer, J as listenOnPlayer, K as makeAnimationEvent, M as triggerTransitionsFailed, O as eraseStyles, P as setStyles, Q as transitionFailed, R as missingTrigger, T as missingEvent, U as unsupportedTriggerEvent, V as unregisteredTrigger, W as NG_TRIGGER_CLASSNAME, X as NG_ANIMATING_CLASSNAME, Y as triggerBuildFailed, Z as parseTimelineCommand, _ as computeStyle, $ as camelCaseToDashCase, a0 as validateWebAnimatableStyleProperty, a1 as allowPreviousPlayerStylesMerge, a2 as normalizeKeyframes$1, a3 as balancePreviousStylesIntoKeyframes, a4 as validationFailed, a5 as normalizeStyles, a6 as buildingFailed } from './util-DIamNgWY.mjs';
-import { N as NoopAnimationPlayer, A as AnimationMetadataType, h as style, d as AUTO_STYLE, ɵ as _PRE_STYLE, j as AnimationGroupPlayer } from './private_export-DBN_2NMM.mjs';
+import { validateStyleProperty, containsElement, getParentElement, invokeQuery, dashCaseToCamelCase, invalidCssUnitValue, invalidExpression, invalidTransitionAlias, visitDslNode, invalidTrigger, invalidDefinition, extractStyleParams, invalidState, invalidStyleValue, SUBSTITUTION_EXPR_START, invalidParallelAnimation, validateStyleParams, invalidKeyframes, invalidOffset, keyframeOffsetsOutOfOrder, keyframesMissingOffsets, getOrSetDefaultValue, invalidStagger, resolveTiming, normalizeAnimationEntry, NG_TRIGGER_SELECTOR, NG_ANIMATING_SELECTOR, resolveTimingValue, interpolateParams, invalidQuery, registerFailed, normalizeKeyframes, LEAVE_CLASSNAME, ENTER_CLASSNAME, missingOrDestroyedAnimation, createAnimationFailed, optimizeGroupPlayer, missingPlayer, listenOnPlayer, makeAnimationEvent, triggerTransitionsFailed, eraseStyles, setStyles, transitionFailed, missingTrigger, missingEvent, unsupportedTriggerEvent, unregisteredTrigger, NG_TRIGGER_CLASSNAME, NG_ANIMATING_CLASSNAME, triggerBuildFailed, parseTimelineCommand, computeStyle, camelCaseToDashCase, validateWebAnimatableStyleProperty, allowPreviousPlayerStylesMerge, normalizeKeyframes$1, balancePreviousStylesIntoKeyframes, validationFailed, normalizeStyles, buildingFailed } from './util-DN3Vao_r.mjs';
+import { NoopAnimationPlayer, AnimationMetadataType, style, AUTO_STYLE, ɵPRE_STYLE as _PRE_STYLE, AnimationGroupPlayer } from './private_export-CacKMzxJ.mjs';
 
 /**
  * @publicApi
@@ -53,10 +53,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.5+sha-1b36f6e", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.5+sha-1b36f6e", ngImport: i0, type: NoopAnimationDriver });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.5+sha-e9a719e", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.5+sha-e9a719e", ngImport: i0, type: NoopAnimationDriver });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.5+sha-1b36f6e", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.5+sha-e9a719e", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
