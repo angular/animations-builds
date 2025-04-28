@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.2.8+sha-7d133c0
+ * @license Angular v19.2.8+sha-aca1f45
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -113,7 +113,7 @@ declare enum AnimationMetadataType {
     Sequence = 2,
     /**
      * Contains a set of animation steps.
-     * See `{@link /api/animations/group group()}`
+     * See `group()`
      */
     Group = 3,
     /**

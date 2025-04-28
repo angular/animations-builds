@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.2.8+sha-7d133c0
+ * @license Angular v19.2.8+sha-aca1f45
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -31,7 +31,7 @@ var AnimationMetadataType;
     AnimationMetadataType[AnimationMetadataType["Sequence"] = 2] = "Sequence";
     /**
      * Contains a set of animation steps.
-     * See `{@link /api/animations/group group()}`
+     * See `group()`
      */
     AnimationMetadataType[AnimationMetadataType["Group"] = 3] = "Group";
     /**
@@ -1173,4 +1173,4 @@ class AnimationGroupPlayer {
 const ɵPRE_STYLE = '!';
 
 export { AUTO_STYLE, AnimationGroupPlayer, AnimationMetadataType, NoopAnimationPlayer, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, ɵPRE_STYLE };
-//# sourceMappingURL=private_export-CacKMzxJ.mjs.map
+//# sourceMappingURL=private_export-faY_wCkZ.mjs.map
