@@ -1,17 +1,18 @@
 {
   "name": "@angular/animations",
-  "version": "18.1.0-next.0+sha-87c5f3c",
+  "version": "20.0.0-next.9+sha-f4d60ff",
   "description": "Angular - animations integration with web-animations",
   "author": "angular",
   "license": "MIT",
   "engines": {
-    "node": "^18.13.0 || >=20.9.0"
+    "node": "^20.11.1 || >=22.11.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/core": "18.1.0-next.0+sha-87c5f3c"
+    "@angular/core": "20.0.0-next.9+sha-f4d60ff",
+    "@angular/common": "20.0.0-next.9+sha-f4d60ff"
   },
   "repository": {
     "type": "git",
@@ -48,20 +49,14 @@
     },
     ".": {
       "types": "./index.d.ts",
-      "esm2022": "./esm2022/animations.mjs",
-      "esm": "./esm2022/animations.mjs",
       "default": "./fesm2022/animations.mjs"
     },
     "./browser": {
       "types": "./browser/index.d.ts",
-      "esm2022": "./esm2022/browser/browser.mjs",
-      "esm": "./esm2022/browser/browser.mjs",
       "default": "./fesm2022/browser.mjs"
     },
     "./browser/testing": {
       "types": "./browser/testing/index.d.ts",
-      "esm2022": "./esm2022/browser/testing/testing.mjs",
-      "esm": "./esm2022/browser/testing/testing.mjs",
       "default": "./fesm2022/browser/testing.mjs"
     }
   }

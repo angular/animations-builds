@@ -1,32 +1,33 @@
 /**
- * @license Angular v18.1.0-next.0+sha-87c5f3c
- * (c) 2010-2024 Google LLC. https://angular.io/
+ * @license Angular v20.0.0-next.9+sha-f4d60ff
+ * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { NoopAnimationPlayer, AUTO_STYLE } from '@angular/animations';
-import { ɵvalidateStyleProperty, ɵcamelCaseToDashCase, ɵvalidateWebAnimatableStyleProperty, ɵcontainsElement, ɵgetParentElement, ɵinvokeQuery, ɵnormalizeKeyframes, ɵallowPreviousPlayerStylesMerge } from '@angular/animations/browser';
+import { validateStyleProperty, camelCaseToDashCase, validateWebAnimatableStyleProperty, containsElement, getParentElement, invokeQuery, normalizeKeyframes$1 as normalizeKeyframes, allowPreviousPlayerStylesMerge } from '../util-D9FfmVnv.mjs';
+import { NoopAnimationPlayer, AUTO_STYLE } from '../private_export-faY_wCkZ.mjs';
+import '@angular/core';
 
 /**
  * @publicApi
  */
 class MockAnimationDriver {
-    static { this.log = []; }
+    static log = [];
     validateStyleProperty(prop) {
-        return ɵvalidateStyleProperty(prop);
+        return validateStyleProperty(prop);
     }
     validateAnimatableStyleProperty(prop) {
-        const cssProp = ɵcamelCaseToDashCase(prop);
-        return ɵvalidateWebAnimatableStyleProperty(cssProp);
+        const cssProp = camelCaseToDashCase(prop);
+        return validateWebAnimatableStyleProperty(cssProp);
     }
     containsElement(elm1, elm2) {
-        return ɵcontainsElement(elm1, elm2);
+        return containsElement(elm1, elm2);
     }
     getParentElement(element) {
-        return ɵgetParentElement(element);
+        return getParentElement(element);
     }
     query(element, selector, multi) {
-        return ɵinvokeQuery(element, selector, multi);
+        return invokeQuery(element, selector, multi);
     }
     computeStyle(element, prop, defaultValue) {
         return defaultValue || '';
@@ -41,6 +42,18 @@ class MockAnimationDriver {
  * @publicApi
  */
 class MockAnimationPlayer extends NoopAnimationPlayer {
+    element;
+    keyframes;
+    duration;
+    delay;
+    easing;
+    previousPlayers;
+    __finished = false;
+    __started = false;
+    previousStyles = new Map();
+    _onInitFns = [];
+    currentSnapshot = new Map();
+    _keyframes = [];
     constructor(element, keyframes, duration, delay, easing, previousPlayers) {
         super(duration, delay);
         this.element = element;
@@ -49,14 +62,8 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         this.delay = delay;
         this.easing = easing;
         this.previousPlayers = previousPlayers;
-        this.__finished = false;
-        this.__started = false;
-        this.previousStyles = new Map();
-        this._onInitFns = [];
-        this.currentSnapshot = new Map();
-        this._keyframes = [];
-        this._keyframes = ɵnormalizeKeyframes(keyframes);
-        if (ɵallowPreviousPlayerStylesMerge(duration, delay)) {
+        this._keyframes = normalizeKeyframes(keyframes);
+        if (allowPreviousPlayerStylesMerge(duration, delay)) {
             previousPlayers.forEach((player) => {
                 if (player instanceof MockAnimationPlayer) {
                     const styles = player.currentSnapshot;
@@ -114,18 +121,6 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
         this.currentSnapshot = captures;
     }
 }
-
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-
-// This file is not used to build this module. It is only used during editing
-
-/**
- * Generated bundle index. Do not edit.
- */
 
 export { MockAnimationDriver, MockAnimationPlayer };
 //# sourceMappingURL=testing.mjs.map
