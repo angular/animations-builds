@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.2.11+sha-7d0db3d
+ * @license Angular v19.2.11+sha-9aedd30
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -53,10 +53,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.11+sha-7d0db3d", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.11+sha-7d0db3d", ngImport: i0, type: NoopAnimationDriver });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.11+sha-9aedd30", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.11+sha-9aedd30", ngImport: i0, type: NoopAnimationDriver });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.11+sha-7d0db3d", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.11+sha-9aedd30", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -1786,7 +1786,7 @@ function balanceProperties(stateMap, key1, key2) {
     }
 }
 
-const EMPTY_INSTRUCTION_MAP = new ElementInstructionMap();
+const EMPTY_INSTRUCTION_MAP = /* @__PURE__ */ new ElementInstructionMap();
 class TimelineAnimationEngine {
     bodyNode;
     _driver;
@@ -1975,7 +1975,7 @@ class StateValue {
     }
 }
 const VOID_VALUE = 'void';
-const DEFAULT_STATE_VALUE = new StateValue(VOID_VALUE);
+const DEFAULT_STATE_VALUE = /* @__PURE__ */ new StateValue(VOID_VALUE);
 class AnimationTransitionNamespace {
     id;
     hostElement;
