@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.1.0-next.0+sha-fc14ca5
+ * @license Angular v20.1.0-next.0+sha-c7420df
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4166,5 +4166,5 @@ class AnimationRendererFactory {
     }
 }
 
-export { AnimationDriver, NoopAnimationDriver, Animation as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationRenderer as ɵAnimationRenderer, AnimationRendererFactory as ɵAnimationRendererFactory, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, BaseAnimationRenderer as ɵBaseAnimationRenderer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, camelCaseToDashCase as ɵcamelCaseToDashCase, containsElement as ɵcontainsElement, createEngine as ɵcreateEngine, getParentElement as ɵgetParentElement, invokeQuery as ɵinvokeQuery, normalizeKeyframes$1 as ɵnormalizeKeyframes, validateStyleProperty as ɵvalidateStyleProperty, validateWebAnimatableStyleProperty as ɵvalidateWebAnimatableStyleProperty };
+export { AnimationDriver, NoopAnimationDriver, Animation as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationRenderer as ɵAnimationRenderer, AnimationRendererFactory as ɵAnimationRendererFactory, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, BaseAnimationRenderer as ɵBaseAnimationRenderer, ENTER_CLASSNAME as ɵENTER_CLASSNAME, LEAVE_CLASSNAME as ɵLEAVE_CLASSNAME, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, TransitionAnimationPlayer as ɵTransitionAnimationPlayer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, camelCaseToDashCase as ɵcamelCaseToDashCase, containsElement as ɵcontainsElement, createEngine as ɵcreateEngine, getParentElement as ɵgetParentElement, invokeQuery as ɵinvokeQuery, normalizeKeyframes$1 as ɵnormalizeKeyframes, validateStyleProperty as ɵvalidateStyleProperty, validateWebAnimatableStyleProperty as ɵvalidateWebAnimatableStyleProperty };
 //# sourceMappingURL=browser.mjs.map
