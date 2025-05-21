@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.2.11+sha-21e5f07
+ * @license Angular v19.2.11+sha-fc2483e
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -232,8 +232,44 @@ declare class WebAnimationsPlayer implements AnimationPlayer {
     beforeDestroy(): void;
 }
 
+declare const ENTER_CLASSNAME = "ng-enter";
+declare const LEAVE_CLASSNAME = "ng-leave";
 declare function normalizeKeyframes(keyframes: Array<_StyleData> | Array<_StyleDataMap>): Array<_StyleDataMap>;
 declare function camelCaseToDashCase(input: string): string;
 declare function allowPreviousPlayerStylesMerge(duration: number, delay: number): boolean;
 
-export { AnimationDriver, Animation$1 as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationRenderer as ɵAnimationRenderer, AnimationRendererFactory as ɵAnimationRendererFactory, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, BaseAnimationRenderer as ɵBaseAnimationRenderer, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, camelCaseToDashCase as ɵcamelCaseToDashCase, containsElement as ɵcontainsElement, createEngine as ɵcreateEngine, getParentElement as ɵgetParentElement, invokeQuery as ɵinvokeQuery, normalizeKeyframes as ɵnormalizeKeyframes, validateStyleProperty as ɵvalidateStyleProperty, validateWebAnimatableStyleProperty as ɵvalidateWebAnimatableStyleProperty };
+declare class TransitionAnimationPlayer implements AnimationPlayer {
+    namespaceId: string;
+    triggerName: string;
+    element: any;
+    private _player;
+    private _containsRealPlayer;
+    private _queuedCallbacks;
+    readonly destroyed = false;
+    parentPlayer: AnimationPlayer | null;
+    markedForDestroy: boolean;
+    disabled: boolean;
+    readonly queued: boolean;
+    readonly totalTime: number;
+    constructor(namespaceId: string, triggerName: string, element: any);
+    setRealPlayer(player: AnimationPlayer): void;
+    getRealPlayer(): AnimationPlayer;
+    overrideTotalTime(totalTime: number): void;
+    syncPlayerEvents(player: AnimationPlayer): void;
+    private _queueEvent;
+    onDone(fn: () => void): void;
+    onStart(fn: () => void): void;
+    onDestroy(fn: () => void): void;
+    init(): void;
+    hasStarted(): boolean;
+    play(): void;
+    pause(): void;
+    restart(): void;
+    finish(): void;
+    destroy(): void;
+    reset(): void;
+    setPosition(p: number): void;
+    getPosition(): number;
+}
+
+export { AnimationDriver, Animation$1 as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationRenderer as ɵAnimationRenderer, AnimationRendererFactory as ɵAnimationRendererFactory, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, BaseAnimationRenderer as ɵBaseAnimationRenderer, ENTER_CLASSNAME as ɵENTER_CLASSNAME, LEAVE_CLASSNAME as ɵLEAVE_CLASSNAME, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, TransitionAnimationPlayer as ɵTransitionAnimationPlayer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, camelCaseToDashCase as ɵcamelCaseToDashCase, containsElement as ɵcontainsElement, createEngine as ɵcreateEngine, getParentElement as ɵgetParentElement, invokeQuery as ɵinvokeQuery, normalizeKeyframes as ɵnormalizeKeyframes, validateStyleProperty as ɵvalidateStyleProperty, validateWebAnimatableStyleProperty as ɵvalidateWebAnimatableStyleProperty };
