@@ -1,12 +1,12 @@
 /**
- * @license Angular v20.0.0+sha-f7d33ee
+ * @license Angular v20.0.0+sha-1802d36
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { AnimationDriver } from '../animation_driver.d-DAiEDqQt.js';
-export { NoopAnimationDriver } from '../animation_driver.d-DAiEDqQt.js';
-import { AnimationTriggerMetadata, AnimationPlayer, ɵStyleDataMap as _StyleDataMap, AnimationMetadata, AnimationOptions, ɵStyleData as _StyleData } from '../animation_player.d-Dv9iW4uh.js';
+import { AnimationDriver } from '../animation_driver.d-xuLo2K_d.js';
+export { NoopAnimationDriver } from '../animation_driver.d-xuLo2K_d.js';
+import { AnimationTriggerMetadata, AnimationPlayer, ɵStyleDataMap as _StyleDataMap, AnimationMetadata, AnimationOptions, ɵStyleData as _StyleData } from '../animation_player.d-Bpvrt8M2.js';
 import { Renderer2, ɵAnimationRendererType as _AnimationRendererType, RendererStyleFlags2, ListenerOptions, RendererFactory2, NgZone, RendererType2 } from '@angular/core';
 
 declare abstract class AnimationStyleNormalizer {
