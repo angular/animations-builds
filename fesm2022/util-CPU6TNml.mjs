@@ -1,10 +1,10 @@
 /**
- * @license Angular v20.1.0-next.0+sha-0ab865e
+ * @license Angular v20.1.0-next.0+sha-8fa75fe
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { AnimationGroupPlayer, NoopAnimationPlayer, AUTO_STYLE, ɵPRE_STYLE as _PRE_STYLE, AnimationMetadataType, sequence } from './private_export-faY_wCkZ.mjs';
+import { AnimationGroupPlayer, NoopAnimationPlayer, AUTO_STYLE, ɵPRE_STYLE as _PRE_STYLE, AnimationMetadataType, sequence } from './private_export-B_vy_9K7.mjs';
 import { ɵRuntimeError as _RuntimeError } from '@angular/core';
 
 const LINE_START = '\n - ';
@@ -694,4 +694,4 @@ function computeStyle(element, prop) {
 }
 
 export { ENTER_CLASSNAME, LEAVE_CLASSNAME, NG_ANIMATING_CLASSNAME, NG_ANIMATING_SELECTOR, NG_TRIGGER_CLASSNAME, NG_TRIGGER_SELECTOR, SUBSTITUTION_EXPR_START, allowPreviousPlayerStylesMerge, balancePreviousStylesIntoKeyframes, buildingFailed, camelCaseToDashCase, computeStyle, containsElement, createAnimationFailed, dashCaseToCamelCase, eraseStyles, extractStyleParams, getOrSetDefaultValue, getParentElement, interpolateParams, invalidCssUnitValue, invalidDefinition, invalidExpression, invalidKeyframes, invalidOffset, invalidParallelAnimation, invalidQuery, invalidStagger, invalidState, invalidStyleValue, invalidTransitionAlias, invalidTrigger, invokeQuery, keyframeOffsetsOutOfOrder, keyframesMissingOffsets, listenOnPlayer, makeAnimationEvent, missingEvent, missingOrDestroyedAnimation, missingPlayer, missingTrigger, normalizeAnimationEntry, normalizeKeyframes$1 as normalizeKeyframes, normalizeKeyframes as normalizeKeyframes$1, normalizeStyles, optimizeGroupPlayer, parseTimelineCommand, registerFailed, resolveTiming, resolveTimingValue, setStyles, transitionFailed, triggerBuildFailed, triggerTransitionsFailed, unregisteredTrigger, unsupportedTriggerEvent, validateStyleParams, validateStyleProperty, validateWebAnimatableStyleProperty, validationFailed, visitDslNode };
-//# sourceMappingURL=util-D9FfmVnv.mjs.map
+//# sourceMappingURL=util-CPU6TNml.mjs.map

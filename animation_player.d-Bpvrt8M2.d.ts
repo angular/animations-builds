@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.1.0-next.0+sha-0ab865e
+ * @license Angular v20.1.0-next.0+sha-8fa75fe
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1201,7 +1201,7 @@ declare function query(selector: string, animation: AnimationMetadata | Animatio
  *
  * @usageNotes
  * In the following example, a container element wraps a list of items stamped out
- * by an `ngFor`. The container element contains an animation trigger that will later be set
+ * by an `@for` block. The container element contains an animation trigger that will later be set
  * to query for each of the inner items.
  *
  * Each time items are added, the opacity fade-in animation runs,
@@ -1214,9 +1214,9 @@ declare function query(selector: string, animation: AnimationMetadata | Animatio
  * <button (click)="toggle()">Show / Hide Items</button>
  * <hr />
  * <div [@listAnimation]="items.length">
- *   <div *ngFor="let item of items">
- *     {{ item }}
- *   </div>
+ *   @for(item of items; track $index) {
+ *      <div>{{ item }}</div>
+ *   }
  * </div>
  * ```
  *

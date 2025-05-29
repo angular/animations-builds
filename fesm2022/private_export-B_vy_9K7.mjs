@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.1.0-next.0+sha-0ab865e
+ * @license Angular v20.1.0-next.0+sha-8fa75fe
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -857,7 +857,7 @@ function query(selector, animation, options = null) {
  *
  * @usageNotes
  * In the following example, a container element wraps a list of items stamped out
- * by an `ngFor`. The container element contains an animation trigger that will later be set
+ * by an `@for` block. The container element contains an animation trigger that will later be set
  * to query for each of the inner items.
  *
  * Each time items are added, the opacity fade-in animation runs,
@@ -870,9 +870,9 @@ function query(selector, animation, options = null) {
  * <button (click)="toggle()">Show / Hide Items</button>
  * <hr />
  * <div [@listAnimation]="items.length">
- *   <div *ngFor="let item of items">
- *     {{ item }}
- *   </div>
+ *   @for(item of items; track $index) {
+ *      <div>{{ item }}</div>
+ *   }
  * </div>
  * ```
  *
@@ -1173,4 +1173,4 @@ class AnimationGroupPlayer {
 const ɵPRE_STYLE = '!';
 
 export { AUTO_STYLE, AnimationGroupPlayer, AnimationMetadataType, NoopAnimationPlayer, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, ɵPRE_STYLE };
-//# sourceMappingURL=private_export-faY_wCkZ.mjs.map
+//# sourceMappingURL=private_export-B_vy_9K7.mjs.map
