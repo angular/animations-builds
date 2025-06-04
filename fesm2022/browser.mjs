@@ -1,12 +1,12 @@
 /**
- * @license Angular v20.1.0-next.0+sha-4178e82
+ * @license Angular v20.1.0-next.0+sha-b839d08
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
 import { Injectable } from '@angular/core';
-import { validateStyleProperty, containsElement, getParentElement, invokeQuery, dashCaseToCamelCase, invalidCssUnitValue, invalidExpression, invalidTransitionAlias, visitDslNode, invalidTrigger, invalidDefinition, extractStyleParams, invalidState, invalidStyleValue, SUBSTITUTION_EXPR_START, invalidParallelAnimation, validateStyleParams, invalidKeyframes, invalidOffset, keyframeOffsetsOutOfOrder, keyframesMissingOffsets, getOrSetDefaultValue, invalidStagger, resolveTiming, normalizeAnimationEntry, NG_TRIGGER_SELECTOR, NG_ANIMATING_SELECTOR, resolveTimingValue, interpolateParams, invalidQuery, registerFailed, normalizeKeyframes, LEAVE_CLASSNAME, ENTER_CLASSNAME, missingOrDestroyedAnimation, createAnimationFailed, optimizeGroupPlayer, missingPlayer, listenOnPlayer, makeAnimationEvent, triggerTransitionsFailed, eraseStyles, setStyles, transitionFailed, missingTrigger, missingEvent, unsupportedTriggerEvent, unregisteredTrigger, NG_TRIGGER_CLASSNAME, NG_ANIMATING_CLASSNAME, triggerBuildFailed, parseTimelineCommand, computeStyle, camelCaseToDashCase, validateWebAnimatableStyleProperty, allowPreviousPlayerStylesMerge, normalizeKeyframes$1, balancePreviousStylesIntoKeyframes, validationFailed, normalizeStyles, buildingFailed } from './util-CPU6TNml.mjs';
+import { validateStyleProperty, containsElement, getParentElement, invokeQuery, dashCaseToCamelCase, invalidCssUnitValue, invalidExpression, invalidTransitionAlias, visitDslNode, invalidTrigger, invalidDefinition, extractStyleParams, invalidState, invalidStyleValue, SUBSTITUTION_EXPR_START, invalidParallelAnimation, validateStyleParams, invalidKeyframes, invalidOffset, keyframeOffsetsOutOfOrder, keyframesMissingOffsets, getOrSetDefaultValue, invalidStagger, resolveTiming, NG_TRIGGER_SELECTOR, NG_ANIMATING_SELECTOR, normalizeAnimationEntry, resolveTimingValue, interpolateParams, invalidQuery, registerFailed, normalizeKeyframes, LEAVE_CLASSNAME, ENTER_CLASSNAME, missingOrDestroyedAnimation, createAnimationFailed, optimizeGroupPlayer, missingPlayer, listenOnPlayer, makeAnimationEvent, triggerTransitionsFailed, eraseStyles, setStyles, transitionFailed, missingTrigger, missingEvent, unsupportedTriggerEvent, NG_TRIGGER_CLASSNAME, unregisteredTrigger, NG_ANIMATING_CLASSNAME, triggerBuildFailed, parseTimelineCommand, computeStyle, camelCaseToDashCase, validateWebAnimatableStyleProperty, allowPreviousPlayerStylesMerge, normalizeKeyframes$1, balancePreviousStylesIntoKeyframes, validationFailed, normalizeStyles, buildingFailed } from './util-CPU6TNml.mjs';
 import { NoopAnimationPlayer, AnimationMetadataType, style, AUTO_STYLE, ɵPRE_STYLE as _PRE_STYLE, AnimationGroupPlayer } from './private_export-B_vy_9K7.mjs';
 
 /**
@@ -53,10 +53,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-4178e82", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-4178e82", ngImport: i0, type: NoopAnimationDriver });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-b839d08", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-b839d08", ngImport: i0, type: NoopAnimationDriver });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-4178e82", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-b839d08", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
