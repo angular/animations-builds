@@ -1,6 +1,6 @@
 {
   "name": "@angular/animations",
-  "version": "20.1.0-next.2+sha-75d246e",
+  "version": "20.1.0-next.2+sha-08276b5",
   "description": "Angular - animations integration with web-animations",
   "author": "angular",
   "license": "MIT",
@@ -11,8 +11,8 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/core": "20.1.0-next.2+sha-75d246e",
-    "@angular/common": "20.1.0-next.2+sha-75d246e"
+    "@angular/core": "20.1.0-next.2+sha-08276b5",
+    "@angular/common": "20.1.0-next.2+sha-08276b5"
   },
   "repository": {
     "type": "git",
