@@ -1,13 +1,13 @@
 /**
- * @license Angular v20.1.0-next.2+sha-1cff7cf
+ * @license Angular v20.1.0-next.2+sha-07df4e1
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
 import { RendererFactory2 } from '@angular/core';
-import { AnimationMetadata, AnimationOptions, AnimationPlayer } from './animation_player.d-Bpvrt8M2.js';
-export { AUTO_STYLE, AnimateChildOptions, AnimateTimings, AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationAnimateRefMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadataType, AnimationQueryMetadata, AnimationQueryOptions, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata, NoopAnimationPlayer, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, ɵStyleData, ɵStyleDataMap } from './animation_player.d-Bpvrt8M2.js';
+import { AnimationMetadata, AnimationOptions, AnimationPlayer } from './animation_player.d.js';
+export { AUTO_STYLE, AnimateChildOptions, AnimateTimings, AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationAnimateRefMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadataType, AnimationQueryMetadata, AnimationQueryOptions, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata, NoopAnimationPlayer, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, ɵStyleData, ɵStyleDataMap } from './animation_player.d.js';
 
 /**
  * An injectable service that produces an animation sequence programmatically within an
