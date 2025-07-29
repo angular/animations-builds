@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.2.0-next.2+sha-d55a706
+ * @license Angular v20.2.0-next.2+sha-dc49c2c
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -11,6 +11,8 @@
  * collects them into a corresponding `AnimationMetadata` object.
  *
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
 var AnimationMetadataType;
 (function (AnimationMetadataType) {
@@ -84,6 +86,8 @@ var AnimationMetadataType;
  * Specifies automatic styling.
  *
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
 const AUTO_STYLE = '*';
 /**
@@ -233,6 +237,8 @@ const AUTO_STYLE = '*';
  * the `.disabled` flag on the event is true.
  *
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
 function trigger(name, definitions) {
     return { type: AnimationMetadataType.Trigger, name, definitions, options: {} };
@@ -294,6 +300,8 @@ function trigger(name, definitions) {
  * ```
  *
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
 function animate(timings, styles = null) {
     return { type: AnimationMetadataType.Animate, styles, timings };
@@ -330,6 +338,8 @@ function animate(timings, styles = null) {
  * instruction until all of the inner animation steps have completed.
  *
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
 function group(steps, options = null) {
     return { type: AnimationMetadataType.Group, steps, options };
@@ -366,6 +376,8 @@ function group(steps, options = null) {
  * steps have completed.
  *
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  **/
 function sequence(steps, options = null) {
     return { type: AnimationMetadataType.Sequence, steps, options };
@@ -408,6 +420,8 @@ function sequence(steps, options = null) {
  * ```
  *
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  **/
 function style(tokens) {
     return { type: AnimationMetadataType.Style, styles: tokens, offset: null };
@@ -440,6 +454,8 @@ function style(tokens) {
  * even when the animation ends.
  *
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  **/
 function state(name, styles, options) {
     return { type: AnimationMetadataType.State, name, styles, options };
@@ -488,6 +504,8 @@ function state(name, styles, options) {
  *```
 
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
 function keyframes(steps) {
     return { type: AnimationMetadataType.Keyframes, steps };
@@ -637,6 +655,8 @@ function keyframes(steps) {
  *    ```
  *
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  **/
 function transition(stateChangeExpr, steps, options = null) {
     return { type: AnimationMetadataType.Transition, expr: stateChangeExpr, animation: steps, options };
@@ -685,6 +705,8 @@ function transition(stateChangeExpr, steps, options = null) {
  * animated, `useAnimation()` throws an error.
  *
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
 function animation(steps, options = null) {
     return { type: AnimationMetadataType.Reference, animation: steps, options };
@@ -707,6 +729,8 @@ function animation(steps, options = null) {
  * and transitions are not handled by this API.
  *
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
 function animateChild(options = null) {
     return { type: AnimationMetadataType.AnimateChild, options };
@@ -720,6 +744,8 @@ function animateChild(options = null) {
  * @return An object that contains the animation parameters.
  *
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
 function useAnimation(animation, options = null) {
     return { type: AnimationMetadataType.AnimateRef, animation, options };
@@ -843,6 +869,8 @@ function useAnimation(animation, options = null) {
  * ```
  *
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
 function query(selector, animation, options = null) {
     return { type: AnimationMetadataType.Query, selector, animation, options };
@@ -926,6 +954,8 @@ function query(selector, animation, options = null) {
  * ```
  *
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
 function stagger(timings, animation) {
     return { type: AnimationMetadataType.Stagger, timings, animation };
@@ -940,6 +970,8 @@ function stagger(timings, animation) {
  * @see {@link AnimationPlayer}
  *
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
 class NoopAnimationPlayer {
     _onDoneFns = [];

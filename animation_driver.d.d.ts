@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.2.0-next.2+sha-d55a706
+ * @license Angular v20.2.0-next.2+sha-dc49c2c
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -9,6 +9,8 @@ import { AnimationPlayer } from './animation_player.d.js';
 
 /**
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  *
  * `AnimationDriver` implentation for Noop animations
  */
@@ -44,6 +46,8 @@ declare class NoopAnimationDriver implements AnimationDriver {
 }
 /**
  * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
 declare abstract class AnimationDriver {
     /**
