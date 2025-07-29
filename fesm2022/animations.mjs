@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.1.3+sha-0b9f53a
+ * @license Angular v20.1.3+sha-ea1afec
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -57,10 +57,10 @@ export { AUTO_STYLE, AnimationMetadataType, NoopAnimationPlayer, animate, animat
  * @publicApi
  */
 class AnimationBuilder {
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.1.3+sha-0b9f53a", ngImport: i0, type: AnimationBuilder, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.1.3+sha-0b9f53a", ngImport: i0, type: AnimationBuilder, providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.1.3+sha-ea1afec", ngImport: i0, type: AnimationBuilder, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.1.3+sha-ea1afec", ngImport: i0, type: AnimationBuilder, providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.1.3+sha-0b9f53a", ngImport: i0, type: AnimationBuilder, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.1.3+sha-ea1afec", ngImport: i0, type: AnimationBuilder, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root', useFactory: () => inject(BrowserAnimationBuilder) }]
         }] });
@@ -100,10 +100,10 @@ class BrowserAnimationBuilder extends AnimationBuilder {
         issueAnimationCommand(this._renderer, null, id, 'register', [entry]);
         return new BrowserAnimationFactory(id, this._renderer);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.1.3+sha-0b9f53a", ngImport: i0, type: BrowserAnimationBuilder, deps: [{ token: i0.RendererFactory2 }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.1.3+sha-0b9f53a", ngImport: i0, type: BrowserAnimationBuilder, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.1.3+sha-ea1afec", ngImport: i0, type: BrowserAnimationBuilder, deps: [{ token: i0.RendererFactory2 }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.1.3+sha-ea1afec", ngImport: i0, type: BrowserAnimationBuilder, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.1.3+sha-0b9f53a", ngImport: i0, type: BrowserAnimationBuilder, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.1.3+sha-ea1afec", ngImport: i0, type: BrowserAnimationBuilder, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [{ type: i0.RendererFactory2 }, { type: Document, decorators: [{
