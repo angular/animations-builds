@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.2.0-next.3+sha-52b8e07
+ * @license Angular v20.2.0-next.4+sha-d24d574
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -515,13 +515,13 @@ function resolveTiming(timings, errors, allowNegativeValues) {
         ? timings
         : parseTimeExpression(timings, errors, allowNegativeValues);
 }
+const PARSE_TIME_EXPRESSION_REGEX = /^(-?[\.\d]+)(m?s)(?:\s+(-?[\.\d]+)(m?s))?(?:\s+([-a-z]+(?:\(.+?\))?))?$/i;
 function parseTimeExpression(exp, errors, allowNegativeValues) {
-    const regex = /^(-?[\.\d]+)(m?s)(?:\s+(-?[\.\d]+)(m?s))?(?:\s+([-a-z]+(?:\(.+?\))?))?$/i;
     let duration;
     let delay = 0;
     let easing = '';
     if (typeof exp === 'string') {
-        const matches = exp.match(regex);
+        const matches = exp.match(PARSE_TIME_EXPRESSION_REGEX);
         if (matches === null) {
             errors.push(invalidTimingValue(exp));
             return { duration: 0, delay: 0, easing: '' };
