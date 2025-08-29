@@ -1,12 +1,11 @@
 /**
- * @license Angular v20.2.3+sha-1abf6d5
+ * @license Angular v20.2.3+sha-8dbeac1
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, Injectable, ANIMATION_MODULE_TYPE, ɵRuntimeError as _RuntimeError, Inject, ViewEncapsulation } from '@angular/core';
+import { inject, Injectable, ANIMATION_MODULE_TYPE, ɵRuntimeError as _RuntimeError, DOCUMENT, Inject, ViewEncapsulation } from '@angular/core';
 import { sequence } from './private_export.mjs';
 export { AUTO_STYLE, AnimationMetadataType, NoopAnimationPlayer, animate, animateChild, animation, group, keyframes, query, stagger, state, style, transition, trigger, useAnimation, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE } from './private_export.mjs';
 
