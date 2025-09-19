@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.3.1+sha-b04e6b1
+ * @license Angular v20.3.1+sha-e78451c
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -55,10 +55,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.1+sha-b04e6b1", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.1+sha-b04e6b1", ngImport: i0, type: NoopAnimationDriver });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.1+sha-e78451c", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.1+sha-e78451c", ngImport: i0, type: NoopAnimationDriver });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.1+sha-b04e6b1", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.1+sha-e78451c", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -3948,7 +3948,15 @@ class BaseAnimationRenderer {
         // If `isMove` true than we should animate this insert.
         this.engine.onInsert(this.namespaceId, newChild, parent, isMove);
     }
-    removeChild(parent, oldChild, isHostElement) {
+    // TODO(thePunderWoman): remove the requireSynchronousElementRemoval flag after the
+    // animations package has been fully deleted post v23.
+    removeChild(parent, oldChild, isHostElement, requireSynchronousElementRemoval) {
+        // Elements using the new `animate.leave` API require synchronous removal and should
+        // skip the rest of the legacy animation behaviors.
+        if (requireSynchronousElementRemoval) {
+            this.delegate.removeChild(parent, oldChild, isHostElement);
+            return;
+        }
         // Prior to the changes in #57203, this method wasn't being called at all by `core` if the child
         // doesn't have a parent. There appears to be some animation-specific downstream logic that
         // depends on the null check happening before the animation engine. This check keeps the old
