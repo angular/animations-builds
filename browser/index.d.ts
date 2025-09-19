@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.0-next.4+sha-56cb093
+ * @license Angular v21.0.0-next.4+sha-40ae5af
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -103,7 +103,7 @@ declare class BaseAnimationRenderer implements Renderer2 {
     createText(value: string): any;
     appendChild(parent: any, newChild: any): void;
     insertBefore(parent: any, newChild: any, refChild: any, isMove?: boolean): void;
-    removeChild(parent: any, oldChild: any, isHostElement?: boolean): void;
+    removeChild(parent: any, oldChild: any, isHostElement?: boolean, requireSynchronousElementRemoval?: boolean): void;
     selectRootElement(selectorOrNode: any, preserveContent?: boolean): any;
     parentNode(node: any): any;
     nextSibling(node: any): any;
