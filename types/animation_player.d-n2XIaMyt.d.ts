@@ -1,9 +1,98 @@
 /**
- * @license Angular v21.0.0-next.5+sha-377d1a0
+ * @license Angular v21.0.0-next.5+sha-fc643c9
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
+/**
+ * Represents a set of CSS styles for use in an animation style as a generic.
+ */
+interface ɵStyleData {
+    [key: string]: string | number;
+}
+/**
+ * Represents a set of CSS styles for use in an animation style as a Map.
+ */
+type ɵStyleDataMap = Map<string, string | number>;
+/**
+ * Represents animation-step timing parameters for an animation step.
+ * @see {@link animate}
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+declare type AnimateTimings = {
+    /**
+     * The full duration of an animation step. A number and optional time unit,
+     * such as "1s" or "10ms" for one second and 10 milliseconds, respectively.
+     * The default unit is milliseconds.
+     */
+    duration: number;
+    /**
+     * The delay in applying an animation step. A number and optional time unit.
+     * The default unit is milliseconds.
+     */
+    delay: number;
+    /**
+     * An easing style that controls how an animations step accelerates
+     * and decelerates during its run time. An easing function such as `cubic-bezier()`,
+     * or one of the following constants:
+     * - `ease-in`
+     * - `ease-out`
+     * - `ease-in-and-out`
+     */
+    easing: string | null;
+};
+/**
+ * @description Options that control animation styling and timing.
+ *
+ * The following animation functions accept `AnimationOptions` data:
+ *
+ * - `transition()`
+ * - `sequence()`
+ * - `group()`
+ * - `query()`
+ * - `animation()`
+ * - `useAnimation()`
+ * - `animateChild()`
+ *
+ * Programmatic animations built using the `AnimationBuilder` service also
+ * make use of `AnimationOptions`.
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+declare interface AnimationOptions {
+    /**
+     * Sets a time-delay for initiating an animation action.
+     * A number and optional time unit, such as "1s" or "10ms" for one second
+     * and 10 milliseconds, respectively.The default unit is milliseconds.
+     * Default value is 0, meaning no delay.
+     */
+    delay?: number | string;
+    /**
+     * A set of developer-defined parameters that modify styling and timing
+     * when an animation action starts. An array of key-value pairs, where the provided value
+     * is used as a default.
+     */
+    params?: {
+        [name: string]: any;
+    };
+}
+/**
+ * Adds duration options to control animation styling and timing for a child animation.
+ *
+ * @see {@link animateChild}
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+declare interface AnimateChildOptions extends AnimationOptions {
+    duration?: number | string;
+}
 /**
  * @description Constants for the categories of parameters that can be defined for animations.
  *
@@ -14,74 +103,73 @@
  *
  * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
-var AnimationMetadataType;
-(function (AnimationMetadataType) {
+declare enum AnimationMetadataType {
     /**
      * Associates a named animation state with a set of CSS styles.
      * See [`state()`](api/animations/state)
      */
-    AnimationMetadataType[AnimationMetadataType["State"] = 0] = "State";
+    State = 0,
     /**
      * Data for a transition from one animation state to another.
      * See `transition()`
      */
-    AnimationMetadataType[AnimationMetadataType["Transition"] = 1] = "Transition";
+    Transition = 1,
     /**
      * Contains a set of animation steps.
      * See `sequence()`
      */
-    AnimationMetadataType[AnimationMetadataType["Sequence"] = 2] = "Sequence";
+    Sequence = 2,
     /**
      * Contains a set of animation steps.
      * See `group()`
      */
-    AnimationMetadataType[AnimationMetadataType["Group"] = 3] = "Group";
+    Group = 3,
     /**
      * Contains an animation step.
      * See `animate()`
      */
-    AnimationMetadataType[AnimationMetadataType["Animate"] = 4] = "Animate";
+    Animate = 4,
     /**
      * Contains a set of animation steps.
      * See `keyframes()`
      */
-    AnimationMetadataType[AnimationMetadataType["Keyframes"] = 5] = "Keyframes";
+    Keyframes = 5,
     /**
      * Contains a set of CSS property-value pairs into a named style.
      * See `style()`
      */
-    AnimationMetadataType[AnimationMetadataType["Style"] = 6] = "Style";
+    Style = 6,
     /**
      * Associates an animation with an entry trigger that can be attached to an element.
      * See `trigger()`
      */
-    AnimationMetadataType[AnimationMetadataType["Trigger"] = 7] = "Trigger";
+    Trigger = 7,
     /**
      * Contains a re-usable animation.
      * See `animation()`
      */
-    AnimationMetadataType[AnimationMetadataType["Reference"] = 8] = "Reference";
+    Reference = 8,
     /**
      * Contains data to use in executing child animations returned by a query.
      * See `animateChild()`
      */
-    AnimationMetadataType[AnimationMetadataType["AnimateChild"] = 9] = "AnimateChild";
+    AnimateChild = 9,
     /**
      * Contains animation parameters for a re-usable animation.
      * See `useAnimation()`
      */
-    AnimationMetadataType[AnimationMetadataType["AnimateRef"] = 10] = "AnimateRef";
+    AnimateRef = 10,
     /**
      * Contains child-animation query data.
      * See `query()`
      */
-    AnimationMetadataType[AnimationMetadataType["Query"] = 11] = "Query";
+    Query = 11,
     /**
      * Contains data for staggering an animation sequence.
      * See `stagger()`
      */
-    AnimationMetadataType[AnimationMetadataType["Stagger"] = 12] = "Stagger";
-})(AnimationMetadataType || (AnimationMetadataType = {}));
+    Stagger = 12
+}
 /**
  * Specifies automatic styling.
  *
@@ -89,7 +177,313 @@ var AnimationMetadataType;
  *
  * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
-const AUTO_STYLE = '*';
+declare const AUTO_STYLE = "*";
+/**
+ * Base for animation data structures.
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+interface AnimationMetadata {
+    type: AnimationMetadataType;
+}
+/**
+ * Contains an animation trigger. Instantiated and returned by the
+ * `trigger()` function.
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+interface AnimationTriggerMetadata extends AnimationMetadata {
+    /**
+     * The trigger name, used to associate it with an element. Unique within the component.
+     */
+    name: string;
+    /**
+     * An animation definition object, containing an array of state and transition declarations.
+     */
+    definitions: AnimationMetadata[];
+    /**
+     * An options object containing a delay and
+     * developer-defined parameters that provide styling defaults and
+     * can be overridden on invocation. Default delay is 0.
+     */
+    options: {
+        params?: {
+            [name: string]: any;
+        };
+    } | null;
+}
+/**
+ * Encapsulates an animation state by associating a state name with a set of CSS styles.
+ * Instantiated and returned by the [`state()`](api/animations/state) function.
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+interface AnimationStateMetadata extends AnimationMetadata {
+    /**
+     * The state name, unique within the component.
+     */
+    name: string;
+    /**
+     *  The CSS styles associated with this state.
+     */
+    styles: AnimationStyleMetadata;
+    /**
+     * An options object containing
+     * developer-defined parameters that provide styling defaults and
+     * can be overridden on invocation.
+     */
+    options?: {
+        params: {
+            [name: string]: any;
+        };
+    };
+}
+/**
+ * Encapsulates an animation transition. Instantiated and returned by the
+ * `transition()` function.
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+interface AnimationTransitionMetadata extends AnimationMetadata {
+    /**
+     * An expression that describes a state change.
+     */
+    expr: string | ((fromState: string, toState: string, element?: any, params?: {
+        [key: string]: any;
+    }) => boolean);
+    /**
+     * One or more animation objects to which this transition applies.
+     */
+    animation: AnimationMetadata | AnimationMetadata[];
+    /**
+     * An options object containing a delay and
+     * developer-defined parameters that provide styling defaults and
+     * can be overridden on invocation. Default delay is 0.
+     */
+    options: AnimationOptions | null;
+}
+/**
+ * Encapsulates a reusable animation, which is a collection of individual animation steps.
+ * Instantiated and returned by the `animation()` function, and
+ * passed to the `useAnimation()` function.
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+interface AnimationReferenceMetadata extends AnimationMetadata {
+    /**
+     *  One or more animation step objects.
+     */
+    animation: AnimationMetadata | AnimationMetadata[];
+    /**
+     * An options object containing a delay and
+     * developer-defined parameters that provide styling defaults and
+     * can be overridden on invocation. Default delay is 0.
+     */
+    options: AnimationOptions | null;
+}
+/**
+ * Encapsulates an animation query. Instantiated and returned by
+ * the `query()` function.
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+interface AnimationQueryMetadata extends AnimationMetadata {
+    /**
+     *  The CSS selector for this query.
+     */
+    selector: string;
+    /**
+     * One or more animation step objects.
+     */
+    animation: AnimationMetadata | AnimationMetadata[];
+    /**
+     * A query options object.
+     */
+    options: AnimationQueryOptions | null;
+}
+/**
+ * Encapsulates a keyframes sequence. Instantiated and returned by
+ * the `keyframes()` function.
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+interface AnimationKeyframesSequenceMetadata extends AnimationMetadata {
+    /**
+     * An array of animation styles.
+     */
+    steps: AnimationStyleMetadata[];
+}
+/**
+ * Encapsulates an animation style. Instantiated and returned by
+ * the `style()` function.
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+interface AnimationStyleMetadata extends AnimationMetadata {
+    /**
+     * A set of CSS style properties.
+     */
+    styles: '*' | {
+        [key: string]: string | number;
+    } | Array<{
+        [key: string]: string | number;
+    } | '*'>;
+    /**
+     * A percentage of the total animate time at which the style is to be applied.
+     */
+    offset: number | null;
+}
+/**
+ * Encapsulates an animation step. Instantiated and returned by
+ * the `animate()` function.
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+interface AnimationAnimateMetadata extends AnimationMetadata {
+    /**
+     * The timing data for the step.
+     */
+    timings: string | number | AnimateTimings;
+    /**
+     * A set of styles used in the step.
+     */
+    styles: AnimationStyleMetadata | AnimationKeyframesSequenceMetadata | null;
+}
+/**
+ * Encapsulates a child animation, that can be run explicitly when the parent is run.
+ * Instantiated and returned by the `animateChild` function.
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+interface AnimationAnimateChildMetadata extends AnimationMetadata {
+    /**
+     * An options object containing a delay and
+     * developer-defined parameters that provide styling defaults and
+     * can be overridden on invocation. Default delay is 0.
+     */
+    options: AnimationOptions | null;
+}
+/**
+ * Encapsulates a reusable animation.
+ * Instantiated and returned by the `useAnimation()` function.
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+interface AnimationAnimateRefMetadata extends AnimationMetadata {
+    /**
+     * An animation reference object.
+     */
+    animation: AnimationReferenceMetadata;
+    /**
+     * An options object containing a delay and
+     * developer-defined parameters that provide styling defaults and
+     * can be overridden on invocation. Default delay is 0.
+     */
+    options: AnimationOptions | null;
+}
+/**
+ * Encapsulates an animation sequence.
+ * Instantiated and returned by the `sequence()` function.
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+interface AnimationSequenceMetadata extends AnimationMetadata {
+    /**
+     *  An array of animation step objects.
+     */
+    steps: AnimationMetadata[];
+    /**
+     * An options object containing a delay and
+     * developer-defined parameters that provide styling defaults and
+     * can be overridden on invocation. Default delay is 0.
+     */
+    options: AnimationOptions | null;
+}
+/**
+ * Encapsulates an animation group.
+ * Instantiated and returned by the `group()` function.
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+interface AnimationGroupMetadata extends AnimationMetadata {
+    /**
+     * One or more animation or style steps that form this group.
+     */
+    steps: AnimationMetadata[];
+    /**
+     * An options object containing a delay and
+     * developer-defined parameters that provide styling defaults and
+     * can be overridden on invocation. Default delay is 0.
+     */
+    options: AnimationOptions | null;
+}
+/**
+ * Encapsulates animation query options.
+ * Passed to the `query()` function.
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+declare interface AnimationQueryOptions extends AnimationOptions {
+    /**
+     * True if this query is optional, false if it is required. Default is false.
+     * A required query throws an error if no elements are retrieved when
+     * the query is executed. An optional query does not.
+     *
+     */
+    optional?: boolean;
+    /**
+     * A maximum total number of results to return from the query.
+     * If negative, results are limited from the end of the query list towards the beginning.
+     * By default, results are not limited.
+     */
+    limit?: number;
+}
+/**
+ * Encapsulates parameters for staggering the start times of a set of animation steps.
+ * Instantiated and returned by the `stagger()` function.
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ **/
+interface AnimationStaggerMetadata extends AnimationMetadata {
+    /**
+     * The timing data for the steps.
+     */
+    timings: string | number;
+    /**
+     * One or more animation steps.
+     */
+    animation: AnimationMetadata | AnimationMetadata[];
+}
 /**
  * Creates a named animation trigger, containing a  list of [`state()`](api/animations/state)
  * and `transition()` entries to be evaluated when the expression
@@ -240,9 +634,7 @@ const AUTO_STYLE = '*';
  *
  * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
-function trigger(name, definitions) {
-    return { type: AnimationMetadataType.Trigger, name, definitions, options: {} };
-}
+declare function trigger(name: string, definitions: AnimationMetadata[]): AnimationTriggerMetadata;
 /**
  * Defines an animation step that combines styling information with timing information.
  *
@@ -303,9 +695,7 @@ function trigger(name, definitions) {
  *
  * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
-function animate(timings, styles = null) {
-    return { type: AnimationMetadataType.Animate, styles, timings };
-}
+declare function animate(timings: string | number, styles?: AnimationStyleMetadata | AnimationKeyframesSequenceMetadata | null): AnimationAnimateMetadata;
 /**
  * @description Defines a list of animation steps to be run in parallel.
  *
@@ -341,9 +731,7 @@ function animate(timings, styles = null) {
  *
  * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
-function group(steps, options = null) {
-    return { type: AnimationMetadataType.Group, steps, options };
-}
+declare function group(steps: AnimationMetadata[], options?: AnimationOptions | null): AnimationGroupMetadata;
 /**
  * Defines a list of animation steps to be run sequentially, one by one.
  *
@@ -379,9 +767,7 @@ function group(steps, options = null) {
  *
  * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  **/
-function sequence(steps, options = null) {
-    return { type: AnimationMetadataType.Sequence, steps, options };
-}
+declare function sequence(steps: AnimationMetadata[], options?: AnimationOptions | null): AnimationSequenceMetadata;
 /**
  * Declares a key/value object containing CSS properties/styles that
  * can then be used for an animation [`state`](api/animations/state), within an animation
@@ -423,9 +809,11 @@ function sequence(steps, options = null) {
  *
  * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  **/
-function style(tokens) {
-    return { type: AnimationMetadataType.Style, styles: tokens, offset: null };
-}
+declare function style(tokens: '*' | {
+    [key: string]: string | number;
+} | Array<'*' | {
+    [key: string]: string | number;
+}>): AnimationStyleMetadata;
 /**
  * Declares an animation state within a trigger attached to an element.
  *
@@ -457,9 +845,11 @@ function style(tokens) {
  *
  * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  **/
-function state(name, styles, options) {
-    return { type: AnimationMetadataType.State, name, styles, options };
-}
+declare function state(name: string, styles: AnimationStyleMetadata, options?: {
+    params: {
+        [name: string]: any;
+    };
+}): AnimationStateMetadata;
 /**
  * Defines a set of animation styles, associating each style with an optional `offset` value.
  *
@@ -507,9 +897,7 @@ function state(name, styles, options) {
  *
  * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
-function keyframes(steps) {
-    return { type: AnimationMetadataType.Keyframes, steps };
-}
+declare function keyframes(steps: AnimationStyleMetadata[]): AnimationKeyframesSequenceMetadata;
 /**
  * Declares an animation transition which is played when a certain specified condition is met.
  *
@@ -658,9 +1046,9 @@ function keyframes(steps) {
  *
  * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  **/
-function transition(stateChangeExpr, steps, options = null) {
-    return { type: AnimationMetadataType.Transition, expr: stateChangeExpr, animation: steps, options };
-}
+declare function transition(stateChangeExpr: string | ((fromState: string, toState: string, element?: any, params?: {
+    [key: string]: any;
+}) => boolean), steps: AnimationMetadata | AnimationMetadata[], options?: AnimationOptions | null): AnimationTransitionMetadata;
 /**
  * Produces a reusable animation that can be invoked in another animation or sequence,
  * by calling the `useAnimation()` function.
@@ -708,9 +1096,7 @@ function transition(stateChangeExpr, steps, options = null) {
  *
  * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
-function animation(steps, options = null) {
-    return { type: AnimationMetadataType.Reference, animation: steps, options };
-}
+declare function animation(steps: AnimationMetadata | AnimationMetadata[], options?: AnimationOptions | null): AnimationReferenceMetadata;
 /**
  * Executes a queried inner animation element within an animation sequence.
  *
@@ -732,9 +1118,7 @@ function animation(steps, options = null) {
  *
  * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
-function animateChild(options = null) {
-    return { type: AnimationMetadataType.AnimateChild, options };
-}
+declare function animateChild(options?: AnimateChildOptions | null): AnimationAnimateChildMetadata;
 /**
  * Starts a reusable animation that is created using the `animation()` function.
  *
@@ -747,9 +1131,7 @@ function animateChild(options = null) {
  *
  * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
-function useAnimation(animation, options = null) {
-    return { type: AnimationMetadataType.AnimateRef, animation, options };
-}
+declare function useAnimation(animation: AnimationReferenceMetadata, options?: AnimationOptions | null): AnimationAnimateRefMetadata;
 /**
  * Finds one or more inner elements within the current element that is
  * being animated within a sequence. Use with `animate()`.
@@ -872,9 +1254,7 @@ function useAnimation(animation, options = null) {
  *
  * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
-function query(selector, animation, options = null) {
-    return { type: AnimationMetadataType.Query, selector, animation, options };
-}
+declare function query(selector: string, animation: AnimationMetadata | AnimationMetadata[], options?: AnimationQueryOptions | null): AnimationQueryMetadata;
 /**
  * Use within an animation `query()` call to issue a timing gap after
  * each queried item is animated.
@@ -957,10 +1337,100 @@ function query(selector, animation, options = null) {
  *
  * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
-function stagger(timings, animation) {
-    return { type: AnimationMetadataType.Stagger, timings, animation };
-}
+declare function stagger(timings: string | number, animation: AnimationMetadata | AnimationMetadata[]): AnimationStaggerMetadata;
 
+/**
+ * Provides programmatic control of a reusable animation sequence,
+ * built using the <code>[AnimationBuilder.build](api/animations/AnimationBuilder#build)()</code>
+ * method which returns an `AnimationFactory`, whose
+ * <code>[create](api/animations/AnimationFactory#create)()</code> method instantiates and
+ * initializes this interface.
+ *
+ * @see {@link AnimationBuilder}
+ * @see {@link AnimationFactory}
+ * @see {@link animate}
+ *
+ * @publicApi
+ *
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ */
+interface AnimationPlayer {
+    /**
+     * Provides a callback to invoke when the animation finishes.
+     * @param fn The callback function.
+     * @see {@link #finish}
+     */
+    onDone(fn: () => void): void;
+    /**
+     * Provides a callback to invoke when the animation starts.
+     * @param fn The callback function.
+     * @see {@link #play}
+     */
+    onStart(fn: () => void): void;
+    /**
+     * Provides a callback to invoke after the animation is destroyed.
+     * @param fn The callback function.
+     * @see {@link #destroy}
+     * @see {@link #beforeDestroy}
+     */
+    onDestroy(fn: () => void): void;
+    /**
+     * Initializes the animation.
+     */
+    init(): void;
+    /**
+     * Reports whether the animation has started.
+     * @returns True if the animation has started, false otherwise.
+     */
+    hasStarted(): boolean;
+    /**
+     * Runs the animation, invoking the `onStart()` callback.
+     */
+    play(): void;
+    /**
+     * Pauses the animation.
+     */
+    pause(): void;
+    /**
+     * Restarts the paused animation.
+     */
+    restart(): void;
+    /**
+     * Ends the animation, invoking the `onDone()` callback.
+     */
+    finish(): void;
+    /**
+     * Destroys the animation, after invoking the `beforeDestroy()` callback.
+     * Calls the `onDestroy()` callback when destruction is completed.
+     */
+    destroy(): void;
+    /**
+     * Resets the animation to its initial state.
+     */
+    reset(): void;
+    /**
+     * Sets the position of the animation.
+     * @param position A fractional value, representing the progress through the animation.
+     */
+    setPosition(position: number): void;
+    /**
+     * Reports the current position of the animation.
+     * @returns A fractional value, representing the progress through the animation.
+     */
+    getPosition(): number;
+    /**
+     * The parent of this player, if any.
+     */
+    parentPlayer: AnimationPlayer | null;
+    /**
+     * The total run time of the animation, in milliseconds.
+     */
+    readonly totalTime: number;
+    /**
+     * Provides a callback to invoke before the animation is destroyed.
+     */
+    beforeDestroy?: () => any;
+}
 /**
  * An empty programmatic controller for reusable animations.
  * Used internally when animations are disabled, to avoid
@@ -973,236 +1443,35 @@ function stagger(timings, animation) {
  *
  * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
  */
-class NoopAnimationPlayer {
-    _onDoneFns = [];
-    _onStartFns = [];
-    _onDestroyFns = [];
-    _originalOnDoneFns = [];
-    _originalOnStartFns = [];
-    _started = false;
-    _destroyed = false;
-    _finished = false;
-    _position = 0;
-    parentPlayer = null;
-    totalTime;
-    constructor(duration = 0, delay = 0) {
-        this.totalTime = duration + delay;
-    }
-    _onFinish() {
-        if (!this._finished) {
-            this._finished = true;
-            this._onDoneFns.forEach((fn) => fn());
-            this._onDoneFns = [];
-        }
-    }
-    onStart(fn) {
-        this._originalOnStartFns.push(fn);
-        this._onStartFns.push(fn);
-    }
-    onDone(fn) {
-        this._originalOnDoneFns.push(fn);
-        this._onDoneFns.push(fn);
-    }
-    onDestroy(fn) {
-        this._onDestroyFns.push(fn);
-    }
-    hasStarted() {
-        return this._started;
-    }
-    init() { }
-    play() {
-        if (!this.hasStarted()) {
-            this._onStart();
-            this.triggerMicrotask();
-        }
-        this._started = true;
-    }
-    /** @internal */
-    triggerMicrotask() {
-        queueMicrotask(() => this._onFinish());
-    }
-    _onStart() {
-        this._onStartFns.forEach((fn) => fn());
-        this._onStartFns = [];
-    }
-    pause() { }
-    restart() { }
-    finish() {
-        this._onFinish();
-    }
-    destroy() {
-        if (!this._destroyed) {
-            this._destroyed = true;
-            if (!this.hasStarted()) {
-                this._onStart();
-            }
-            this.finish();
-            this._onDestroyFns.forEach((fn) => fn());
-            this._onDestroyFns = [];
-        }
-    }
-    reset() {
-        this._started = false;
-        this._finished = false;
-        this._onStartFns = this._originalOnStartFns;
-        this._onDoneFns = this._originalOnDoneFns;
-    }
-    setPosition(position) {
-        this._position = this.totalTime ? position * this.totalTime : 1;
-    }
-    getPosition() {
-        return this.totalTime ? this._position / this.totalTime : 1;
-    }
-    /** @internal */
-    triggerCallback(phaseName) {
-        const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
-        methods.forEach((fn) => fn());
-        methods.length = 0;
-    }
+declare class NoopAnimationPlayer implements AnimationPlayer {
+    private _onDoneFns;
+    private _onStartFns;
+    private _onDestroyFns;
+    private _originalOnDoneFns;
+    private _originalOnStartFns;
+    private _started;
+    private _destroyed;
+    private _finished;
+    private _position;
+    parentPlayer: AnimationPlayer | null;
+    readonly totalTime: number;
+    constructor(duration?: number, delay?: number);
+    private _onFinish;
+    onStart(fn: () => void): void;
+    onDone(fn: () => void): void;
+    onDestroy(fn: () => void): void;
+    hasStarted(): boolean;
+    init(): void;
+    play(): void;
+    private _onStart;
+    pause(): void;
+    restart(): void;
+    finish(): void;
+    destroy(): void;
+    reset(): void;
+    setPosition(position: number): void;
+    getPosition(): number;
 }
 
-/**
- * A programmatic controller for a group of reusable animations.
- * Used internally to control animations.
- *
- * @see {@link AnimationPlayer}
- * @see {@link animations/group group}
- *
- */
-class AnimationGroupPlayer {
-    _onDoneFns = [];
-    _onStartFns = [];
-    _finished = false;
-    _started = false;
-    _destroyed = false;
-    _onDestroyFns = [];
-    parentPlayer = null;
-    totalTime = 0;
-    players;
-    constructor(_players) {
-        this.players = _players;
-        let doneCount = 0;
-        let destroyCount = 0;
-        let startCount = 0;
-        const total = this.players.length;
-        if (total == 0) {
-            queueMicrotask(() => this._onFinish());
-        }
-        else {
-            this.players.forEach((player) => {
-                player.onDone(() => {
-                    if (++doneCount == total) {
-                        this._onFinish();
-                    }
-                });
-                player.onDestroy(() => {
-                    if (++destroyCount == total) {
-                        this._onDestroy();
-                    }
-                });
-                player.onStart(() => {
-                    if (++startCount == total) {
-                        this._onStart();
-                    }
-                });
-            });
-        }
-        this.totalTime = this.players.reduce((time, player) => Math.max(time, player.totalTime), 0);
-    }
-    _onFinish() {
-        if (!this._finished) {
-            this._finished = true;
-            this._onDoneFns.forEach((fn) => fn());
-            this._onDoneFns = [];
-        }
-    }
-    init() {
-        this.players.forEach((player) => player.init());
-    }
-    onStart(fn) {
-        this._onStartFns.push(fn);
-    }
-    _onStart() {
-        if (!this.hasStarted()) {
-            this._started = true;
-            this._onStartFns.forEach((fn) => fn());
-            this._onStartFns = [];
-        }
-    }
-    onDone(fn) {
-        this._onDoneFns.push(fn);
-    }
-    onDestroy(fn) {
-        this._onDestroyFns.push(fn);
-    }
-    hasStarted() {
-        return this._started;
-    }
-    play() {
-        if (!this.parentPlayer) {
-            this.init();
-        }
-        this._onStart();
-        this.players.forEach((player) => player.play());
-    }
-    pause() {
-        this.players.forEach((player) => player.pause());
-    }
-    restart() {
-        this.players.forEach((player) => player.restart());
-    }
-    finish() {
-        this._onFinish();
-        this.players.forEach((player) => player.finish());
-    }
-    destroy() {
-        this._onDestroy();
-    }
-    _onDestroy() {
-        if (!this._destroyed) {
-            this._destroyed = true;
-            this._onFinish();
-            this.players.forEach((player) => player.destroy());
-            this._onDestroyFns.forEach((fn) => fn());
-            this._onDestroyFns = [];
-        }
-    }
-    reset() {
-        this.players.forEach((player) => player.reset());
-        this._destroyed = false;
-        this._finished = false;
-        this._started = false;
-    }
-    setPosition(p) {
-        const timeAtPosition = p * this.totalTime;
-        this.players.forEach((player) => {
-            const position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
-            player.setPosition(position);
-        });
-    }
-    getPosition() {
-        const longestPlayer = this.players.reduce((longestSoFar, player) => {
-            const newPlayerIsLongest = longestSoFar === null || player.totalTime > longestSoFar.totalTime;
-            return newPlayerIsLongest ? player : longestSoFar;
-        }, null);
-        return longestPlayer != null ? longestPlayer.getPosition() : 0;
-    }
-    beforeDestroy() {
-        this.players.forEach((player) => {
-            if (player.beforeDestroy) {
-                player.beforeDestroy();
-            }
-        });
-    }
-    /** @internal */
-    triggerCallback(phaseName) {
-        const methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
-        methods.forEach((fn) => fn());
-        methods.length = 0;
-    }
-}
-
-const ɵPRE_STYLE = '!';
-
-export { AUTO_STYLE, AnimationGroupPlayer, AnimationMetadataType, NoopAnimationPlayer, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation, ɵPRE_STYLE };
-//# sourceMappingURL=private_export.mjs.map
+export { AUTO_STYLE, AnimationMetadataType, NoopAnimationPlayer, animate, animateChild, animation, group, keyframes, query, sequence, stagger, state, style, transition, trigger, useAnimation };
+export type { AnimateChildOptions, AnimateTimings, AnimationAnimateChildMetadata, AnimationAnimateMetadata, AnimationAnimateRefMetadata, AnimationGroupMetadata, AnimationKeyframesSequenceMetadata, AnimationMetadata, AnimationOptions, AnimationPlayer, AnimationQueryMetadata, AnimationQueryOptions, AnimationReferenceMetadata, AnimationSequenceMetadata, AnimationStaggerMetadata, AnimationStateMetadata, AnimationStyleMetadata, AnimationTransitionMetadata, AnimationTriggerMetadata, ɵStyleData, ɵStyleDataMap };

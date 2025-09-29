@@ -1,11 +1,11 @@
 /**
- * @license Angular v21.0.0-next.5+sha-377d1a0
+ * @license Angular v21.0.0-next.5+sha-fc643c9
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { validateStyleProperty, camelCaseToDashCase, validateWebAnimatableStyleProperty, containsElement, getParentElement, invokeQuery, normalizeKeyframes$1 as normalizeKeyframes, allowPreviousPlayerStylesMerge } from '../util.mjs';
-import { NoopAnimationPlayer, AUTO_STYLE } from '../private_export.mjs';
+import { validateStyleProperty, camelCaseToDashCase, validateWebAnimatableStyleProperty, containsElement, getParentElement, invokeQuery, normalizeKeyframes$1 as normalizeKeyframes, allowPreviousPlayerStylesMerge } from '../util-DSsRHubN.mjs';
+import { NoopAnimationPlayer, AUTO_STYLE } from '../private_export-BtcYkoRi.mjs';
 import '@angular/core';
 
 /**

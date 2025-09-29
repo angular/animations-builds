@@ -1,11 +1,11 @@
 /**
- * @license Angular v21.0.0-next.5+sha-377d1a0
+ * @license Angular v21.0.0-next.5+sha-fc643c9
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { AnimationPlayer, ɵStyleDataMap as _StyleDataMap, NoopAnimationPlayer } from '../../animation_player.js';
-import { AnimationDriver } from '../../animation_driver.js';
+import { AnimationPlayer, ɵStyleDataMap as _StyleDataMap, NoopAnimationPlayer } from '../animation_player.d-n2XIaMyt.js';
+import { AnimationDriver } from '../animation_driver.d-D5anJ0sa.js';
 import '@angular/core';
 
 /**
