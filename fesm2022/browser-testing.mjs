@@ -1,11 +1,11 @@
 /**
- * @license Angular v21.0.0-next.5+sha-51a0b59
+ * @license Angular v21.0.0-next.5+sha-2f6caef
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { validateStyleProperty, camelCaseToDashCase, validateWebAnimatableStyleProperty, containsElement, getParentElement, invokeQuery, normalizeKeyframes$1 as normalizeKeyframes, allowPreviousPlayerStylesMerge } from '../util-DSsRHubN.mjs';
-import { NoopAnimationPlayer, AUTO_STYLE } from '../private_export-BtcYkoRi.mjs';
+import { validateStyleProperty, camelCaseToDashCase, validateWebAnimatableStyleProperty, containsElement, getParentElement, invokeQuery, normalizeKeyframes$1 as normalizeKeyframes, allowPreviousPlayerStylesMerge } from './_util-chunk.mjs';
+import { NoopAnimationPlayer, AUTO_STYLE } from './_private_export-chunk.mjs';
 import '@angular/core';
 
 /**
@@ -127,4 +127,4 @@ class MockAnimationPlayer extends NoopAnimationPlayer {
 }
 
 export { MockAnimationDriver, MockAnimationPlayer };
-//# sourceMappingURL=testing.mjs.map
+//# sourceMappingURL=browser-testing.mjs.map

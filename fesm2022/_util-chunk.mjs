@@ -1,10 +1,10 @@
 /**
- * @license Angular v21.0.0-next.5+sha-51a0b59
+ * @license Angular v21.0.0-next.5+sha-2f6caef
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { AnimationGroupPlayer, NoopAnimationPlayer, AUTO_STYLE, ɵPRE_STYLE as _PRE_STYLE, AnimationMetadataType, sequence } from './private_export-BtcYkoRi.mjs';
+import { AnimationGroupPlayer, NoopAnimationPlayer, AUTO_STYLE, ɵPRE_STYLE as _PRE_STYLE, AnimationMetadataType, sequence } from './_private_export-chunk.mjs';
 import { ɵRuntimeError as _RuntimeError } from '@angular/core';
 
 const LINE_START = '\n - ';
@@ -694,4 +694,4 @@ function computeStyle(element, prop) {
 }
 
 export { ENTER_CLASSNAME, LEAVE_CLASSNAME, NG_ANIMATING_CLASSNAME, NG_ANIMATING_SELECTOR, NG_TRIGGER_CLASSNAME, NG_TRIGGER_SELECTOR, SUBSTITUTION_EXPR_START, allowPreviousPlayerStylesMerge, balancePreviousStylesIntoKeyframes, buildingFailed, camelCaseToDashCase, computeStyle, containsElement, createAnimationFailed, dashCaseToCamelCase, eraseStyles, extractStyleParams, getOrSetDefaultValue, getParentElement, interpolateParams, invalidCssUnitValue, invalidDefinition, invalidExpression, invalidKeyframes, invalidOffset, invalidParallelAnimation, invalidQuery, invalidStagger, invalidState, invalidStyleValue, invalidTransitionAlias, invalidTrigger, invokeQuery, keyframeOffsetsOutOfOrder, keyframesMissingOffsets, listenOnPlayer, makeAnimationEvent, missingEvent, missingOrDestroyedAnimation, missingPlayer, missingTrigger, normalizeAnimationEntry, normalizeKeyframes$1 as normalizeKeyframes, normalizeKeyframes as normalizeKeyframes$1, normalizeStyles, optimizeGroupPlayer, parseTimelineCommand, registerFailed, resolveTiming, resolveTimingValue, setStyles, transitionFailed, triggerBuildFailed, triggerTransitionsFailed, unregisteredTrigger, unsupportedTriggerEvent, validateStyleParams, validateStyleProperty, validateWebAnimatableStyleProperty, validationFailed, visitDslNode };
-//# sourceMappingURL=util-DSsRHubN.mjs.map
+//# sourceMappingURL=_util-chunk.mjs.map
