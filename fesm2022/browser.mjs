@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.0-next.8+sha-fd9af2a
+ * @license Angular v21.0.0-next.8+sha-70332b0
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -55,10 +55,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.0.0-next.8+sha-fd9af2a", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "21.0.0-next.8+sha-fd9af2a", ngImport: i0, type: NoopAnimationDriver });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.0.0-next.8+sha-70332b0", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "21.0.0-next.8+sha-70332b0", ngImport: i0, type: NoopAnimationDriver });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.0.0-next.8+sha-fd9af2a", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.0.0-next.8+sha-70332b0", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -3976,7 +3976,7 @@ class BaseAnimationRenderer {
         // Elements using the new `animate.leave` API require synchronous removal and should
         // skip the rest of the legacy animation behaviors.
         if (requireSynchronousElementRemoval) {
-            this.delegate.removeChild(parent, oldChild, isHostElement);
+            this.delegate.removeChild(parent, oldChild, isHostElement, requireSynchronousElementRemoval);
             return;
         }
         // Prior to the changes in #57203, this method wasn't being called at all by `core` if the child
