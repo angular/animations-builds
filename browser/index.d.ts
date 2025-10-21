@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.3.6+sha-50e2c54
+ * @license Angular v20.3.6+sha-bd38cd4
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -203,7 +203,7 @@ declare class WebAnimationsPlayer implements AnimationPlayer {
     private _finalKeyframe?;
     private _originalOnDoneFns;
     private _originalOnStartFns;
-    readonly domPlayer: Animation;
+    domPlayer: Animation | null;
     time: number;
     parentPlayer: AnimationPlayer | null;
     currentSnapshot: _StyleDataMap;

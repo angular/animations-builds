@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.3.6+sha-50e2c54
+ * @license Angular v20.3.6+sha-bd38cd4
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -55,10 +55,10 @@ class NoopAnimationDriver {
     animate(element, keyframes, duration, delay, easing, previousPlayers = [], scrubberAccessRequested) {
         return new NoopAnimationPlayer(duration, delay);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.6+sha-50e2c54", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.6+sha-50e2c54", ngImport: i0, type: NoopAnimationDriver });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.6+sha-bd38cd4", ngImport: i0, type: NoopAnimationDriver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.6+sha-bd38cd4", ngImport: i0, type: NoopAnimationDriver });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.6+sha-50e2c54", ngImport: i0, type: NoopAnimationDriver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.6+sha-bd38cd4", ngImport: i0, type: NoopAnimationDriver, decorators: [{
             type: Injectable
         }] });
 /**
@@ -3639,8 +3639,7 @@ class WebAnimationsPlayer {
     // (since the _onStartFns and _onDoneFns get deleted after they are called)
     _originalOnDoneFns = [];
     _originalOnStartFns = [];
-    // using non-null assertion because it's re(set) by init();
-    domPlayer;
+    domPlayer = null;
     time = 0;
     parentPlayer = null;
     currentSnapshot = new Map();
@@ -3661,25 +3660,32 @@ class WebAnimationsPlayer {
         }
     }
     init() {
-        this._buildPlayer();
+        if (!this._buildPlayer()) {
+            return;
+        }
         this._preparePlayerBeforeStart();
     }
     _buildPlayer() {
         if (this._initialized)
-            return;
+            return this.domPlayer;
         this._initialized = true;
         const keyframes = this.keyframes;
-        // @ts-expect-error overwriting a readonly property
-        this.domPlayer = this._triggerWebAnimation(this.element, keyframes, this.options);
+        const animation = this._triggerWebAnimation(this.element, keyframes, this.options);
+        if (!animation) {
+            this._onFinish();
+            return null;
+        }
+        this.domPlayer = animation;
         this._finalKeyframe = keyframes.length ? keyframes[keyframes.length - 1] : new Map();
         const onFinish = () => this._onFinish();
-        this.domPlayer.addEventListener('finish', onFinish);
+        animation.addEventListener('finish', onFinish);
         this.onDestroy(() => {
             // We must remove the `finish` event listener once an animation has completed all its
             // iterations. This action is necessary to prevent a memory leak since the listener captures
             // `this`, creating a closure that prevents `this` from being garbage collected.
-            this.domPlayer.removeEventListener('finish', onFinish);
+            animation.removeEventListener('finish', onFinish);
         });
+        return animation;
     }
     _preparePlayerBeforeStart() {
         // this is required so that the player doesn't start to animate right away
@@ -3687,7 +3693,7 @@ class WebAnimationsPlayer {
             this._resetDomPlayerState();
         }
         else {
-            this.domPlayer.pause();
+            this.domPlayer?.pause();
         }
     }
     _convertKeyframesToObject(keyframes) {
@@ -3699,7 +3705,15 @@ class WebAnimationsPlayer {
     }
     /** @internal */
     _triggerWebAnimation(element, keyframes, options) {
-        return element.animate(this._convertKeyframesToObject(keyframes), options);
+        const keyframesObject = this._convertKeyframesToObject(keyframes);
+        // Account for `Element.animate` throwing an exception (Firefox) or returning null (Chromium) in certain
+        // conditions. See https://github.com/angular/angular/issues/64486
+        try {
+            return element.animate(keyframesObject, options);
+        }
+        catch {
+            return null;
+        }
     }
     onStart(fn) {
         this._originalOnStartFns.push(fn);
@@ -3713,7 +3727,10 @@ class WebAnimationsPlayer {
         this._onDestroyFns.push(fn);
     }
     play() {
-        this._buildPlayer();
+        const player = this._buildPlayer();
+        if (!player) {
+            return;
+        }
         if (!this.hasStarted()) {
             this._onStartFns.forEach((fn) => fn());
             this._onStartFns = [];
@@ -3722,14 +3739,16 @@ class WebAnimationsPlayer {
                 this._specialStyles.start();
             }
         }
-        this.domPlayer.play();
+        player.play();
     }
     pause() {
         this.init();
-        this.domPlayer.pause();
+        this.domPlayer?.pause();
     }
     finish() {
         this.init();
+        if (!this.domPlayer)
+            return;
         if (this._specialStyles) {
             this._specialStyles.finish();
         }
@@ -3745,9 +3764,7 @@ class WebAnimationsPlayer {
         this._onDoneFns = this._originalOnDoneFns;
     }
     _resetDomPlayerState() {
-        if (this.domPlayer) {
-            this.domPlayer.cancel();
-        }
+        this.domPlayer?.cancel();
     }
     restart() {
         this.reset();
@@ -3769,12 +3786,17 @@ class WebAnimationsPlayer {
         }
     }
     setPosition(p) {
-        if (this.domPlayer === undefined) {
+        if (!this.domPlayer) {
             this.init();
         }
-        this.domPlayer.currentTime = p * this.time;
+        if (this.domPlayer) {
+            this.domPlayer.currentTime = p * this.time;
+        }
     }
     getPosition() {
+        if (!this.domPlayer) {
+            return this._initialized ? 1 : 0;
+        }
         // tsc is complaining with TS2362 without the conversion to number
         return +(this.domPlayer.currentTime ?? 0) / this.time;
     }
