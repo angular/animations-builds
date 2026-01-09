@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.2.0-next.0+sha-99db2e9
+ * @license Angular v21.2.0-next.0+sha-5c16caa
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -12,7 +12,7 @@ export { AUTO_STYLE, AnimationMetadataType, NoopAnimationPlayer, animate, animat
 class AnimationBuilder {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-99db2e9",
+    version: "21.2.0-next.0+sha-5c16caa",
     ngImport: i0,
     type: AnimationBuilder,
     deps: [],
@@ -20,7 +20,7 @@ class AnimationBuilder {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-99db2e9",
+    version: "21.2.0-next.0+sha-5c16caa",
     ngImport: i0,
     type: AnimationBuilder,
     providedIn: 'root',
@@ -29,7 +29,7 @@ class AnimationBuilder {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-99db2e9",
+  version: "21.2.0-next.0+sha-5c16caa",
   ngImport: i0,
   type: AnimationBuilder,
   decorators: [{
@@ -71,7 +71,7 @@ class BrowserAnimationBuilder extends AnimationBuilder {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-99db2e9",
+    version: "21.2.0-next.0+sha-5c16caa",
     ngImport: i0,
     type: BrowserAnimationBuilder,
     deps: [{
@@ -83,7 +83,7 @@ class BrowserAnimationBuilder extends AnimationBuilder {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-99db2e9",
+    version: "21.2.0-next.0+sha-5c16caa",
     ngImport: i0,
     type: BrowserAnimationBuilder,
     providedIn: 'root'
@@ -91,7 +91,7 @@ class BrowserAnimationBuilder extends AnimationBuilder {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-99db2e9",
+  version: "21.2.0-next.0+sha-5c16caa",
   ngImport: i0,
   type: BrowserAnimationBuilder,
   decorators: [{
