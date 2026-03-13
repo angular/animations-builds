@@ -1,18 +1,18 @@
 /**
- * @license Angular v21.2.4+sha-334ae10
+ * @license Angular v21.2.4+sha-21cab20
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
 
-import * as i0 from '@angular/core';
-import { inject, Injectable, ANIMATION_MODULE_TYPE, ɵRuntimeError as _RuntimeError, DOCUMENT, Inject, ViewEncapsulation } from '@angular/core';
 import { sequence } from './_private_export-chunk.mjs';
 export { AUTO_STYLE, AnimationMetadataType, NoopAnimationPlayer, animate, animateChild, animation, group, keyframes, query, stagger, state, style, transition, trigger, useAnimation, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE } from './_private_export-chunk.mjs';
+import * as i0 from '@angular/core';
+import { inject, ANIMATION_MODULE_TYPE, ViewEncapsulation, ɵRuntimeError as _RuntimeError, DOCUMENT, Injectable, Inject } from '@angular/core';
 
 class AnimationBuilder {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.4+sha-334ae10",
+    version: "21.2.4+sha-21cab20",
     ngImport: i0,
     type: AnimationBuilder,
     deps: [],
@@ -20,7 +20,7 @@ class AnimationBuilder {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.4+sha-334ae10",
+    version: "21.2.4+sha-21cab20",
     ngImport: i0,
     type: AnimationBuilder,
     providedIn: 'root',
@@ -29,7 +29,7 @@ class AnimationBuilder {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.4+sha-334ae10",
+  version: "21.2.4+sha-21cab20",
   ngImport: i0,
   type: AnimationBuilder,
   decorators: [{
@@ -71,7 +71,7 @@ class BrowserAnimationBuilder extends AnimationBuilder {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.4+sha-334ae10",
+    version: "21.2.4+sha-21cab20",
     ngImport: i0,
     type: BrowserAnimationBuilder,
     deps: [{
@@ -83,7 +83,7 @@ class BrowserAnimationBuilder extends AnimationBuilder {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.4+sha-334ae10",
+    version: "21.2.4+sha-21cab20",
     ngImport: i0,
     type: BrowserAnimationBuilder,
     providedIn: 'root'
@@ -91,7 +91,7 @@ class BrowserAnimationBuilder extends AnimationBuilder {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.4+sha-334ae10",
+  version: "21.2.4+sha-21cab20",
   ngImport: i0,
   type: BrowserAnimationBuilder,
   decorators: [{
