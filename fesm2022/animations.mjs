@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.1.0-next.0+sha-7b4791f
+ * @license Angular v22.1.0-next.0+sha-c72ebcb
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -7,36 +7,34 @@
 import { sequence } from './_private_export-chunk.mjs';
 export { AUTO_STYLE, AnimationMetadataType, NoopAnimationPlayer, animate, animateChild, animation, group, keyframes, query, stagger, state, style, transition, trigger, useAnimation, AnimationGroupPlayer as ɵAnimationGroupPlayer, ɵPRE_STYLE } from './_private_export-chunk.mjs';
 import * as i0 from '@angular/core';
-import { inject, ANIMATION_MODULE_TYPE, ViewEncapsulation, ɵRuntimeError as _RuntimeError, DOCUMENT, Injectable, Inject } from '@angular/core';
+import { inject, ANIMATION_MODULE_TYPE, ViewEncapsulation, ɵRuntimeError as _RuntimeError, DOCUMENT, Service, Inject, Injectable } from '@angular/core';
 
 class AnimationBuilder {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.1.0-next.0+sha-7b4791f",
+    version: "22.1.0-next.0+sha-c72ebcb",
     ngImport: i0,
     type: AnimationBuilder,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
-    version: "22.1.0-next.0+sha-7b4791f",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
+    version: "22.1.0-next.0+sha-c72ebcb",
     ngImport: i0,
     type: AnimationBuilder,
-    providedIn: 'root',
-    useFactory: () => inject(BrowserAnimationBuilder)
+    factory: () => inject(BrowserAnimationBuilder)
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.1.0-next.0+sha-7b4791f",
+  version: "22.1.0-next.0+sha-c72ebcb",
   ngImport: i0,
   type: AnimationBuilder,
   decorators: [{
-    type: Injectable,
+    type: Service,
     args: [{
-      providedIn: 'root',
-      useFactory: () => inject(BrowserAnimationBuilder)
+      factory: () => inject(BrowserAnimationBuilder)
     }]
   }]
 });
@@ -71,7 +69,7 @@ class BrowserAnimationBuilder extends AnimationBuilder {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.1.0-next.0+sha-7b4791f",
+    version: "22.1.0-next.0+sha-c72ebcb",
     ngImport: i0,
     type: BrowserAnimationBuilder,
     deps: [{
@@ -83,7 +81,7 @@ class BrowserAnimationBuilder extends AnimationBuilder {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.1.0-next.0+sha-7b4791f",
+    version: "22.1.0-next.0+sha-c72ebcb",
     ngImport: i0,
     type: BrowserAnimationBuilder,
     providedIn: 'root'
@@ -91,7 +89,7 @@ class BrowserAnimationBuilder extends AnimationBuilder {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.1.0-next.0+sha-7b4791f",
+  version: "22.1.0-next.0+sha-c72ebcb",
   ngImport: i0,
   type: BrowserAnimationBuilder,
   decorators: [{
