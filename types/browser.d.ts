@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.1.0+sha-aa6d318
+ * @license Angular v22.1.0+sha-3d0067a
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -91,7 +91,7 @@ declare class BaseAnimationRenderer implements Renderer2 {
     delegate: Renderer2;
     engine: AnimationEngine;
     private _onDestroy?;
-    readonly ɵtype: _AnimationRendererType.Regular;
+    readonly ɵtype = _AnimationRendererType.Regular;
     constructor(namespaceId: string, delegate: Renderer2, engine: AnimationEngine, _onDestroy?: (() => void) | undefined);
     get data(): {
         [key: string]: any;
