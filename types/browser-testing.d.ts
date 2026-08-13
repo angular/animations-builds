@@ -1,11 +1,11 @@
 /**
- * @license Angular v22.2.0-next.1+sha-c9990c4
+ * @license Angular v22.2.0-next.1+sha-6f848db
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
 
-import { AnimationPlayer, ɵStyleDataMap as _StyleDataMap, NoopAnimationPlayer } from './_animation_player-chunk.js';
-import { AnimationDriver } from './_animation_driver-chunk.js';
+import { AnimationPlayer, ɵStyleDataMap as _StyleDataMap, NoopAnimationPlayer } from './animations.js';
+import { AnimationDriver } from './browser.js';
 import '@angular/core';
 
 /**
