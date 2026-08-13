@@ -1,12 +1,12 @@
 /**
- * @license Angular v22.1.1+sha-e9660b1
+ * @license Angular v22.1.1+sha-910f391
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
 
 import { AnimationDriver } from './_animation_driver-chunk.js';
 export { NoopAnimationDriver } from './_animation_driver-chunk.js';
-import { AnimationTriggerMetadata, AnimationPlayer, ɵStyleDataMap as _StyleDataMap, AnimationMetadata, AnimationOptions, ɵStyleData as _StyleData } from './_animation_player-chunk.js';
+import { AnimationTriggerMetadata, AnimationPlayer, ɵStyleDataMap as _StyleDataMap, AnimationMetadata, AnimationOptions, ɵStyleData as _StyleData } from './animations.js';
 import { Renderer2, ɵAnimationRendererType as _AnimationRendererType, RendererStyleFlags2, ListenerOptions, RendererFactory2, NgZone, RendererType2 } from '@angular/core';
 
 declare abstract class AnimationStyleNormalizer {
