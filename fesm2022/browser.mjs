@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.0-next.2+sha-1c2b057
+ * @license Angular v22.2.0-next.2+sha-38d0932
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -30,7 +30,7 @@ class NoopAnimationDriver {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-1c2b057",
+    version: "22.2.0-next.2+sha-38d0932",
     ngImport: i0,
     type: NoopAnimationDriver,
     deps: [],
@@ -38,14 +38,14 @@ class NoopAnimationDriver {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-1c2b057",
+    version: "22.2.0-next.2+sha-38d0932",
     ngImport: i0,
     type: NoopAnimationDriver
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-1c2b057",
+  version: "22.2.0-next.2+sha-38d0932",
   ngImport: i0,
   type: NoopAnimationDriver,
   decorators: [{
@@ -1668,7 +1668,7 @@ class StateValue {
   }
   constructor(input, namespaceId = '') {
     this.namespaceId = namespaceId;
-    const isObj = input && input.hasOwnProperty('value');
+    const isObj = input && Object.hasOwn(input, 'value');
     const value = isObj ? input['value'] : input;
     this.value = normalizeTriggerValue(value);
     if (isObj) {
@@ -1775,7 +1775,7 @@ class AnimationTransitionNamespace {
     }
     let fromState = triggersWithStates.get(triggerName);
     const toState = new StateValue(value, this.id);
-    const isObj = value && value.hasOwnProperty('value');
+    const isObj = value && Object.hasOwn(value, 'value');
     if (!isObj && fromState) {
       toState.absorbOptions(fromState.options);
     }
