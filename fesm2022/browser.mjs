@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.1.2+sha-85f12a5
+ * @license Angular v22.1.2+sha-4413711
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -30,7 +30,7 @@ class NoopAnimationDriver {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.1.2+sha-85f12a5",
+    version: "22.1.2+sha-4413711",
     ngImport: i0,
     type: NoopAnimationDriver,
     deps: [],
@@ -38,14 +38,14 @@ class NoopAnimationDriver {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.1.2+sha-85f12a5",
+    version: "22.1.2+sha-4413711",
     ngImport: i0,
     type: NoopAnimationDriver
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.1.2+sha-85f12a5",
+  version: "22.1.2+sha-4413711",
   ngImport: i0,
   type: NoopAnimationDriver,
   decorators: [{
@@ -249,7 +249,7 @@ class AnimationAstBuilderVisitor {
         if (style instanceof Map) {
           style.forEach(value => {
             extractStyleParams(value).forEach(sub => {
-              if (!params.hasOwnProperty(sub)) {
+              if (!Object.hasOwn(params, sub)) {
                 missingSubs.add(sub);
               }
             });
@@ -588,7 +588,7 @@ function consumeOffset(styles) {
   return offset;
 }
 function constructTimingAst(value, errors) {
-  if (value.hasOwnProperty('duration')) {
+  if (typeof value === 'object' && value !== null && Object.hasOwn(value, 'duration')) {
     return value;
   }
   if (typeof value == 'number') {
@@ -959,7 +959,7 @@ class AnimationTimelineContext {
         paramsToUpdate = this.options.params = {};
       }
       Object.keys(newParams).forEach(name => {
-        if (!skipIfExists || !paramsToUpdate.hasOwnProperty(name)) {
+        if (!skipIfExists || !Object.hasOwn(paramsToUpdate, name)) {
           paramsToUpdate[name] = interpolateParams(newParams[name], paramsToUpdate, this.errors);
         }
       });
@@ -2909,7 +2909,7 @@ function objEquals(a, b) {
   if (k1.length != k2.length) return false;
   for (let i = 0; i < k1.length; i++) {
     const prop = k1[i];
-    if (!b.hasOwnProperty(prop) || a[prop] !== b[prop]) return false;
+    if (!Object.hasOwn(b, prop) || a[prop] !== b[prop]) return false;
   }
   return true;
 }

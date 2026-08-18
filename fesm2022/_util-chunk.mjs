@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.1.2+sha-85f12a5
+ * @license Angular v22.1.2+sha-4413711
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -287,7 +287,7 @@ function _convertTimeValueToMS(value, unit) {
   }
 }
 function resolveTiming(timings, errors, allowNegativeValues) {
-  return timings.hasOwnProperty('duration') ? timings : parseTimeExpression(timings, errors, allowNegativeValues);
+  return typeof timings === 'object' && timings !== null && Object.hasOwn(timings, 'duration') ? timings : parseTimeExpression(timings, errors, allowNegativeValues);
 }
 const PARSE_TIME_EXPRESSION_REGEX = /^(-?[\.\d]+)(m?s)(?:\s+(-?[\.\d]+)(m?s))?(?:\s+([-a-z]+(?:\(.+?\))?))?$/i;
 function parseTimeExpression(exp, errors, allowNegativeValues) {
@@ -376,7 +376,7 @@ function validateStyleParams(value, options, errors) {
   const matches = extractStyleParams(value);
   if (matches.length) {
     matches.forEach(varName => {
-      if (!params.hasOwnProperty(varName)) {
+      if (!Object.hasOwn(params, varName)) {
         errors.push(invalidStyleParams(varName));
       }
     });
