@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.0-next.5+sha-81c3f3a
+ * @license Angular v22.2.0-next.5+sha-74c1716
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -42,7 +42,7 @@ declare class NoopAnimationDriver implements AnimationDriver {
      */
     animate(element: any, keyframes: Array<Map<string, string | number>>, duration: number, delay: number, easing: string, previousPlayers?: any[], scrubberAccessRequested?: boolean): AnimationPlayer;
     static ɵfac: i0.ɵɵFactoryDeclaration<NoopAnimationDriver, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<NoopAnimationDriver>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * @publicApi

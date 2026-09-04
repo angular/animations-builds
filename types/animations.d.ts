@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.0-next.5+sha-81c3f3a
+ * @license Angular v22.2.0-next.5+sha-74c1716
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -66,7 +66,7 @@ declare abstract class AnimationBuilder {
      */
     abstract build(animation: AnimationMetadata | AnimationMetadata[]): AnimationFactory;
     static ɵfac: i0.ɵɵFactoryDeclaration<AnimationBuilder, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<AnimationBuilder>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * A factory object returned from the
@@ -96,7 +96,7 @@ declare class BrowserAnimationBuilder extends AnimationBuilder {
     constructor(rootRenderer: RendererFactory2, doc: Document);
     build(animation: AnimationMetadata | AnimationMetadata[]): AnimationFactory;
     static ɵfac: i0.ɵɵFactoryDeclaration<BrowserAnimationBuilder, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<BrowserAnimationBuilder>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
