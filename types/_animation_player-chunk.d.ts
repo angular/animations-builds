@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.0-next.5+sha-5afdd98
+ * @license Angular v22.2.0-next.5+sha-2c71e88-with-local-changes
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1159,7 +1159,7 @@ declare function useAnimation(animation: AnimationReferenceMetadata, options?: A
  * Tokens can be merged into a combined query selector string. For example:
  *
  * ```ts
- *  query(':self, .record:enter, .record:leave, @subTrigger', [...])
+ *  query('@subTrigger, :self, .record:enter, .record:leave', [...])
  * ```
  *
  * The `query()` function collects multiple elements and works internally by using
