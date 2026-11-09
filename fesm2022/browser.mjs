@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.3.0-next.4+sha-3d2581a
+ * @license Angular v22.3.0-next.4+sha-670c172
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -30,7 +30,7 @@ class NoopAnimationDriver {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.3.0-next.4+sha-3d2581a",
+    version: "22.3.0-next.4+sha-670c172",
     ngImport: i0,
     type: NoopAnimationDriver,
     deps: [],
@@ -38,14 +38,14 @@ class NoopAnimationDriver {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.3.0-next.4+sha-3d2581a",
+    version: "22.3.0-next.4+sha-670c172",
     ngImport: i0,
     type: NoopAnimationDriver
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.3.0-next.4+sha-3d2581a",
+  version: "22.3.0-next.4+sha-670c172",
   ngImport: i0,
   type: NoopAnimationDriver,
   decorators: [{
@@ -3532,17 +3532,9 @@ class AnimationRendererFactory {
     };
   }
   createRenderer(hostElement, type) {
-    const EMPTY_NAMESPACE_ID = '';
     const delegate = this.delegate.createRenderer(hostElement, type);
     if (!hostElement || !type?.data?.['animation']) {
-      const cache = this._rendererCache;
-      let renderer = cache.get(delegate);
-      if (!renderer) {
-        const onRendererDestroy = () => cache.delete(delegate);
-        renderer = new BaseAnimationRenderer(EMPTY_NAMESPACE_ID, delegate, this.engine, onRendererDestroy);
-        cache.set(delegate, renderer);
-      }
-      return renderer;
+      return getOrCreateBaseRenderer(delegate, this.engine, this._rendererCache);
     }
     const componentId = type.id;
     const namespaceId = type.id + '-' + this._currentId;
@@ -3608,6 +3600,15 @@ class AnimationRendererFactory {
     this.engine.flush();
     this.delegate.componentReplaced?.(componentId);
   }
+}
+function getOrCreateBaseRenderer(delegate, engine, cache) {
+  let renderer = cache.get(delegate);
+  if (!renderer) {
+    const onRendererDestroy = () => cache.delete(delegate);
+    renderer = new BaseAnimationRenderer('', delegate, engine, onRendererDestroy);
+    cache.set(delegate, renderer);
+  }
+  return renderer;
 }
 
 export { AnimationDriver, NoopAnimationDriver, Animation as ɵAnimation, AnimationEngine as ɵAnimationEngine, AnimationRenderer as ɵAnimationRenderer, AnimationRendererFactory as ɵAnimationRendererFactory, AnimationStyleNormalizer as ɵAnimationStyleNormalizer, BaseAnimationRenderer as ɵBaseAnimationRenderer, ENTER_CLASSNAME as ɵENTER_CLASSNAME, LEAVE_CLASSNAME as ɵLEAVE_CLASSNAME, NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer, TransitionAnimationPlayer as ɵTransitionAnimationPlayer, WebAnimationsDriver as ɵWebAnimationsDriver, WebAnimationsPlayer as ɵWebAnimationsPlayer, WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer, allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge, camelCaseToDashCase as ɵcamelCaseToDashCase, containsElement as ɵcontainsElement, createEngine as ɵcreateEngine, getParentElement as ɵgetParentElement, invokeQuery as ɵinvokeQuery, normalizeKeyframes$1 as ɵnormalizeKeyframes, validateStyleProperty as ɵvalidateStyleProperty, validateWebAnimatableStyleProperty as ɵvalidateWebAnimatableStyleProperty };
