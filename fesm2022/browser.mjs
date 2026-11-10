@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.3.0-next.4+sha-622a7c7
+ * @license Angular v22.3.0-next.4+sha-5b3ea8a
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -30,7 +30,7 @@ class NoopAnimationDriver {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.3.0-next.4+sha-622a7c7",
+    version: "22.3.0-next.4+sha-5b3ea8a",
     ngImport: i0,
     type: NoopAnimationDriver,
     deps: [],
@@ -38,14 +38,14 @@ class NoopAnimationDriver {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.3.0-next.4+sha-622a7c7",
+    version: "22.3.0-next.4+sha-5b3ea8a",
     ngImport: i0,
     type: NoopAnimationDriver
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.3.0-next.4+sha-622a7c7",
+  version: "22.3.0-next.4+sha-5b3ea8a",
   ngImport: i0,
   type: NoopAnimationDriver,
   decorators: [{
