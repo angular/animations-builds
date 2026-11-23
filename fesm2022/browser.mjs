@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.3.0+sha-3309ac5
+ * @license Angular v22.3.0+sha-f5d6bfd
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -30,7 +30,7 @@ class NoopAnimationDriver {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.3.0+sha-3309ac5",
+    version: "22.3.0+sha-f5d6bfd",
     ngImport: i0,
     type: NoopAnimationDriver,
     deps: [],
@@ -38,14 +38,14 @@ class NoopAnimationDriver {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.3.0+sha-3309ac5",
+    version: "22.3.0+sha-f5d6bfd",
     ngImport: i0,
     type: NoopAnimationDriver
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.3.0+sha-3309ac5",
+  version: "22.3.0+sha-f5d6bfd",
   ngImport: i0,
   type: NoopAnimationDriver,
   decorators: [{
@@ -3540,15 +3540,8 @@ class AnimationRendererFactory {
     const namespaceId = type.id + '-' + this._currentId;
     this._currentId++;
     this.engine.register(namespaceId, hostElement);
-    const registerTrigger = trigger => {
-      if (Array.isArray(trigger)) {
-        trigger.forEach(registerTrigger);
-      } else {
-        this.engine.registerTrigger(componentId, namespaceId, hostElement, trigger.name, trigger);
-      }
-    };
     const animationTriggers = type.data['animation'];
-    animationTriggers.forEach(registerTrigger);
+    registerTriggers(this.engine, componentId, namespaceId, hostElement, animationTriggers);
     return new AnimationRenderer(this, namespaceId, delegate, this.engine);
   }
   begin() {
@@ -3599,6 +3592,15 @@ class AnimationRendererFactory {
   componentReplaced(componentId) {
     this.engine.flush();
     this.delegate.componentReplaced?.(componentId);
+  }
+}
+function registerTriggers(engine, componentId, namespaceId, hostElement, triggers) {
+  for (const trigger of triggers) {
+    if (Array.isArray(trigger)) {
+      registerTriggers(engine, componentId, namespaceId, hostElement, trigger);
+    } else {
+      engine.registerTrigger(componentId, namespaceId, hostElement, trigger.name, trigger);
+    }
   }
 }
 function getOrCreateBaseRenderer(delegate, engine, cache) {
