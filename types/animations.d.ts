@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.4.0-next.0+sha-b9bb8c0
+ * @license Angular v22.4.0-next.0+sha-4201783
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -55,7 +55,7 @@ export { AUTO_STYLE, AnimateChildOptions, AnimateTimings, AnimationAnimateChildM
  *
  * @publicApi
  *
- * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in a future version
  */
 declare abstract class AnimationBuilder {
     /**
@@ -75,7 +75,7 @@ declare abstract class AnimationBuilder {
  *
  * @publicApi
  *
- * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in a future version
  */
 declare abstract class AnimationFactory {
     /**
@@ -130,7 +130,7 @@ declare class BrowserAnimationBuilder extends AnimationBuilder {
  *
  * @publicApi
  *
- * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in a future version
  */
 interface AnimationEvent {
     /**
