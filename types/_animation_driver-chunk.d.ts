@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.3.0+sha-b148ffd
+ * @license Angular v22.3.0+sha-b78757b
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -10,7 +10,7 @@ import { AnimationPlayer } from './_animation_player-chunk.js';
 /**
  * @publicApi
  *
- * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in a future version
  *
  * `AnimationDriver` implentation for Noop animations
  */
@@ -47,7 +47,7 @@ declare class NoopAnimationDriver implements AnimationDriver {
 /**
  * @publicApi
  *
- * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
+ * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in a future version
  */
 declare abstract class AnimationDriver {
     /**
